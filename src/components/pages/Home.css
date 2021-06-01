@@ -1,0 +1,87 @@
+html{
+    scroll-behavior: smooth;
+}
+
+.home-intro{
+    height: calc(100vh - 80px);
+    color: white;
+    background: #6E9ECC;
+}
+
+.home-intro__container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 15%;
+}
+.home-intro__content{
+    max-width: 50%;
+}
+
+.home-intro__content-title{
+    font-size: calc(2.6rem + 1.6vw);
+    font-weight: bold;
+    text-shadow: 5px 5px 0px #000;
+}
+
+.home-intro__content p{
+    font-size: calc(1.2rem + 0.3vw);
+    font-weight: 300;
+    opacity: 0.7;
+}
+
+.home-intro__image{
+    min-width: 50%;
+}
+
+.home-about{
+    height: 150vh;
+    background: white;
+}
+
+.home-team{
+    height: 150vh;
+    background: #e5e5e5;
+}
+
+.home-universities{
+    height: 150vh;
+    background: white;
+}
+.home-launch{
+    height: 150vh;
+    background: #e5e5e5;
+}
+
+@media screen and (min-width: 960px) {
+    .home{
+        display: flex;
+        flex-flow: column;
+
+    }
+    .home section{
+        order: 10; /*This solution might cause problems when I start adding more divs later.*/
+    }
+    .navbar{
+        order:2 !important;
+    }
+    .home-intro{
+        order: 1 !important;;
+    }
+}
+
+@media (max-width: 767px){
+    .home-intro__container{
+        display: flex;
+        flex-direction: column;
+        align-items: normal;
+        padding: 0;
+        padding-left: 12%;
+        padding-right: 5%;
+    }
+
+    .home-intro__content{
+        max-width: 80%;
+        margin-bottom: 25px;
+    }
+}
