@@ -14,6 +14,8 @@ export default function Home() {
                         <h1 className="home-intro__content-title">Speer Education</h1>
                         <p>Connecting adept college students with passionate high schoolers to enhance their subject 
                             specific awareness</p>
+                        <a href="#about"><button>ABOUT US</button></a>
+                        <a href="#launch"><button>KEEP INFORMED</button></a>
                         {/* 2 Buttons */}
                     </div>
                     <div className="home-intro__image">
@@ -22,7 +24,7 @@ export default function Home() {
                 </div>
             </section>
             <section className="home-about" id="about">
-
+            
             </section>
             <section className="home-team" id="team">
 
