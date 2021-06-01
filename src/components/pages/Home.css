@@ -25,7 +25,7 @@ html{
 }
 
 .home-intro__content p{
-    font-size: calc(1.2rem + 0.3vw);
+    font-size: calc(1.1rem + 0.4vw);
     font-weight: 300;
     opacity: 0.7;
 }
@@ -57,8 +57,38 @@ html{
 }
 
 .home-about{
-    height: 150vh;
     background: white;
+}
+
+.home-about__heading{
+    padding-top: 8vh;
+    color: #084987;
+    text-align: center;
+    font-size: 3.5rem;
+    font-weight: bold;
+}
+
+.home-about__container{
+    display: flex;
+    align-items: center;
+    padding: 25px 12%;
+    padding-bottom: 50px;
+}
+
+.home-about__content{
+    max-width: 43%;
+}
+
+.home-about__content p {
+    margin-left: 25%;
+    max-width: 70%;
+    line-height: 25px;
+    font-size: calc(0.6rem + 0.5vw);
+    font-weight: 400;
+}
+
+.home-about__image{
+    min-width: 57%;
 }
 
 .home-team{
@@ -105,5 +135,39 @@ html{
     .home-intro__content{
         max-width: 80%;
         margin-bottom: 25px;
+    }
+
+    .home-intro__button-container{
+        display: flex;
+    }
+
+    .home-intro__content button{
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .home-about__container{
+        flex-direction: column;
+        padding-top: 15px; 
+        padding-left: 4%;
+        padding-right: 4%;
+    }
+    .home-about__content{
+        max-width: 100%;
+    }
+    .home-about__content p{
+        margin-left: 0%;
+        max-width: 100%;
+    }
+    .home-about__image{
+        min-width: 80%;
+    }
+}
+
+/* Queries for height for certain shorter iphones */
+@media (max-height: 568px){
+    .home-intro{
+        height: auto;
+        padding-bottom: 50px;
     }
 }
