@@ -25,9 +25,7 @@ export default function Home() {
                 </div>
             </section>
             <section className="home-about" id="about">
-                {/* Flexbox, H1 */}
                 <h1 className="home-about__heading">ABOUT</h1>
-                {/* Flexbox, Left Side text, Right Side image */}
                 <div className="home-about__container">
                     <div className="home-about__content">
                         <p>
@@ -47,7 +45,26 @@ export default function Home() {
                 </div>
             </section>
             <section className="home-team" id="team">
-
+                <h1 className="home-team__heading">TEAM</h1>
+                {/* Flexbox container, 2 div's , then inside each div, a div with image as background and below, title and name */}
+                <div className="home-team__container">
+                    <div className="home-team__card">
+                        <div className="home-team__card-pic" id="profPic1"></div>
+                        <div className="home-team__card-bio">
+                            <h2>Harsha Bharadwaj</h2>
+                            <p>Founder and Managing Director</p>
+                            <a href="https://www.linkedin.com/in/harsha-bharadwaj-8a5219204"><i class="fab fa-2x fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div className="home-team__card">
+                        <div className="home-team__card-pic" id="profPic2"></div>
+                        <div className="home-team__card-bio">
+                            <h2>Parv Badra</h2>
+                            <p>Chief Technology Officer</p>
+                            <a href="https://www.linkedin.com/in/parvbhadra/"><i class="fab fa-2x fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
             </section>
             <section className="home-universities" id="universities">
 
