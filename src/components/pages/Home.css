@@ -163,6 +163,27 @@ html{
     height: 150vh;
     background: white;
 }
+
+.home-universities__heading{
+    padding-top: 6vh;
+    color: #084987;
+    text-align: center;
+    font-size: calc(2rem + 1vw);
+    font-weight: bold;
+}
+
+.home-universities__carousel{
+    padding-top: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 50vw;
+}
+
+.home-universities__carousel-images{
+    object-fit: contain;
+    height: 200px;
+}
+
 .home-launch{
     height: 150vh;
     background: #e5e5e5;
@@ -228,6 +249,10 @@ html{
 
     .home-team__container{
         flex-direction: column;
+    }
+
+    .home-universities__carousel{
+        max-width: 80vw;
     }
 }
 
