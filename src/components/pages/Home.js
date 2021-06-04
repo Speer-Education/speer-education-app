@@ -120,7 +120,7 @@ export default function Home() {
                 </Slider>
             </section>
             <section className="home-launch" id="launch">
-
+                        
             </section>
             {/* Add a Footer Component*/}
         </div>

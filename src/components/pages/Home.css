@@ -5,7 +5,7 @@ html{
 .home-intro{
     height: calc(100vh - 80px);
     color: white;
-    background: #6E9ECC;
+    background: #111111;
 }
 
 .home-intro__container{
@@ -160,7 +160,6 @@ html{
 }
 
 .home-universities{
-    height: 150vh;
     background: white;
 }
 
@@ -177,6 +176,7 @@ html{
     margin-left: auto;
     margin-right: auto;
     max-width: 50vw;
+    padding-bottom: 80px;
 }
 
 .home-universities__carousel-images{
