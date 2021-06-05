@@ -120,7 +120,7 @@ export default function Home() {
                 </div>
             </section>
             <section className="home-footer">
-
+                {/* Insert Footer */}
             </section>
         </div>
     )
