@@ -61,7 +61,7 @@ html{
 }
 
 .home-about__heading{
-    padding-top: 8vh;
+    padding-top: calc(80px + 3vh);
     color: #084987;
     text-align: center;
     font-size: 3.5rem;
@@ -96,7 +96,7 @@ html{
 }
 
 .home-team__heading {
-    padding-top: 6vh;
+    padding-top: calc(65px + 5vh);
     color: black;
     text-align: center;
     font-size: 3.5rem;
@@ -164,7 +164,7 @@ html{
 }
 
 .home-universities__heading{
-    padding-top: 6vh;
+    padding-top: calc(65px + 3.8vh);
     color: #084987;
     text-align: center;
     font-size: calc(2rem + 1vw);
@@ -185,8 +185,90 @@ html{
 }
 
 .home-launch{
-    height: 150vh;
     background: #e5e5e5;
+    padding-bottom: 25px;
+}
+
+.home-launch__heading{
+    padding-top: calc(65px + 3.5vh);
+    text-align: center;
+    font-size: calc(2rem + 2vw);
+    font-weight: bold;
+}
+
+.home-launch__container{
+    display: flex;
+    padding: 25px 15%;
+}
+
+.home-launch__info{
+    display: flex;
+    flex-direction: column; 
+    align-items: center;  
+    max-width: 50%; 
+    padding-top: 11px;
+}
+
+.home-launch__info p{
+    text-align: center;
+    margin-bottom: 10px; 
+}
+
+.home-launch__info a{
+    color: black;
+    text-decoration: none;
+}
+
+.home-launch__info .fa-linkedin-in{
+    text-align: center;
+    margin-top: 25px; 
+}
+
+.home-launch__form{
+    padding-left: 6%;
+    width: 100%;
+}
+
+.home-launch__form-row{
+    margin-bottom: 10px;
+}
+
+.home-launch__form input{
+    width: 100%;
+    border: 1px solid rgba(128, 128, 128, 0.699);
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    color: rgba(172, 166, 166, 0.932);
+}
+
+.home-launch__form select{
+    width: 100%;
+    border: 1px solid rgba(128, 128, 128, 0.699);
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-top: 25px;
+    font-size: 1rem;
+    color: rgba(68, 64, 64, 0.932);
+}
+
+.home-launch__form-button{
+    width: 100%;
+    border: 1px solid #222a35;
+    background-color: #222a35;
+    color: white;
+    font-size: 1rem;
+    padding: 7px 12px;
+}
+
+.home-launch__form-button:hover{
+    background-color: #222a35e3;
+    transition: 0.3s;
+}
+
+.home-footer{
+    min-height: 6vh;
+    background-color: white;
 }
 
 @media screen and (min-width: 960px) {
@@ -254,6 +336,22 @@ html{
     .home-universities__carousel{
         max-width: 80vw;
     }
+
+    .home-launch__container{
+        flex-direction: column;
+        align-items: center;
+        padding: 25px 10%;
+    }
+
+    .home-launch__info{
+        margin-bottom: 50px;
+        max-width: 95%;
+    }
+
+    .home-launch__form{
+        padding: 0;
+    }
+
 }
 
 /* Queries for height for certain shorter iphones */

@@ -7,6 +7,7 @@ import './Home.css';
 
 export default function Home() {
 
+    // Settings for the University Slider
     const sliderSettings = {
         dots: false,
         infinite: true,
@@ -24,8 +25,7 @@ export default function Home() {
               settings: {
                 slidesToShow: 3,
                 slidesToScroll: 1,
-                infinite: true,
-                dots: true
+                infinite: true
               }
             },
             {
@@ -37,7 +37,7 @@ export default function Home() {
             }
           ]
       };
-
+    //   The items in the Uni Slider
     const carouselItems = [
         {title: 'LSE', src: 'https://static1.s123-cdn-static-a.com/uploads/5219948/400_60a66de4946c3.png'},
         {title: 'Cambridge', src: "https://concourse.global/wp-content/uploads/2019/05/university-of-cambridge-2-logo.png"},
@@ -47,6 +47,11 @@ export default function Home() {
         {title: 'University Of Warwick', src: 'https://static1.s123-cdn-static-a.com/uploads/5219948/400_60a66c5c94505.png'},
         {title: 'University Of Sheffield', src: 'https://static1.s123-cdn-static-a.com/uploads/5219948/400_60a66ec223e5f_filter_60a672e3bdda1.png'}
     ]
+
+    function submitStayInTouch(e){
+        e.preventDefault();
+
+    }
 
     return (
         <div className="home">
@@ -120,9 +125,43 @@ export default function Home() {
                 </Slider>
             </section>
             <section className="home-launch" id="launch">
-                        
+                {/* H1 */}
+                {/* Flex container, then flex content on left side, and form on right side. */}
+                <h1 className="home-launch__heading">WE'RE LAUNCHING SOON!</h1>
+                <div className="home-launch__container">
+                    <div className="home-launch__info">
+                        <p>Dubai, United Arab Emirates</p>
+                        <p><a href="mailto:speereducation@gmail.com"><i class="far fa-envelope"></i> speereducation@gmail.com</a></p>
+                        <p>Share your contact information and we'll keep you informed about launch dates, beta programs and new features!</p>
+                        <a href="https://www.linkedin.com/company/speereducation/"><i class="fab fa-2x fa-linkedin-in"></i></a>
+                    </div>
+                    <form className="home-launch__form">
+                        <div className="home-launch__form-row">
+                            <input type="text" placeholder="Name (Optional)"></input>
+                        </div>
+                        <div className="home-launch__form-row">
+                            <input type="text" placeholder="School (Optional)"></input>
+                        </div>
+                        <div className="home-launch__form-row">
+                            <select>
+                                <option value selected>Year (Optional)</option>
+                                <option value="<9">Younger</option>
+                                <option value="9">Grade 9/Grade 10</option>
+                                <option value="10">Grade 10/Year 11</option>
+                                <option value="11">Grade 11/Year 12</option>
+                                <option value="12">Grade 12/Year 13</option>
+                            </select>
+                        </div>
+                        <div className="home-launch__form-row">
+                            <input type="email" placeholder="Email Address (Required)"></input>
+                        </div>
+                        <button className="home-launch__form-button" type="submit" onClick={submitStayInTouch}>STAY IN TOUCH!</button>
+                    </form>
+                </div>
             </section>
-            {/* Add a Footer Component*/}
+            <section className="home-footer">
+
+            </section>
         </div>
     )
 }
