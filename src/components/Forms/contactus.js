@@ -5,20 +5,40 @@ export const ContactUsForm = () => {
 
   const submitStayInTouch = async (e) => {
     e.preventDefault();
+    fetch("https://speer-education-dev.web.app/stayintouch", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    }).then(function (response) {
+      console.log(response);
+      return response.json();
+    });
   };
 
   const handleFormInput = (e) => {
     const { value, name } = e.target;
-    setForm({...form, [name]:value})
-  }
+    setForm({ ...form, [name]: value });
+  };
 
   return (
     <form className="home-launch__form">
       <div className="home-launch__form-row">
-        <input type="text" placeholder="Name (Optional)" name="name" onChange={handleFormInput}/>
+        <input
+          type="text"
+          placeholder="Name (Optional)"
+          name="name"
+          onChange={handleFormInput}
+        />
       </div>
       <div className="home-launch__form-row">
-        <input type="text" placeholder="School (Optional)" name="school" onChange={handleFormInput}/>
+        <input
+          type="text"
+          placeholder="School (Optional)"
+          name="school"
+          onChange={handleFormInput}
+        />
       </div>
       <div className="home-launch__form-row">
         <select name="year" onChange={handleFormInput}>
@@ -33,7 +53,12 @@ export const ContactUsForm = () => {
         </select>
       </div>
       <div className="home-launch__form-row">
-        <input type="email" placeholder="Email Address (Required)" name="email" onChange={handleFormInput}/>
+        <input
+          type="email"
+          placeholder="Email Address (Required)"
+          name="email"
+          onChange={handleFormInput}
+        />
       </div>
       <button
         className="home-launch__form-button"
