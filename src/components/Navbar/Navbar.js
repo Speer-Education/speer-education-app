@@ -18,7 +18,7 @@ export default function Navbar() {
             <div className="navbar-container">
                 <a href="/" className="navbar-logo" onClick={closeMobileMenu}>
                     {/*Image taken from the 123 website CDN -->*/ }
-                    <img className="navbar-logo__image" src="https://static1.s123-cdn-static-a.com/uploads/5219948/400_filter_nobg_60aa467ccdc7f.png" alt="speer logo"></img>
+                    <img className="navbar-logo__image" src="./rocket-logo@2x.png" alt="speer logo"></img>
                 </a> {/*Link replaces the A tag once we ihave multiple pages and install React Router Dom*/}
                 <div className="menu-icon" onClick={handleClick}>
                     <i className={click ? 'fas fa-times' : 'fas fa-bars'}/>

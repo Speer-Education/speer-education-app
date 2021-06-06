@@ -29,9 +29,7 @@
 
 .navbar-logo__image {
   object-fit: contain;
-  max-height: 79px;
-  max-width: 10vw;
-  min-width: 100px;
+  height: 60px;
 }
 
 .navbar-logo__text {
@@ -128,13 +126,6 @@
     background-color: #fff;
     color: #242424;
     border-radius: 0;
-  }
-
-  .navbar-logo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(5%, 60%);
   }
 
   .navbar-logo__text {
