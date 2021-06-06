@@ -1,10 +1,10 @@
 import React from 'react';
-import Navbar from '../../Navbar';
+import Navbar from '../../components/Navbar/Navbar';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import {sliderSettings, sliderItems} from './HomeConfig';
-import { ContactUsForm } from '../../Forms/contactus'
+import { ContactUsForm } from '../../components/Forms/contactus'
 import './Home.css';
 
 export default function Home() {
