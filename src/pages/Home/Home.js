@@ -30,7 +30,8 @@ export default function Home() {
                     </div>
                 </div>
             </section>
-            <section className="home-about" id="about">
+            <section className="home-about">
+                <div className="home__spacer" id="about"></div>
                 <h1 className="home-about__heading">ABOUT</h1>
                 <div className="home-about__container">
                     <div className="home-about__content">
@@ -50,7 +51,8 @@ export default function Home() {
                     </div>
                 </div>
             </section>
-            <section className="home-team" id="team">
+            <section className="home-team">
+                <div className="home__spacer" id="team"></div>
                 <h1 className="home-team__heading">TEAM</h1>
                 {/* Flexbox container, 2 div's , then inside each div, a div with image as background and below, title and name */}
                 <div className="home-team__container">
@@ -72,7 +74,8 @@ export default function Home() {
                     </div>
                 </div>
             </section>
-            <section className="home-universities" id="universities">
+            <section className="home-universities">
+                <div className="home__spacer" id="universities"></div>
                 <h1 className="home-universities__heading">UNIVERSITIES</h1>
                 <Slider className="home-universities__carousel" {...sliderSettings}>
                     {sliderItems.map(item => (
@@ -80,7 +83,8 @@ export default function Home() {
                     ))}
                 </Slider>
             </section>
-            <section className="home-launch" id="launch">
+            <section className="home-launch">
+                <div className="home__spacer" id="launch"></div>
                 {/* H1 */}
                 {/* Flex container, then flex content on left side, and form on right side. */}
                 <h1 className="home-launch__heading">WE'RE LAUNCHING SOON!</h1>
