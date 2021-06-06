@@ -111,9 +111,17 @@ html{
 }
 
 .home-team__container{
-    display: flex;
-    padding: 25px calc(15% + 5vw);
+    text-align: center;
+    padding: 25px 15%;
     padding-bottom: 50px;
+}
+
+.home-team__grid {
+    display: inline-block;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .home-team__card{
@@ -126,7 +134,7 @@ html{
 
 .home-team__card-pic{
     border-radius: 100%;
-    object-fit: contain;
+    object-fit: cover;
     height: calc(200px + 5vw);
     width: calc(200px + 5vw);
     border-radius: 100%;
@@ -152,14 +160,6 @@ html{
 
 .home-team__card i{
     object-fit: contain;
-}
-
-#profPic1{
-    background-image: url("https://static1.s123-cdn-static-a.com/uploads/5219948/800_60a3aaaf2fc5c_filter_60a3aaf59e482.jpg");
-}
-
-#profPic2{
-    background-image: url("https://static1.s123-cdn-static-a.com/uploads/5219948/800_60a250ac2c72a.jpg");
 }
 
 .home-team__card-bio{

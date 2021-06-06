@@ -6,6 +6,7 @@ import Slider from "react-slick";
 import ScrollAnimation from 'react-animate-on-scroll';
 import {sliderSettings, sliderItems} from './HomeConfig';
 import { ContactUsForm } from '../../components/Forms/contactus'
+import { TeamCard } from '../../components/Team/TeamCard';
 import "animate.css/animate.min.css";
 import './Home.css';
 
@@ -57,27 +58,25 @@ export default function Home() {
             </section>
             <section className="home-team">
                 <ScrollAnimation animateOnce animateIn="animate__fadeInUp">
-                <div className="home__spacer" id="team"></div>
-                <h1 className="home-team__heading">TEAM</h1>
-                {/* Flexbox container, 2 div's , then inside each div, a div with image as background and below, title and name */}
-                <div className="home-team__container">
-                    <div className="home-team__card">
-                        <div className="home-team__card-pic" id="profPic1"></div>
-                        <div className="home-team__card-bio">
-                            <h2>Harsha Bharadwaj</h2>
-                            <p>Founder and Managing Director</p>
-                            <a href="https://www.linkedin.com/in/harsha-bharadwaj-8a5219204"><i class="fab fa-2x fa-linkedin-in"></i></a>
-                        </div>
+                    <div className="home__spacer" id="team"></div>
+                    <h1 className="home-team__heading">TEAM</h1>
+                    {/* Flexbox container, 2 div's , then inside each div, a div with image as background and below, title and name */}
+                    <div className="home-team__container">
+                        <div className="home-team__grid">
+                            <TeamCard
+                                fullname="Harsha Bharadwaj"
+                                title="Founder and Managing Director"
+                                linkedinUrl="https://www.linkedin.com/in/harsha-bharadwaj-8a5219204"
+                                imageUrl="https://static1.s123-cdn-static-a.com/uploads/5219948/800_60a3aaaf2fc5c_filter_60a3aaf59e482.jpg"
+                            />
+                            <TeamCard
+                                fullname="Parv Badra"
+                                title="Chief Technology Officer"
+                                linkedinUrl="https://www.linkedin.com/in/parvbhadra/"
+                                imageUrl="https://static1.s123-cdn-static-a.com/uploads/5219948/800_60a250ac2c72a.jpg"
+                            />
+                        </div>    
                     </div>
-                    <div className="home-team__card">
-                        <div className="home-team__card-pic" id="profPic2"></div>
-                        <div className="home-team__card-bio">
-                            <h2>Parv Badra</h2>
-                            <p>Chief Technology Officer</p>
-                            <a href="https://www.linkedin.com/in/parvbhadra/"><i class="fab fa-2x fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                </div>
                 </ScrollAnimation>
             </section>
             <section className="home-universities">
