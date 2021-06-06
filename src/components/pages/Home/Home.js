@@ -4,14 +4,10 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import {sliderSettings, sliderItems} from './HomeConfig';
+import { ContactUsForm } from '../../Forms/contactus'
 import './Home.css';
 
 export default function Home() {
-
-    function submitStayInTouch(e){
-        e.preventDefault();
-
-    }
 
     return (
         <div className="home">
@@ -95,28 +91,7 @@ export default function Home() {
                         <p>Share your contact information and we'll keep you informed about launch dates, beta programs and new features!</p>
                         <a href="https://www.linkedin.com/company/speereducation/"><i class="fab fa-2x fa-linkedin-in"></i></a>
                     </div>
-                    <form className="home-launch__form">
-                        <div className="home-launch__form-row">
-                            <input type="text" placeholder="Name (Optional)"></input>
-                        </div>
-                        <div className="home-launch__form-row">
-                            <input type="text" placeholder="School (Optional)"></input>
-                        </div>
-                        <div className="home-launch__form-row">
-                            <select>
-                                <option value selected>Year (Optional)</option>
-                                <option value="<9">Younger</option>
-                                <option value="9">Grade 9/Grade 10</option>
-                                <option value="10">Grade 10/Year 11</option>
-                                <option value="11">Grade 11/Year 12</option>
-                                <option value="12">Grade 12/Year 13</option>
-                            </select>
-                        </div>
-                        <div className="home-launch__form-row">
-                            <input type="email" placeholder="Email Address (Required)"></input>
-                        </div>
-                        <button className="home-launch__form-button" type="submit" onClick={submitStayInTouch}>STAY IN TOUCH!</button>
-                    </form>
+                    <ContactUsForm/>
                 </div>
             </section>
             <section className="home-footer">
