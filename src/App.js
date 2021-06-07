@@ -1,11 +1,14 @@
-import './App.css';
-import Home from './pages/Home/Home';
+import "./App.css";
+import Home from "./pages/Home/Home";
+import { AuthProvider } from "./hooks/useAuth";
 
 function App() {
   return (
-    <div className="app">
-      <Home/>
-    </div>
+    <AuthProvider>
+      <div className="app">
+        <Home />
+      </div>
+    </AuthProvider>
   );
 }
 
