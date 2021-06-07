@@ -7,7 +7,7 @@ const sliderSettings = {
     slidesToScroll: 1,
     autoplay: true,
     speed: 200,
-    autoplaySpeed: 2000,
+    autoplaySpeed: 1800,
     pauseOnHover: true,
     cssEase: "linear",
     responsive: [
