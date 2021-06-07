@@ -7,11 +7,12 @@ import ScrollAnimation from 'react-animate-on-scroll';
 import {sliderSettings, sliderItems} from './HomeConfig';
 import { ContactUsForm } from '../../components/Forms/contactus'
 import { TeamCard } from '../../components/Team/TeamCard';
+import { useAuth } from '../../hooks/useAuth';
 import "animate.css/animate.min.css";
 import './Home.css';
 
 export default function Home() {
-
+    const { user } = useAuth();
     return (
         <div className="home">
             <Navbar/>
