@@ -44,7 +44,7 @@ const useAuthProvider = () => {
             });
     };
     const initFacebookSignIn = () => {
-        return auth.signInWithRedirect(new firebase.auth.FacebookAuthProvider()
+        return auth.signInWithRedirect(new firebase.auth.FacebookAuthProvider())
             .then((response) => {
                 console.log('sign in successful');
                 getUserAdditionalData(response.user);
