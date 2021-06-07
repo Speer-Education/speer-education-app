@@ -30,6 +30,30 @@ const useAuthProvider = () => {
                 return { error };
             });
     };
+    const initGoogleSignIn = () => {
+        return auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider().setCustomParameters({
+            prompt: 'select_account'
+         }))
+            .then((response) => {
+                console.log('sign in successful');
+                getUserAdditionalData(response.user);
+                return response.user;
+            })
+            .catch((error) => {
+                return { error };
+            });
+    };
+    const initFacebookSignIn = () => {
+        return auth.signInWithRedirect(new firebase.auth.FacebookAuthProvider()
+            .then((response) => {
+                console.log('sign in successful');
+                getUserAdditionalData(response.user);
+                return response.user;
+            })
+            .catch((error) => {
+                return { error };
+            });
+    };
     const getUserAdditionalData = (user) => {
         if(!user) return;
         return user.getIdTokenResult(true).then(({ claims:{ user_id, studentId, userGroups, email} }) => {
@@ -84,5 +108,5 @@ const useAuthProvider = () => {
         return auth.signOut().then(() => setUser(false));
     };
 
-    return { user, signInWithEmailAndPassword, signOut };
+    return { user, signInWithEmailAndPassword, signOut, initGoogleSignIn, initFacebookSignIn };
 };
