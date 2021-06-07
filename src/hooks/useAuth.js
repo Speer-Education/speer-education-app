@@ -4,7 +4,7 @@ import {
     useContext,
     createContext,
 } from 'react';
-import {  auth, db, rtdb } from '../config/firebase';
+import {  auth, db, rtdb, firebase } from '../config/firebase';
 const authContext = createContext({ user: {} });
 const { Provider } = authContext;
 
