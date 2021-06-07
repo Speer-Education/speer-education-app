@@ -16,9 +16,8 @@ export default function Home() {
     return (
         <div className="home">
             <Navbar/>
-            <section className="home-intro" id="intro">
-                {/* Div with flex, that will be row, then as screen gets smaller, becomes col */}
-                {/* First div with Content, h1, button etc. Second with Image.*/}
+            <section className="home-intro">
+                <div className="home__spacer" id="intro"></div>
                 <div className="home-intro__container">
                     <div className="home-intro__content">
                         <h1 className="home-intro__content-title">Speer Education</h1>
@@ -35,7 +34,7 @@ export default function Home() {
                 </div>
             </section>
             <section className="home-about">
-                <ScrollAnimation animateOnce animateIn="animate__fadeInUp">
+                <ScrollAnimation animateOnce duration={0.5} animateIn="animate__fadeInUp">
                     <div className="home__spacer" id="about"></div>
                     <h1 className="home-about__heading">ABOUT</h1>
                     <div className="home-about__container">
@@ -58,7 +57,7 @@ export default function Home() {
                 </ScrollAnimation>
             </section>
             <section className="home-team">
-                <ScrollAnimation animateOnce animateIn="animate__fadeInUp">
+                <ScrollAnimation animateOnce duration={0.5} animateIn="animate__fadeInUp">
                     <div className="home__spacer" id="team"></div>
                     <h1 className="home-team__heading">TEAM</h1>
                     {/* Flexbox container, 2 div's , then inside each div, a div with image as background and below, title and name */}
@@ -81,7 +80,7 @@ export default function Home() {
                 </ScrollAnimation>
             </section>
             <section className="home-universities">
-                <ScrollAnimation animateOnce animateIn="animate__fadeInUp">
+                <ScrollAnimation animateOnce duration={0.5} animateIn="animate__fadeInUp">
                     <div className="home__spacer" id="universities"></div>
                     <h1 className="home-universities__heading">UNIVERSITIES</h1>
                     <Slider className="home-universities__carousel" {...sliderSettings}>
@@ -92,7 +91,7 @@ export default function Home() {
                 </ScrollAnimation>
             </section>
             <section className="home-launch">
-                <ScrollAnimation animateOnce animateIn="animate__fadeInUp">
+                <ScrollAnimation animateOnce duration={0.5} animateIn="animate__fadeInUp">
                     <div className="home__spacer" id="launch"></div>
                     {/* H1 */}
                     {/* Flex container, then flex content on left side, and form on right side. */}
