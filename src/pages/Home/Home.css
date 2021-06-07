@@ -2,6 +2,13 @@ html{
     scroll-behavior: smooth;
 }
 
+.home__spacer {
+    display: inline;
+    position: relative;
+    height: 80px;
+    bottom: 80px;
+}
+
 .home-intro{
     height: calc(100vh - 80px);
     color: white;
@@ -61,7 +68,7 @@ html{
 }
 
 .home-about__heading{
-    padding-top: calc(80px + 3vh);
+    padding-top: 3vh;
     color: #084987;
     text-align: center;
     font-size: 3.5rem;
@@ -96,7 +103,7 @@ html{
 }
 
 .home-team__heading {
-    padding-top: calc(65px + 5vh);
+    padding-top: 5vh;
     color: black;
     text-align: center;
     font-size: 3.5rem;
@@ -104,9 +111,17 @@ html{
 }
 
 .home-team__container{
-    display: flex;
-    padding: 25px calc(15% + 5vw);
+    text-align: center;
+    padding: 25px 15%;
     padding-bottom: 50px;
+}
+
+.home-team__grid {
+    display: inline-block;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .home-team__card{
@@ -119,7 +134,7 @@ html{
 
 .home-team__card-pic{
     border-radius: 100%;
-    object-fit: contain;
+    object-fit: cover;
     height: calc(200px + 5vw);
     width: calc(200px + 5vw);
     border-radius: 100%;
@@ -147,14 +162,6 @@ html{
     object-fit: contain;
 }
 
-#profPic1{
-    background-image: url("https://static1.s123-cdn-static-a.com/uploads/5219948/800_60a3aaaf2fc5c_filter_60a3aaf59e482.jpg");
-}
-
-#profPic2{
-    background-image: url("https://static1.s123-cdn-static-a.com/uploads/5219948/800_60a250ac2c72a.jpg");
-}
-
 .home-team__card-bio{
     text-align: center;
 }
@@ -164,7 +171,7 @@ html{
 }
 
 .home-universities__heading{
-    padding-top: calc(65px + 3.8vh);
+    padding-top: 3.8vh;
     color: #084987;
     text-align: center;
     font-size: calc(2rem + 1vw);
@@ -190,7 +197,7 @@ html{
 }
 
 .home-launch__heading{
-    padding-top: calc(65px + 3.5vh);
+    padding-top: 3.5vh;
     text-align: center;
     font-size: calc(2rem + 2vw);
     font-weight: bold;
