@@ -7,9 +7,12 @@ export default function UserDetails() {
 
     // Hard coding default values for the select fields first
     const [form, setForm] = useState({
+        name: "",
         grade: "<9",
         dateOfBirth:"2003-05-09",
+        country: "",
         major: "undecided",
+        hobbies: ""
     });
 
     // To check if all fields are filled up
@@ -57,7 +60,7 @@ export default function UserDetails() {
                 {/* Ask which to make mandatory and then force them to be required*/}
                 {/* Name */}
                 <label for="preferred-name">What should we call you?</label>
-                <input type="text" id="preferred-name" placeholder="Name" name="name" onChange={handleFormInput}/>
+                <input type="text" id="preferred-name" placeholder="Name" name="name" value={form.name} onChange={handleFormInput}/>
                 {/* Grade */}
                 <label for="grade">What Grade Are You In?</label>
                 <select id="grade" name="grade" onChange={handleFormInput}>
@@ -85,7 +88,7 @@ export default function UserDetails() {
 
                 {/* Interests/hobbies */}
                 <label for="hobbies">What are some of your hobbies? (Sports, interests etc...)</label>
-                <input name="hobbies" placeholder="Hobbies" onChange={handleFormInput}></input>
+                <input name="hobbies" placeholder="Hobbies" onChange={handleFormInput} value={form.hobbies}></input>
                 
                 {/* Submission Button */}
                 <button

@@ -5,7 +5,7 @@ import { useAuth } from "../../hooks/useAuth";
 
 export default function Login() {
 
-    const { user , initGoogleSignIn, initFacebookSignIn } = useAuth();
+    const { user , initGoogleSignIn, initFacebookSignIn, signOut } = useAuth();
 
     const googleSignIn = (e) => {
         e.preventDefault();
@@ -17,6 +17,10 @@ export default function Login() {
         initFacebookSignIn();
     }
 
+    const logOut = () => {
+        signOut()
+    }
+
     return (
         <div className="login">
             <form>
@@ -26,6 +30,7 @@ export default function Login() {
                     <Button type="submit" onClick={googleSignIn}>Sign In With Google<i className="fab fa-google"></i></Button>
                     <Button type="submit" onClick={facebookSignIn}>Sign In With Facebook<i className="fab fa-facebook"></i></Button>
                 </div>
+                <Button type="submit" onClick={logOut}>Sign Out</Button>
             </form>
         </div>
     )
