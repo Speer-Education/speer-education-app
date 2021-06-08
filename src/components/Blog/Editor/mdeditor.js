@@ -1,5 +1,5 @@
 import Editor from 'rich-markdown-editor';
-import styles from '../styles/editor.module.css'
+import styles from './mdeditor.css'
 import { storage } from '../../../config/firebase';
 
 const colors = {
@@ -125,7 +125,7 @@ const dark = {
 const MDEditor = ({ docId, ...props }) => {
   return <>
     <Editor
-      theme={dark}
+      theme={light}
       className={styles.markdown}
       uploadImage={async file => {
         const result = await storage.ref(`updates/${docId}`).put(file);
