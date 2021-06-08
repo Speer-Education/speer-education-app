@@ -18,6 +18,10 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
+firebase.firestore().settings({
+  cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+});
+
 const app = firebase.app();
 const auth = firebase.auth();
 const db = firebase.firestore();
@@ -26,9 +30,6 @@ const now = firebase.firestore.Timestamp.now();
 const storage = firebase.storage();
 
 db.enablePersistence()
-db.settings({
-  cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
-});
 
 export { firebase, auth, db, now, storage, rtdb };
 
