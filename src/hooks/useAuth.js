@@ -1,10 +1,5 @@
-import {
-    useState,
-    useEffect,
-    useContext,
-    createContext,
-} from 'react';
-import {  auth, db, rtdb, firebase } from '../config/firebase';
+import { useState, useEffect, useContext, createContext } from "react";
+import { auth, db, rtdb, firebase } from "../config/firebase";
 const authContext = createContext({ user: {} });
 const { Provider } = authContext;
 
@@ -19,56 +14,52 @@ export const useAuth = () => {
 
 const useAuthProvider = () => {
     const [user, setUser] = useState(null);
+    const [userDetails, setUserDetails] = useState(null);
     let lastCommitted;
 
-    const signInWithEmailAndPassword = ({email, password}) => {
-        return auth.signInWithEmailAndPassword(email, password)
-            .then((response) => {
-                console.log('sign in successful');
-                getUserAdditionalData(response.user);
-                return response.user;
-            })
+    const signInWithEmailAndPassword = async ({ email, password }) => {
+        let response = await auth
+            .signInWithEmailAndPassword(email, password)
             .catch((error) => {
                 return { error };
             });
+        console.log("sign in successful");
     };
-    const initGoogleSignIn = () => {
-        return auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider().setCustomParameters({
-            prompt: 'select_account'
-         }))
-            .then((response) => {
-                console.log('sign in successful');
-                getUserAdditionalData(response.user);
-                return response.user;
-            })
+    const initGoogleSignIn = async () => {
+        let response = await auth
+            .signInWithRedirect(
+                new firebase.auth.GoogleAuthProvider().setCustomParameters({
+                    prompt: "select_account",
+                })
+            )
             .catch((error) => {
                 return { error };
             });
+        console.log("sign in successful");
     };
-    const initFacebookSignIn = () => {
-        return auth.signInWithRedirect(new firebase.auth.FacebookAuthProvider())
-            .then((response) => {
-                console.log('sign in successful');
-                getUserAdditionalData(response.user);
-                return response.user;
-            })
+    const initFacebookSignIn = async () => {
+        let response = await auth
+            .signInWithRedirect(new firebase.auth.FacebookAuthProvider())
             .catch((error) => {
                 return { error };
             });
+        console.log("sign in successful");
     };
-    const getUserAdditionalData = (user) => {
-        if(!user) return;
-        return user.getIdTokenResult(true).then(({ claims }) => {
-            setUser(user,...claims);
-        })
+    const getUserTokenResult = async (refresh) => {
+        if (!user) return;
+        let { claims } = await user.getIdTokenResult(refresh);
+        if (refresh) {
+            //User claims was updated, refresh?
+        }
+        return claims
     };
 
     const handleAuthStateChanged = (user) => {
         if (user) {
-            console.log('sign in successful');
-            getUserAdditionalData(user);
+            setUser(user);
+            console.log("sign in successful");
         } else {
-            setUser(false)
+            setUser(false);
         }
     };
 
@@ -78,37 +69,48 @@ const useAuthProvider = () => {
     }, []);
 
     useEffect(() => {
+        console.log("new user_claims");
         if (user?.uid) {
-            return db.doc(`user_claims/${user.uid}`).onSnapshot( snap => {
-                const data = snap.data()
-                if (data) {
-                    if (lastCommitted &&
-                            !data._lastCommitted.isEqual(lastCommitted)) {
-                        // Force a refresh of the user's ID token
-                        console.log('Refreshing token')
-                        user.getIdToken(true)
-                    }
-                    lastCommitted = data._lastCommitted
-                    getUserAdditionalData(user);
+            return db.doc(`user_claims/${user.uid}`).onSnapshot(async (snap) => {
+                const data = snap.data();
+                if (lastCommitted && !data._lastCommitted.isEqual(lastCommitted)) {
+                    setUserDetails({ ...userDetails, ... await getUserTokenResult(true) })
+                    console.log("Refreshing token");
                 }
-            })
+                lastCommitted = data._lastCommitted;
+            });
         }
     }, [user]);
 
     useEffect(() => {
+        console.log("new users");
         if (user?.uid) {
             // Subscribe to user document on mount
             const unsubscribe = db
-                .collection('users')
+                .collection("users")
                 .doc(user.uid)
-                .onSnapshot((doc) => setUser(...user,doc.data()));
+                .onSnapshot(async (doc) => {
+                    setUserDetails({ ...doc.data(), ... await getUserTokenResult() })
+                });
             return () => unsubscribe();
         }
     }, [user]);
+
+    // Debug Use
+    // useEffect(() => {
+    //     console.log(userDetails)
+    // }, [userDetails])
 
     const signOut = () => {
         return auth.signOut().then(() => setUser(false));
     };
 
-    return { user, signInWithEmailAndPassword, signOut, initGoogleSignIn, initFacebookSignIn };
+    return {
+        user,
+        userDetails,
+        signInWithEmailAndPassword,
+        signOut,
+        initGoogleSignIn,
+        initFacebookSignIn,
+    };
 };
