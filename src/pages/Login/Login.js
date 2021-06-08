@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Login.css';
 import { Button } from '@material-ui/core';
 import { useAuth } from "../../hooks/useAuth";
@@ -20,6 +20,7 @@ export default function Login() {
     return (
         <div className="login">
             <form>
+                { user ? <p>Logged In!</p>: <p>Not Logged In</p>}
                 <h1>Speer Education</h1>
                 <div className="login__buttons">
                     <Button type="submit" onClick={googleSignIn}>Sign In With Google<i className="fab fa-google"></i></Button>
