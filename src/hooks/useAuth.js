@@ -19,6 +19,8 @@ export const useAuth = () => {
 
 const useAuthProvider = () => {
     const [user, setUser] = useState(null);
+    let lastCommitted;
+
     const signInWithEmailAndPassword = ({email, password}) => {
         return auth.signInWithEmailAndPassword(email, password)
             .then((response) => {
@@ -56,13 +58,8 @@ const useAuthProvider = () => {
     };
     const getUserAdditionalData = (user) => {
         if(!user) return;
-        return user.getIdTokenResult(true).then(({ claims:{ user_id, studentId, userGroups, email} }) => {
-            setUser({
-                uid:user_id,
-                studentid:studentId,
-                userGroups:userGroups,
-                email:email
-            });
+        return user.getIdTokenResult(true).then(({ claims }) => {
+            setUser(user,...claims);
         })
     };
 
@@ -82,16 +79,21 @@ const useAuthProvider = () => {
 
     useEffect(() => {
         if (user?.uid) {
-            rtdb.ref(`refreshtoken/${user.uid}`).on('value', snap => {
-                if (snap.val() > 0) {
-                    console.log('Updating user claims')
-                    rtdb.ref(`refreshtoken/${user.uid}`).set(0);
+            return db.doc(`user_claims/${user.uid}`).onSnapshot( snap => {
+                const data = snap.data()
+                if (data) {
+                    if (lastCommitted &&
+                            !data._lastCommitted.isEqual(lastCommitted)) {
+                        // Force a refresh of the user's ID token
+                        console.log('Refreshing token')
+                        user.getIdToken(true)
+                    }
+                    lastCommitted = data._lastCommitted
                     getUserAdditionalData(user);
                 }
             })
-            return () => rtdb.ref(`refreshtoken/${user.uid}`).off();
         }
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         if (user?.uid) {
@@ -99,10 +101,10 @@ const useAuthProvider = () => {
             const unsubscribe = db
                 .collection('users')
                 .doc(user.uid)
-                .onSnapshot((doc) => setUser(doc.data()));
+                .onSnapshot((doc) => setUser(...user,doc.data()));
             return () => unsubscribe();
         }
-    }, []);
+    }, [user]);
 
     const signOut = () => {
         return auth.signOut().then(() => setUser(false));
