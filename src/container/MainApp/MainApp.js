@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { AppNavbar } from '../../components/AppNavbar/AppNavbar';
 
 
 export default function MainApp() {
@@ -8,6 +9,7 @@ export default function MainApp() {
 
     return (
         <div>
+            <AppNavbar/>
             <Switch>
                 {/* Main Page */}
                 <Route exact path ={`${path}`}>
