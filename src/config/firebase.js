@@ -25,6 +25,11 @@ const rtdb = firebase.database();
 const now = firebase.firestore.Timestamp.now();
 const storage = firebase.storage();
 
+db.enablePersistence()
+db.settings({
+  cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+});
+
 export { firebase, auth, db, now, storage, rtdb };
 
 console.log(app.name ? "Firebase Mode Activated!" : "Firebase not working :(");
