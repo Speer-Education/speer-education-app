@@ -1,8 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import './UserDetails.css';
 import Select from 'react-select';
-import countryList from 'react-select-country-list';
-
+import { countryOptions } from './UserDetailsConfig';
 
 export default function UserDetails() {
 
@@ -12,9 +11,6 @@ export default function UserDetails() {
         dateOfBirth:"2003-05-09",
         major: "undecided",
     });
-
-    // To get the list of countries
-    const countryOptions = useMemo(() => countryList().getData(), []);
 
     // To check if all fields are filled up
     const isValidForm = () => {
@@ -29,6 +25,7 @@ export default function UserDetails() {
     //To submit the form when the user hits submit (Yet to implement)
     const handleFormSubmit = (e) => {
         e.preventDefault();
+        console.log(countryOptions);
 
         console.log("Form:", form);
         console.log("Is valid form", isValidForm());
@@ -50,7 +47,7 @@ export default function UserDetails() {
 
     // To handle select form inputs.
     const handleCountrySelectFormInput = value => {
-        setForm({...form, country: value.label})
+        setForm({...form, country: value})
     }
 
     return (
@@ -100,6 +97,7 @@ export default function UserDetails() {
 
                 {/* Date of Birth won't change visually */}
                 {/* Change the other selects to the cool select form */}
+                {/* Create own country list to remove dependency on react-select-country-list */}
             </form>
         </div>
     )
