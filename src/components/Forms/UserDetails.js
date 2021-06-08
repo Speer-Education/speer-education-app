@@ -70,7 +70,7 @@ export default function UserDetails() {
                 </select>
                 {/* Date Of Birth */}
                 <label for="dateOfBirth">What's you Date Of Birth?</label>
-                <input type="date" id="dateOfBirth" value="2003-05-09" max="2012-12-31" name="dateOfBirth" onChange={handleFormInput} />
+                <input type="date" id="dateOfBirth" value={form.date} max="2012-12-31" name="dateOfBirth" onChange={handleFormInput} />
                 {/* Insert Country They Live In (Use a country list)*/}
                 <label for="country">Country Of Residence</label>
                 <Select className="user-details__custom-select" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
@@ -95,9 +95,7 @@ export default function UserDetails() {
                     Submit
                 </button>
 
-                {/* Date of Birth won't change visually */}
                 {/* Change the other selects to the cool select form */}
-                {/* Create own country list to remove dependency on react-select-country-list */}
             </form>
         </div>
     )
