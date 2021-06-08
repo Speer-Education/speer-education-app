@@ -5,6 +5,7 @@ import MainApp from "./container/MainApp/MainApp";
 import AdminApp from "./container/AdminApp/AdminApp";
 import { AuthProvider } from "./hooks/useAuth";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import UserDetails from "./components/Forms/UserDetails";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/main-app" component={MainApp} />
             <Route path="/admin-app" component={AdminApp} />
             <Route exact path={"/login"} component={Login}/>
+            <Route exact path={"/user-details"} component={UserDetails}/>
           </Switch>
         </div>
       </Router>
