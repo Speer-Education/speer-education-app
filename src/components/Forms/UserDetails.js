@@ -9,19 +9,19 @@ export default function UserDetails() {
     const [form, setForm] = useState({
         name: "",
         grade: "",
-        dateOfBirth:"2003-05-09",
+        dateOfBirth:"",
         country: "",
-        major: "undecided",
+        major: "",
         hobbies: ""
     });
 
     // To check if all fields are filled up
     const isValidForm = () => {
         return form.name !== undefined && form.name !== ""
-            && form.grade !== undefined 
-            && form.dateOfBirth !== undefined
-            && form.country !== undefined 
-            && form.major !== undefined
+            && form.grade !== undefined && form.grade !== ""
+            && form.dateOfBirth !== undefined && form.dateOfBirth !== ""
+            && form.country !== undefined && form.country !== ""
+            && form.major !== undefined && form.major !== ""
             && form.hobbies !== undefined && form.hobbies !== ""
     }
 
