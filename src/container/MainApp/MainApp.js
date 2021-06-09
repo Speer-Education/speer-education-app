@@ -1,13 +1,15 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from "react-router-dom";
-
+import { AppNavbar } from '../../components/AppNavbar/AppNavbar';
+import BlogPage from '../../pages/MainApp/Blog/BlogPage';
 
 export default function MainApp() {
 
     let { path } = useRouteMatch();
 
     return (
-        <div>
+        <>
+            <AppNavbar/>
             <Switch>
                 {/* Main Page */}
                 <Route exact path ={`${path}`}>
@@ -21,11 +23,15 @@ export default function MainApp() {
                 <Route exact path={`${path}/message`}>
                     <h1>Message</h1>
                 </Route>
-                {/* Blog Page */}
-                <Route exact path={`${path}/blog`}>
+                {/* Blogs Page */}
+                <Route exact path={`${path}/blogs`}>
                     <h1>Blog</h1>
                 </Route>
+                {/* Blog Page */}
+                <Route exact path={`${path}/blog/:postId`}>
+                    <BlogPage/>
+                </Route>
             </Switch>
-        </div>
+        </>
     )
 }
