@@ -9,9 +9,8 @@ function Messaging() {
     return (
         <div className="messaging">
             <div className="messaging__body">
-                {/* Sidebar */}
+                {/* Sidebar Section then the Chat Section*/}
                 <Sidebar/>
-                {/* Chat Section */}
                 <Chat/>
             </div>
         </div>
