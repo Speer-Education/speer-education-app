@@ -19,7 +19,7 @@ export default function BlogPage() {
     }
     return <div className="p-6">
         {loaded && <MDEditor defaultValue={body} onChange={val => setEditedPost({ ...editedPost, body: val() })} />}
-        <Button variant="outlined" onClick={handleSaveBlog}>
+        <Button className="float-right" variant="outlined" onClick={handleSaveBlog}>
             Save Changes
         </Button>
     </div>
