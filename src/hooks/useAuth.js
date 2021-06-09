@@ -1,7 +1,14 @@
 import { useState, useEffect, useContext, createContext } from "react";
 import { auth, db, rtdb, firebase } from "../config/firebase";
+import history from './history';
+
+import {
+    useHistory,
+    useLocation
+} from "react-router-dom";
 const authContext = createContext({ user: {} });
 const { Provider } = authContext;
+
 
 export function AuthProvider({ children }) {
     const auth = useAuthProvider();
@@ -48,8 +55,9 @@ const useAuthProvider = () => {
     const getUserTokenResult = async (refresh) => {
         if (!user) return;
         let { claims } = await user.getIdTokenResult(refresh);
-        if (refresh) {
-            //User claims was updated, refresh?
+        if (!claims.finishSetup) {
+            console.log(history.location.pathname)
+            history.push('/onboarding');
         }
         return claims
     };
@@ -69,7 +77,6 @@ const useAuthProvider = () => {
     }, []);
 
     useEffect(() => {
-        console.log("new user_claims");
         if (user?.uid) {
             return db.doc(`user_claims/${user.uid}`).onSnapshot(async (snap) => {
                 const data = snap.data();
@@ -83,7 +90,6 @@ const useAuthProvider = () => {
     }, [user]);
 
     useEffect(() => {
-        console.log("new users");
         if (user?.uid) {
             // Subscribe to user document on mount
             const unsubscribe = db

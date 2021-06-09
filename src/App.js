@@ -5,12 +5,13 @@ import Onboarding from "./pages/Onboarding/Onboarding";
 import MainApp from "./container/MainApp/MainApp";
 import AdminApp from "./container/AdminApp/AdminApp";
 import { AuthProvider } from "./hooks/useAuth";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Router, Switch, Route } from "react-router-dom";
+import history from './hooks/history';
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router history={history}>
         <div className="app">
           <Switch>
             <Route exact path="/" component={Home} />
