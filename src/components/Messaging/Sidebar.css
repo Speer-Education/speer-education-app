@@ -1,5 +1,5 @@
-.sidebar{
-    flex: 0.2;
+.sidebar{ 
+    flex: 0.2; /*Chat component will take up the other 0.8 */
     min-width: 250px;
     display: flex;
     flex-direction: column;

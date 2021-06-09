@@ -18,22 +18,10 @@ function Sidebar() {
             <div className="sidebar__searchContainer">
                 <div className="sidebar__search">
                     <SearchOutlined/>
-                    <input type="text" placeholder="Search for exisiting chats"/>
+                    <input type="text" placeholder="Search by name"/>
                 </div>
             </div>
             <div className="sidebar__chats">
-                <SidebarChat/>
-                <SidebarChat/>
-                <SidebarChat/>
-                <SidebarChat/>
-                <SidebarChat/>
-                <SidebarChat/>
-                <SidebarChat/>
-                <SidebarChat/>
-                <SidebarChat/>
-                <SidebarChat/>
-                <SidebarChat/>
-                <SidebarChat/>
                 <SidebarChat/>
                 <SidebarChat/>
                 <SidebarChat/>
