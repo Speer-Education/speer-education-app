@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import { AppNavbar } from '../../components/AppNavbar/AppNavbar';
 import BlogPage from '../../pages/MainApp/Blog/BlogPage';
+import Chat from '../../pages/MainApp/Chat/Chat';
 
 export default function MainApp() {
 
@@ -19,9 +20,9 @@ export default function MainApp() {
                 <Route exact path={`${path}/mentors`}>
                     <h1>Mentors</h1>
                 </Route>
-                {/* Messages Page */}
-                <Route exact path={`${path}/message`}>
-                    <h1>Message</h1>
+                {/* Chat Page */}
+                <Route exact path={`${path}/chat`}>
+                    <Chat/>
                 </Route>
                 {/* Blogs Page */}
                 <Route exact path={`${path}/blogs`}>
