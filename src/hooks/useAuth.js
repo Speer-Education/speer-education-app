@@ -58,6 +58,8 @@ const useAuthProvider = () => {
         if (!claims.finishSetup) {
             console.log(history.location.pathname)
             history.push('/onboarding');
+        } else if(history.location.pathname.startsWith('/onboarding')) {
+            history.push('/main-app');
         }
         return claims
     };
