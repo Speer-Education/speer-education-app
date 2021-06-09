@@ -1,11 +1,11 @@
 import "./App.css";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
+import Onboarding from "./pages/Onboarding/Onboarding";
 import MainApp from "./container/MainApp/MainApp";
 import AdminApp from "./container/AdminApp/AdminApp";
 import { AuthProvider } from "./hooks/useAuth";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import UserDetails from "./components/Forms/UserDetails";
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
             <Route path="/main-app" component={MainApp} />
             <Route path="/admin-app" component={AdminApp} />
             <Route exact path={"/login"} component={Login}/>
-            <Route exact path={"/user-details"} component={UserDetails}/>
+            <Route exact path={"/onboarding"} component={Onboarding}/>
           </Switch>
         </div>
       </Router>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './UserDetails.css';
+import './Onboarding.css';
 import Select from 'react-select';
-import { gradeOptions, majorOptions, countryOptions } from './UserDetailsConfig';
+import { gradeOptions, majorOptions, countryOptions } from './OnboardingConfig';
 
 export default function UserDetails() {
 
