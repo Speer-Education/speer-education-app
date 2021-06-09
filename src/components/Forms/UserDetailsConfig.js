@@ -1,3 +1,49 @@
+const gradeOptions = [
+  {
+    "value" : "<9",
+    "label" : "Younger"
+  },
+  {
+    "value" : "9",
+    "label" : "Grade 9/Year 10"
+  },
+  {
+    "value" : "10",
+    "label" : "Grade 10/Year 11"
+  },
+  {
+    "value" : "11",
+    "label" : "Grade 11 /Year 12"
+  },
+  {
+    "value" : "12",
+    "label" : "Grade 12/Year 13"
+  },
+  {
+    "value" : ">12",
+    "label" : "Older/Graduated"
+  }
+]
+
+const majorOptions = [
+  {
+    "value" : "undecided",
+    "label" : "Undecided"
+  },
+  {
+    "value" : "economics",
+    "label" : "Economics"
+  },
+  {
+    "value" : "business",
+    "label" : "Business"
+  },
+  {
+    "value" : "accounting",
+    "label" : "Accounting"
+  },
+]
+
 const countryOptions =[
     {
       "value": "AF",
@@ -997,4 +1043,4 @@ const countryOptions =[
     }
   ]
 
-  export {countryOptions};
+  export { gradeOptions, majorOptions, countryOptions };

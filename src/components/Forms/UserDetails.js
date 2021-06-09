@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import './UserDetails.css';
 import Select from 'react-select';
-import { countryOptions } from './UserDetailsConfig';
+import { gradeOptions, majorOptions, countryOptions } from './UserDetailsConfig';
 
 export default function UserDetails() {
 
     // Hard coding default values for the select fields first
     const [form, setForm] = useState({
         name: "",
-        grade: "<9",
+        grade: "",
         dateOfBirth:"2003-05-09",
         country: "",
         major: "undecided",
@@ -53,6 +53,14 @@ export default function UserDetails() {
         setForm({...form, country: value})
     }
 
+    const handleGradeSelectFormInput = value => {
+        setForm({...form, grade: value})
+    }
+
+    const handleMajorSelectFormInput = value => {
+        setForm({...form, major: value})
+    }
+
     return (
         <div className="user-details">
             <h1>Tell us about yourself!</h1>
@@ -63,14 +71,7 @@ export default function UserDetails() {
                 <input type="text" id="preferred-name" placeholder="Name" name="name" value={form.name} onChange={handleFormInput}/>
                 {/* Grade */}
                 <label for="grade">What Grade Are You In?</label>
-                <select id="grade" name="grade" onChange={handleFormInput}>
-                    <option value="<9" selected>Younger</option>
-                    <option value="9">Grade 9/Grade 10</option>
-                    <option value="10">Grade 10/Year 11</option>
-                    <option value="11" >Grade 11/Year 12</option>
-                    <option value="12">Grade 12/Year 13</option>
-                    <option value=">12">Older</option>
-                </select>
+                <Select className="user-details__custom-select" id="grade" name="grade" options={gradeOptions} value={form.grade} onChange={handleGradeSelectFormInput}/>
                 {/* Date Of Birth */}
                 <label for="dateOfBirth">What's you Date Of Birth?</label>
                 <input type="date" id="dateOfBirth" value={form.date} max="2012-12-31" name="dateOfBirth" onChange={handleFormInput} />
@@ -79,13 +80,7 @@ export default function UserDetails() {
                 <Select className="user-details__custom-select" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
                 {/* What they plan to major in */}
                 <label for="major">What Do You Plan To Major In?</label>
-                <select id="major" name="major" onChange={handleFormInput}>
-                    <option value="undecided" selected>Undecided</option>
-                    <option value="economics">Economics</option>
-                    <option value="business">Business</option>
-                    <option value="accounting">Accounting</option>
-                </select>
-
+                <Select className="user-details__custom-select" id="major" name="major" options={majorOptions} value={form.major} onChange={handleMajorSelectFormInput}/>
                 {/* Interests/hobbies */}
                 <label for="hobbies">What are some of your hobbies? (Sports, interests etc...)</label>
                 <input name="hobbies" placeholder="Hobbies" onChange={handleFormInput} value={form.hobbies}></input>
