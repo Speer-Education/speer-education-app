@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import { useState, useMemo } from 'react';
 import './Onboarding.css';
 import Select from 'react-select';
 import { gradeOptions, majorOptions, countryOptions } from './OnboardingConfig';
+import { updateDoc } from '../../hooks/firestore';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function UserDetails() {
-
+    const { user } = useAuth();
     // Hard coding default values for the select fields first
     const [form, setForm] = useState({
         name: "",
@@ -14,31 +16,35 @@ export default function UserDetails() {
         major: "",
         hobbies: ""
     });
+    const [submitting, setSubmitting] = useState(false);
 
     // To check if all fields are filled up
-    const isValidForm = () => {
+    const isValidForm = useMemo(() => {
         return form.name !== undefined && form.name !== ""
             && form.grade !== undefined && form.grade !== ""
             && form.dateOfBirth !== undefined && form.dateOfBirth !== ""
             && form.country !== undefined && form.country !== ""
             && form.major !== undefined && form.major !== ""
             && form.hobbies !== undefined && form.hobbies !== ""
-    }
+    }, [form])
 
     //To submit the form when the user hits submit (Yet to implement)
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
+        setSubmitting(true);
         console.log(countryOptions);
 
         console.log("Form:", form);
-        console.log("Is valid form", isValidForm());
+        console.log("Is valid form", isValidForm);
         // Only submit if the entered a name
-        if (isValidForm() === true) {
+        if (isValidForm === true) {
             console.log("Submission sucessful")
         } else {
             // Trigger some sort of UI to tell the user they need to fill up all the inputs
             console.log("Submission unsuccessful, please fill up all the inputs")
+            setSubmitting(false);
         }
+        await updateDoc(`users/${user.uid}`, form)
     }
 
     //Updates state whenever the user change fields in the form
@@ -84,11 +90,12 @@ export default function UserDetails() {
                 {/* Interests/hobbies */}
                 <label for="hobbies">What are some of your hobbies? (Sports, interests etc...)</label>
                 <input name="hobbies" placeholder="Hobbies" onChange={handleFormInput} value={form.hobbies}></input>
-                
+                {!isValidForm && <p className="text-red-600">Error! Please fill in all the blanks.</p>}
                 {/* Submission Button */}
                 <button
                     type="submit"
                     onClick={handleFormSubmit}
+                    disabled={!isValidForm}
                 >
                     Submit
                 </button>
