@@ -24,12 +24,12 @@ export default function Login() {
     return (
         <div className="login">
             <form>
-                { user ? <p>Logged In!</p>: <p>Not Logged In</p>}
                 <h1>Speer Education</h1>
+                { user ? <p>Logged In!</p>: <> <p>Not Logged In</p>
                 <div className="login__buttons">
                     <Button type="submit" onClick={googleSignIn}>Sign In With Google<i className="fab fa-google"></i></Button>
                     <Button type="submit" onClick={facebookSignIn}>Sign In With Facebook<i className="fab fa-facebook"></i></Button>
-                </div>
+                </div> </> }
                 { user ? <Button type="submit" onClick={logOut}>Sign Out</Button> : null}
             </form>
         </div>
