@@ -8,8 +8,14 @@
 .sidebar__header{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 20px;
     border-right: 1px solid lightgray;
+}
+
+.sidebar__headerUsername{
+    font-size: 1.2rem;
+    font-weight: 400;
 }
 
 .sidebar__searchContainer{
@@ -45,4 +51,13 @@
     flex: 1; /* Vertical flex */
     background-color: white;
     overflow: auto;
+}
+
+.sidebar__mentorButton{
+    width: 100%!important;
+    min-height: 61px;
+    font-size: 1.2rem!important;
+    border-top: 1px solid rgba(153, 144, 144, 0.808)!important;
+    border-right: 1px solid rgba(153, 144, 144, 0.808)!important;
+    border-radius: 0!important;
 }

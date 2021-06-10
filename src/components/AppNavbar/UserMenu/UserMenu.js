@@ -3,7 +3,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import styles from './UserMenu.css'
 
 const UserAvatar = ({ url, setOpen }) => {
-    return <button className="lg:w-12 lg:h-12 rounded-full w-10 h-10 border-blue-500 border-2 overflow-hidden shadow-xl" onClick={() => setOpen(true)}>
+    return <button className="lg:w-12 lg:h-12 rounded-full w-10 h-10 border-blue-500 border-2 overflow-hidden shadow-xl" onClick={() => setOpen(prevOpen => !prevOpen)}>
         <img className="h-full w-full object-cover" src={url} alt="avatar" />
     </button>
 }
@@ -25,9 +25,9 @@ const UserDropdown = ({ user, open }) => {
 const UserMenu = () => {
     const { user } = useAuth();
     const [open, setOpen] = useState(false);
-    if (!user) return <a className="text-red-800 font-semibold" href="./login">Sign In</a>;
-    return <div className="relative" onMouseLeave={() => setOpen(false)}>
-        <UserAvatar url={user.photoURL} setOpen={setOpen} />
+    if (!user) return <a className="text-red-800 font-semibold" href="/login">Sign In</a>;
+    return <div className="relative" >
+        <UserAvatar url={user.photoURL} setOpen={setOpen}/>
         <UserDropdown user={user} open={open} />
     </div>
 }
