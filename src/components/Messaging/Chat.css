@@ -21,28 +21,32 @@
     font-weight: 500;
 }
 
-.chat__headerInfo > p {
-    color: gray;
-}
-
-.chat__message{
-    position: relative;
-    font-size: 16px;
-    padding: 10px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    width: fit-content; /*will dynamically expand based on how much text ther eis in the message*/
-}
-
-.chat__headerRight {
-    display: flex;
-    justify-content: space-between;
-    min-width: 100px;
-}
-
 .chat__body{
     flex: 1;
     background: lightgray;
     padding: 30px;
     overflow: auto;
+}
+
+.chat__footer{
+    height: 62px;
+    border-top: 1px solid lightgray;
+}
+
+.chat__footer > form {
+    display: flex;
+}
+
+.chat__footerInput{
+    flex: 1;
+    display: flex;
+}
+
+.chat__footerInput > input {
+    flex: 1;
+    margin: 10px;
+    border-radius: 30px;
+    padding: 10px;
+    border: none;
+    outline: none;
 }

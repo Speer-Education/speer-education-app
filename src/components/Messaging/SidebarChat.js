@@ -1,19 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import "./SidebarChat.css";
 import { Avatar } from "@material-ui/core";
+import { Link, useRouteMatch } from 'react-router-dom';
+import { db } from '../../config/firebase';
 
-function SidebarChat() {
+function SidebarChat({ id, roomName }) {
+
+    const [messages, setMessages] = useState('');
+    let { url } = useRouteMatch();
+
+    useEffect(() => {
+        if (id) {
+            db.collection('rooms').doc(id).collection('messages').orderBy('date', 'desc').onSnapshot(snap => {
+                setMessages(snap.docs.map( doc => doc.data()))
+            })
+        }
+    }, [id])
+
     return (
-        <div className="sidebarChat">
-            <Avatar /> {/* Add src={*room_pic*} in the Avatar tag <-- Room pic defaults to the other user's prof pic if there are
+        <Link to={`${url}/${id}`}>
+            <div className="sidebarChat">
+                <Avatar /> {/* Add src={*room_pic*} in the Avatar tag <-- Room pic defaults to the other user's prof pic if there are
             only 2 users, and  the group pic if it is a group chat.*/}
-            <div className="sidebarChat__info">
-                <h2>Person/Room Name</h2> {/* If the room has only 2 people, it will display
+                <div className="sidebarChat__info">
+                    <h2>{roomName}</h2> {/* If the room has only 2 people, it will display
                 the name of the other person in the chat (so just person name), but if it is a group chat (more than 2 people), 
                 there will be a name property and we show the room name instead.*/}
-                <p>Last Message...</p> {/* Just take the last message from the room database, but shorten it to like 20 characters and add an ...*/}
+                    <p>{messages[0] ? messages[0].message.substring(0,16) + "..." : "No Message History"}</p>
+                </div>
             </div>
-        </div>
+        </Link>
     )
 }
 
