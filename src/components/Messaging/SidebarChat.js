@@ -21,11 +21,10 @@ function SidebarChat({ id, roomName }) {
         <Link to={`${url}/${id}`}>
             <div className="sidebarChat">
                 <Avatar /> {/* Add src={*room_pic*} in the Avatar tag <-- Room pic defaults to the other user's prof pic if there are
-            only 2 users, and  the group pic if it is a group chat.*/}
+                only 2 users, and  the group pic if it is a group chat. <-- Implement this to come from Sidebar and be passed down as a prop <-- Do that when you get
+                another user*/}
                 <div className="sidebarChat__info">
-                    <h2>{roomName}</h2> {/* If the room has only 2 people, it will display
-                the name of the other person in the chat (so just person name), but if it is a group chat (more than 2 people), 
-                there will be a name property and we show the room name instead.*/}
+                    <h2>{roomName}</h2> 
                     <p>{messages[0] ? messages[0].message.substring(0,16) + "..." : "No Message History"}</p>
                 </div>
             </div>
