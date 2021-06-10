@@ -25,6 +25,12 @@
     font-size: xx-small;
 }
 
+.chat__messageText{
+    font-weight: 400;
+    font-size: 1rem;
+    display: block;
+}
+
 .chat__timestamp{
     margin-right: 10px;
     font-size: xx-small;

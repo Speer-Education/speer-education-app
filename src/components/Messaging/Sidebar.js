@@ -19,11 +19,11 @@ function Sidebar() {
         const unsubscribe = db.collection('rooms').onSnapshot(snap => {
 
             setRooms(snap.docs.filter(doc => isUsersRoom(doc.data())).map(doc => {
-                if (doc.name) {
+                if (doc.data().name) {
                     return {
                         id: doc.id,
                         data: doc.data(),
-                        name: doc.name //Straight away can put name there if there is a name for the group (will be the case for when multiple people)
+                        name: doc.data().name //Straight away can put name there if there is a name for the group (will be the case for when multiple people)
                     }
                 } else {
                     return {
@@ -61,6 +61,7 @@ function Sidebar() {
 
     return (
         <div className="sidebar">
+            {console.log(user?.uid)}
             {console.log(userDetails)}
             <div className="sidebar__header">
                 <Avatar src={userDetails?.picture} />
