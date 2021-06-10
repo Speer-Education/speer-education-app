@@ -4,6 +4,8 @@ import Select from 'react-select';
 import { gradeOptions, majorOptions, countryOptions } from './OnboardingConfig';
 import { updateDoc } from '../../hooks/firestore';
 import { useAuth } from '../../hooks/useAuth';
+import { functions } from '../../config/firebase';
+import Button from '@material-ui/core/Button';
 
 export default function UserDetails() {
     const { user } = useAuth();
@@ -44,7 +46,11 @@ export default function UserDetails() {
             console.log("Submission unsuccessful, please fill up all the inputs")
             setSubmitting(false);
         }
-        await updateDoc(`users/${user.uid}`, form)
+
+        await functions.httpsCallable('onBoarding')({form})
+            .catch((error) => {
+                console.error(error)
+            })
     }
 
     //Updates state whenever the user change fields in the form
@@ -92,13 +98,14 @@ export default function UserDetails() {
                 <input name="hobbies" placeholder="Hobbies" onChange={handleFormInput} value={form.hobbies}></input>
                 {!isValidForm && <p className="text-red-600">Error! Please fill in all the blanks.</p>}
                 {/* Submission Button */}
-                <button
+                <Button
                     type="submit"
                     onClick={handleFormSubmit}
-                    disabled={!isValidForm}
+                    disabled={!isValidForm || submitting}
+                    variant="outlined"
                 >
-                    Submit
-                </button>
+                    {submitting?"Submitting...":"Submit"}
+                </Button>
 
                 {/* Change the other selects to the cool select form */}
             </form>
