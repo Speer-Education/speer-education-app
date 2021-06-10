@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Avatar, IconButton } from '@material-ui/core';
 import { AttachFile, Send } from '@material-ui/icons';
 import { useParams } from 'react-router-dom';
-import { db } from '../../config/firebase';
-import firebase from 'firebase';
+import { firebase, db } from '../../config/firebase';
 import "./Chat.css";
 import ChatMessage from './ChatMessage';
 
