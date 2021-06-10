@@ -21,10 +21,6 @@
     font-weight: 500;
 }
 
-.chat__headerInfo > p {
-    color: gray;
-}
-
 .chat__body{
     flex: 1;
     background: lightgray;

@@ -17,19 +17,19 @@ export default function MainApp() {
                     <h1>Main App Page</h1>
                 </Route>
                 {/* Mentor Page */}
-                <Route exact path={`${path}/mentors`}>
+                <Route path={`${path}/mentors`}> 
                     <h1>Mentors</h1>
                 </Route>
                 {/* Chat Page */}
-                <Route exact path={`${path}/messages`}>
+                <Route path={`${path}/messages`}> {/* Fixed routing bug to do with "exact" */}
                     <Messages/>
                 </Route>
                 {/* Blogs Page */}
-                <Route exact path={`${path}/blogs`}>
+                <Route path={`${path}/blogs`}>
                     <h1>Blog</h1>
                 </Route>
                 {/* Blog Page */}
-                <Route exact path={`${path}/blog/:postId`}>
+                <Route path={`${path}/blog/:postId`}>
                     <BlogPage/>
                 </Route>
             </Switch>
