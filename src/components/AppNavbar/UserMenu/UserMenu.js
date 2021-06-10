@@ -25,7 +25,7 @@ const UserDropdown = ({ user, open }) => {
 const UserMenu = () => {
     const { user } = useAuth();
     const [open, setOpen] = useState(false);
-    if (!user) return <a className="text-red-800 font-semibold" href="./login">Sign In</a>;
+    if (!user) return <a className="text-red-800 font-semibold" href="/login">Sign In</a>;
     return <div className="relative" onMouseLeave={() => setOpen(false)}>
         <UserAvatar url={user.photoURL} setOpen={setOpen} />
         <UserDropdown user={user} open={open} />
