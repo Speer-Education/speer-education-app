@@ -3,11 +3,14 @@ import { Avatar, IconButton } from '@material-ui/core';
 import { AttachFile, Send } from '@material-ui/icons';
 import { useParams } from 'react-router-dom';
 import { db } from '../../config/firebase';
+import { useAuth } from '../../hooks/useAuth';
 import firebase from 'firebase';
 import "./Chat.css";
 import ChatMessage from './ChatMessage';
 
 function Chat() {
+
+    const { user, userDetails } = useAuth();
 
     const [input, setInput] = useState("");
     const { roomId } = useParams();
@@ -20,8 +23,8 @@ function Chat() {
         db.collection('rooms').doc(roomId).collection('messages').add({
             message: input,
             date: firebase.firestore.FieldValue.serverTimestamp(),
-            senderId: "h67gh6", //<-- Hard Coded for now
-            senderUsername: "Dan Jones" //<-- Hard Coded for now
+            senderId: user?.uid, 
+            senderUsername: userDetails.name 
         })
 
         setInput(""); /* Reset the input at the end */
@@ -64,7 +67,7 @@ function Chat() {
                     message={message.data.message} 
                     username={message.data.senderUsername} 
                     timestamp={message.data.date?.toDate().toUTCString()} 
-                    isCurrentUser={message.data.senderId === "h67gh6"} /> //<-- Hard coded for now
+                    isCurrentUser={message.data.senderId === user?.uid} /> 
                 ))}
             </div>
             <div className="chat__footer">
