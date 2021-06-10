@@ -11,7 +11,7 @@ function SidebarChat({ id, roomName, roomPic }) {
 
     useEffect(() => {
         if (id) {
-            db.collection('rooms').doc(id).collection('messages').orderBy('date', 'desc').onSnapshot(snap => {
+            db.collection('rooms').doc(id).collection('messages').orderBy('date', 'desc').limit(1).onSnapshot(snap => {
                 setMessages(snap.docs.map( doc => doc.data()))
             })
         }
