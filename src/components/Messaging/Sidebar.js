@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Sidebar.css';
-import { Avatar, IconButton } from "@material-ui/core";
-import ChatIcon from '@material-ui/icons/Chat';
+import { Avatar } from "@material-ui/core";
 import { SearchOutlined } from '@material-ui/icons';
 import SidebarChat from './SidebarChat';
 import { db } from '../../config/firebase';
@@ -19,17 +18,24 @@ function Sidebar() {
         const unsubscribe = db.collection('rooms').onSnapshot(snap => {
 
             setRooms(snap.docs.filter(doc => isUsersRoom(doc.data())).map(doc => {
-                if (doc.name) {
+
+                const docData = doc.data();
+                //Means it is a group chat
+                if (docData.name) {
                     return {
                         id: doc.id,
-                        data: doc.data(),
-                        name: doc.name //Straight away can put name there if there is a name for the group (will be the case for when multiple people)
+                        data: docData,
+                        name: docData.name, //Straight away can put name there if there is a name for the group (will be the case for when multiple people)
+                        //pic: docData.picture || ""
                     }
                 } else {
+                    const { roomName, roomPic } = findRoomNameAndRoomPic(docData);
+
                     return {
                         id: doc.id,
-                        data: doc.data(),
-                        name: findRoomName(doc.data())
+                        data: docData,
+                        name: roomName,
+                        //pic: roomPic
                     }
                 }
             }))
@@ -50,10 +56,16 @@ function Sidebar() {
         return false
     }
 
-    const findRoomName = (data) => {
+    const findRoomNameAndRoomPic = (data) => {
         for (let i = 0; i < data.users.length; i++) {
             if (data.users[i].userId !== user?.uid) {
-                return data.users[i].username
+
+                //Find room picture
+
+                return {
+                    roomName: data.users[i].username,
+                    //roomPic: Find prof pic and put it here
+                }
             }
         }
         return "ERROR: NO ROOM NAME FOUND"
@@ -61,6 +73,7 @@ function Sidebar() {
 
     return (
         <div className="sidebar">
+            {console.log(user?.uid)}
             {console.log(userDetails)}
             <div className="sidebar__header">
                 <Avatar src={userDetails?.picture} />
@@ -79,7 +92,7 @@ function Sidebar() {
             </div>
             <Link to="/main-app/mentors">
                 <Button className="sidebar__mentorButton">
-                    Discover more mentors!
+                    Connect with more mentors!
                 </Button>
             </Link>
         </div>

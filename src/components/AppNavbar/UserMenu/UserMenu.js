@@ -3,7 +3,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import styles from './UserMenu.css'
 
 const UserAvatar = ({ url, setOpen }) => {
-    return <button className="lg:w-12 lg:h-12 rounded-full w-10 h-10 border-blue-500 border-2 overflow-hidden shadow-xl" onClick={() => setOpen(prevOpen => !prevOpen)}>
+    return <button className="lg:w-12 lg:h-12 rounded-full w-10 h-10 border-blue-500 border-2 overflow-hidden shadow-xl cursor-pointer" onClick={() => setOpen(prevOpen => !prevOpen)}>
         <img className="h-full w-full object-cover" src={url} alt="avatar" />
     </button>
 }
@@ -15,7 +15,7 @@ const UserDropdown = ({ user, open }) => {
         <a href="#" className="transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300">
             Student Info
         </a>
-        <a className="transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300"
+        <a className="cursor-pointer transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300"
             onClick={() => signOut()}>
             Logout
         </a>

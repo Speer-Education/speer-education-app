@@ -86,7 +86,7 @@ const useAuthProvider = () => {
                     setUserDetails({ ...userDetails, ... await getUserTokenResult(true) })
                     console.log("Refreshing token");
                 }
-                lastCommitted = data._lastCommitted;
+                lastCommitted = data?._lastCommitted;
             });
         }
     }, [user]);

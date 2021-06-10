@@ -3,36 +3,37 @@ import { Avatar, IconButton } from '@material-ui/core';
 import { AttachFile, Send } from '@material-ui/icons';
 import { useParams } from 'react-router-dom';
 import { firebase, db } from '../../config/firebase';
+import { useAuth } from '../../hooks/useAuth';
 import "./Chat.css";
 import ChatMessage from './ChatMessage';
 
 function Chat() {
 
+    const { user, userDetails } = useAuth();
+
     const [input, setInput] = useState("");
     const { roomId } = useParams();
     const [roomName, setRoomName] = useState(""); //Will have to reach out again and figure out what its room name is.
+    const [roomPic, setRoomPic] = useState("");
     const [messages, setMessages] = useState([]);
-
-    const sendMessage = (e) => {
-        e.preventDefault(); 
-
-        db.collection('rooms').doc(roomId).collection('messages').add({
-            message: input,
-            date: firebase.firestore.FieldValue.serverTimestamp(),
-            senderId: "h67gh6", //<-- Hard Coded for now
-            senderUsername: "Dan Jones" //<-- Hard Coded for now
-        })
-
-        setInput(""); /* Reset the input at the end */
-    }
 
     //TO get the room name and messages
     useEffect(() => {
         if (roomId) {
             //Get Room Name
-            db.collection('rooms').doc(roomId).onSnapshot(snapshot => (
-                setRoomName(snapshot.data().users[1].username) //Use logic to get the actual room name 
-            ))
+            db.collection('rooms').doc(roomId).onSnapshot(snapshot => {
+                const snapData = snapshot.data()
+                //If there is a name (it means it is a group chat)
+                if(snapData.name){
+                    setRoomName(snapData.name)
+                    /* setRoomPic(snapData.picture || "") <-- Sets the room picture*/
+                //If there is no name (A direct message between two person chat)
+                } else {
+                    const { roomName, roomPic } = findRoomNameAndRoomPic(snapData);
+                    setRoomName(roomName) //Implemented function (actually from Sidebar.js) to get the actual room name    
+                    /* setRoomPic(roomPic)  <-- Sets the room picture*/                 
+                }
+            })
 
             //Get Messages
             db.collection('rooms').doc(roomId).collection('messages').orderBy('date','asc').onSnapshot(snapshot => (
@@ -47,6 +48,34 @@ function Chat() {
         }
         
     }, [roomId])
+
+    const sendMessage = (e) => {
+        e.preventDefault(); 
+
+        db.collection('rooms').doc(roomId).collection('messages').add({
+            message: input,
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+            senderId: user?.uid, 
+            senderUsername: userDetails.name 
+        })
+
+        setInput(""); /* Reset the input at the end */
+    }
+
+    const findRoomNameAndRoomPic = (data) => {
+        for (let i = 0; i < data.users.length; i++) {
+            if (data.users[i].userId !== user?.uid) {
+
+                //Find profile pic *here*
+
+                return {
+                    roomName: data.users[i].username,
+                    // roomPic: Find profile pic 
+                }
+            }
+        }
+        return "ERROR: NO ROOM NAME FOUND"
+    }
 
     return (
         <div className="chat">
@@ -63,7 +92,7 @@ function Chat() {
                     message={message.data.message} 
                     username={message.data.senderUsername} 
                     timestamp={message.data.date?.toDate().toUTCString()} 
-                    isCurrentUser={message.data.senderId === "h67gh6"} /> //<-- Hard coded for now
+                    isCurrentUser={message.data.senderId === user?.uid} /> 
                 ))}
             </div>
             <div className="chat__footer">
