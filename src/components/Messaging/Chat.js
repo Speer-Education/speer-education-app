@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Avatar, IconButton } from '@material-ui/core';
 import { AttachFile, Send } from '@material-ui/icons';
 import { useParams } from 'react-router-dom';
@@ -18,6 +18,8 @@ function Chat() {
     const [roomPic, setRoomPic] = useState("");
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const messagesEndRef = useRef(null);
 
     //TO get the room name and messages
     useEffect(() => {
@@ -60,6 +62,11 @@ function Chat() {
         
     }, [roomId])
 
+    useEffect(() => {
+        scrollToBottom()
+      }, [messages, loading]);
+    
+
     const sendMessage = (e) => {
         e.preventDefault(); 
 
@@ -85,6 +92,10 @@ function Chat() {
         
     }
 
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView()
+      }
+
     return (
         <div className="chat">
             {loading ? <div className="chat__Loader"><Loader/></div>: 
@@ -104,6 +115,7 @@ function Chat() {
                     timestamp={message.data.date?.toDate().toUTCString()} 
                     isCurrentUser={message.data.senderId === user?.uid} /> 
                 ))}
+                <div ref={messagesEndRef} />
             </div>
             <div className="chat__footer">
                 <form>
