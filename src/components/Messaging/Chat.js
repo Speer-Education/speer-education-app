@@ -30,7 +30,7 @@ function Chat() {
             const unsub1 = db.collection('rooms').doc(roomId).onSnapshot(async (snapshot) => { //<-- Add an unsubscribe
                 const snapData = snapshot.data()
                 //If there is a name (it means it is a group chat)
-                if(snapData.name){
+                if(snapData?.name){
                     setRoomName(snapData.name)
                     setRoomPic(snapData.picture || "") 
                 //If there is no name (A direct message between two person chat)
@@ -84,10 +84,10 @@ function Chat() {
     }
 
     const findRoomNameAndRoomPic = async (data) => {
-        let recipientId = data.users.filter((userId) => userId !== user?.uid)[0] //<-- Remove the destructuring
+        let recipientId = data?.users.filter((userId) => userId !== user?.uid)[0] //<-- Remove the destructuring
         return {
-            roomName:(await db.doc(`users/${recipientId}`).get()).data().name, //<-- asynchrously fetch user id's
-            roomPic: await storage.ref(`/profilepics/${recipientId}.png`).getDownloadURL()
+            roomName:(await db.doc(`users/${recipientId}`).get()).data()?.name, //<-- asynchrously fetch user id's
+            roomPic: await storage.ref(`/profilepics/${recipientId}.png`)?.getDownloadURL()
         }
         
     }
