@@ -26,11 +26,11 @@ function Sidebar() {
                         id: doc.id,
                         data: docData,
                         name: docData.name, //Straight away can put name there if there is a name for the group (will be the case for when multiple people)
-                        //pic: docData.picture || ""
+                        pic: docData.picture || ""
                     }
                 } else {
                     const { roomName, roomPic } = await findRoomNameAndRoomPic(docData);
-
+                    
                     return {
                         id: doc.id,
                         data: docData,

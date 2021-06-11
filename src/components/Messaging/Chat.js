@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Avatar, IconButton } from '@material-ui/core';
 import { AttachFile, Send } from '@material-ui/icons';
 import { useParams } from 'react-router-dom';
-import { firebase, db } from '../../config/firebase';
+import { firebase, db, storage } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import "./Chat.css";
 import ChatMessage from './ChatMessage';
@@ -21,17 +21,17 @@ function Chat() {
     useEffect(() => {
         if (roomId) {
             //Get Room Name
-            db.collection('rooms').doc(roomId).onSnapshot(snapshot => {
+            db.collection('rooms').doc(roomId).onSnapshot(async (snapshot) => {
                 const snapData = snapshot.data()
                 //If there is a name (it means it is a group chat)
                 if(snapData.name){
                     setRoomName(snapData.name)
-                    /* setRoomPic(snapData.picture || "") <-- Sets the room picture*/
+                    setRoomPic(snapData.picture || "") 
                 //If there is no name (A direct message between two person chat)
                 } else {
-                    const { roomName, roomPic } = findRoomNameAndRoomPic(snapData);
+                    const { roomName, roomPic } = await findRoomNameAndRoomPic(snapData);
                     setRoomName(roomName) //Implemented function (actually from Sidebar.js) to get the actual room name    
-                    /* setRoomPic(roomPic)  <-- Sets the room picture*/                 
+                    setRoomPic(roomPic)                 
                 }
             })
 
@@ -52,35 +52,32 @@ function Chat() {
     const sendMessage = (e) => {
         e.preventDefault(); 
 
-        db.collection('rooms').doc(roomId).collection('messages').add({
-            message: input,
-            date: firebase.firestore.FieldValue.serverTimestamp(),
-            senderId: user?.uid, 
-            senderUsername: userDetails.name 
-        })
-
-        setInput(""); /* Reset the input at the end */
+        //Fixed bug (now requires text to send message)
+        if (input !== ""){
+            db.collection('rooms').doc(roomId).collection('messages').add({
+                message: input,
+                date: firebase.firestore.FieldValue.serverTimestamp(),
+                senderId: user?.uid, 
+                senderUsername: userDetails.name 
+            })
+    
+            setInput(""); /* Reset the input at the end */
+        }
     }
 
-    const findRoomNameAndRoomPic = (data) => {
-        for (let i = 0; i < data.users.length; i++) {
-            if (data.users[i].userId !== user?.uid) {
-
-                //Find profile pic *here*
-
-                return {
-                    roomName: data.users[i].username,
-                    // roomPic: Find profile pic 
-                }
-            }
+    const findRoomNameAndRoomPic = async (data) => {
+        let recipient = data.users.filter(({userId}) => userId !== user?.uid)[0]
+        return {
+            roomName: recipient.username,
+            roomPic: await storage.ref(`/profilepics/${recipient.userId}.png`).getDownloadURL()
         }
-        return "ERROR: NO ROOM NAME FOUND"
+        
     }
 
     return (
         <div className="chat">
             <div className="chat__header">
-                <Avatar /> {/* src={*other user's prof pic or room picture*} */}
+                <Avatar src={roomPic}/> {/* src={*other user's prof pic or room picture*} */}
                 <div className="chat__headerInfo">
                     <h3>{roomName}</h3>
                 </div>
