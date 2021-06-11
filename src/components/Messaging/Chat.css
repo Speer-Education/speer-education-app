@@ -2,6 +2,7 @@
     flex: 0.8;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .chat__header{
@@ -49,4 +50,11 @@
     padding: 10px;
     border: none;
     outline: none;
+}
+
+.chat__Loader{
+    display: grid;
+    place-items: center;
+    height: 100%;
+    transform: scale(3);
 }
