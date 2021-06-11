@@ -6,6 +6,7 @@ import { firebase, db, storage } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import "./Chat.css";
 import ChatMessage from './ChatMessage';
+import Loader from '../Loader/Loader';
 
 function Chat() {
 
@@ -16,11 +17,13 @@ function Chat() {
     const [roomName, setRoomName] = useState(""); //Will have to reach out again and figure out what its room name is.
     const [roomPic, setRoomPic] = useState("");
     const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     //TO get the room name and messages
     useEffect(() => {
         if (roomId) {
 
+            setLoading(true);
             //Get Room Name
             const unsub1 = db.collection('rooms').doc(roomId).onSnapshot(async (snapshot) => { //<-- Add an unsubscribe
                 const snapData = snapshot.data()
@@ -34,7 +37,9 @@ function Chat() {
                     setRoomName(roomName) //Implemented function (actually from Sidebar.js) to get the actual room name    
                     setRoomPic(roomPic)                 
                 }
+                setLoading(false);
             })
+           
 
             //Get Messages
             const unsub2 = db.collection('rooms').doc(roomId).collection('messages').orderBy('date','asc').onSnapshot(snapshot => (
@@ -82,9 +87,10 @@ function Chat() {
 
     return (
         <div className="chat">
-            {roomName || roomPic ? null : <h1>agahsfahjfgbdhjsdgj</h1>}
+            {loading ? <div className="chat__Loader"><Loader/></div>: 
+             <>
             <div className="chat__header">
-                <Avatar src={roomPic}/> {/* src={*other user's prof pic or room picture*} */}
+                <Avatar src={roomPic}/> 
                 <div className="chat__headerInfo">
                     <h3>{roomName}</h3>
                 </div>
@@ -102,7 +108,7 @@ function Chat() {
             <div className="chat__footer">
                 <form>
                     <IconButton>
-                        <AttachFile /> {/*Eventually make it able to attach a file*/}
+                        <AttachFile /> 
                     </IconButton>
                     <div className="chat__footerInput">
                         <input type="text" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)}/>
@@ -111,7 +117,7 @@ function Chat() {
                         </IconButton>
                     </div>
                 </form>
-            </div>
+            </div> </>}
         </div>
     )
 }
