@@ -3,6 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/database";
 import "firebase/storage";
+import "firebase/functions";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAx-OEKEZF6LgX5wv03qRilbGTWIJvL4kw",
@@ -18,13 +19,20 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
+firebase.firestore().settings({
+  cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+});
+
 const app = firebase.app();
 const auth = firebase.auth();
 const db = firebase.firestore();
 const rtdb = firebase.database();
 const now = firebase.firestore.Timestamp.now();
 const storage = firebase.storage();
+const functions = firebase.functions();
 
-export { firebase, auth, db, now, storage, rtdb };
+db.enablePersistence()
+
+export { firebase, auth, db, now, storage, rtdb, functions };
 
 console.log(app.name ? "Firebase Mode Activated!" : "Firebase not working :(");

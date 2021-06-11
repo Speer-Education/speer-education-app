@@ -1,11 +1,14 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from "react-router-dom";
+import BlogEditor from  '../../pages/AdminApp/BlogEditor/BlogEditor';
+import { AppNavbar } from '../../components/AppNavbar/AppNavbar';
 
 export default function AdminApp() {
     let { path } = useRouteMatch();
 
     return (
-        <div>
+        <>
+            <AppNavbar/>
             <Switch>
                 {/* Main Page */}
                 <Route exact path ={`${path}`}>
@@ -20,10 +23,10 @@ export default function AdminApp() {
                     <h1>Manage Blog</h1>
                 </Route>
                 {/* Blog Poster Page */}
-                <Route exact path={`${path}/blog-poster`}>
-                    <h1>Post Blog</h1>
+                <Route exact path={`${path}/blog-poster/:postId`}>
+                    <BlogEditor/>
                 </Route>
             </Switch>
-        </div>
+        </>
     )
 }
