@@ -78,7 +78,7 @@ function Sidebar() {
                     return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} roomPic={room.pic}/>
                 })}
             </div>
-            <Link to="/main-app/mentors">
+            <Link to="/app/mentors">
                 <Button className="sidebar__mentorButton">
                     Connect with more mentors!
                 </Button>
