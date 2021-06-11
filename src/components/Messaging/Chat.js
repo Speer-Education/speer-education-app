@@ -20,8 +20,9 @@ function Chat() {
     //TO get the room name and messages
     useEffect(() => {
         if (roomId) {
+
             //Get Room Name
-            db.collection('rooms').doc(roomId).onSnapshot(async (snapshot) => {
+            const unsub1 = db.collection('rooms').doc(roomId).onSnapshot(async (snapshot) => { //<-- Add an unsubscribe
                 const snapData = snapshot.data()
                 //If there is a name (it means it is a group chat)
                 if(snapData.name){
@@ -36,7 +37,7 @@ function Chat() {
             })
 
             //Get Messages
-            db.collection('rooms').doc(roomId).collection('messages').orderBy('date','asc').onSnapshot(snapshot => (
+            const unsub2 = db.collection('rooms').doc(roomId).collection('messages').orderBy('date','asc').onSnapshot(snapshot => (
                 setMessages(snapshot.docs.map(doc => {
                     return {
                         id: doc.id, 
@@ -45,6 +46,11 @@ function Chat() {
                 }))
                 )
             )
+
+            return () => {
+                unsub1();
+                unsub2();
+            }
         }
         
     }, [roomId])
@@ -66,16 +72,17 @@ function Chat() {
     }
 
     const findRoomNameAndRoomPic = async (data) => {
-        let recipient = data.users.filter(({userId}) => userId !== user?.uid)[0]
+        let recipientId = data.users.filter((userId) => userId !== user?.uid)[0] //<-- Remove the destructuring
         return {
-            roomName: recipient.username,
-            roomPic: await storage.ref(`/profilepics/${recipient.userId}.png`).getDownloadURL()
+            roomName:(await db.doc(`users/${recipientId}`).get()).data().name, //<-- asynchrously fetch user id's
+            roomPic: await storage.ref(`/profilepics/${recipientId}.png`).getDownloadURL()
         }
         
     }
 
     return (
         <div className="chat">
+            {roomName || roomPic ? null : <h1>agahsfahjfgbdhjsdgj</h1>}
             <div className="chat__header">
                 <Avatar src={roomPic}/> {/* src={*other user's prof pic or room picture*} */}
                 <div className="chat__headerInfo">

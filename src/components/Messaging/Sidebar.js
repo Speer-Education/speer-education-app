@@ -15,9 +15,12 @@ function Sidebar() {
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
-        const unsubscribe = db.collection('rooms').onSnapshot(snap => {
+        //If user is blank
+        if (!user) return
 
-            Promise.all(snap.docs.filter(doc => isUsersRoom(doc.data())).map(async doc => {
+        const unsubscribe = db.collection('rooms').where('users','array-contains', user?.uid).onSnapshot(snap => {
+
+            Promise.all(snap.docs.map(async doc => {
 
                 const docData = doc.data();
                 //Means it is a group chat
@@ -46,15 +49,12 @@ function Sidebar() {
         }
     }, [user?.uid])
 
-    const isUsersRoom = (data) => {
-        return data.users.filter(({userId}) => userId === user?.uid).length >0
-    }
 
     const findRoomNameAndRoomPic = async (data) => {
-        let recipient = data.users.filter(({userId}) => userId !== user?.uid)[0]
+        let recipientId = data.users.filter((id) => id !== user?.uid)[0]
         return {
-            roomName: recipient.username,
-            roomPic: await storage.ref(`/profilepics/${recipient.userId}.png`).getDownloadURL()
+            roomName: (await db.doc(`users/${recipientId}`).get()).data()?.name,
+            roomPic: await storage.ref(`/profilepics/${recipientId}.png`).getDownloadURL()
         }
         // return "ERROR: NO ROOM NAME FOUND"
     }
