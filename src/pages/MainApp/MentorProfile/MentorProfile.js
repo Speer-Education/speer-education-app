@@ -16,12 +16,12 @@ const MentorProfile = () => {
     const { user } = useAuth();
 
     useEffect(() => {
-        setProfPic(await storage.ref(`/profilepics/${mentorId}.png`)?.getDownloadURL());
 
         console.log(`mentors/${mentorId}`)
         return db.doc(`mentors/${mentorId}`).onSnapshot(async snap => {
             console.log(snap.data())
             setMentor(snap.data());
+            setProfPic(await storage.ref(`/profilepics/${mentorId}.png`)?.getDownloadURL());
         })
     }, [mentorId]);
 
