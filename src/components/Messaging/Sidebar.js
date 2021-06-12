@@ -19,7 +19,7 @@ function Sidebar() {
         //If user is blank
         if (!user) return
 
-        const unsubscribe = db.collection('rooms').where('users','array-contains', user?.uid).onSnapshot(snap => {
+        const unsubscribe = db.collection('rooms').where('users', 'array-contains', user?.uid).onSnapshot(snap => {
 
             Promise.all(snap.docs.map(async doc => {
 
@@ -34,7 +34,7 @@ function Sidebar() {
                     }
                 } else {
                     const { roomName, roomPic } = await findRoomNameAndRoomPic(docData);
-                    
+
                     return {
                         id: doc.id,
                         data: docData,
@@ -62,8 +62,6 @@ function Sidebar() {
 
     return (
         <div className="sidebar">
-            {console.log(user?.uid)}
-            {console.log(userDetails)}
             <div className="sidebar__header">
                 <Avatar src={userDetails?.picture} />
                 <h1 className="sidebar__headerUsername">{userDetails?.name}</h1>
@@ -75,8 +73,8 @@ function Sidebar() {
                 </div>
             </div>
             <div className="sidebar__chats">
-                {rooms.filter(room => room.name.includes(search)).map(room => {
-                    return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} roomPic={room.pic}/>
+                {rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase())).map(room => {
+                    return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} roomPic={room.pic} />
                 })}
             </div>
             <Link to="/app/mentors">

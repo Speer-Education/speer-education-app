@@ -30,28 +30,28 @@ function Chat() {
             const unsub1 = db.collection('rooms').doc(roomId).onSnapshot(async (snapshot) => { //<-- Add an unsubscribe
                 const snapData = snapshot.data()
                 //If there is a name (it means it is a group chat)
-                if(snapData?.name){
+                if (snapData?.name) {
                     setRoomName(snapData.name)
-                    setRoomPic(snapData.picture || "") 
-                //If there is no name (A direct message between two person chat)
+                    setRoomPic(snapData.picture || "")
+                    //If there is no name (A direct message between two person chat)
                 } else {
                     const { roomName, roomPic } = await findRoomNameAndRoomPic(snapData);
                     setRoomName(roomName) //Implemented function (actually from Sidebar.js) to get the actual room name    
-                    setRoomPic(roomPic)                 
+                    setRoomPic(roomPic)
                 }
                 setLoading(false);
             })
-           
+
 
             //Get Messages
-            const unsub2 = db.collection('rooms').doc(roomId).collection('messages').orderBy('date','asc').onSnapshot(snapshot => (
+            const unsub2 = db.collection('rooms').doc(roomId).collection('messages').orderBy('date', 'asc').onSnapshot(snapshot => (
                 setMessages(snapshot.docs.map(doc => {
                     return {
-                        id: doc.id, 
+                        id: doc.id,
                         data: doc.data()
                     }
                 }))
-                )
+            )
             )
 
             return () => {
@@ -59,26 +59,26 @@ function Chat() {
                 unsub2();
             }
         }
-        
+
     }, [roomId])
 
     useEffect(() => {
         scrollToBottom()
-      }, [messages, loading]);
-    
+    }, [messages, loading]);
+
 
     const sendMessage = (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
 
         //Fixed bug (now requires text to send message)
-        if (input !== ""){
+        if (input !== "") {
             db.collection('rooms').doc(roomId).collection('messages').add({
                 message: input,
                 date: firebase.firestore.FieldValue.serverTimestamp(),
-                senderId: user?.uid, 
-                senderUsername: userDetails.name 
+                senderId: user?.uid,
+                senderUsername: userDetails.name
             })
-    
+
             setInput(""); /* Reset the input at the end */
         }
     }
@@ -86,51 +86,52 @@ function Chat() {
     const findRoomNameAndRoomPic = async (data) => {
         let recipientId = data?.users.filter((userId) => userId !== user?.uid)[0] //<-- Remove the destructuring
         return {
-            roomName:(await db.doc(`users/${recipientId}`).get()).data()?.name, //<-- asynchrously fetch user id's
+            roomName: (await db.doc(`users/${recipientId}`).get()).data()?.name, //<-- asynchrously fetch user id's
             roomPic: await storage.ref(`/profilepics/${recipientId}.png`)?.getDownloadURL()
         }
-        
+
     }
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView()
-      }
+    }
 
     return (
         <div className="chat">
-            {loading ? <div className="chat__Loader"><Loader/></div>: 
-             <>
-            <div className="chat__header">
-                <Avatar src={roomPic}/> 
-                <div className="chat__headerInfo">
-                    <h3>{roomName}</h3>
-                </div>
-            </div>
-            <div className="chat__body">
-                {messages.map(message => (
-                    <ChatMessage 
-                    key={message.id} 
-                    message={message.data.message} 
-                    username={message.data.senderUsername} 
-                    timestamp={message.data.date?.toDate().toUTCString()} 
-                    isCurrentUser={message.data.senderId === user?.uid} /> 
-                ))}
-                <div ref={messagesEndRef} />
-            </div>
-            <div className="chat__footer">
-                <form>
-                    <IconButton>
-                        <AttachFile /> 
-                    </IconButton>
-                    <div className="chat__footerInput">
-                        <input type="text" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)}/>
-                        <IconButton type="submit" onClick={sendMessage}>
-                            <Send />
-                        </IconButton>
+            {loading ? <div className="chat__Loader"><Loader /></div> :
+                <>
+                    <div className="chat__header">
+                        <Avatar src={roomPic} />
+                        <div className="chat__headerInfo">
+                            <h3>{roomName}</h3>
+                        </div>
+                    </div>
+                    <div className="chat__body">
+                        {messages.map(message => (
+                            <ChatMessage
+                                key={message.id}
+                                message={message.data.message}
+                                username={message.data.senderUsername}
+                                timestamp={message.data.date?.toDate().toUTCString()}
+                                isCurrentUser={message.data.senderId === user?.uid} />
+                        ))}
+                        <div ref={messagesEndRef} />
+                    </div>
+                    <div className="chat__footer">
+                        <form>
+                            <IconButton>
+                                <AttachFile />
+                            </IconButton>
+                            <div className="chat__footerInput">
+                                {/* <input type="text" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)}/> */}
+                                <textarea cols="2" rows="3" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)}/>
+                                <IconButton type="submit" onClick={sendMessage}>
+                                <Send />
+                            </IconButton>
                     </div>
                 </form>
-            </div> </>}
-        </div>
+                </div> </>}
+        </div >
     )
 }
 
