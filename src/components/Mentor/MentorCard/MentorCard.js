@@ -21,7 +21,7 @@ const MentorCard = ({ id, name, university, major, description }) => {
             <p>{description}</p>
             <Link to={`/app/mentors/${id}`}>
                 <Button
-                    variant="default"
+                    variant="text"
                 >View Profile</Button>
             </Link>
         </div>

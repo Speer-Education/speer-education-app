@@ -42,6 +42,10 @@ const majorOptions = [
     "value" : "accounting",
     "label" : "Accounting"
   },
+  {
+    "value" : "computer science",
+    "label" : "Computer Science"
+  },
 ]
 
 const countryOptions =[

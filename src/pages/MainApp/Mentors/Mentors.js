@@ -19,6 +19,7 @@ const Mentors = () => {
             <div className="mentors__grid">
                 {mentors.map(({id, name, university, major, description}) => <MentorCard
                     id={id}
+                    key={id}
                     name={name}
                     university={university}
                     major={major}

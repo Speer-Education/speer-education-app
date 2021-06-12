@@ -24,7 +24,7 @@ const UserDropdown = ({ user, open }) => {
         <a href="/app/messages" className="transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300">
             Messages
         </a>
-        <a className="cursor-pointer transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300"
+        <a href="/" className="cursor-pointer transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300"
             onClick={() => signOut()}>
             Logout
         </a>

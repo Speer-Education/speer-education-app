@@ -79,22 +79,22 @@ export default function UserDetails() {
             <form className="user-details__form">
                 {/* Ask which to make mandatory and then force them to be required*/}
                 {/* Name */}
-                <label for="preferred-name">What should we call you?</label>
+                <label htmlFor="preferred-name">What should we call you?</label>
                 <input type="text" id="preferred-name" placeholder="Name" name="name" value={form.name} onChange={handleFormInput}/>
                 {/* Grade */}
-                <label for="grade">What Grade Are You In?</label>
+                <label htmlFor="grade">What Grade Are You In?</label>
                 <Select className="user-details__custom-select" id="grade" name="grade" options={gradeOptions} value={form.grade} onChange={handleGradeSelectFormInput}/>
                 {/* Date Of Birth */}
-                <label for="dateOfBirth">What's you Date Of Birth?</label>
+                <label htmlFor="dateOfBirth">What's you Date Of Birth?</label>
                 <input type="date" id="dateOfBirth" value={form.date} max="2012-12-31" name="dateOfBirth" onChange={handleFormInput} />
                 {/* Insert Country They Live In (Use a country list)*/}
-                <label for="country">Country Of Residence</label>
+                <label htmlFor="country">Country Of Residence</label>
                 <Select className="user-details__custom-select" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
                 {/* What they plan to major in */}
-                <label for="major">What Do You Plan To Major In?</label>
+                <label htmlFor="major">What Do You Plan To Major In?</label>
                 <Select className="user-details__custom-select" id="major" name="major" options={majorOptions} value={form.major} onChange={handleMajorSelectFormInput}/>
                 {/* Interests/hobbies */}
-                <label for="hobbies">What are some of your hobbies? (Sports, interests etc...)</label>
+                <label htmlFor="hobbies">What are some of your hobbies? (Sports, interests etc...)</label>
                 <input name="hobbies" placeholder="Hobbies" onChange={handleFormInput} value={form.hobbies}></input>
                 {!isValidForm && <p className="text-red-600">Error! Please fill in all the blanks.</p>}
                 {/* Submission Button */}
