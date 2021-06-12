@@ -44,16 +44,21 @@ export default function Navbar() {
                             UNIVERSITIES
                         </a>
                     </li>
+                    <li className="nav-item">
+                        <a href ="#launch" className="nav-links" onClick={closeMobileMenu}>
+                            LAUCNHING SOON
+                        </a>
+                    </li>
                     {/* This nav-item-desktop will only appear when above 960px */}
                     <li className="nav-item-desktop">
-                        <a href ="#launch" className="nav-links nav-links-desktop" onClick={closeMobileMenu}>
-                            WE'RE LAUNCHING SOON
+                        <a href ="/login" className="nav-links nav-links-desktop" onClick={closeMobileMenu}>
+                            LOGIN
                         </a>
                     </li>
                     {/* this nav-item-mobile will only appear when below 960px */}
                     <li className="nav-item-mobile">
-                        <a href ="#launch" className="nav-links-mobile" onClick={closeMobileMenu}>
-                            We're Launching Soon
+                        <a href ="/login" className="nav-links-mobile" onClick={closeMobileMenu}>
+                            LOGIN
                         </a>
                     </li>
                 </ul>

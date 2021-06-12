@@ -2,6 +2,7 @@ import React from 'react';
 import './Login.css';
 import { Button } from '@material-ui/core';
 import { useAuth } from "../../hooks/useAuth";
+import { Link } from 'react-router-dom';
 
 export default function Login() {
 
@@ -30,7 +31,7 @@ export default function Login() {
                     <Button type="submit" onClick={googleSignIn}>Sign In With Google<i className="fab fa-google"></i></Button>
                     <Button type="submit" onClick={facebookSignIn}>Sign In With Facebook<i className="fab fa-facebook"></i></Button>
                 </div> </> }
-                { user ? <Button type="submit" onClick={logOut}>Sign Out</Button> : null}
+                { user ? <div><Link to="/app">Go To App</Link><Button type="submit" onClick={logOut}>Sign Out</Button></div>: null}
             </form>
         </div>
     )
