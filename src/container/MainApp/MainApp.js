@@ -5,6 +5,7 @@ import BlogPage from '../../pages/MainApp/Blog/BlogPage';
 import Messages from '../../pages/MainApp/Messaging/Messaging';
 import MentorsPage from '../../pages/MainApp/Mentors/Mentors';
 import MentorProfile from '../../pages/MainApp/MentorProfile/MentorProfile';
+import EditProfile from '../../pages/MainApp/EditProfile/EditProfile';
 
 export default function MainApp() {
 
@@ -21,6 +22,9 @@ export default function MainApp() {
                 {/* Mentor Page */}
                 <Route exact path={`${path}/mentors`}> 
                     <MentorsPage/>
+                </Route>
+                <Route path={`${path}/editProfile`}> 
+                    <EditProfile/>
                 </Route>
                 {/* Mentor Profile Page */}
                 <Route path={`${path}/mentors/:mentorId`}> 
