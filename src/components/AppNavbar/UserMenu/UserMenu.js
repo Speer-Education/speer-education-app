@@ -15,6 +15,9 @@ const UserDropdown = ({ user, open }) => {
         <a href="/app" className="transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300">
             Dashboard
         </a>
+        <a href="/app/mentors" className="transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300">
+            Connect With Mentors
+        </a>
         <a href="/app/editProfile" className="transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300">
             Student Info
         </a>
