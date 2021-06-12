@@ -6,6 +6,8 @@ import Messages from '../../pages/MainApp/Messaging/Messaging';
 import MentorsPage from '../../pages/MainApp/Mentors/Mentors';
 import MentorProfile from '../../pages/MainApp/MentorProfile/MentorProfile';
 import EditProfile from '../../pages/MainApp/EditProfile/EditProfile';
+import Dashboard from '../../pages/MainApp/Dashboard/Dashboard';
+
 
 export default function MainApp() {
 
@@ -17,7 +19,7 @@ export default function MainApp() {
             <Switch>
                 {/* Main Page */}
                 <Route exact path ={`${path}`}>
-                    <h1>Main App Page</h1>
+                    <Dashboard/>
                 </Route>
                 {/* Mentor Page */}
                 <Route exact path={`${path}/mentors`}> 

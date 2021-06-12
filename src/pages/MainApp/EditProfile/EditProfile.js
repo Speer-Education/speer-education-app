@@ -46,7 +46,7 @@ export default function EditProfile() {
         e.preventDefault();
         setSubmitting(true);
         console.log(user);
-        console.log("User Id:", user.uid)
+        console.log("User Details:", userDetails)
 
         if (isValidForm === true && user) {
             console.log("submission is valid")
@@ -56,6 +56,8 @@ export default function EditProfile() {
         }
 
         setSubmitting(false);
+        console.log(user);
+        console.log("User Details:", userDetails)
     }
 
     // To handle select form inputs.
@@ -76,7 +78,8 @@ export default function EditProfile() {
             Edit Profile
             <form>
                 <label htmlFor="name">Name:</label>
-                <input type="text" id="name" value={updatedUserInfo?.name} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, name: e.target.value })}></input>
+                <input type="text" id="name" value={updatedUserInfo?.name} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, name: e.target.value })}></input> 
+                {/* When I submit this, it changes the name in the users/id but not for userDetails.name or user.displayName */}
                 <label htmlFor="dateOfBirth">Date Of Birth:</label>
                 <input type="date" id="dateOfBirth" value={updatedUserInfo?.dateOfBirth} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, dateOfBirth: e.target.value })}></input>
 
