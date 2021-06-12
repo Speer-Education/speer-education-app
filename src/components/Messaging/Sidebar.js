@@ -13,6 +13,7 @@ function Sidebar() {
     const { user, userDetails } = useAuth();
 
     const [rooms, setRooms] = useState([]);
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         //If user is blank
@@ -70,11 +71,11 @@ function Sidebar() {
             <div className="sidebar__searchContainer">
                 <div className="sidebar__search">
                     <SearchOutlined />
-                    <input type="text" placeholder="Search by name" />
+                    <input type="text" placeholder="Search by name" value={search} onChange={(e) => setSearch(e.target.value)}/>
                 </div>
             </div>
             <div className="sidebar__chats">
-                {rooms.map(room => {
+                {rooms.filter(room => room.name.includes(search)).map(room => {
                     return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} roomPic={room.pic}/>
                 })}
             </div>
