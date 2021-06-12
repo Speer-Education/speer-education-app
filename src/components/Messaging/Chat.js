@@ -23,7 +23,7 @@ function Chat() {
 
     //TO get the room name and messages
     useEffect(() => {
-        if (roomId) {
+        if (roomId && user) {
 
             setLoading(true);
             //Get Room Name
@@ -60,7 +60,7 @@ function Chat() {
             }
         }
 
-    }, [roomId])
+    }, [roomId, user])
 
     useEffect(() => {
         scrollToBottom()
