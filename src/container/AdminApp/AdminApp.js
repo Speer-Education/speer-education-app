@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from "react-router-dom";
-import BlogEditor from  '../../pages/AdminApp/BlogEditor/BlogEditor';
 import { AppNavbar } from '../../components/AppNavbar/AppNavbar';
 
 export default function AdminApp() {
@@ -21,10 +20,6 @@ export default function AdminApp() {
                 {/* Blog Management Page */}
                 <Route exact path={`${path}/blog-manager`}>
                     <h1>Manage Blog</h1>
-                </Route>
-                {/* Blog Poster Page */}
-                <Route exact path={`${path}/blog-poster/:postId`}>
-                    <BlogEditor/>
                 </Route>
             </Switch>
         </>

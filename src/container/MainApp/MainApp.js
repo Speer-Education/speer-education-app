@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import { AppNavbar } from '../../components/AppNavbar/AppNavbar';
+import BlogEditorPage from '../../pages/MainApp/BlogEditor/BlogEditor';
 import BlogPage from '../../pages/MainApp/Blog/BlogPage';
 import Messages from '../../pages/MainApp/Messaging/Messaging';
 import MentorsPage from '../../pages/MainApp/Mentors/Mentors';
@@ -43,6 +44,9 @@ export default function MainApp() {
                 {/* Blog Page */}
                 <Route path={`${path}/blog/:postId`}>
                     <BlogPage/>
+                </Route>
+                <Route path={`${path}/blogeditor/:postId`}>
+                    <BlogEditorPage/>
                 </Route>
             </Switch>
         </>
