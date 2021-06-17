@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 // import SpeerLogo from '../images/speer-logo.png'; <-- This file is not actually transparent, used the image from the 123 instead.
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -18,7 +19,7 @@ export default function Navbar() {
             <div className="navbar-container">
                 <div className="navbar-logo">
                     {/*Image taken from the 123 website CDN -->*/ }
-                    <a href="/" onClick={closeMobileMenu}><img className="navbar-logo__image" src="./rocket-logo@2x.png" alt="speer logo"></img></a>
+                    <Link to="/" onClick={closeMobileMenu}><img className="navbar-logo__image" src="./rocket-logo@2x.png" alt="speer logo"></img></Link>
                 </div> {/*Link replaces the A tag once we ihave multiple pages and install React Router Dom*/}
                 <div className="menu-icon" onClick={handleClick}>
                     <i className={click ? 'fas fa-times' : 'fas fa-bars'}/>
@@ -51,15 +52,15 @@ export default function Navbar() {
                     </li>
                     {/* This nav-item-desktop will only appear when above 960px */}
                     <li className="nav-item-desktop">
-                        <a href ="/login" className="nav-links nav-links-desktop" onClick={closeMobileMenu}>
+                        <Link to ="/login" className="nav-links nav-links-desktop" onClick={closeMobileMenu}>
                             LOGIN
-                        </a>
+                        </Link>
                     </li>
                     {/* this nav-item-mobile will only appear when below 960px */}
                     <li className="nav-item-mobile">
-                        <a href ="/login" className="nav-links-mobile" onClick={closeMobileMenu}>
+                        <Link to ="/login" className="nav-links-mobile" onClick={closeMobileMenu}>
                             LOGIN
-                        </a>
+                        </Link>
                     </li>
                 </ul>
             </div>

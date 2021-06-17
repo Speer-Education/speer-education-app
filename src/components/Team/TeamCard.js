@@ -6,7 +6,7 @@ export const TeamCard = ({ fullname, title, linkedinUrl, imageUrl }) => {
         <h2>{fullname}</h2>
         <p>{title}</p>
         <a href={linkedinUrl}>
-          <i class="fab fa-2x fa-linkedin-in"></i>
+          <i className="fab fa-2x fa-linkedin-in"></i>
         </a>
       </div>
     </div>

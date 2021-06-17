@@ -42,7 +42,7 @@ export const ContactUsForm = () => {
       </div>
       <div className="home-launch__form-row">
         <select name="year" onChange={handleFormInput}>
-          <option value selected>
+          <option value defaultValue>
             Year (Optional)
           </option>
           <option value="<9">Younger</option>

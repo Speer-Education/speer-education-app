@@ -14,8 +14,9 @@ export default function EditProfile() {
         grade: "",
         dateOfBirth: "",
         country: "",
+        school: "",
         major: "",
-        hobbies: ""
+        bio: ""
     });
 
     const [submitting, setSubmitting] = useState(false);
@@ -28,8 +29,9 @@ export default function EditProfile() {
             grade : userDetails?.grade, 
             dateOfBirth : userDetails?.dateOfBirth, 
             country : userDetails?.country,
+            school : userDetails?.school,
             major : userDetails?.major, 
-            hobbies : userDetails?.hobbies
+            bio : userDetails?.bio
         });
     }, [userDetails])
 
@@ -39,8 +41,9 @@ export default function EditProfile() {
             && updatedUserInfo?.grade !== undefined && updatedUserInfo?.grade !== ""
             && updatedUserInfo?.dateOfBirth !== undefined && updatedUserInfo?.dateOfBirth !== ""
             && updatedUserInfo?.country !== undefined && updatedUserInfo?.country !== ""
+            && updatedUserInfo?.school !== undefined && updatedUserInfo?.school !== ""
             && updatedUserInfo?.major !== undefined && updatedUserInfo?.major !== ""
-            && updatedUserInfo?.hobbies !== undefined && updatedUserInfo?.hobbies !== ""
+            && updatedUserInfo?.bio !== undefined && updatedUserInfo?.bio !== ""
     }, [updatedUserInfo])
 
     const handleUpdateProfile = async (e) => {
@@ -83,7 +86,7 @@ export default function EditProfile() {
         <div className="editProfile">
             Edit Profile
             <form>
-                <label htmlFor="name">Name:</label>
+                <label htmlFor="name">Full Name (Put first name before last name):</label>
                 <input type="text" id="name" value={updatedUserInfo?.name} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, name: e.target.value })}></input> 
                 {/* When I submit this, it changes the name in the users/id but not for userDetails.name or user.displayName */}
                 <label htmlFor="dateOfBirth">Date Of Birth:</label>
@@ -92,14 +95,18 @@ export default function EditProfile() {
                 {/* Grade */}
                 <label htmlFor="grade">What Grade Are You In?</label>
                 <Select className="user-details__custom-select" id="grade" name="grade" options={gradeOptions} value={updatedUserInfo?.grade} onChange={handleGradeSelectFormInput} />
+                {/* What country they live in */}
                 <label htmlFor="country">Country Of Residence</label>
                 <Select className="user-details__custom-select" id="country" name="country" options={countryOptions} value={updatedUserInfo?.country} onChange={handleCountrySelectFormInput} />
+                {/* What school they go to */}
+                <label htmlFor="school">What school do you go to?</label>
+                <input type="text" id="school" value={updatedUserInfo?.school} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, school: e.target.value })}></input>
                 {/* What they plan to major in */}
                 <label htmlFor="major">What Do You Plan To Major In?</label>
                 <Select className="user-details__custom-select" id="major" name="major" options={majorOptions} value={updatedUserInfo?.major} onChange={handleMajorSelectFormInput} />
-
-                <label htmlFor="hobbies">Hobbies:</label>
-                <input type="text" id="hobbies" value={updatedUserInfo?.hobbies} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, hobbies: e.target.value })}></input>
+                {/* Short Bio */}
+                <label htmlFor="bio">Bio:</label>
+                <input type="text" id="bio" value={updatedUserInfo?.bio} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, bio: e.target.value })}></input>
                 {!isValidForm && <p className="text-red-600">Error! Please Don't leave any blanks.</p>}
                 {edited? <h3>Edited Successfully!</h3> : null}
                 <Button
