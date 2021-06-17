@@ -33,6 +33,7 @@ export default function EditProfile() {
             major : userDetails?.major, 
             bio : userDetails?.bio
         });
+        console.log("inside top useEffect:", userDetails?.name)
     }, [userDetails])
 
     // To check if all fields are filled up
@@ -49,24 +50,21 @@ export default function EditProfile() {
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
         setSubmitting(true);
-        console.log(user);
-        console.log("User Details:", userDetails)
 
         if (isValidForm === true && user) {
+            console.log("updated user info:", updatedUserInfo)
             console.log("submission is valid")
-            db.doc(`users/${user.uid}`).update(updatedUserInfo);
+            await db.doc(`users/${user.uid}`).update(updatedUserInfo);
         } else {
             console.log("submission is invalid")
         }
-
+        
         setSubmitting(false);
         setEdited(true);
         setTimeout(() => {
             setEdited(false)
         }, 1800);
 
-        console.log(user);
-        console.log("User Details:", userDetails)
     }
 
     // To handle select form inputs.
