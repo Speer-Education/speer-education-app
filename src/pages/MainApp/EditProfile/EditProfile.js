@@ -19,6 +19,7 @@ export default function EditProfile() {
     });
 
     const [submitting, setSubmitting] = useState(false);
+    const [edited, setEdited] = useState(false);
 
     //setting the updated user info
     useEffect(() => {
@@ -56,6 +57,11 @@ export default function EditProfile() {
         }
 
         setSubmitting(false);
+        setEdited(true);
+        setTimeout(() => {
+            setEdited(false)
+        }, 1800);
+
         console.log(user);
         console.log("User Details:", userDetails)
     }
@@ -95,6 +101,7 @@ export default function EditProfile() {
                 <label htmlFor="hobbies">Hobbies:</label>
                 <input type="text" id="hobbies" value={updatedUserInfo?.hobbies} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, hobbies: e.target.value })}></input>
                 {!isValidForm && <p className="text-red-600">Error! Please Don't leave any blanks.</p>}
+                {edited? <h3>Edited Successfully!</h3> : null}
                 <Button
                     type="submit"
                     onClick={handleUpdateProfile}

@@ -1,9 +1,10 @@
-import React from 'react'
-import MentorShowcase from '../../../components/Dashboard/MentorShowcase'
+import React from 'react';
+import MentorShowcase from '../../../components/Dashboard/MentorShowcase';
+import './Dashboard.css';
 
 function Dashboard() {
     return (
-        <div>
+        <div className="dashboard">
             <MentorShowcase/>
         </div>
     )
