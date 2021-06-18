@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Avatar, IconButton } from '@material-ui/core';
 import { AttachFile, Send } from '@material-ui/icons';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { firebase, db, storage } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import "./Chat.css";
@@ -16,6 +16,7 @@ function Chat() {
     const { roomId } = useParams();
     const [roomName, setRoomName] = useState(""); //Will have to reach out again and figure out what its room name is.
     const [roomPic, setRoomPic] = useState("");
+    const [recipientId, setRecipientId] = useState();
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -35,9 +36,10 @@ function Chat() {
                     setRoomPic(snapData.picture || "")
                     //If there is no name (A direct message between two person chat)
                 } else {
-                    const { roomName, roomPic } = await findRoomNameAndRoomPic(snapData);
+                    const { roomName, roomPic, recipientId } = await findRoomNameAndRoomPicAndRecipientId(snapData);
                     setRoomName(roomName) //Implemented function (actually from Sidebar.js) to get the actual room name    
                     setRoomPic(roomPic)
+                    setRecipientId(recipientId)
                 }
                 setLoading(false);
             })
@@ -83,11 +85,12 @@ function Chat() {
         }
     }
 
-    const findRoomNameAndRoomPic = async (data) => {
+    const findRoomNameAndRoomPicAndRecipientId = async (data) => {
         let recipientId = data?.users.filter((userId) => userId !== user?.uid)[0] //<-- Remove the destructuring
         return {
             roomName: (await db.doc(`users/${recipientId}`).get()).data()?.name, //<-- asynchrously fetch user id's
-            roomPic: await storage.ref(`/profilepics/${recipientId}.png`)?.getDownloadURL()
+            roomPic: await storage.ref(`/profilepics/${recipientId}.png`)?.getDownloadURL(),
+            recipientId: recipientId
         }
 
     }
@@ -101,10 +104,18 @@ function Chat() {
             {loading ? <div className="chat__Loader"><Loader /></div> :
                 <>
                     <div className="chat__header">
-                        <Avatar src={roomPic} />
-                        <div className="chat__headerInfo">
-                            <h3>{roomName}</h3>
-                        </div>
+                        {recipientId ?
+                            <Link to={`/app/profile/${recipientId}`}>
+                                <Avatar src={roomPic} />
+                                <div className="chat__headerInfo">
+                                    <h3>{roomName}</h3>
+                                </div>
+                            </Link> : <>
+                                <Avatar src={roomPic} />
+                                <div className="chat__headerInfo">
+                                    <h3>{roomName}</h3>
+                                </div>
+                            </>}
                     </div>
                     <div className="chat__body">
                         {messages.map(message => (
@@ -124,13 +135,13 @@ function Chat() {
                             </IconButton>
                             <div className="chat__footerInput">
                                 {/* <input type="text" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)}/> */}
-                                <textarea cols="2" rows="3" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)}/>
+                                <textarea cols="2" rows="3" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)} />
                                 <IconButton type="submit" onClick={sendMessage}>
-                                <Send />
-                            </IconButton>
-                    </div>
-                </form>
-                </div> </>}
+                                    <Send />
+                                </IconButton>
+                            </div>
+                        </form>
+                    </div> </>}
         </div >
     )
 }

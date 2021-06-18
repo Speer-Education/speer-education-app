@@ -24,16 +24,34 @@ export default function EditProfile() {
 
     //setting the updated user info
     useEffect(() => {
-        setUpdatedUserInfo({
-            name : userDetails?.name, 
-            grade : userDetails?.grade, 
-            dateOfBirth : userDetails?.dateOfBirth, 
-            country : userDetails?.country,
-            school : userDetails?.school,
-            major : userDetails?.major, 
-            bio : userDetails?.bio
-        });
-        console.log("inside top useEffect:", userDetails?.name)
+
+        //If mentor, we will want to add additional details. (We could either query the database for the mentor details as well, OR 
+        //we could just sync the mentor details WITH userDetails and then we could obtain everything from userDetails)
+        if (userDetails?.isMtr === true){
+            setUpdatedUserInfo({
+                name : userDetails?.name, 
+                grade : userDetails?.grade, 
+                dateOfBirth : userDetails?.dateOfBirth, 
+                country : userDetails?.country,
+                school : userDetails?.school,
+                major : userDetails?.major, 
+                bio : userDetails?.bio,
+                //Add mentor details here (make user details contain mentor details (in any as well), sync userDetails name and major 
+                //with mentor details, or exclude name and major from the mentors documents, also remember to have email appear on 
+                //users document in firestore.
+            });
+        } else {
+            setUpdatedUserInfo({
+                name : userDetails?.name, 
+                grade : userDetails?.grade, 
+                dateOfBirth : userDetails?.dateOfBirth, 
+                country : userDetails?.country,
+                school : userDetails?.school,
+                major : userDetails?.major, 
+                bio : userDetails?.bio
+            });
+        }
+
     }, [userDetails])
 
     // To check if all fields are filled up
@@ -47,6 +65,7 @@ export default function EditProfile() {
             && updatedUserInfo?.bio !== undefined && updatedUserInfo?.bio !== ""
     }, [updatedUserInfo])
 
+    //On submission
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
         setSubmitting(true);
@@ -54,7 +73,10 @@ export default function EditProfile() {
         if (isValidForm === true && user) {
             console.log("updated user info:", updatedUserInfo)
             console.log("submission is valid")
-            await db.doc(`users/${user.uid}`).update(updatedUserInfo);
+            await db.doc(`users/${user.uid}`).update(updatedUserInfo); /* <-- When we add mentors, we will have to change this so that we
+            don't include the university and mentor description details */
+            /*Then here we update the mentor details as well, only need to include the name, major, university, and mentor 
+            description sections*/
         } else {
             console.log("submission is invalid")
         }
@@ -82,6 +104,7 @@ export default function EditProfile() {
 
     return (
         <div className="editProfile">
+            {console.log(userDetails)}
             Edit Profile
             <form>
                 <label htmlFor="name">Full Name (Put first name before last name):</label>
@@ -116,6 +139,14 @@ export default function EditProfile() {
                     {submitting ? "Submitting..." : "Submit Changes"}
                 </Button>
             </form>
+            {userDetails?.isMtr === true? <>
+            Edit Mentor Profile (Only for Mentor Accounts)
+            <form>
+                {/* Mentor Description */}
+                <label htmlFor="mentorDescription">Mentor Description</label>
+                <textarea id="mentorDescription" ></textarea>
+            </form>
+            </> : null}
         </div>
     )
 }

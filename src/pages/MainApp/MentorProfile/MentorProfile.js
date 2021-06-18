@@ -16,6 +16,7 @@ const MentorProfile = () => {
 
     const { user } = useAuth();
 
+    //Getting the data on the mentor
     useEffect(() => {
         setLoading(true)
         console.log(`mentors/${mentorId}`)

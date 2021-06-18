@@ -7,8 +7,8 @@ import Messages from '../../pages/MainApp/Messaging/Messaging';
 import MentorsPage from '../../pages/MainApp/Mentors/Mentors';
 import MentorProfile from '../../pages/MainApp/MentorProfile/MentorProfile';
 import EditProfile from '../../pages/MainApp/EditProfile/EditProfile';
+import ProfilePage from '../../pages/MainApp/ProfilePage/ProfilePage';
 import Dashboard from '../../pages/MainApp/Dashboard/Dashboard';
-
 
 export default function MainApp() {
 
@@ -26,12 +26,17 @@ export default function MainApp() {
                 <Route exact path={`${path}/mentors`}> 
                     <MentorsPage/>
                 </Route>
-                <Route path={`${path}/editProfile`}> 
-                    <EditProfile/>
-                </Route>
                 {/* Mentor Profile Page */}
                 <Route path={`${path}/mentors/:mentorId`}> 
                     <MentorProfile/>
+                </Route>
+                {/* Profile Page */}
+                <Route path={`${path}/profile/:profileId`}>
+                    <ProfilePage/>
+                </Route>
+                {/* Edit Profile Page */}
+                <Route path={`${path}/editProfile`}> 
+                    <EditProfile/>
                 </Route>
                 {/* Chat Page */}
                 <Route path={`${path}/messages`}> {/* Fixed routing bug to do with "exact" */}
