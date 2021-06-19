@@ -15,8 +15,9 @@ export default function UserDetails() {
         grade: "",
         dateOfBirth:"",
         country: "",
+        school: "",
         major: "",
-        hobbies: ""
+        bio: ""
     });
     const [submitting, setSubmitting] = useState(false);
 
@@ -26,8 +27,9 @@ export default function UserDetails() {
             && form.grade !== undefined && form.grade !== ""
             && form.dateOfBirth !== undefined && form.dateOfBirth !== ""
             && form.country !== undefined && form.country !== ""
+            && form.school !== undefined && form.school !== ""
             && form.major !== undefined && form.major !== ""
-            && form.hobbies !== undefined && form.hobbies !== ""
+            && form.bio !== undefined && form.bio !== ""
     }, [form])
 
     //To submit the form when the user hits submit (Yet to implement)
@@ -79,23 +81,26 @@ export default function UserDetails() {
             <form className="user-details__form">
                 {/* Ask which to make mandatory and then force them to be required*/}
                 {/* Name */}
-                <label for="preferred-name">What should we call you?</label>
+                <label htmlFor="preferred-name">What's your Full Name? (Put first name before last name)</label>
                 <input type="text" id="preferred-name" placeholder="Name" name="name" value={form.name} onChange={handleFormInput}/>
                 {/* Grade */}
-                <label for="grade">What Grade Are You In?</label>
+                <label htmlFor="grade">What Grade Are You In?</label>
                 <Select className="user-details__custom-select" id="grade" name="grade" options={gradeOptions} value={form.grade} onChange={handleGradeSelectFormInput}/>
                 {/* Date Of Birth */}
-                <label for="dateOfBirth">What's you Date Of Birth?</label>
+                <label htmlFor="dateOfBirth">What's you Date Of Birth?</label>
                 <input type="date" id="dateOfBirth" value={form.date} max="2012-12-31" name="dateOfBirth" onChange={handleFormInput} />
                 {/* Insert Country They Live In (Use a country list)*/}
-                <label for="country">Country Of Residence</label>
+                <label htmlFor="country">Country Of Residence</label>
                 <Select className="user-details__custom-select" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
+                {/* Their school Name: */}
+                <label htmlFor="school">What's the name of your school?</label>
+                <input type="text" id="school" placeholder="school" name="school" value={form.school} onChange={handleFormInput}/>
                 {/* What they plan to major in */}
-                <label for="major">What Do You Plan To Major In?</label>
+                <label htmlFor="major">What Do You Plan To Major In?</label>
                 <Select className="user-details__custom-select" id="major" name="major" options={majorOptions} value={form.major} onChange={handleMajorSelectFormInput}/>
                 {/* Interests/hobbies */}
-                <label for="hobbies">What are some of your hobbies? (Sports, interests etc...)</label>
-                <input name="hobbies" placeholder="Hobbies" onChange={handleFormInput} value={form.hobbies}></input>
+                <label htmlFor="bio">Give a short 50 word bio about yourself, your aspirations or hobbies etc...</label>
+                <input name="bio" placeholder="Short Bio (50 words)" onChange={handleFormInput} value={form.bio}></input>
                 {!isValidForm && <p className="text-red-600">Error! Please fill in all the blanks.</p>}
                 {/* Submission Button */}
                 <Button

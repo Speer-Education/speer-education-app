@@ -1,0 +1,8 @@
+.mentorShowcase{
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-right: 5px;
+    border-right: solid pink 1px;
+}

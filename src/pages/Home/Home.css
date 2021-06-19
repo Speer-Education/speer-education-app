@@ -112,7 +112,7 @@ html{
 
 .home-team__container{
     text-align: center;
-    padding: 25px 15%;
+    padding: 25px 5%;
     padding-bottom: 50px;
 }
 
@@ -128,7 +128,7 @@ html{
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 50%;
+    min-width: 25%;
     padding-top: 25px;
 }
 
@@ -182,7 +182,7 @@ html{
     padding-top: 25px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 50vw;
+    max-width: 75vw;
     padding-bottom: 80px;
 }
 
@@ -246,7 +246,7 @@ html{
     border-radius: 5px;
     padding: 10px 15px;
     font-size: 1rem;
-    color: rgba(172, 166, 166, 0.932);
+    color: rgba(0, 0, 0, 0.932);
 }
 
 .home-launch__form select{
@@ -254,9 +254,8 @@ html{
     border: 1px solid rgba(128, 128, 128, 0.699);
     border-radius: 5px;
     padding: 10px 15px;
-    margin-top: 25px;
     font-size: 1rem;
-    color: rgba(68, 64, 64, 0.932);
+    color: rgba(0, 0, 0, 0.932);
 }
 
 .home-launch__form-button{
@@ -266,6 +265,22 @@ html{
     color: white;
     font-size: 1rem;
     padding: 7px 12px;
+    cursor: pointer;
+}
+
+.home-launch__form-error{
+    text-align: center;
+    margin-top: 5px;
+    color: red;
+    text-transform: capitalize;
+}
+
+.home-launch__form-sent{
+    text-align: center;
+    margin: 5px 0 10px 0;
+    color: rgb(27, 150, 19);
+    font-size: 1.3rem;
+    text-transform: capitalize;
 }
 
 .home-launch__form-button:hover{

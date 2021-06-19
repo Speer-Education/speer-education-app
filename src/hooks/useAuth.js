@@ -59,7 +59,7 @@ const useAuthProvider = () => {
             console.log(history.location.pathname)
             history.push('/onboarding');
         } else if(history.location.pathname.startsWith('/onboarding')) {
-            history.push('/main-app');
+            history.push('/app');
         }
         return claims
     };
@@ -76,14 +76,15 @@ const useAuthProvider = () => {
     useEffect(() => {
         const unsub = auth.onAuthStateChanged(handleAuthStateChanged);
         return () => unsub();
-    }, []);
-
+        }, []);
+    
+    //For user claims
     useEffect(() => {
         if (user?.uid) {
             return db.doc(`user_claims/${user.uid}`).onSnapshot(async (snap) => {
                 const data = snap.data();
                 if (lastCommitted && !data._lastCommitted.isEqual(lastCommitted)) {
-                    setUserDetails({ ...userDetails, ... await getUserTokenResult(true) })
+                    setUserDetails({ ...await getUserTokenResult(true), ...userDetails })
                     console.log("Refreshing token");
                 }
                 lastCommitted = data?._lastCommitted;
@@ -98,7 +99,7 @@ const useAuthProvider = () => {
                 .collection("users")
                 .doc(user.uid)
                 .onSnapshot(async (doc) => {
-                    setUserDetails({ ...doc.data(), ... await getUserTokenResult() })
+                    setUserDetails({ ...await getUserTokenResult(), ...doc.data() })
                 });
             return () => unsubscribe();
         }

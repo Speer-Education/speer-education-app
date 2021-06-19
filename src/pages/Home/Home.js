@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import ScrollAnimation from 'react-animate-on-scroll';
-import {sliderSettings, sliderItems} from './HomeConfig';
+import { sliderSettings, sliderItems, teamMembers } from './HomeConfig';
 import { ContactUsForm } from '../../components/Forms/contactus'
 import { TeamCard } from '../../components/Team/TeamCard';
 import "animate.css/animate.min.css";
@@ -61,18 +61,15 @@ export default function Home() {
                     {/* Flexbox container, 2 div's , then inside each div, a div with image as background and below, title and name */}
                     <div className="home-team__container">
                         <div className="home-team__grid">
-                            <TeamCard
-                                fullname="Harsha Bharadwaj"
-                                title="Founder and Managing Director"
-                                linkedinUrl="https://www.linkedin.com/in/harsha-bharadwaj-8a5219204"
-                                imageUrl="https://static1.s123-cdn-static-a.com/uploads/5219948/800_60a3aaaf2fc5c_filter_60a3aaf59e482.jpg"
-                            />
-                            <TeamCard
-                                fullname="Parv Badra"
-                                title="Chief Technology Officer"
-                                linkedinUrl="https://www.linkedin.com/in/parvbhadra/"
-                                imageUrl="https://static1.s123-cdn-static-a.com/uploads/5219948/800_60a250ac2c72a.jpg"
-                            />
+                            {teamMembers.map(member => {
+                                return (<TeamCard
+                                key={member.fullName}
+                                fullname={member.fullName}
+                                title={member.title}
+                                linkedinUrl={member.linkedInIrl}
+                                imageUrl={member.imageUrl}
+                            />)
+                            })}
                         </div>    
                     </div>
                 </ScrollAnimation>
@@ -101,7 +98,7 @@ export default function Home() {
                             <p>Share your contact information and we'll keep you informed about launch dates, beta programs and new features!</p>
                             <a href="https://www.linkedin.com/company/speereducation/"><i class="fab fa-2x fa-linkedin-in"></i></a>
                         </div>
-                        <ContactUsForm/>
+                        <ContactUsForm mainClassName="home-launch"/>
                     </div>
                 </ScrollAnimation>
             </section>

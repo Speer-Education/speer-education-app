@@ -7,18 +7,21 @@ import { db, storage } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import Loader from '../Loader/Loader';
 
 function Sidebar() {
 
     const { user, userDetails } = useAuth();
 
     const [rooms, setRooms] = useState([]);
+    const [search, setSearch] = useState('');
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         //If user is blank
         if (!user) return
 
-        const unsubscribe = db.collection('rooms').where('users','array-contains', user?.uid).onSnapshot(snap => {
+        const unsubscribe = db.collection('rooms').where('users', 'array-contains', user?.uid).onSnapshot(snap => {
 
             Promise.all(snap.docs.map(async doc => {
 
@@ -32,16 +35,21 @@ function Sidebar() {
                         pic: docData.picture || ""
                     }
                 } else {
-                    const { roomName, roomPic } = await findRoomNameAndRoomPic(docData);
-                    
+                    const { roomName, isMentor, roomPic } = await findRoomNameAndRoomPic(docData);
+
                     return {
                         id: doc.id,
                         data: docData,
                         name: roomName,
+                        isMentor: isMentor,
                         pic: roomPic
                     }
                 }
-            })).then(res => setRooms(res))
+            })).then(res => {
+                setLoading(false)
+                setRooms(res)
+            })
+            
         })
 
         return () => {
@@ -52,17 +60,19 @@ function Sidebar() {
 
     const findRoomNameAndRoomPic = async (data) => {
         let recipientId = data.users.filter((id) => id !== user?.uid)[0]
+
+        const userData = (await db.doc(`users/${recipientId}`).get()).data()
+
         return {
-            roomName: (await db.doc(`users/${recipientId}`).get()).data()?.name,
-            roomPic: await storage.ref(`/profilepics/${recipientId}.png`).getDownloadURL()
+            roomName: userData?.name, //<-- asynchrously fetch user id's
+            roomPic: await storage.ref(`/profilepics/${recipientId}.png`)?.getDownloadURL(),
+            isMentor: userData?.isMtr,
         }
         // return "ERROR: NO ROOM NAME FOUND"
     }
 
     return (
         <div className="sidebar">
-            {console.log(user?.uid)}
-            {console.log(userDetails)}
             <div className="sidebar__header">
                 <Avatar src={userDetails?.picture} />
                 <h1 className="sidebar__headerUsername">{userDetails?.name}</h1>
@@ -70,15 +80,17 @@ function Sidebar() {
             <div className="sidebar__searchContainer">
                 <div className="sidebar__search">
                     <SearchOutlined />
-                    <input type="text" placeholder="Search by name" />
+                    <input type="text" placeholder="Search by name" value={search} onChange={(e) => setSearch(e.target.value)}/>
                 </div>
             </div>
             <div className="sidebar__chats">
-                {rooms.map(room => {
-                    return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} roomPic={room.pic}/>
+                {rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase())).map(room => {
+                    return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} isMentor={room.isMentor} roomPic={room.pic} />
                 })}
+                {rooms.length === 0 && !loading? "You have no chat rooms yet!": null}
+                {loading? <div className="sidebar__loader"><Loader /></div>: null}
             </div>
-            <Link to="/main-app/mentors">
+            <Link to="/app/mentors">
                 <Button className="sidebar__mentorButton">
                     Connect with more mentors!
                 </Button>
