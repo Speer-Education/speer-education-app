@@ -112,18 +112,17 @@ export default function EditProfile() {
                 {/* When I submit this, it changes the name in the users/id but not for userDetails.name or user.displayName */}
                 <label htmlFor="dateOfBirth">Date Of Birth:</label>
                 <input type="date" id="dateOfBirth" value={updatedUserInfo?.dateOfBirth} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, dateOfBirth: e.target.value })}></input>
-
                 {/* Grade */}
-                <label htmlFor="grade">What Grade Are You In?</label>
+                <label htmlFor="grade">What Grade Are You In? {userDetails?.isMtr? "(Just set this to Older/Graduated since you're a mentor)": ""}</label>
                 <Select className="user-details__custom-select" id="grade" name="grade" options={gradeOptions} value={updatedUserInfo?.grade} onChange={handleGradeSelectFormInput} />
                 {/* What country they live in */}
                 <label htmlFor="country">Country Of Residence</label>
                 <Select className="user-details__custom-select" id="country" name="country" options={countryOptions} value={updatedUserInfo?.country} onChange={handleCountrySelectFormInput} />
                 {/* What school they go to */}
-                <label htmlFor="school">What school do you go to?</label>
+                <label htmlFor="school">What {userDetails?.isMtr? "university" : "school"} do you go to?</label>
                 <input type="text" id="school" value={updatedUserInfo?.school} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, school: e.target.value })}></input>
                 {/* What they plan to major in */}
-                <label htmlFor="major">What Do You Plan To Major In?</label>
+                <label htmlFor="major">What Do You {userDetails?.isMtr? "" : "Plan To"} Major In?</label>
                 <Select className="user-details__custom-select" id="major" name="major" options={majorOptions} value={updatedUserInfo?.major} onChange={handleMajorSelectFormInput} />
                 {/* Short Bio */}
                 <label htmlFor="bio">Bio:</label>

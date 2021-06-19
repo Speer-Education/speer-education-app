@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { db, storage } from '../../../config/firebase';
+import { Link, Redirect } from 'react-router-dom';
+import { db, storage, functions } from '../../../config/firebase';
 import { useParams } from 'react-router-dom';
+import history from '../../../hooks/history';
 
 
 function ProfilePage() {
@@ -9,6 +10,7 @@ function ProfilePage() {
     const [profileUser, setProfileUser] = useState();
     const [profPic, setProfPic] = useState();
     const [isMentor, setIsMentor] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         return db.doc(`users/${profileId}`).onSnapshot(async snap => {
@@ -19,15 +21,29 @@ function ProfilePage() {
             if (snap.data().isMtr){
                 setIsMentor(true)
             }
+
+            setLoading(false);
         })
 
     }, [profileId])
 
-    console.log(profileUser)
-    console.log(profPic)
+    const connectWithPerson = async () => {
+        // Send person Id to backend for room creation, or to just use the room that alr existed.
+
+        //We can use this existing function, but maybe change the backend because rn the backend is destructuring it as mentorId, 
+        //so make the backend destructure as profileId, and change the mentor said to put it in as profileId as well.
+        let { data: targetRoomId } = await functions.httpsCallable('createRoom')({ profileId })
+            .catch((error) => {
+                console.error(error)
+            })
+        history.push(`/app/messages/${targetRoomId}`)
+    }
 
     return (
         <div className="profilePage">
+            {/* Redirects the user to the mentor page if user is a mentor */}
+            {isMentor? <Redirect to={`/app/mentors/${profileId}`}></Redirect> : null}
+            {!loading ? <> <img src={profPic} alt="profile"></img>
             Name: {profileUser?.name}
             <br/>
             Grade: {profileUser?.grade.label}
@@ -35,7 +51,7 @@ function ProfilePage() {
             Plans to Major In: {profileUser?.major.label}
             <br/>
             Bio: {profileUser?.bio}
-            {isMentor? <div> This user is also a mentor, click <Link to={`/app/mentors/${profileId}`}>HERE</Link> to see their mentor profile</div> : null}
+            <button onClick={connectWithPerson}>Connect With Person</button></> : null }
         </div>
     )
 }

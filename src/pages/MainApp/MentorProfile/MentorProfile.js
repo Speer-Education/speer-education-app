@@ -33,7 +33,9 @@ const MentorProfile = () => {
         /* Send Mentor ID to backend for checking and room creation */
 
         setCreatingRoom(true);
-        let { data: targetRoomId } = await functions.httpsCallable('createRoom')({ mentorId })
+
+        //send it in as profile id instead of mentor id (will need to change the backend so this still works)
+        let { data: targetRoomId } = await functions.httpsCallable('createRoom')({ profileId: mentorId })
             .catch((error) => {
                 console.error(error)
             })
