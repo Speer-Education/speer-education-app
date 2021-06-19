@@ -33,12 +33,13 @@ function Sidebar() {
                         pic: docData.picture || ""
                     }
                 } else {
-                    const { roomName, roomPic } = await findRoomNameAndRoomPic(docData);
+                    const { roomName, isMentor, roomPic } = await findRoomNameAndRoomPic(docData);
 
                     return {
                         id: doc.id,
                         data: docData,
                         name: roomName,
+                        isMentor: isMentor,
                         pic: roomPic
                     }
                 }
@@ -53,9 +54,13 @@ function Sidebar() {
 
     const findRoomNameAndRoomPic = async (data) => {
         let recipientId = data.users.filter((id) => id !== user?.uid)[0]
+
+        const userData = (await db.doc(`users/${recipientId}`).get()).data()
+
         return {
-            roomName: (await db.doc(`users/${recipientId}`).get()).data()?.name,
-            roomPic: await storage.ref(`/profilepics/${recipientId}.png`).getDownloadURL()
+            roomName: userData?.name, //<-- asynchrously fetch user id's
+            roomPic: await storage.ref(`/profilepics/${recipientId}.png`)?.getDownloadURL(),
+            isMentor: userData?.isMtr,
         }
         // return "ERROR: NO ROOM NAME FOUND"
     }
@@ -74,7 +79,7 @@ function Sidebar() {
             </div>
             <div className="sidebar__chats">
                 {rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase())).map(room => {
-                    return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} roomPic={room.pic} />
+                    return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} isMentor={room.isMentor} roomPic={room.pic} />
                 })}
             </div>
             <Link to="/app/mentors">

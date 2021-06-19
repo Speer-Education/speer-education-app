@@ -17,6 +17,7 @@ function Chat() {
     const [roomName, setRoomName] = useState(""); //Will have to reach out again and figure out what its room name is.
     const [roomPic, setRoomPic] = useState("");
     const [recipientId, setRecipientId] = useState();
+    const [isMentor, setIsMentor] = useState();
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -36,9 +37,10 @@ function Chat() {
                     setRoomPic(snapData.picture || "")
                     //If there is no name (A direct message between two person chat)
                 } else {
-                    const { roomName, roomPic, recipientId } = await findRoomNameAndRoomPicAndRecipientId(snapData);
+                    const { roomName, roomPic, isMentor, recipientId } = await findRoomNameAndRoomPicAndRecipientId(snapData);
                     setRoomName(roomName) //Implemented function (actually from Sidebar.js) to get the actual room name    
                     setRoomPic(roomPic)
+                    setIsMentor(isMentor)
                     setRecipientId(recipientId)
                 }
                 setLoading(false);
@@ -87,9 +89,13 @@ function Chat() {
 
     const findRoomNameAndRoomPicAndRecipientId = async (data) => {
         let recipientId = data?.users.filter((userId) => userId !== user?.uid)[0] //<-- Remove the destructuring
+
+        const userData = (await db.doc(`users/${recipientId}`).get()).data()
+
         return {
-            roomName: (await db.doc(`users/${recipientId}`).get()).data()?.name, //<-- asynchrously fetch user id's
+            roomName: userData?.name, //<-- asynchrously fetch user id's
             roomPic: await storage.ref(`/profilepics/${recipientId}.png`)?.getDownloadURL(),
+            isMentor: userData?.isMtr,
             recipientId: recipientId
         }
 
@@ -108,7 +114,7 @@ function Chat() {
                             <Link to={`/app/profile/${recipientId}`}>
                                 <Avatar src={roomPic} />
                                 <div className="chat__headerInfo">
-                                    <h3>{roomName}</h3>
+                                    <h3>{roomName} {isMentor ? <i class="fas fa-user-check"></i> : null}</h3>
                                 </div>
                             </Link> : <>
                                 <Avatar src={roomPic} />
