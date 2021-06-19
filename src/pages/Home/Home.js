@@ -98,7 +98,7 @@ export default function Home() {
                             <p>Share your contact information and we'll keep you informed about launch dates, beta programs and new features!</p>
                             <a href="https://www.linkedin.com/company/speereducation/"><i class="fab fa-2x fa-linkedin-in"></i></a>
                         </div>
-                        <ContactUsForm/>
+                        <ContactUsForm mainClassName="home-launch"/>
                     </div>
                 </ScrollAnimation>
             </section>

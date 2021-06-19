@@ -1,31 +1,48 @@
 import React, { useState } from "react";
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import emailjs from 'emailjs-com';
 
-export const ContactUsForm = () => {
+//Yup Schema
+const contactUsSchema = yup.object().shape({
+  name: yup.string(),
+  school: yup.string(),
+  year: yup.string(),
+  email: yup.string().email().required('A valid Email is required'),
+})
+
+export const ContactUsForm = ({ mainClassName }) => {
+
   const [form, setForm] = useState({
     name: "",
     school: "",
     year: "",
     email: "",
   });
+  const [emailSent, setEmailSent] = useState(false)
 
-  const submitStayInTouch = async (e) => {
-    e.preventDefault();
-    console.log(form);
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(contactUsSchema)
+  });
+
+  const submitStayInTouch = async (data) => {
+    console.log(data);
 
     //Add proper form validation next
-    emailjs.send('service_28lmjk8', 'template_4gjnunu', form, 'user_S25sGxPzB9WUatre16GNf')
-    .then((result) => {
-      console.log(result.text);
-      setForm({
-        name: "",
-        school: "",
-        year: "",
-        email: "",
-      })
-    }, (error) => {
-      console.log(error.text);
-    });
+    emailjs.send('service_28lmjk8', 'template_4gjnunu', data, 'user_S25sGxPzB9WUatre16GNf')
+      .then((result) => {
+        console.log(result.text);
+        setEmailSent(true);
+        setForm({
+          name: "",
+          school: "",
+          year: "",
+          email: "",
+        })
+      }, (error) => {
+        console.log(error.text);
+      });
 
     //Comment out backend mail service for now
     // fetch("https://speer-education-dev.web.app/stayintouch", {
@@ -46,27 +63,31 @@ export const ContactUsForm = () => {
   };
 
   return (
-    <form className="home-launch__form">
-      <div className="home-launch__form-row">
+    <form className={`${mainClassName}__form`} onSubmit={handleSubmit(submitStayInTouch)}>
+      <div className={`${mainClassName}__form-row`}>
         <input
           type="text"
+          {...register('name')}
           placeholder="Name (Optional)"
           name="name"
           value={form.name}
           onChange={handleFormInput}
         />
+        <p className={`${mainClassName}__form-error`}>{errors.name?.message}</p>
       </div>
-      <div className="home-launch__form-row">
+      <div className={`${mainClassName}__form-row`}>
         <input
           type="text"
+          {...register('school')}
           placeholder="School (Optional)"
           name="school"
           value={form.school}
           onChange={handleFormInput}
         />
+        <p className={`${mainClassName}__form-error`}>{errors.school?.message}</p>
       </div>
-      <div className="home-launch__form-row">
-        <select name="year" onChange={handleFormInput} value={form.year}>
+      <div className={`${mainClassName}__form-row`}>
+        <select {...register('year')} name="year" onChange={handleFormInput} value={form.year} >
           <option value defaultValue>
             Year (Optional)
           </option>
@@ -76,20 +97,23 @@ export const ContactUsForm = () => {
           <option value="11">Grade 11/Year 12</option>
           <option value="12">Grade 12/Year 13</option>
         </select>
+        <p className={`${mainClassName}__form-error`}>{errors.year?.message}</p>
       </div>
-      <div className="home-launch__form-row">
+      <div className={`${mainClassName}__form-row`}>
         <input
           type="email"
+          {...register('email')}
           placeholder="Email Address (Required)"
           name="email"
           value={form.email}
           onChange={handleFormInput}
         />
+        <p className={`${mainClassName}__form-error`}>{errors.email?.message}</p>
       </div>
+      {emailSent? <p className={`${mainClassName}__form-sent`}>Email was successful. We'll reach out to you soon!</p> : null}
       <button
-        className="home-launch__form-button"
+        className={`${mainClassName}__form-button`}
         type="submit"
-        onClick={submitStayInTouch}
       >
         STAY IN TOUCH!
       </button>

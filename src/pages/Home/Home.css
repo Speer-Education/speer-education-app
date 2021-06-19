@@ -246,7 +246,7 @@ html{
     border-radius: 5px;
     padding: 10px 15px;
     font-size: 1rem;
-    color: rgba(172, 166, 166, 0.932);
+    color: rgba(0, 0, 0, 0.932);
 }
 
 .home-launch__form select{
@@ -255,7 +255,7 @@ html{
     border-radius: 5px;
     padding: 10px 15px;
     font-size: 1rem;
-    color: rgba(68, 64, 64, 0.932);
+    color: rgba(0, 0, 0, 0.932);
 }
 
 .home-launch__form-button{
@@ -265,6 +265,21 @@ html{
     color: white;
     font-size: 1rem;
     padding: 7px 12px;
+}
+
+.home-launch__form-error{
+    text-align: center;
+    margin-top: 5px;
+    color: red;
+    text-transform: capitalize;
+}
+
+.home-launch__form-sent{
+    text-align: center;
+    margin: 5px 0 10px 0;
+    color: rgb(27, 150, 19);
+    font-size: 1.3rem;
+    text-transform: capitalize;
 }
 
 .home-launch__form-button:hover{
