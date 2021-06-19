@@ -1,20 +1,43 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import emailjs from 'emailjs-com';
 
 export const ContactUsForm = () => {
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({
+    name: "",
+    school: "",
+    year: "",
+    email: "",
+  });
 
   const submitStayInTouch = async (e) => {
     e.preventDefault();
-    fetch("https://speer-education-dev.web.app/stayintouch", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    }).then(function (response) {
-      console.log(response);
-      return response.json();
+    console.log(form);
+
+    //Add proper form validation next
+    emailjs.send('service_28lmjk8', 'template_4gjnunu', form, 'user_S25sGxPzB9WUatre16GNf')
+    .then((result) => {
+      console.log(result.text);
+      setForm({
+        name: "",
+        school: "",
+        year: "",
+        email: "",
+      })
+    }, (error) => {
+      console.log(error.text);
     });
+
+    //Comment out backend mail service for now
+    // fetch("https://speer-education-dev.web.app/stayintouch", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(form),
+    // }).then(function (response) {
+    //   console.log(response);
+    //   return response.json();
+    // });
   };
 
   const handleFormInput = (e) => {
@@ -29,6 +52,7 @@ export const ContactUsForm = () => {
           type="text"
           placeholder="Name (Optional)"
           name="name"
+          value={form.name}
           onChange={handleFormInput}
         />
       </div>
@@ -37,11 +61,12 @@ export const ContactUsForm = () => {
           type="text"
           placeholder="School (Optional)"
           name="school"
+          value={form.school}
           onChange={handleFormInput}
         />
       </div>
       <div className="home-launch__form-row">
-        <select name="year" onChange={handleFormInput}>
+        <select name="year" onChange={handleFormInput} value={form.year}>
           <option value defaultValue>
             Year (Optional)
           </option>
@@ -57,6 +82,7 @@ export const ContactUsForm = () => {
           type="email"
           placeholder="Email Address (Required)"
           name="email"
+          value={form.email}
           onChange={handleFormInput}
         />
       </div>

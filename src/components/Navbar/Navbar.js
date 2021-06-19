@@ -47,7 +47,7 @@ export default function Navbar() {
                     </li>
                     <li className="nav-item">
                         <a href ="#launch" className="nav-links" onClick={closeMobileMenu}>
-                            LAUCNHING SOON
+                            LAUNCHING SOON
                         </a>
                     </li>
                     {/* This nav-item-desktop will only appear when above 960px */}

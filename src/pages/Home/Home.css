@@ -112,7 +112,7 @@ html{
 
 .home-team__container{
     text-align: center;
-    padding: 25px 15%;
+    padding: 25px 5%;
     padding-bottom: 50px;
 }
 
@@ -128,7 +128,7 @@ html{
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 50%;
+    min-width: 25%;
     padding-top: 25px;
 }
 
@@ -182,7 +182,7 @@ html{
     padding-top: 25px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 50vw;
+    max-width: 75vw;
     padding-bottom: 80px;
 }
 
@@ -254,7 +254,6 @@ html{
     border: 1px solid rgba(128, 128, 128, 0.699);
     border-radius: 5px;
     padding: 10px 15px;
-    margin-top: 25px;
     font-size: 1rem;
     color: rgba(68, 64, 64, 0.932);
 }

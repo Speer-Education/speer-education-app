@@ -39,4 +39,25 @@ const sliderItems = [
     {title: 'University Of Sheffield', src: 'https://static1.s123-cdn-static-a.com/uploads/5219948/400_60a66ec223e5f_filter_60a672e3bdda1.png'}
 ]
 
-export {sliderSettings, sliderItems};
+const teamMembers = [
+  {
+    fullName: "Harsha Bharadwaj",
+    title: "Founder and Managing Director",
+    linkedInIrl: "https://www.linkedin.com/in/harsha-bharadwaj-8a5219204",
+    imageUrl: "https://static1.s123-cdn-static-a.com/uploads/5219948/800_60a3aaaf2fc5c_filter_60a3aaf59e482.jpg",
+  },
+  {
+    fullName: "Parv BhaBadraradwaj",
+    title: "Chief Technology Officer",
+    linkedInIrl: "https://www.linkedin.com/in/parvbhadra/",
+    imageUrl: "https://static1.s123-cdn-static-a.com/uploads/5219948/800_60a250ac2c72a.jpg",
+  },
+  {
+    fullName: "Ee Hsin Kok",
+    title: "Lead Web Developer",
+    linkedInIrl: "www.linkedin.com/in/eehsinkok",
+    imageUrl: "https://media-exp3.licdn.com/dms/image/C4E03AQFix1Fw_49djw/profile-displayphoto-shrink_200_200/0/1622477620307?e=1629331200&v=beta&t=pK4q6k6MFL8zV108w_vJl2FgrziJx_JDlYXugdCtE_0",
+  },
+]
+
+export {sliderSettings, sliderItems, teamMembers};
