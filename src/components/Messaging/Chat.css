@@ -59,7 +59,7 @@
     outline: none;
 }
 
-.chat__Loader{
+.chat__loader{
     display: grid;
     place-items: center;
     height: 100%;

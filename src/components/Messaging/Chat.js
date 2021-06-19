@@ -109,7 +109,7 @@ function Chat() {
 
     return (
         <div className="chat">
-            {loading ? <div className="chat__Loader"><Loader /></div> :
+            {loading ? <div className="chat__loader"><Loader /></div> :
                 <>
                     <div className="chat__header">
                         {recipientId ?

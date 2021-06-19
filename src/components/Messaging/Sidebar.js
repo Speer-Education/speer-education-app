@@ -7,6 +7,7 @@ import { db, storage } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import Loader from '../Loader/Loader';
 
 function Sidebar() {
 
@@ -14,6 +15,7 @@ function Sidebar() {
 
     const [rooms, setRooms] = useState([]);
     const [search, setSearch] = useState('');
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         //If user is blank
@@ -43,7 +45,11 @@ function Sidebar() {
                         pic: roomPic
                     }
                 }
-            })).then(res => setRooms(res))
+            })).then(res => {
+                setLoading(false)
+                setRooms(res)
+            })
+            
         })
 
         return () => {
@@ -81,6 +87,8 @@ function Sidebar() {
                 {rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase())).map(room => {
                     return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} isMentor={room.isMentor} roomPic={room.pic} />
                 })}
+                {rooms.length === 0 && !loading? "You have no chat rooms yet!": null}
+                {loading? <div className="sidebar__loader"><Loader /></div>: null}
             </div>
             <Link to="/app/mentors">
                 <Button className="sidebar__mentorButton">
