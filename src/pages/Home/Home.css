@@ -265,6 +265,7 @@ html{
     color: white;
     font-size: 1rem;
     padding: 7px 12px;
+    cursor: pointer;
 }
 
 .home-launch__form-error{

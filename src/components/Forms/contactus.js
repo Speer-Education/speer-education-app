@@ -20,7 +20,8 @@ export const ContactUsForm = ({ mainClassName }) => {
     year: "",
     email: "",
   });
-  const [emailSent, setEmailSent] = useState(false)
+  const [emailSent, setEmailSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(contactUsSchema)
@@ -28,6 +29,8 @@ export const ContactUsForm = ({ mainClassName }) => {
 
   const submitStayInTouch = async (data) => {
     console.log(data);
+
+    setLoading(true);
 
     //Add proper form validation next
     emailjs.send('service_28lmjk8', 'template_4gjnunu', data, 'user_S25sGxPzB9WUatre16GNf')
@@ -40,8 +43,10 @@ export const ContactUsForm = ({ mainClassName }) => {
           year: "",
           email: "",
         })
+        setLoading(false);
       }, (error) => {
         console.log(error.text);
+        setLoading(false);
       });
 
     //Comment out backend mail service for now
@@ -114,6 +119,7 @@ export const ContactUsForm = ({ mainClassName }) => {
       <button
         className={`${mainClassName}__form-button`}
         type="submit"
+        disabled={loading}
       >
         STAY IN TOUCH!
       </button>
