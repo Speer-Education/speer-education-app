@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Avatar, IconButton } from '@material-ui/core';
 import { AttachFile, Send } from '@material-ui/icons';
 import { useParams, Link } from 'react-router-dom';
+import Filter from 'bad-words';
 import { firebase, db, storage } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import "./Chat.css";
@@ -22,6 +23,7 @@ function Chat() {
     const [loading, setLoading] = useState(true);
 
     const messagesEndRef = useRef(null);
+    const filter = new Filter();
 
     //TO get the room name and messages
     useEffect(() => {
@@ -77,7 +79,7 @@ function Chat() {
         //Fixed bug (now requires text to send message)
         if (input !== "") {
             db.collection('rooms').doc(roomId).collection('messages').add({
-                message: input,
+                message: filter.clean(input),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
                 senderId: user?.uid,
                 senderUsername: userDetails.name
