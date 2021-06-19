@@ -36,9 +36,8 @@ export default function EditProfile() {
                 school : userDetails?.school,
                 major : userDetails?.major, 
                 bio : userDetails?.bio,
-                //Add mentor details here (make user details contain mentor details (in any as well), sync userDetails name and major 
-                //with mentor details, or exclude name and major from the mentors documents, also remember to have email appear on 
-                //users document in firestore.
+                linkedInURL: userDetails?.linkedInURL || "",
+                gradClass: userDetails?.gradClass || "",
             });
         } else {
             setUpdatedUserInfo({
@@ -73,10 +72,7 @@ export default function EditProfile() {
         if (isValidForm === true && user) {
             console.log("updated user info:", updatedUserInfo)
             console.log("submission is valid")
-            await db.doc(`users/${user.uid}`).update(updatedUserInfo); /* <-- When we add mentors, we will have to change this so that we
-            don't include the university and mentor description details */
-            /*Then here we update the mentor details as well, only need to include the name, major, university, and mentor 
-            description sections*/
+            await db.doc(`users/${user.uid}`).update(updatedUserInfo); 
         } else {
             console.log("submission is invalid")
         }
@@ -126,7 +122,14 @@ export default function EditProfile() {
                 <Select className="user-details__custom-select" id="major" name="major" options={majorOptions} value={updatedUserInfo?.major} onChange={handleMajorSelectFormInput} />
                 {/* Short Bio */}
                 <label htmlFor="bio">Bio:</label>
-                <input type="text" id="bio" value={updatedUserInfo?.bio} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, bio: e.target.value })}></input>
+                <textarea type="text" id="bio" value={updatedUserInfo?.bio} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, bio: e.target.value })}></textarea>
+                {userDetails?.isMtr === true ? <>
+                {/* Mentor Linkedin Link */}
+                <label htmlFor="linkedInURL">LinkedIn Profile</label>
+                <input id="linkedInURL" value={updatedUserInfo?.linkedInURL} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, linkedInURL: e.target.value })}></input>
+                <label htmlFor="gradClass">Graduating Class</label>
+                <input id="gradClass" value={updatedUserInfo?.gradClass} onChange={(e) => setUpdatedUserInfo({ ...updatedUserInfo, gradClass: e.target.value })}></input>
+                </> : null}
                 {!isValidForm && <p className="text-red-600">Error! Please Don't leave any blanks.</p>}
                 {edited? <h3>Edited Successfully!</h3> : null}
                 <Button
@@ -138,14 +141,7 @@ export default function EditProfile() {
                     {submitting ? "Submitting..." : "Submit Changes"}
                 </Button>
             </form>
-            {userDetails?.isMtr === true? <>
-            Edit Mentor Profile (Only for Mentor Accounts)
-            <form>
-                {/* Mentor Description */}
-                <label htmlFor="mentorDescription">Mentor Description</label>
-                <textarea id="mentorDescription" ></textarea>
-            </form>
-            </> : null}
+            
         </div>
     )
 }

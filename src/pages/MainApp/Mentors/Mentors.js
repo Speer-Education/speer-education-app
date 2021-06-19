@@ -17,13 +17,13 @@ const Mentors = () => {
     return (
         <div className="mentors">
             <div className="mentors__grid">
-                {mentors.map(({id, name, university, major, description}) => <MentorCard
+                {mentors.map(({id, name, school, major, bio}) => <MentorCard
                     id={id}
                     key={id}
                     name={name}
-                    university={university}
+                    school={school}
                     major={major}
-                    description={description}
+                    bio={bio}
                     />)}
             </div>
         </div>

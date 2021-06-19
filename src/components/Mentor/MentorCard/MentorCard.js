@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { storage } from '../../../config/firebase';
 import Loader from '../../Loader/Loader';
 
-const MentorCard = ({ id, name, university, major, description }) => {
+const MentorCard = ({ id, name, school, major, bio }) => {
 
     const [imageUrl, setImageUrl] = useState("");
     const [loading, setLoading] = useState(true);
@@ -24,9 +24,9 @@ const MentorCard = ({ id, name, university, major, description }) => {
         <div className="mentorCard">
             {loading ? <Loader/> : <img src={imageUrl} alt="mentor"/>}
             <h1>{name}</h1>
-            <h2><b>University: </b>{university}</h2>
-            <h2><b>Major: </b>{major}</h2>
-            <p>{description.substring(0, 125) + "..."}</p>
+            <h2><b>University: </b>{school}</h2>
+            <h2><b>Major: </b>{major.label}</h2>
+            <p>{bio.substring(0, 125) + "..."}</p>
             <Link to={`/app/mentors/${id}`}>
                 <Button
                     variant="text"

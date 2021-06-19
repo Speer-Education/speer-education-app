@@ -32,13 +32,13 @@ export default function MentorShowcase() {
         <div className="mentorShowcase">
             <h2>Explore Our Mentors:</h2>
             {/* Randomly generates 2 mentors in random order*/}
-            {shuffleArray(mentors.slice(0)).slice(0,2).map(({ id, name, university, major, description }) => <MentorCard
+            {shuffleArray(mentors.slice(0)).slice(0,2).map(({ id, name, school, major, bio }) => <MentorCard
                 id={id}
                 key={id}
                 name={name}
-                university={university}
+                school={school}
                 major={major}
-                description={description}
+                bio={bio}
             />)}
             <Link to="/app/mentors">
                 <Button variant="contained">View More Mentors</Button>

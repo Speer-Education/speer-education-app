@@ -48,9 +48,9 @@ const MentorProfile = () => {
                 {/* *Insert Photo (Have to search storage for it) */}
                 <img src={profPic} alt="mentor profile" />
                 <h1>{mentor?.name}</h1>
-                <h2>{mentor?.university}</h2>
-                <h2>{mentor?.major}</h2>
-                <p>{mentor?.description}</p>
+                <h2>{mentor?.school}</h2>
+                <h2>{mentor?.major.label}</h2>
+                <p>{mentor?.bio}</p>
                 <Button varient="default" disabled={creatingRoom} onClick={connectWithMentor}>{creatingRoom ? <Loader /> : "Connect With Mentor!"}</Button>
             </>}
         </div>
