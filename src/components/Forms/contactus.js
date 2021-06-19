@@ -121,7 +121,7 @@ export const ContactUsForm = ({ mainClassName }) => {
         type="submit"
         disabled={loading}
       >
-        STAY IN TOUCH!
+        {loading? "PROCESSING..." : "STAY IN TOUCH"}
       </button>
     </form>
   );
