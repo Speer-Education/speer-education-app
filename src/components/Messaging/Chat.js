@@ -73,8 +73,8 @@ function Chat() {
     useEffect(() => {
         scrollToBottom()
         //Increase the swear count in the db if it the current count has increased again
-        if(prevSwearCount < currSwearCount){
-            db.doc(`users/${user.uid}`).update({profanities: firebase.firestore.FieldValue.increment(currSwearCount-prevSwearCount)})
+        if (prevSwearCount < currSwearCount) {
+            db.doc(`users/${user.uid}`).update({ profanities: firebase.firestore.FieldValue.increment(currSwearCount - prevSwearCount) })
             setPrevSwearCount(currSwearCount);
         }
     }, [messages, loading]);

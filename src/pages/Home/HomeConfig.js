@@ -1,5 +1,5 @@
 // Settings for the University Slider
-const sliderSettings = {
+const uniSliderSettings = {
     dots: false,
     infinite: true,
     lazyLoad: true,
@@ -28,6 +28,42 @@ const sliderSettings = {
         }
       ]
   };
+const teamSliderSettings = {
+    dots: false,
+    infinite: true,
+    lazyLoad: true,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    autoplay: true,
+    speed: 300,
+    autoplaySpeed: 1600,
+    pauseOnHover: true,
+    cssEase: "linear",
+    responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            infinite: true
+          }
+        },
+        {
+          breakpoint: 767,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1
+          }
+        },
+        {
+          breakpoint: 615,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        },
+      ]
+  };
 //   The items in the Uni Slider
 const sliderItems = [
     {title: 'LSE', src: 'https://static1.s123-cdn-static-a.com/uploads/5219948/400_60a66de4946c3.png'},
@@ -44,20 +80,44 @@ const teamMembers = [
     fullName: "Harsha Bharadwaj",
     title: "Founder and Managing Director",
     linkedInIrl: "https://www.linkedin.com/in/harsha-bharadwaj-8a5219204",
-    imageUrl: "https://static1.s123-cdn-static-a.com/uploads/5219948/800_60a3aaaf2fc5c_filter_60a3aaf59e482.jpg",
+    imageUrl: "./team_speer/harsha.jpeg",
+  },  {
+    fullName: "Ibrahim Sait",
+    title: "Co-founder and Chief Marketing Officer",
+    linkedInIrl: "https://www.linkedin.com/in/ibrahim-sait/",
+    imageUrl: "./team_speer/ibrahim.jpeg",
   },
   {
     fullName: "Parv BhaBadraradwaj",
     title: "Chief Technology Officer",
     linkedInIrl: "https://www.linkedin.com/in/parvbhadra/",
-    imageUrl: "https://static1.s123-cdn-static-a.com/uploads/5219948/800_60a250ac2c72a.jpg",
+    imageUrl: "./team_speer/parv.jpeg",
   },
   {
     fullName: "Ee Hsin Kok",
     title: "Lead Web Developer",
     linkedInIrl: "www.linkedin.com/in/eehsinkok",
-    imageUrl: "https://media-exp3.licdn.com/dms/image/C4E03AQFix1Fw_49djw/profile-displayphoto-shrink_200_200/0/1622477620307?e=1629331200&v=beta&t=pK4q6k6MFL8zV108w_vJl2FgrziJx_JDlYXugdCtE_0",
+    imageUrl: "./team_speer/eehsin.jpg",
+  },
+  {
+    fullName: "Varnika Seth",
+    title: "Chief Designing Officer",
+    linkedInIrl: "www.linkedin.com/in/eehsinkok",
+    imageUrl: "./team_speer/varnika.jpeg",
+  },
+
+  {
+    fullName: "Hardik Mahajan",
+    title: "General Manager",
+    linkedInIrl: "https://www.linkedin.com/in/hardik-mahajan-235b5820b/",
+    imageUrl: "./team_speer/harry.jpeg",
+  },
+  {
+    fullName: "Tzi Hwee Chew",
+    title: "Web Developer",
+    linkedInIrl: "https://www.linkedin.com/in/imjustchew/",
+    imageUrl: "./team_speer/chew.png",
   },
 ]
 
-export {sliderSettings, sliderItems, teamMembers};
+export {uniSliderSettings, teamSliderSettings, sliderItems, teamMembers};
