@@ -1,6 +1,7 @@
 import { storage } from '../../config/firebase';
+import { useState, useEffect } from 'react';
 
-export default function ProfilePicture({ uid, thumb=false, ...params }) {
+export default function ProfilePicture({ uid, ...params }) {
     const [url, setUrl] = useState(false);
 
     useEffect(async () => {
@@ -8,8 +9,8 @@ export default function ProfilePicture({ uid, thumb=false, ...params }) {
         setUrl(imageUrl)
     }, [uid]);
 
-    return url&&<img
-        src={url}
+    return <img
+        src={url || './user_placeholder.png'}
         {...params}
     />
 }

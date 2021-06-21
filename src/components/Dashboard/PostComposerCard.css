@@ -1,0 +1,10 @@
+.post-composer {
+    padding:24px 36px;
+    margin:12px;
+    border-radius: 12px;
+    @apply shadow-lg
+}
+
+.post-composer button {
+    float: right;
+}

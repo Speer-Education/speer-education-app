@@ -1,0 +1,42 @@
+.post-card {
+    padding:24px 36px;
+    margin:12px;
+    border-radius: 12px;
+    @apply shadow-lg
+}
+
+.post-author_container {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 12px;
+}
+
+.post-author_image img {
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    @apply shadow-md
+}
+
+.author-details_container {
+    display: flex;
+    flex-direction: column;
+    height: 56px;
+    margin-left: 12px;
+    justify-content: space-around;
+}
+
+.author-details_name {
+    font-size: 1.5rem;
+    font-weight: 400;
+    flex:1;
+}
+
+.author-details_school {
+    flex:1;
+    color:#000000a2;
+}
+
+.post-timestamp_text {
+    color:#000000a2;
+}
