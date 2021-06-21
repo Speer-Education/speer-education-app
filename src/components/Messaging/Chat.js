@@ -21,8 +21,6 @@ function Chat() {
     const [isMentor, setIsMentor] = useState();
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [currSwearCount, setCurrSwearCount] = useState(0);
-    const [prevSwearCount, setPrevSwearCount] = useState(0);
 
     const messagesEndRef = useRef(null);
     const filter = new Filter();
@@ -72,11 +70,7 @@ function Chat() {
 
     useEffect(() => {
         scrollToBottom()
-        //Increase the swear count in the db if it the current count has increased again
-        if (prevSwearCount < currSwearCount) {
-            db.doc(`users/${user.uid}`).update({ profanities: firebase.firestore.FieldValue.increment(currSwearCount - prevSwearCount) })
-            setPrevSwearCount(currSwearCount);
-        }
+
     }, [messages, loading]);
 
 
@@ -86,12 +80,8 @@ function Chat() {
         //Fixed bug (now requires text to send message)
         if (input !== "") {
 
-            if (filter.isProfane(input)) {
-                setCurrSwearCount(currSwearCount + 1) //Adds 1 to the current swear count if message has profanities
-            }
-
             db.collection('rooms').doc(roomId).collection('messages').add({
-                message: filter.clean(input),
+                message: input,
                 date: firebase.firestore.FieldValue.serverTimestamp(),
                 senderId: user?.uid,
                 senderUsername: userDetails.name
@@ -141,7 +131,7 @@ function Chat() {
                         {messages.map(message => (
                             <ChatMessage
                                 key={message.id}
-                                message={message.data.message}
+                                message={filter.clean(message.data.message)}
                                 username={message.data.senderUsername}
                                 timestamp={message.data.date?.toDate().toUTCString()}
                                 isCurrentUser={message.data.senderId === user?.uid} />

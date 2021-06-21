@@ -18,7 +18,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path={"/login"} component={Login} />
-          {user ? <>
+          {user !== false ? <>
             <Route path="/app" component={MainApp} /> {/* In the future, we make it so it only renders if user is logged in */}
             <Route path="/admin-app" component={AdminApp} /> {/* Only render if user is logged in as admin*/}
             <Route exact path={"/onboarding"} component={Onboarding} />
