@@ -16,6 +16,7 @@ function Chat() {
 
     const [input, setInput] = useState("");
     const { roomId } = useParams();
+    const [roomDoc, setRoomDoc] = useState({});
     const [roomName, setRoomName] = useState(""); //Will have to reach out again and figure out what its room name is.
     const [roomPic, setRoomPic] = useState("");
     const [recipientId, setRecipientId] = useState();
@@ -34,6 +35,7 @@ function Chat() {
             //Get Room Name
             const unsub1 = db.collection('rooms').doc(roomId).onSnapshot(async (snapshot) => { //<-- Add an unsubscribe
                 const snapData = snapshot.data()
+                setRoomDoc(snapData)
                 //If there is a name (it means it is a group chat)
                 if (snapData?.name) {
                     setRoomName(snapData.name)
@@ -76,15 +78,16 @@ function Chat() {
 
     const sendMessage = (e) => {
         e.preventDefault();
-
+        if(!user) return;
         //Fixed bug (now requires text to send message)
         if (input !== "") {
 
             db.collection('rooms').doc(roomId).collection('messages').add({
                 message: input,
                 date: firebase.firestore.FieldValue.serverTimestamp(),
-                senderId: user?.uid,
-                senderUsername: userDetails.name
+                senderId: user.uid,
+                senderUsername: userDetails.name,
+                recipientIds: roomDoc.users.filter(mod => mod != user.uid)
             })
 
             setInput(""); /* Reset the input at the end */
