@@ -18,7 +18,7 @@ const PostStream = () => {
 
     return (
         <>
-            {streamPosts.map(post => <PostCard post={post}/>)}
+            {streamPosts.map(post => <PostCard key={post.id} post={post}/>)}
         </>
     );
 }
