@@ -5,6 +5,7 @@ import { useParams, Link } from 'react-router-dom';
 import Filter from 'bad-words';
 import { firebase, db, storage } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
+import badWordsList from '../../config/badWords.json';
 import "./Chat.css";
 import ChatMessage from './ChatMessage';
 import Loader from '../Loader/Loader';
@@ -23,7 +24,7 @@ function Chat() {
     const [loading, setLoading] = useState(true);
 
     const messagesEndRef = useRef(null);
-    const filter = new Filter();
+    const filter = new Filter({ emptyList: true, list: badWordsList});
 
     //TO get the room name and messages
     useEffect(() => {
@@ -130,7 +131,7 @@ function Chat() {
                         {messages.map(message => (
                             <ChatMessage
                                 key={message.id}
-                                message={filter.clean(message.data.message)}
+                                message={filter.isProfane(message.data.message) ?  filter.clean(message.data.message): message.data.message}
                                 username={message.data.senderUsername}
                                 timestamp={message.data.date?.toDate().toUTCString()}
                                 isCurrentUser={message.data.senderId === user?.uid} />
