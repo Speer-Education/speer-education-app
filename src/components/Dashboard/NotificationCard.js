@@ -1,4 +1,5 @@
 import React from 'react'
+import TimeAgo from 'react-timeago';
 
 export default function NotificationCard({message, id, name, date}) {
     return (
@@ -6,7 +7,7 @@ export default function NotificationCard({message, id, name, date}) {
             <p>{message}</p>
             <p>{name}</p>
             <p>{id}</p>
-            <p>{date.toDate().toUTCString()}</p>
+            {date && <p><TimeAgo date={date.toDate().getTime()} /></p>}
         </div>
     )
 }
