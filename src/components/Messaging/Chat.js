@@ -48,7 +48,6 @@ function Chat() {
                 setLoading(false);
             })
 
-
             //Get Messages
             const unsub2 = db.collection('rooms').doc(roomId).collection('messages').orderBy('date', 'asc').onSnapshot(snapshot => (
                 setMessages(snapshot.docs.map(doc => {

@@ -19,7 +19,7 @@ html{
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 15%;
+    padding: 11%;
 }
 .home-intro__content{
     max-width: 50%;
@@ -59,8 +59,10 @@ html{
     transition: ease-in-out 0.2s;
 }
 
-.home-intro__image{
-    min-width: 50%;
+.home-intro__image img{
+    object-fit: contain;
+    height: 50vw;
+    max-height: 500px;
 }
 
 .home-about{
@@ -78,8 +80,8 @@ html{
 .home-about__container{
     display: flex;
     align-items: center;
-    padding: 25px 12%;
-    padding-bottom: 50px;
+    padding: 15px 12%;
+    padding-bottom: 30px;
 }
 
 .home-about__content{
@@ -95,7 +97,12 @@ html{
 }
 
 .home-about__image{
-    min-width: 57%;
+    text-align: center;
+}
+
+.home-about__image img{
+    object-fit: contain;
+    max-width: 41vw;
 }
 
 .home-team{
@@ -318,14 +325,29 @@ html{
     }
 }
 
+@media (max-width: 960px){
+    .home-intro__container{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-left: 10%;
+        padding-right: 5%;
+    }
+}
+
 @media (max-width: 767px){
+    .home-intro{
+        height: auto;
+        padding-bottom: 50px;
+    }
+
     .home-intro__container{
         display: flex;
         flex-direction: column;
         align-items: normal;
         padding: 0;
-        padding-left: 12%;
-        padding-right: 5%;
+        padding-left: 8%;
+        padding-right: 3%;
     }
 
     .home-intro__content{
@@ -342,6 +364,12 @@ html{
         padding: 10px;
     }
 
+    .home-intro__image img{
+        max-width: 90vw;
+        height: auto;
+        max-height: 450px;
+    }
+
     .home-about__container{
         flex-direction: column;
         padding-top: 15px; 
@@ -355,8 +383,9 @@ html{
         margin-left: 0%;
         max-width: 100%;
     }
-    .home-about__image{
-        min-width: 80%;
+    .home-about__image img{
+        max-width: 85%;
+        min-width: 260px;
     }
 
     .home-team__card{

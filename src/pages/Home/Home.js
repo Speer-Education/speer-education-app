@@ -31,7 +31,7 @@ export default function Home() {
                         </div>
                     </div>
                     <div className="home-intro__image">
-                        <img src="https://static.s123-cdn-static-d.com/ready_uploads/svg/normal_604d33874cc33.svg" alt=""></img>
+                        <img src="./home_graphic_1.png" alt=""></img>
                     </div>
                 </div>
             </section>
@@ -53,7 +53,7 @@ export default function Home() {
                             </p>
                         </div>
                         <div className="home-about__image">
-                            <img src="https://static1.s123-cdn-static-a.com/uploads/5219948/normal_60a25a8740cb6.svg" alt=""></img>
+                            <img src="./home_graphic_2.jpg" alt=""></img>
                         </div>
                     </div>
                 </ScrollAnimation>
