@@ -96,13 +96,13 @@ const teamMembers = [
   {
     fullName: "Ee Hsin Kok",
     title: "Lead Web Developer",
-    linkedInIrl: "www.linkedin.com/in/eehsinkok",
+    linkedInIrl: "https://www.linkedin.com/in/eehsinkok/",
     imageUrl: "./team_speer/eehsin.jpg",
   },
   {
     fullName: "Varnika Seth",
     title: "Chief Designing Officer",
-    linkedInIrl: "www.linkedin.com/in/eehsinkok",
+    linkedInIrl: "https://www.linkedin.com/in/varnika-seth-754522215",
     imageUrl: "./team_speer/varnika.jpeg",
   },
 
