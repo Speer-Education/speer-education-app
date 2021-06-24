@@ -1,11 +1,7 @@
 import { useState, useEffect, useContext, createContext } from "react";
-import { auth, db, rtdb, firebase } from "../config/firebase";
+import { auth, db, firebase } from "../config/firebase";
 import history from './history';
 
-import {
-    useHistory,
-    useLocation
-} from "react-router-dom";
 const authContext = createContext({ user: {} });
 const { Provider } = authContext;
 
@@ -25,7 +21,7 @@ const useAuthProvider = () => {
     let lastCommitted;
 
     const signInWithEmailAndPassword = async ({ email, password }) => {
-        let response = await auth
+        await auth
             .signInWithEmailAndPassword(email, password)
             .catch((error) => {
                 return { error };
@@ -33,7 +29,7 @@ const useAuthProvider = () => {
         console.log("sign in successful");
     };
     const initGoogleSignIn = async () => {
-        let response = await auth
+        await auth
             .signInWithRedirect(
                 new firebase.auth.GoogleAuthProvider().setCustomParameters({
                     prompt: "select_account",
@@ -45,7 +41,7 @@ const useAuthProvider = () => {
         console.log("sign in successful");
     };
     const initFacebookSignIn = async () => {
-        let response = await auth
+        await auth
             .signInWithRedirect(new firebase.auth.FacebookAuthProvider())
             .catch((error) => {
                 return { error };
@@ -90,7 +86,7 @@ const useAuthProvider = () => {
                 lastCommitted = data?._lastCommitted;
             });
         }
-    }, [user]);
+    }, [user, getUserTokenResult]);
 
     useEffect(() => {
         if (user?.uid) {
