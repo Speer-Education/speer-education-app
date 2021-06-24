@@ -12,7 +12,8 @@ html{
 .home-intro{
     height: calc(100vh - 80px);
     color: white;
-    background: #111111;
+    background-color: #222; 
+    background: linear-gradient(90deg, rgba(0, 18, 35, 1) 0%,rgba(21, 21, 21, 1) 100%);
 }
 
 .home-intro__container{
@@ -58,14 +59,14 @@ html{
 
 .home-intro__content button:hover{
     border: none;
-    background: #6da8e1;
+    background: #222a35;
     transition: ease-in-out 0.2s;
 }
 
 .home-intro__image img{
     object-fit: contain;
-    height: 50vw;
-    max-height: 500px;
+    height: 47vw;
+    max-height: 450px;
 }
 
 .home-about{
@@ -88,12 +89,12 @@ html{
 }
 
 .home-about__content{
-    max-width: 43%;
+    max-width: 100%;
 }
 
 .home-about__content p {
-    margin-left: 25%;
-    max-width: 70%;
+    margin-left: 0;
+    max-width: 75%;
     line-height: 25px;
     font-size: calc(0.6rem + 0.5vw);
     font-weight: 400;
