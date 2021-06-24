@@ -88,7 +88,7 @@ const teamMembers = [
     imageUrl: "./team_speer/ibrahim.jpeg",
   },
   {
-    fullName: "Parv BhaBadraradwaj",
+    fullName: "Parv Bhadra",
     title: "Chief Technology Officer",
     linkedInIrl: "https://www.linkedin.com/in/parvbhadra/",
     imageUrl: "./team_speer/parv.jpeg",

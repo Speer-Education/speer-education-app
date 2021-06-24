@@ -19,8 +19,11 @@ html{
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 11%;
+    padding: 11vh;
+    justify-content: center;
+    height: 100%;
 }
+
 .home-intro__content{
     max-width: 50%;
 }
