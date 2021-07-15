@@ -10,7 +10,8 @@ function Dashboard() {
     return (
         <div className="dashboard">
             <MentorShowcase/>
-            <div className="stream_container">
+            <div className="stream_container shadow-lg m-4">
+                <p className="font-semibold text-lg pl-4 pt-4">Your Feed</p>
                 <PostComposerCard />
                 <PostStream/>
             </div>

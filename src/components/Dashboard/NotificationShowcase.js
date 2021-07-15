@@ -22,6 +22,7 @@ export default function NotificationShowcase() {
         <div className="notificationShowcase">
             {console.log(notifications)}
             {!notifications ? "No notifications" : <>
+            <h2>Recent Messages</h2>
             {notifications.map((message,index) => (
                 <NotificationCard 
                     key={index}

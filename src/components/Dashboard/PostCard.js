@@ -17,9 +17,10 @@ const PostCard = ({ post }) => {
     useEffect(async () => {
         setLoading(true);
         if(!post) return;
-        let authorProfile = (await db.doc(`users/${author}`).get()).data()
-        setAuthorProfile(authorProfile)
-        setLoading(false)   
+        return db.doc(`users/${author}`).onSnapshot(snap => {
+            setAuthorProfile(snap.data())
+            setLoading(false)   
+        })
     }, [post]);
 
     const handleDeletePost = () => {
@@ -27,22 +28,26 @@ const PostCard = ({ post }) => {
     }
 
     return loading? 
-    <div className="post-card">
-        <h1>Loading</h1>
+    <div className="py-4 px-6 m-4 animate-pulse">
+        <div className="post-author_image bg-blue-400"></div>
     </div>:
-    <div className="post-card">
-        <div className="post-author_container">
-            <div className="post-author_image">
-                <ProfilePicture uid={author}/>
+    <div className="py-4 px-6 m-4">
+        <div className="post-author_container w-full">
+            <div className="flex flex-row flex-1">
+                <div className="post-author_image">
+                    <ProfilePicture uid={author}/>
+                </div>
+                <div className="author-details_container">
+                    <span className="author-details_name">{authorProfile.name}</span>
+                    <span className="author-details_school">{authorProfile.major.label}@{authorProfile.school}</span>
+                    {_createdOn && <span className="post-timestamp_text">Posted <TimeAgo date={_createdOn.toDate().getTime()} /></span>}
+                </div>
             </div>
-            <div className="author-details_container">
-                <span className="author-details_name">{authorProfile.name}</span>
-                <span className="author-details_school">{authorProfile.major.label}@{authorProfile.school}</span>
-                {_createdOn && <span className="post-timestamp_text">Posted <TimeAgo date={_createdOn.toDate().getTime()} /></span>}
-            </div>
-            {(user?.uid == author ) && <IconButton aria-label="delete" className="float-right" onClick={handleDeletePost}>
-                <DeleteIcon className="text-red-600"/>
-            </IconButton>}
+            {(user?.uid == author ) && <div>
+                <IconButton aria-label="delete" className="float-right" onClick={handleDeletePost}>
+                    <DeleteIcon className="text-red-600"/>
+                </IconButton>
+            </div>}
         </div>
         <MDEditor defaultValue={body} readOnly={true} />
     </div>
