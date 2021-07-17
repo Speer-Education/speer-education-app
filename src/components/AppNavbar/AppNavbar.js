@@ -18,7 +18,7 @@ export const NavBarLink = ({IconComponent, title}) => {
 export const AppNavbar = () => {
   return (
     <div className="flex flex-row w-full justify-evenly items-center p-8 h-32">
-      <img className="h-20" src="./full-transparent-logo.png"/>
+      <img className="h-20" src="/full-transparent-logo.png"/>
       <div className="flex flex-row h-full">
         <NavBarLink IconComponent={HomeTwoToneIcon} title="Home"/>
         <NavBarLink IconComponent={PeopleTwoToneIcon} title="My Mentors"/>

@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { db } from '../../config/firebase';
-import MentorCard from '../Mentor/MentorCard/MentorCard';
+import ProfilePicture from '../User/ProfilePicture';
 import './MentorShowcase.css';
 
 export default function MentorShowcase() {
@@ -27,22 +27,18 @@ export default function MentorShowcase() {
         }
         return array;
     }
-
+    console.log(mentors)
     return (
         <div className="mentorShowcase">
-            <h2>Explore Our Mentors:</h2>
+            <p>New Mentors To Find</p>
             {/* Randomly generates 2 mentors in random order*/}
-            {shuffleArray(mentors.slice(0)).slice(0,2).map(({ id, name, school, major, bio }) => <MentorCard
-                id={id}
-                key={id}
-                name={name}
-                school={school}
-                major={major}
-                bio={bio}
-            />)}
-            <Link to="/app/mentors">
-                <Button variant="contained">View More Mentors</Button>
-            </Link>
+            {shuffleArray(mentors.slice(0)).slice(0,2).map(({ id, name, school, major, bio }) => <div className="flex flex-row p-2">
+                <ProfilePicture className="w-10 h-10 rounded-full" uid={id}/>
+                <div className="flex-1 ml-2">
+                    <h3>{name}</h3>
+                    <p>{major.value}</p>
+                </div>
+            </div>)}
         </div>
     )
 }
