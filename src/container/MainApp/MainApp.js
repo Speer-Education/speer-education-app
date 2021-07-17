@@ -42,6 +42,8 @@ export default function MainApp() {
                 <Route path={`${path}/messages`}> {/* Fixed routing bug to do with "exact" */}
                     <Messages/>
                 </Route>
+
+                {/* TODO: Remove Blog pages as they are deprecated from the project*/}
                 {/* Blogs Page */}
                 <Route path={`${path}/blogs`}>
                     <h1>Blog</h1>

@@ -13,20 +13,23 @@ export default function OpenChats() {
 
     const [chatrooms, setChatrooms] = useState();
 
+    //Sorts the activeChats in the user document
     useEffect(() => {
 
         //If user id hasn't loaded yet, just return
         if (userDetails?.activeChats) {
             const { activeChats } = userDetails
+            //Transform activeChats object into an array to better iterate through
             const rooms = Object.values(activeChats).map((val, index) => {
                 return {
                     id: Object.keys(activeChats)[index],
                     ...val
                 }
             })
+            //Order Active chats by chronological order
             setChatrooms(rooms.sort(({date: x},{date: y}) => x.toMillis() - y.toMillis()))
         }
-
+        //TODO uhoh, wrong dependencies, forgot to update
     }, [userDetails?.chatNotifications])
 
     return (

@@ -7,6 +7,7 @@ import { db } from '../../../config/firebase';
 const Mentors = () => {
     const [mentors, setMentors] = useState([]);
     useEffect(() => {
+        //Get all the mentors and set in mentors
         return db.collection('mentors').onSnapshot(snap => {
             setMentors(snap.docs.map( doc => {
                 return { id: doc.id, ...doc.data()}

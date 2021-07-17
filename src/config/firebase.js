@@ -15,10 +15,12 @@ const firebaseConfig = {
   appId: "1:768215592962:web:944d85b44e2cdc2e0c371b",
 };
 
+//Make sure there are firebase apps loaded to initialize
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
+//make sure firestore caches everything that it needs
 firebase.firestore().settings({
   cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
 });
@@ -31,6 +33,7 @@ const now = firebase.firestore.Timestamp.now();
 const storage = firebase.storage();
 const functions = firebase.functions();
 
+//Enable persistence for firestore so it saves in browser
 db.enablePersistence()
 
 export { firebase, auth, db, now, storage, rtdb, functions };
