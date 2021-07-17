@@ -13,7 +13,8 @@ export default function MentorShowcase() {
 
     const [mentors, setMentors] = useState([]);
     const { user } = useAuth();
-
+    
+    //Loads the mentors in mentor collection
     useEffect(() => {
         return db.collection('mentors').onSnapshot(snap => {
             //TODO: Proper method of fetching random mentor documents, this way is highly inefficient and is going to cost us a lot of reads

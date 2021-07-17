@@ -21,6 +21,7 @@ function Sidebar() {
         //If user is blank
         if (!user) return
 
+        //Fetch rooms where the user is in them
         const unsubscribe = db.collection('rooms').where('users', 'array-contains', user?.uid).onSnapshot(snap => {
 
             Promise.all(snap.docs.map(async doc => {
@@ -58,6 +59,8 @@ function Sidebar() {
     }, [user?.uid])
 
 
+    //resolve a room name for this
+    //TODO: should add the name to the room document instead of loading like this
     const findRoomNameAndRoomPic = async (data) => {
         let recipientId = data.users.filter((id) => id !== user?.uid)[0]
 

@@ -8,18 +8,26 @@ import TimeAgo from 'react-timeago';
 import './PostCard.css';
 import { useAuth } from '../../hooks/useAuth';
 
+/**
+ * Creates the post card for this post
+ * @component
+ * @param {*} param0 
+ * @returns 
+ */
 const PostCard = ({ post }) => {
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
     const [authorProfile, setAuthorProfile] = useState({});
     const { author, body, _createdOn } = post;
 
+    //Attach listener on the author
+    //TODO: should have author details in post
     useEffect(async () => {
-        setLoading(true);
+        setLoading(true); //BLock view of anything if author is loading
         if(!post) return;
         return db.doc(`users/${author}`).onSnapshot(snap => {
             setAuthorProfile(snap.data())
-            setLoading(false)   
+            setLoading(false)
         })
     }, [post]);
 

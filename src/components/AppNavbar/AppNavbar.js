@@ -7,6 +7,14 @@ import ArrowDropDownTwoToneIcon from '@material-ui/icons/ArrowDropDownTwoTone';
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
+/**
+ * Component for the link in the navbar
+ * @component
+ * @param {Component} IconComponent 
+ * @param {string} title
+ * @param {string} href
+ * @returns 
+ */
 export const NavBarLink = ({IconComponent, title, href}) => {
   return <Link to={href}>
     <div className="grid place-items-center h-full px-5 hover:bg-gray-100 cursor-pointer">
@@ -18,6 +26,11 @@ export const NavBarLink = ({IconComponent, title, href}) => {
   </Link>
 }
 
+/**
+ * App navbar shown to users
+ * @component
+ * @returns 
+ */
 export const AppNavbar = () => {
   return (
     <div className="flex flex-row w-full justify-evenly items-center p-8 h-32">

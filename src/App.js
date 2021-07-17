@@ -21,7 +21,7 @@ function App() {
           {user !== false ? <>
             <Route path="/app" component={MainApp} /> {/* In the future, we make it so it only renders if user is logged in */}
             <Route path="/admin-app" component={AdminApp} /> {/* Only render if user is logged in as admin*/}
-            <Route exact path={"/onboarding"} component={Onboarding} />
+            <Route exact path={"/onboarding"} component={Onboarding} /> {/* Onboarding form to get the neccesary details before starting */}
           </> : null}
           {user === false && <Route path="/">
             <Redirect to="/" />

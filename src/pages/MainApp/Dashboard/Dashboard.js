@@ -15,9 +15,11 @@ function Dashboard() {
     return (
         <div className="dashboard">
             <div>
+                {/* left side bar */}
                 <MentorShowcase/>
             </div>
             <div className="stream_container">
+                {/* center container */}
                 <div className="shadow-md bg-white shadow-lg m-2 flex-1 max-w-4xl rounded-md">
                     <div className="flex flex-row justify-between w-full">
                         <p className="font-semibold text-lg pl-4 pt-4">Your Feed</p>
@@ -27,11 +29,12 @@ function Dashboard() {
                             <CancelIcon className="text-red-600"/>
                         </IconButton>}
                     </div>
-                    {createPost && <PostComposerCard />}
+                    {createPost && <PostComposerCard />} {/* only show if user wants to create a post */}
                     <PostStream/>
                 </div>
             </div>
             <div>
+                {/* right side bar */}
                 <OpenChats/>
             </div>
         </div>

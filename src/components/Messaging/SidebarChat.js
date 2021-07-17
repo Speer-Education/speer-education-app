@@ -9,6 +9,8 @@ function SidebarChat({ id, roomName, isMentor, roomPic }) {
     const [messages, setMessages] = useState('');
     let { url } = useRouteMatch();
 
+    //Fetches the latest message for display
+    //TODO: new backend code has last messages in the room document, no need for excessive room read.
     useEffect(() => {
         if (id) {
             db.collection('rooms').doc(id).collection('messages').orderBy('date', 'desc').limit(1).onSnapshot(snap => {
