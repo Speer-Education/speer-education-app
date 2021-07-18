@@ -32,8 +32,7 @@ export default function OpenChats() {
     }, [userDetails?.activeRooms])
 
     return (
-        <div className="rounded-md bg-white m-2 p-2 max-w-sm w-72 shadow-md">
-            {console.log(chatrooms)}
+        <div className="rounded-md bg-white m-2 p-3 max-w-sm w-72 shadow-md">
             {!chatrooms ? "No notifications" : <>
             <p>Open Chats</p>
             {chatrooms.map(({senderUsername, senderId, message, roomId})=> (
