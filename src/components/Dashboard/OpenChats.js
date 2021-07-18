@@ -30,7 +30,7 @@ export default function OpenChats() {
             setChatrooms(rooms.sort(({date: x},{date: y}) => x.toMillis() - y.toMillis()))
         }
         //TODO uhoh, wrong dependencies, forgot to update
-    }, [userDetails?.chatNotifications])
+    }, [userDetails?.activeRooms])
 
     return (
         <div className="rounded-md bg-white m-2 p-2 max-w-sm w-72 shadow-md">
@@ -38,10 +38,10 @@ export default function OpenChats() {
             {!chatrooms ? "No notifications" : <>
             <p>Open Chats</p>
             {chatrooms.map(({senderUsername, senderId, message, roomId})=> (
-                <div className="flex flex-row">
-                    <ProfilePicture uid={senderId} className="w-10 h-10"/>
-                    <div className="flex-1">
-                        <p>{senderUsername}</p>
+                <div className="flex flex-row mt-2">
+                    <ProfilePicture uid={senderId} className="w-10 h-10 rounded-full"/>
+                    <div className="flex-1 ml-2">
+                        <p className="font-bold">{senderUsername}</p>
                         <p>{message}</p>
                     </div>
                     <div className="flex flex-col items-center">
