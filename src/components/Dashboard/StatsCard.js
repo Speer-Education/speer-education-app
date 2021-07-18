@@ -15,11 +15,11 @@ export default function StatsCard() {
             </div>
             <div className="flex flex-row w-full divide-x divide-gray-400">
                 <div className="flex-1 py-4 px-1">
-                    <p className="font-semibold text-2xl">12</p>
+                    <p className="font-semibold text-2xl">{userDetails?.mentoryCount || 0}</p>
                     <p>Connection to Mentory</p>
                 </div>
                 <div className="flex-1 py-4 px-1 border-l-2">
-                    <p className="font-semibold text-2xl">23</p>
+                    <p className="font-semibold text-2xl">{(userDetails?.rooms || []).length}</p>
                     <p>Open Chats</p>
                 </div>
             </div>
