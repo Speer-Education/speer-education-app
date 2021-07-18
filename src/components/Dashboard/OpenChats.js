@@ -29,7 +29,6 @@ export default function OpenChats() {
             //Order Active chats by chronological order
             setChatrooms(rooms.sort(({date: x},{date: y}) => x.toMillis() - y.toMillis()))
         }
-        //TODO uhoh, wrong dependencies, forgot to update
     }, [userDetails?.activeRooms])
 
     return (

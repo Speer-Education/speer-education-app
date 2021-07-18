@@ -10,11 +10,10 @@ function SidebarChat({ id, roomName, isMentor, roomPic }) {
     let { url } = useRouteMatch();
 
     //Fetches the latest message for display
-    //TODO: new backend code has last messages in the room document, no need for excessive room read.
     useEffect(() => {
         if (id) {
-            db.collection('rooms').doc(id).collection('messages').orderBy('date', 'desc').limit(1).onSnapshot(snap => {
-                setMessages(snap.docs.map( doc => doc.data()))
+            db.collection('rooms').doc(id).onSnapshot(doc => {
+                setMessages(doc.data().lastMessage)
             })
         }
     }, [id])
@@ -26,7 +25,7 @@ function SidebarChat({ id, roomName, isMentor, roomPic }) {
                 only 2 users, and  the group pic if it is a group chat. <-- Implement this to come from Sidebar and be passed down as a prop */}
                 <div className="sidebarChat__info">
                     <h2>{roomName} {isMentor ? <i class="fas fa-user-check"></i> : null}</h2> 
-                    <p>{messages[0] ? messages[0].message.substring(0,16) + "..." : "No Message History"}</p>
+                    <p>{messages ? messages.message.substring(0,16) + "..." : "No Message History"}</p>
                 </div>
             </div>
         </Link>
