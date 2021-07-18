@@ -4,6 +4,7 @@ import PostComposerCard from '../../../components/Dashboard/PostComposerCard';
 import PostStream from '../../../components/Dashboard/PostStream';
 import NotificationShowcase from '../../../components/Dashboard/NotificationShowcase';
 import OpenChats from '../../../components/Dashboard/OpenChats';
+import StatsCard from '../../../components/Dashboard/StatsCard';
 import EditIcon from '@material-ui/icons/Edit';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { IconButton } from '@material-ui/core';
@@ -17,6 +18,7 @@ function Dashboard() {
             <div>
                 {/* left side bar */}
                 <MentorShowcase/>
+                <StatsCard/>
             </div>
             <div className="stream_container">
                 {/* center container */}
