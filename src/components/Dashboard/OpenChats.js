@@ -17,12 +17,12 @@ export default function OpenChats() {
     useEffect(() => {
 
         //If user id hasn't loaded yet, just return
-        if (userDetails?.activeChats) {
-            const { activeChats } = userDetails
+        if (userDetails?.activeRooms) {
+            const { activeRooms } = userDetails
             //Transform activeChats object into an array to better iterate through
-            const rooms = Object.values(activeChats).map((val, index) => {
+            const rooms = Object.values(activeRooms).map((val, index) => {
                 return {
-                    id: Object.keys(activeChats)[index],
+                    id: Object.keys(activeRooms)[index],
                     ...val
                 }
             })
