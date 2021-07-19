@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext, createContext } from "react";
 import { auth, db, firebase } from "../config/firebase";
 import history from './history';
+import { useLocalStorage } from "./useHooks";
 
 const authContext = createContext({ user: {} });
 const { Provider } = authContext;
