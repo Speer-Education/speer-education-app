@@ -9,6 +9,16 @@ import badWordsList from '../../config/badWords.json';
 import "./Chat.css";
 import ChatMessage from './ChatMessage';
 import Loader from '../Loader/Loader';
+import { useOnScreen } from '../../hooks/useHooks';
+import { getSnapshot } from '../../hooks/firestore';
+import { InView } from 'react-intersection-observer';
+
+let messageArray = []
+let listeners = []    // list of listeners
+let start = null      // start position of listener
+let end = null        // end position of listener
+
+const DOCUMENTS_PER_PAGE = 10;
 
 function Chat() {
 
@@ -23,14 +33,28 @@ function Chat() {
     const [isMentor, setIsMentor] = useState();
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadedAllMessages, setLoadedAllMessages] = useState(false);
 
     const messagesEndRef = useRef(null);
     const filter = new Filter({ emptyList: true, list: badWordsList});
 
     //TO get the room name and messages
     useEffect(() => {
-        if (roomId && user) {
+        if (!user) return;
 
+        //Clear all variables before reloading page.
+        messageArray = [];
+        listeners = [];
+        start = null;
+        end = null;
+        setMessages(messageArray)
+        getMessages();
+
+        return () => detachListeners();
+    }, [roomId, user]);
+
+    useEffect(() => {
+        if (roomId && user) {
             setLoading(true);
             //Get Room Name
             const unsub1 = db.collection('rooms').doc(roomId).onSnapshot(async (snapshot) => { //<-- Add an unsubscribe
@@ -51,30 +75,99 @@ function Chat() {
                 setLoading(false);
             })
 
-            //Get Messages
-            const unsub2 = db.collection('rooms').doc(roomId).collection('messages').orderBy('date', 'asc').onSnapshot(snapshot => (
-                setMessages(snapshot.docs.map(doc => {
-                    return {
-                        id: doc.id,
-                        data: doc.data()
-                    }
-                }))
-            )
-            )
-
             return () => {
                 unsub1();
-                unsub2();
             }
         }
 
     }, [roomId, user])
 
-    useEffect(() => {
-        scrollToBottom()
+    // useEffect(() => {
+    //     scrollToBottom()
 
-    }, [messages, loading]);
+    // }, [messages, loading]);
+    
+    function handleUpdatedMessages(snapshot) {
+        // append new messages to message array
+        snapshot.forEach((message) => {
+            // filter out any duplicates (from modify/delete events)         
+            messageArray = messageArray.filter(x => x.id !== message.id)
+            messageArray.push({ id: message.id, ...message.data() })
+        })
 
+        // remove post from local array if deleted
+        snapshot.docChanges().forEach(change => {
+            if (change.type === 'removed') {
+                const message = change.doc
+                //Remove post from our array if it is here
+                messageArray = messageArray.filter(x => x.id !== message.id)
+            }
+        });
+        console.log(messageArray)
+        messageArray = messageArray.filter(({date}) => date != null );
+        //Sort array because it is unsorted, filter date as it might be null
+        messageArray.sort(({ date: x }, { date: y }) => {
+            return x.toDate() - y.toDate()
+        })
+        setMessages(messageArray)
+        setLoading(false)
+    }
+
+    async function getMessages() {
+        // query reference for the messages we want
+        // single query to get startAt snapshot
+
+        let ref = db.collection('rooms').doc(roomId).collection('messages')
+        let snapshots = await getSnapshot(ref.orderBy('date', 'desc')
+            .limit(DOCUMENTS_PER_PAGE))
+        // save startAt snapshot
+        start  = snapshots.docs[snapshots.docs.length - 1]
+        // create listener using startAt snapshot (starting boundary)    
+        let listener = ref.orderBy('date', 'asc')
+            .startAt(start)
+            .onSnapshot(snap => {
+                scrollToBottom()
+                handleUpdatedMessages(snap)
+            })
+        // add listener to list
+        listeners.push(listener)
+    }
+
+    async function getMoreMessages() {
+        console.log('getting more messages')
+        let ref = db.collection('rooms').doc(roomId).collection('messages')
+        setLoading(true)
+        if (!start) {
+            console.log('no more posts');
+            setLoadedAllMessages(true);
+            setLoading(false)
+            return;
+        }
+        // single query to get new startAt snapshot
+        let snapshots = await getSnapshot(ref.orderBy('date', 'desc')
+            .startAt(start)
+            .limit(DOCUMENTS_PER_PAGE))
+        // previous starting boundary becomes new ending boundary
+        end = start
+        start = snapshots.docs[snapshots.docs.length - 1]
+
+        // create another listener using new boundaries     
+        if (!end) {
+            console.log('no more posts');
+            setLoadedAllMessages(true);
+            setLoading(false)
+            return;
+        }
+        let listener = ref.orderBy('date', 'asc')
+            .startAt(start).endBefore(end)
+            .onSnapshot(handleUpdatedMessages)
+        listeners.push(listener)
+    }
+
+    // call to detach all listeners
+    function detachListeners() {
+        listeners.forEach(listener => listener())
+    }
 
     const sendMessage = (e) => {
         e.preventDefault();
@@ -111,50 +204,50 @@ function Chat() {
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView()
     }
-
+    // console.log(messages)
     return (
         <div className="chat">
-            {loading ? <div className="chat__loader"><Loader /></div> :
-                <>
-                    <div className="chat__header">
-                        {recipientId ?
-                            <Link to={`/app/profile/${recipientId}`}>
-                                <Avatar src={roomPic} />
-                                <div className="chat__headerInfo">
-                                    <h3>{roomName} {isMentor ? <i class="fas fa-user-check"></i> : null}</h3>
-                                </div>
-                            </Link> : <>
-                                <Avatar src={roomPic} />
-                                <div className="chat__headerInfo">
-                                    <h3>{roomName}</h3>
-                                </div>
-                            </>}
+            <div className="chat__header">
+                {recipientId ?
+                    <Link to={`/app/profile/${recipientId}`}>
+                        <Avatar src={roomPic} />
+                        <div className="chat__headerInfo">
+                            <h3>{roomName} {isMentor ? <i class="fas fa-user-check"></i> : null}</h3>
+                        </div>
+                    </Link> : <>
+                        <Avatar src={roomPic} />
+                        <div className="chat__headerInfo">
+                            <h3>{roomName}</h3>
+                        </div>
+                    </>}
+            </div>
+            <div className="chat__body">
+                <InView as="div" onChange={(inView, entry) => { if(inView && !loading) getMoreMessages()}}/>
+                {loading &&<div className="w-full grid place-items-center"><Loader />,</div>}
+                {messages.map(({message, date, id, senderId, senderUsername}) => (
+                    <ChatMessage
+                        key={id}
+                        message={filter.isProfane(message) ?  filter.clean(message): message}
+                        username={senderUsername}
+                        timestamp={date.toMillis()}
+                        isCurrentUser={senderId === user?.uid} />
+                ))}
+                <div ref={messagesEndRef} />
+            </div>
+            <div className="chat__footer">
+                <form>
+                    <IconButton>
+                        <AttachFile />
+                    </IconButton>
+                    <div className="chat__footerInput">
+                        {/* <input type="text" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)}/> */}
+                        <textarea cols="2" rows="3" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)} />
+                        <IconButton type="submit" onClick={sendMessage}>
+                            <Send />
+                        </IconButton>
                     </div>
-                    <div className="chat__body">
-                        {messages.map(message => (
-                            <ChatMessage
-                                key={message.id}
-                                message={filter.isProfane(message.data.message) ?  filter.clean(message.data.message): message.data.message}
-                                username={message.data.senderUsername}
-                                timestamp={message.data.date?.toDate().toUTCString()}
-                                isCurrentUser={message.data.senderId === user?.uid} />
-                        ))}
-                        <div ref={messagesEndRef} />
-                    </div>
-                    <div className="chat__footer">
-                        <form>
-                            <IconButton>
-                                <AttachFile />
-                            </IconButton>
-                            <div className="chat__footerInput">
-                                {/* <input type="text" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)}/> */}
-                                <textarea cols="2" rows="3" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)} />
-                                <IconButton type="submit" onClick={sendMessage}>
-                                    <Send />
-                                </IconButton>
-                            </div>
-                        </form>
-                    </div> </>}
+                </form>
+            </div>
         </div >
     )
 }

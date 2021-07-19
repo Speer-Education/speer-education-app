@@ -14,7 +14,6 @@ const LazyAdminApp = lazy(() => import("./container/AdminApp/AdminApp"))
 function App() {
 
   const { user } = useAuth();
-  console.log(user)
   return (
     <Router history={history}>
       <div className="app">
