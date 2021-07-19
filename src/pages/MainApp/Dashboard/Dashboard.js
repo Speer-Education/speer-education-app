@@ -10,6 +10,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { IconButton } from '@material-ui/core';
 import {Helmet} from "react-helmet";
 import './Dashboard.css';
+import YoutubeEmbed from "../../../components/Dashboard/Video";
 
 function Dashboard() {
     const [createPost, setCreatePost] = useState(false);
@@ -42,6 +43,8 @@ function Dashboard() {
             <div>
                 {/* right side bar */}
                 <OpenChats/>
+                <YoutubeEmbed embedId="rokGy0huYEA" />
+                <p>testing</p>
             </div>
         </div>
     )
