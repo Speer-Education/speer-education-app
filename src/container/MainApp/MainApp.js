@@ -1,9 +1,9 @@
 import React, { Suspense, lazy } from 'react';
 import { Switch, Route, useRouteMatch } from "react-router-dom";
-import { AppNavbar } from '../../components/AppNavbar/AppNavbar';
-// import BlogEditorPage from '../../pages/MainApp/BlogEditor/BlogEditor';
-// import BlogPage from '../../pages/MainApp/Blog/BlogPage';
+import CircleLoader from '../../components/Loader/CircleLoader';
+import './MainApp.css';
 
+import AppNavbar from '../../components/AppNavbar/AppNavbar';
 const LazyMessages = lazy(() => import('../../pages/MainApp/Messaging/Messaging'))
 const LazyMentorsPage = lazy(() => import('../../pages/MainApp/Mentors/Mentors'))
 const LazyMentorProfile = lazy(() => import('../../pages/MainApp/MentorProfile/MentorProfile'))
@@ -18,7 +18,7 @@ export default function MainApp() {
     return (
         <>
             <AppNavbar />
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div className="circleLoader"> <CircleLoader /> </div>}>
                 <Switch>
                     {/* Main Page */}
                     <Route exact path={`${path}`}>

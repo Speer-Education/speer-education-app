@@ -4,6 +4,7 @@ import Home from "./pages/Home/Home";
 import { useAuth } from "./hooks/useAuth";
 import { Router, Switch, Route, Redirect } from "react-router-dom";
 import history from './hooks/history';
+import CircleLoader from './components/Loader/CircleLoader';
 
 const LazyLogin = lazy(() => import("./pages/Login/Login"))
 const LazyOnboarding = lazy(() => import("./pages/Onboarding/Onboarding"))
@@ -17,7 +18,7 @@ function App() {
   return (
     <Router history={history}>
       <div className="app">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div className="circleLoader"> <CircleLoader/> </div>}>
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path={"/login"} component={LazyLogin} />

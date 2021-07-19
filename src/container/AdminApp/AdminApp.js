@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from "react-router-dom";
-import { AppNavbar } from '../../components/AppNavbar/AppNavbar';
+import AppNavbar from '../../components/AppNavbar/AppNavbar';
 
 export default function AdminApp() {
     let { path } = useRouteMatch();

@@ -15,8 +15,8 @@ import { Link } from 'react-router-dom';
  * @param {string} href
  * @returns 
  */
-export const NavBarLink = ({IconComponent, title, href}) => {
-  return <Link to={href}>
+const NavBarLink = ({IconComponent, title, href}) => {
+  return <Link to={href} className="text-gray-800 no-underline">
     <div className="grid place-items-center h-full px-5 hover:bg-gray-100 cursor-pointer">
       <div className="flex-1 flex flex-col items-center">
         <IconComponent className="h-8 w-8"/>
@@ -31,7 +31,7 @@ export const NavBarLink = ({IconComponent, title, href}) => {
  * @component
  * @returns 
  */
-export const AppNavbar = () => {
+const AppNavbar = () => {
   return (
     <div className="flex flex-row w-full justify-evenly items-center p-8 h-32">
       <img className="h-20" src="/full-transparent-logo.png"/>
@@ -48,3 +48,5 @@ export const AppNavbar = () => {
     </div>
   );
 };
+
+export default AppNavbar;
