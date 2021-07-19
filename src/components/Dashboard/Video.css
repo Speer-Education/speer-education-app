@@ -1,8 +1,7 @@
-.video-responsive {
-    max-width: 500px;
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    padding-right: 5px;
-    @apply p-3 m-2 shadow-lg rounded-md bg-white;
+img{
+    padding-right: 10px;
+}
+
+p {
+    padding-left: 10px;
 }
