@@ -3,6 +3,7 @@ import './Login.css';
 import { Button } from '@material-ui/core';
 import { useAuth } from "../../hooks/useAuth";
 import { Link } from 'react-router-dom';
+import {Helmet} from "react-helmet";
 
 export default function Login() {
 
@@ -24,6 +25,10 @@ export default function Login() {
 
     return (
         <div className="login">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Login | Speer Education</title>
+            </Helmet>
             <form>
                 <h1>Speer Education</h1>
                 { user ? <p>Logged In!</p>: <> <p>Not Logged In</p>

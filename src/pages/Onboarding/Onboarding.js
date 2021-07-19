@@ -6,6 +6,7 @@ import { updateDoc } from '../../hooks/firestore';
 import { useAuth } from '../../hooks/useAuth';
 import { functions } from '../../config/firebase';
 import Button from '@material-ui/core/Button';
+import {Helmet} from "react-helmet";
 
 export default function UserDetails() {
     const { user } = useAuth();
@@ -77,6 +78,10 @@ export default function UserDetails() {
 
     return (
         <div className="user-details">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Sign Up | Speer Education</title>
+            </Helmet>
             <h1>Tell us about yourself!</h1>
             <form className="user-details__form">
                 {/* Ask which to make mandatory and then force them to be required*/}
