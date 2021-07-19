@@ -12,7 +12,6 @@ import {Helmet} from "react-helmet";
 import './Dashboard.css';
 
 function Dashboard() {
-    const [createPost, setCreatePost] = useState(false);
     return (
         <div className="dashboard">
             <Helmet>
@@ -26,16 +25,11 @@ function Dashboard() {
             </div>
             <div className="stream_container">
                 {/* center container */}
-                <div className="shadow-md bg-white shadow-lg m-2 flex-1 max-w-4xl rounded-md">
+                <div className="flex-1 max-w-4xl">
                     <div className="flex flex-row justify-between w-full">
-                        <p className="font-semibold text-lg pl-4 pt-4">Your Feed</p>
-                        {!createPost ? <IconButton aria-label="delete" className="float-right" onClick={() => setCreatePost(true)}>
-                            <EditIcon className="text-blue-600"/>
-                        </IconButton>:<IconButton aria-label="delete" className="float-right" onClick={() => setCreatePost(false)}>
-                            <CancelIcon className="text-red-600"/>
-                        </IconButton>}
+                        <p className="font-semibold text-lg pl-4 pt-4">Post Feed</p>
                     </div>
-                    {createPost && <PostComposerCard />} {/* only show if user wants to create a post */}
+                    <PostComposerCard /> {/* only show if user wants to create a post */}
                     <PostStream/>
                 </div>
             </div>
