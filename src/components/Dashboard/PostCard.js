@@ -34,21 +34,27 @@ const PostCard = ({ post }) => {
     const handleDeletePost = () => {
         db.doc(`posts/${post.id}`).delete()
     }
-
     return loading? 
-    <div className="py-4 px-6 m-4 animate-pulse">
-        <div className="post-author_image bg-blue-400"></div>
+    <div class="py-4 px-6 m-2 bg-white rounded-lg shadow-lg w-screen max-w-4xl">
+        <div class="animate-pulse flex space-x-4">
+        <div class="rounded-full bg-gray-300 h-12 w-12"></div>
+        <div class="flex-1 space-y-4 py-1">
+            <div class="h-4 bg-gray-300 rounded w-3/12"></div>
+            <div class="space-y-2">
+            <div class="h-4 bg-gray-300 rounded"></div>
+            <div class="h-4 bg-gray-300 rounded w-5/6"></div>
+            </div>
+        </div>
+        </div>
     </div>:
-    <div className="py-4 px-6 m-4">
+    <div className="py-4 px-6 m-2 bg-white rounded-lg shadow-lg">
         <div className="post-author_container w-full">
-            <div className="flex flex-row flex-1">
-                <div className="post-author_image">
-                    <ProfilePicture uid={author}/>
-                </div>
-                <div className="author-details_container">
-                    <span className="author-details_name">{authorProfile.name}</span>
-                    <span className="author-details_school">{authorProfile.major.label}@{authorProfile.school}</span>
-                    {_createdOn && <span className="post-timestamp_text">Posted <TimeAgo date={_createdOn.toDate().getTime()} /></span>}
+            <div className="flex flex-row flex-1 items-center">
+                <ProfilePicture uid={author} className="shadow-md bg-blue-400 overflow-hidden h-12 w-12 rounded-full"/>
+                <div className="flex-1 space-y py-1 ml-2">
+                    <div className="text-xl">{authorProfile.name}</div>
+                    <div className="author-details_school">{authorProfile.major.label}@{authorProfile.school}</div>
+                    {_createdOn && <div className="post-timestamp_text">Posted <TimeAgo date={_createdOn.toDate().getTime()} /></div>}
                 </div>
             </div>
             {(user?.uid == author ) && <div>
