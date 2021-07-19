@@ -30,8 +30,7 @@ export const useAuth = () => {
 const useAuthProvider = () => {
     const [user, setUser] = useState(null); 
     const [userDetails, setUserDetails] = useState(null);
-    //TODO: add useLocalStorage hook and make sure last committed is stored in local storage
-    let lastCommitted; //The last committed state of our user claims document, decides if token needs to update if outdated
+    const [lastCommitted, setLastCommitted] = useLocalStorage("lastCommited", 0);  //The last committed state of our user claims document, decides if token needs to update if outdated
 
     /**
      * Sign in user with email and password login
@@ -121,7 +120,7 @@ const useAuthProvider = () => {
                     setUserDetails({ ...await getUserTokenResult(true), ...userDetails })
                     console.log("Refreshing token");
                 }
-                lastCommitted = data?._lastCommitted;
+                setLastCommitted(data?._lastCommitted);
             });
         }
     }, [user, getUserTokenResult]);
