@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import './Mentors.css'
 import MentorCard from '../../../components/Mentor/MentorCard/MentorCard';
 import { db } from '../../../config/firebase';
+import {Helmet} from "react-helmet";
 
 const Mentors = () => {
     const [mentors, setMentors] = useState([]);
@@ -17,6 +18,10 @@ const Mentors = () => {
 
     return (
         <div className="mentors">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Mentors | Speer Education</title>
+            </Helmet>
             <div className="mentors__grid">
                 {mentors.map(({id, name, school, major, bio}) => <MentorCard
                     id={id}

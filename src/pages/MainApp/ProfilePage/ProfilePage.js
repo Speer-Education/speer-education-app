@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { db, storage, functions } from '../../../config/firebase';
 import { useParams } from 'react-router-dom';
 import history from '../../../hooks/history';
-
+import {Helmet} from "react-helmet";
 
 function ProfilePage() {
     const { profileId } = useParams();
@@ -41,6 +41,10 @@ function ProfilePage() {
 
     return (
         <div className="profilePage">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Your Profile | Speer Education</title>
+            </Helmet>
             {/* Redirects the user to the mentor page if user is a mentor */}
             {isMentor? <Redirect to={`/app/mentors/${profileId}`}></Redirect> : null}
             {!loading ? <> <img src={profPic} alt="profile"></img>

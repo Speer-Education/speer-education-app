@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 import './MentorProfile.css';
 import Loader from '../../../components/Loader/Loader';
 import history from '../../../hooks/history';
+import {Helmet} from "react-helmet";
 
 const MentorProfile = () => {
     const { mentorId } = useParams();
@@ -44,6 +45,10 @@ const MentorProfile = () => {
 
     return (
         <div className="mentorProfile">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Mentor Profile | Speer Education</title>
+            </Helmet>
             {loading ? <Loader />: <>
                 {/* *Insert Photo (Have to search storage for it) */}
                 <img src={profPic} alt="mentor profile" />

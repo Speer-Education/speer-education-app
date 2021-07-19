@@ -8,13 +8,17 @@ import StatsCard from '../../../components/Dashboard/StatsCard';
 import EditIcon from '@material-ui/icons/Edit';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { IconButton } from '@material-ui/core';
-
+import {Helmet} from "react-helmet";
 import './Dashboard.css';
 
 function Dashboard() {
     const [createPost, setCreatePost] = useState(false);
     return (
         <div className="dashboard">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Dashboard | Speer Education</title>
+            </Helmet>
             <div>
                 {/* left side bar */}
                 <MentorShowcase/>
