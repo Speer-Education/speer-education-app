@@ -116,6 +116,7 @@ const useAuthProvider = () => {
     useEffect(() => {
         if (user?.uid) {
             return db.doc(`user_claims/${user.uid}`).onSnapshot(async (snap) => {
+                console.log(lastCommitted)
                 const data = snap.data();
                 if (lastCommitted && !data._lastCommitted.isEqual(lastCommitted)) {
                     setUserDetails({ ...await getUserTokenResult(true), ...userDetails })
@@ -124,7 +125,7 @@ const useAuthProvider = () => {
                 setLastCommitted(data?._lastCommitted);
             });
         }
-    }, [user, getUserTokenResult]);
+    }, [user?.uid]); //Only reattach if user uid is updated :(
 
     //Attaches the user document to listen for changes in the document
     useEffect(() => {
