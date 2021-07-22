@@ -33,8 +33,15 @@ const now = firebase.firestore.Timestamp.now();
 const storage = firebase.storage();
 const functions = firebase.functions();
 
+// FOR LOCAL EMULATORS  =================
+// db.useEmulator("localhost", 8080);
+// rtdb.useEmulator("localhost", 9000);
+// functions.useEmulator("localhost", 5001);
+
+
 //Enable persistence for firestore so it saves in browser
 db.enablePersistence()
+
 
 export { firebase, auth, db, now, storage, rtdb, functions };
 

@@ -11,13 +11,6 @@
     margin-bottom: 12px;
 }
 
-.post-author_image img {
-    width: 56px;
-    height: 56px;
-    border-radius: 999px;
-    @apply shadow-md
-}
-
 .author-details_container {
     display: flex;
     flex-direction: column;
@@ -40,3 +33,12 @@
 .post-timestamp_text {
     color:#000000a2;
 }
+
+@keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: .5;
+    }
+  }

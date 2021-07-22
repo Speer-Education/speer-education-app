@@ -30,7 +30,7 @@ const PostComposerCard = () => {
 
     return (
         <div className="post-composer">
-            <h2>Tell us what's on your mind :)</h2>
+            <p className="font-medium text-xl text-blue-900">Write something to tell the world!</p>
             {!saving && <MDEditor onChange={val => setPostContent(val())}/>}
             <Button disabled={saving || (postContent.length == 0)} variant="outlined" onClick={createNewPost}>Post</Button>
         </div>

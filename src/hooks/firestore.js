@@ -28,4 +28,12 @@ const getNewDocId = (path) => db.collection(path).doc().id
 
 const deletePost = (path) => db.doc(path).delete();
 
-export { useDocListener, updateDoc, getNewDocId, deletePost }
+const getSnapshot = (ref) => new Promise((resolve, reject) => {
+    let unsubscribe = ref.onSnapshot((snapshot) => {
+        unsubscribe();
+        resolve(snapshot)
+    })
+})
+
+
+export { useDocListener, updateDoc, getNewDocId, deletePost, getSnapshot }
