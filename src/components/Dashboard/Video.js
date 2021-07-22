@@ -1,31 +1,46 @@
 import PropTypes from "prop-types";
-import './Video.css';
 import React, { useEffect, useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-export default function YoutubeEmbed({ embedId }) {
-  let [isOpen, setIsOpen] = useState(true)
+import { db } from '../../config/firebase';
+export default function YoutubeEmbed() {
+  let [embed_id, setembed_id] = useState([]);
+  let [isOpen, setIsOpen] = useState(false)
+  const [Video_data, setVideo_data] = useState([]);
 
   function closeModal() {
     setIsOpen(false)
   }
 
-  function openModal() {
+  function openModal({ embedId }) {
+    setembed_id(embedId)
     setIsOpen(true)
   }
 
-  YoutubeEmbed.propTypes = {
-    embedId: PropTypes.string.isRequired
-  };
   useEffect(() => {
     console.log("overhere");
-    console.log(fetch("https://gdata.youtube.com/feeds/api/videos/" + embedId + "?v=2&alt=json-in-script&format=5&callback=getTitle").then(response => response.json()));
+    db.collection('Video_data').onSnapshot(snap => {
+      let data = snap.docs.map(docSnap => {
+        return {
+          id: docSnap.id,
+          ...docSnap.data()
+        }
+      })
+      setVideo_data(data);
+    });
+    Video_data.map(data =>{
+      console.log(data.id)
+      console.log(data.title)
+    });
+
   }, []);
   return (
     <>
+      {Video_data.map(data =>{
       <div className="flex flex-row w-300 min-w-500 p-3 m-2 shadow-lg rounded-md bg-white">
-        <img src={`http://img.youtube.com/vi/${embedId}/0.jpg`} height="90px" width="160px" onClick={openModal} />
-        <p>123</p>
-      </div> 
+        <img src={`http://img.youtube.com/vi/${data.YT_id}/0.jpg`} height="90px" width="160px" onClick={openModal(data.YT_id)} />
+        <p>{data.title}</p>
+      </div>
+      })}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -63,15 +78,15 @@ export default function YoutubeEmbed({ embedId }) {
             >
               <div className="inline-block w-max max-w-full h-max max-h-full p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                 <div className="mt-2">
-                <iframe
-                  width="800px"
-                  height="450px"
-                  src={`https://www.youtube.com/embed/${embedId}`}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="Embedded youtube"
-                />
+                  <iframe
+                    width="800px"
+                    height="450px"
+                    src={`https://www.youtube.com/embed/${embed_id}`}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title="Embedded youtube"
+                  />
                 </div>
 
                 <div className="mt-4">
