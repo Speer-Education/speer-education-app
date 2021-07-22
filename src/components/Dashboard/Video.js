@@ -18,7 +18,7 @@ export default function YoutubeEmbed() {
 
   useEffect(() => {
     console.log("overhere");
-    db.collection('Video_data').onSnapshot(snap => {
+    return db.collection('Video_data').onSnapshot(snap => {
       let data = snap.docs.map(docSnap => {
         return {
           id: docSnap.id,
@@ -27,20 +27,15 @@ export default function YoutubeEmbed() {
       })
       setVideo_data(data);
     });
-    Video_data.map(data =>{
-      console.log(data.id)
-      console.log(data.title)
-    });
-
   }, []);
   return (
     <>
-      {Video_data.map(data =>{
+      {Video_data.map(data =>
       <div className="flex flex-row w-300 min-w-500 p-3 m-2 shadow-lg rounded-md bg-white">
-        <img src={`http://img.youtube.com/vi/${data.YT_id}/0.jpg`} height="90px" width="160px" onClick={openModal(data.YT_id)} />
+        <img src={`http://img.youtube.com/vi/${data.YT_id}/0.jpg`} height="90px" width="160px" onClick={()=>openModal(data.YT_id)} />
         <p>{data.title}</p>
       </div>
-      })}
+      )}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
