@@ -10,6 +10,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { IconButton } from '@material-ui/core';
 import {Helmet} from "react-helmet";
 import './Dashboard.css';
+import YoutubeEmbed from "../../../components/Dashboard/Video";
 
 function Dashboard() {
     return (
@@ -25,7 +26,7 @@ function Dashboard() {
             </div>
             <div className="stream_container">
                 {/* center container */}
-                <div className="flex-1 max-w-4xl">
+                <div className=" shadow-lg m-2 flex-1 max-w-4xl rounded-md shadow-md bg-white">
                     <div className="flex flex-row justify-between w-full">
                         <p className="font-semibold text-lg pl-4 pt-4">Post Feed</p>
                     </div>
@@ -36,6 +37,7 @@ function Dashboard() {
             <div>
                 {/* right side bar */}
                 <OpenChats/>
+                <YoutubeEmbed/>
             </div>
         </div>
     )
