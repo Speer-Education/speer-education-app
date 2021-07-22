@@ -27,7 +27,7 @@ function Dashboard() {
             </div>
             <div className="stream_container">
                 {/* center container */}
-                <div className="shadow-md bg-white shadow-lg m-2 flex-1 max-w-4xl rounded-md">
+                <div className=" shadow-lg m-2 flex-1 max-w-4xl rounded-md shadow-md bg-white">
                     <div className="flex flex-row justify-between w-full">
                         <p className="font-semibold text-lg pl-4 pt-4">Your Feed</p>
                         {!createPost ? <IconButton aria-label="delete" className="float-right" onClick={() => setCreatePost(true)}>
@@ -43,8 +43,7 @@ function Dashboard() {
             <div>
                 {/* right side bar */}
                 <OpenChats/>
-                <YoutubeEmbed embedId="rokGy0huYEA" />
-                <p>testing</p>
+                <YoutubeEmbed/>
             </div>
         </div>
     )

@@ -7,18 +7,19 @@ export default function YoutubeEmbed() {
   let [isOpen, setIsOpen] = useState(false)
   const [Video_data, setVideo_data] = useState([]);
 
+  //set pop up state
   function closeModal() {
     setIsOpen(false)
   }
 
-  function openModal({ embedId }) {
+  function openModal(embedId) {
     setembed_id(embedId)
     setIsOpen(true)
   }
 
   useEffect(() => {
-    console.log("overhere");
-    return db.collection('Video_data').onSnapshot(snap => {
+    //read video data from firebase
+    return db.collection('video').onSnapshot(snap => {
       let data = snap.docs.map(docSnap => {
         return {
           id: docSnap.id,
@@ -30,12 +31,19 @@ export default function YoutubeEmbed() {
   }, []);
   return (
     <>
+      {/**? display the video img base on list read from firebase */}
+      <div className="flex flex-col w-300 min-w-500 p-3 m-2 shadow-lg rounded-md bg-white space-y-6">
+      <b>Videos</b>
       {Video_data.map(data =>
-      <div className="flex flex-row w-300 min-w-500 p-3 m-2 shadow-lg rounded-md bg-white">
-        <img src={`http://img.youtube.com/vi/${data.YT_id}/0.jpg`} height="90px" width="160px" onClick={()=>openModal(data.YT_id)} />
-        <p>{data.title}</p>
+      <div className="flex flex-row space-x-3" >
+        <img src={`http://img.youtube.com/vi/${data.youtubeid}/0.jpg`} height="90px" width="160px" onClick={()=>openModal(data.youtubeid)} />
+        <div className="flex flex-col text-sm">
+        <b>{data.title}</b>
+        <p>{data.description.slice(0, 30) + "..."}</p>
+        </div>
       </div>
       )}
+      </div>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
