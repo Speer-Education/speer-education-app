@@ -32,16 +32,15 @@ const UserDropdown = ({ user, open, setOpen }) => {
         };
     }, [open, wrapperRef]);
     
-    return <div ref={wrapperRef} className={`${open ? 'block' : 'hidden'} absolute break-words right-0 w-40 mt-1 py-2 bg-white dark:bg-gray-800 rounded shadow-2xl z-50 ${styles.dropdown_menu}`}>
-        <p className="dark:text-gray-400 font-light text-xs px-4 py-2">{user.email}</p>
-        <Link to="/app/editProfile">
-            <a className="transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300">
+    return <div ref={wrapperRef} className={`${open ? 'block' : 'hidden'} absolute break-words right-0 max-w-min mt-1 py-2 bg-white dark:bg-gray-800 rounded shadow-2xl z-50 ${styles.dropdown_menu}`}>
+        <b className="whitespace-nowrap overflow-hidden dark:text-gray-400 font-light text-xs px-4 py-2">{user.email}</b>
+        <br></br>
+        <a href="/app/editProfile" className="no-underline transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300">
                 Edit Profile
-            </a>
-        </Link>
-        <a href="/" className="cursor-pointer transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300"
+        </a>
+        <a href="/" className="cursor-pointer transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300 no-underline"
             onClick={() => signOut()}>
-            Logout
+            Log out
         </a>
     </div>
 }
