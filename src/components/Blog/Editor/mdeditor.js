@@ -128,7 +128,7 @@ const MDEditor = ({ docId, ...props }) => {
       theme={light}
       className={styles.markdown}
       uploadImage={async file => {
-        const result = await storage.ref(`updates/${docId}`).put(file);
+        const result = await storage.ref(`updates/${docId}/${file.name || (docId + new Date().getTime())}`).put(file);
         return await result.ref.getDownloadURL();
       }}
       {...props}
