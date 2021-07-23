@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MDEditor } from '../Blog/Editor/mdeditor';
 import { Button } from '@material-ui/core';
 import './PostComposerCard.css'
@@ -14,12 +14,19 @@ const PostComposerCard = () => {
     const [postContent, setPostContent] = useState("");
     const [saving, setSaving] = useState(false);
     const { user } = useAuth();
+    const [docId, setDocId] = useState(db.collection('posts').doc().id);
+
+    useEffect(() => {
+        if(saving) return;
+        setDocId(db.collection('posts').doc().id)
+    }, [saving]);
 
     //Save the post the user created
     const createNewPost = async () => {
         if(!user) return;
+        if(!docId) return;
         setSaving(true) //set saving to true to show loading
-        await db.collection('posts').add({
+        await db.doc('posts/' + docId).set({
             author: user.uid,
             body: postContent,
             _createdOn: firebase.firestore.FieldValue.serverTimestamp()
@@ -31,7 +38,7 @@ const PostComposerCard = () => {
     return (
         <div className="post-composer">
             <p className="font-medium text-xl text-blue-900">Write something to tell the world!</p>
-            {!saving && <MDEditor onChange={val => setPostContent(val())}/>}
+            {!saving && <MDEditor docId={docId} onChange={val => setPostContent(val())}/>}
             <Button disabled={saving || (postContent.length == 0)} variant="outlined" onClick={createNewPost}>Post</Button>
         </div>
     );
