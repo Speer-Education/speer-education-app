@@ -47,7 +47,7 @@ const PostCard = ({ post }) => {
         await db.doc(`posts/${id}/likes/${user.uid}`).set({
             liked: true,
             likeUser: user.uid,
-            _createdOn: firebase.firestore.ServerValue.serverTimestamp()
+            _createdOn: firebase.firestore.FieldValue.serverTimestamp()
         })
     }
 
