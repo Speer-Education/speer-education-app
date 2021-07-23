@@ -26,7 +26,7 @@ function Dashboard() {
             </div>
             <div className="stream_container">
                 {/* center container */}
-                <div className=" shadow-lg m-2 flex-1 max-w-4xl rounded-md shadow-md bg-white">
+                <div className="m-2 flex-1 max-w-4xl">
                     <div className="flex flex-row justify-between w-full">
                         <p className="font-semibold text-lg pl-4 pt-4">Post Feed</p>
                     </div>
