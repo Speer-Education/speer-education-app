@@ -35,16 +35,16 @@ export default function YoutubeEmbed() {
     <>
       {/**? display the video img base on list read from firebase */}
       <div className="flex flex-col w-300 min-w-500 p-3 m-2 shadow-lg rounded-md bg-white space-y-6">
-      <b>Videos</b>
-      {Video_data.map(data =>
-      <div className="flex flex-row space-x-3" >
-        <img src={`http://img.youtube.com/vi/${data.youtubeid}/0.jpg`} height="90px" width="160px" onClick={()=>openModal(data.youtubeid)} />
-        <div className="flex flex-col text-sm">
-        <b>{data.title}</b>
-        <p>{data.description.slice(0, 30) + "..."}</p>
-        </div>
-      </div>
-      )}
+        <b>Videos</b>
+        {Video_data.map(data =>
+          <div className="flex flex-row space-x-3 cursor-pointer" onClick={() => openModal(data.youtubeid)}>
+            <img src={`http://img.youtube.com/vi/${data.youtubeid}/0.jpg`} height="90px" width="160px"/>
+            <div className="flex flex-col text-sm">
+              <b>{data.title}</b>
+              <p>{data.description.slice(0, 30) + "..."}</p>
+            </div>
+          </div>
+        )}
       </div>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog

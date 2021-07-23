@@ -113,10 +113,16 @@ const teamMembers = [
     imageUrl: "./team_speer/harry.jpeg",
   },
   {
-    fullName: "Tzi Hwee Chew",
+    fullName: "Chew Tzi Hwee",
     title: "Web Developer",
     linkedInIrl: "https://www.linkedin.com/in/imjustchew/",
     imageUrl: "./team_speer/chew.png",
+  },
+  {
+    fullName: "Darius Chan",
+    title: "Regional Director of Asia",
+    linkedInIrl: "https://www.linkedin.com/in/darius-chan-626034213",
+    imageUrl: "./team_speer/darius.jpeg",
   },
 ]
 
