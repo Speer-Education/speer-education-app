@@ -34,9 +34,10 @@ function Chat() {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [loadedAllMessages, setLoadedAllMessages] = useState(false);
+    const [fileMessages, setFileMessages] = useState([]);
 
     const messagesEndRef = useRef(null);
-    const filter = new Filter({ emptyList: true, list: badWordsList});
+    const filter = new Filter({ emptyList: true, list: badWordsList });
 
     //TO get the room name and messages
     useEffect(() => {
@@ -86,7 +87,7 @@ function Chat() {
     //     scrollToBottom()
 
     // }, [messages, loading]);
-    
+
     function handleUpdatedMessages(snapshot) {
         // append new messages to message array
         snapshot.forEach((message) => {
@@ -104,7 +105,7 @@ function Chat() {
             }
         });
         console.log(messageArray)
-        messageArray = messageArray.filter(({date}) => date != null );
+        messageArray = messageArray.filter(({ date }) => date != null);
         //Sort array because it is unsorted, filter date as it might be null
         messageArray.sort(({ date: x }, { date: y }) => {
             return x.toDate() - y.toDate()
@@ -121,7 +122,7 @@ function Chat() {
         let snapshots = await getSnapshot(ref.orderBy('date', 'desc')
             .limit(DOCUMENTS_PER_PAGE))
         // save startAt snapshot
-        start  = snapshots.docs[snapshots.docs.length - 1]
+        start = snapshots.docs[snapshots.docs.length - 1]
         // create listener using startAt snapshot (starting boundary)    
         let listener = ref.orderBy('date', 'asc')
             .startAt(start)
@@ -169,13 +170,52 @@ function Chat() {
         listeners.forEach(listener => listener())
     }
 
-    const sendMessage = (e) => {
+    const sendMessage = async (e) => {
         e.preventDefault();
-        if(!user) return;
+        if (!user) return;
+
+        //Check whether there are files and then send them. (Don't need to worry about below, if the user adds files and adds a message, it will send the files as one message then
+        //the text message as the next message. If not, it just sends the files (or vice versa if there are no files))
+        if (fileMessages.length > 0){
+
+            //TODO: Add a state here for fileSendLoading...
+
+            //Record current Timestamp.
+            const fileSendDate = new Date();
+
+            //Go through the files here and upload them to storage, keep track of the id. The room should be messageFiles/roomId/
+            const fileMessagesStorageDetails = await Promise.all(fileMessages.map( async (file, index) => {
+                const storagePath = `roomFiles/${roomId}/${`${roomId}_${fileSendDate.toISOString()}`}_${index}`;
+                const result = await storage.ref(storagePath).put(file);
+                return {path: storagePath, ref: await result.ref.getDownloadURL()};
+            }))
+
+            const attachments = fileMessagesStorageDetails.map((storageDetail, index) => {
+                return {
+                    filename: fileMessages[index].name,
+                    bucketPath: storageDetail.path,
+                    uploadedOn: fileSendDate,
+                    downloadUrl: storageDetail.ref,
+                }
+            })
+
+            db.collection('rooms').doc(roomId).collection('messages').add({
+                messageType: "file",
+                files: attachments, 
+                date: firebase.firestore.FieldValue.serverTimestamp(),
+                senderId: user.uid,
+                senderUsername: userDetails.name,
+                recipientIds: roomDoc.users.filter(mod => mod != user.uid)
+            })
+
+            setFileMessages([]); //Reset the files at the end
+        } 
+
         //Fixed bug (now requires text to send message)
         if (input !== "") {
 
             db.collection('rooms').doc(roomId).collection('messages').add({
+                messageType: "text",
                 message: input,
                 date: firebase.firestore.FieldValue.serverTimestamp(),
                 senderId: user.uid,
@@ -204,6 +244,22 @@ function Chat() {
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView()
     }
+
+    const handleFileUpload = (e) => {
+        let files = e.target.files;
+        files = [...files]; //Turning FileList into an array
+
+        //Too many files
+        if (files.length > 3) {
+            //TODO: Notify user that we only take the first 3 files, too many files.
+
+            //Then cut the files array to only the first 3.
+            files.splice(3);
+        }
+
+        //Set the file message.
+        setFileMessages(files);
+    }
     // console.log(messages)
     return (
         <div className="chat">
@@ -212,7 +268,7 @@ function Chat() {
                     <Link to={`/app/profile/${recipientId}`}>
                         <Avatar src={roomPic} />
                         <div className="chat__headerInfo">
-                            <h3>{roomName} {isMentor ? <i class="fas fa-user-check"></i> : null}</h3>
+                            <h3>{roomName} {isMentor ? <i className="fas fa-user-check"></i> : null}</h3>
                         </div>
                     </Link> : <>
                         <Avatar src={roomPic} />
@@ -222,12 +278,12 @@ function Chat() {
                     </>}
             </div>
             <div className="chat__body">
-                <InView as="div" onChange={(inView, entry) => { if(inView && !loading) getMoreMessages()}}/>
-                {loading &&<div className="w-full grid place-items-center"><Loader />,</div>}
-                {messages.map(({message, date, id, senderId, senderUsername}) => (
-                    <ChatMessage
+                <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
+                {loading && <div className="w-full grid place-items-center"><Loader />,</div>}
+                {messages.map(({ message, messageType, date, id, senderId, senderUsername }) => (
+                    messageType === "file" ? "TODO: Add presentation for image and text files" : <ChatMessage
                         key={id}
-                        message={filter.isProfane(message) ?  filter.clean(message): message}
+                        message={filter.isProfane(message) ? filter.clean(message) : message}
                         username={senderUsername}
                         timestamp={date.toMillis()}
                         isCurrentUser={senderId === user?.uid} />
@@ -236,9 +292,13 @@ function Chat() {
             </div>
             <div className="chat__footer">
                 <form>
-                    <IconButton>
-                        <AttachFile />
-                    </IconButton>
+                    <input accept="image/*" multiple id="icon-button-file" type="file" hidden onChange={handleFileUpload}/>
+                    <label htmlFor="icon-button-file">
+                        <IconButton component="span">
+                            <AttachFile />
+                        </IconButton>
+                        {fileMessages.length === 1 ? "1 File Uploaded" : (fileMessages.length > 1 ? `${fileMessages.length} Files Uploaded` : null)}
+                    </label>
                     <div className="chat__footerInput">
                         {/* <input type="text" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)}/> */}
                         <textarea cols="2" rows="3" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)} />
