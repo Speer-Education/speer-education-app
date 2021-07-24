@@ -299,7 +299,7 @@ function Chat() {
             </div>
             <div className="chat__footer">
                 <form>
-                    <input accept="image/*" multiple id="icon-button-file" type="file" hidden onChange={handleFileUpload}/>
+                    <input accept="*" multiple id="icon-button-file" type="file" hidden onChange={handleFileUpload}/>
                     <label htmlFor="icon-button-file">
                         <IconButton component="span">
                             <AttachFile />
