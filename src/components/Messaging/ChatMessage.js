@@ -1,6 +1,7 @@
 import React from 'react';
 import './ChatMessage.css';
 import TimeAgo from 'react-timeago';
+import { Link } from 'react-router-dom';
 
 /**
  * Returns the chat message bubble for the user
@@ -8,7 +9,22 @@ import TimeAgo from 'react-timeago';
  * @param {params} param0 message, username, timestamp, isCurrentUser
  * @returns Component
  */
-function ChatMessage({ message, username, timestamp, isCurrentUser }) {
+function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentUser }) {
+
+    if (hasFiles) {
+        return (
+            <p className={`chat__message ${isCurrentUser && "chat__receiver"}`}>
+                <span className="chat__name">{username}</span>
+                {files.map(file => {
+                    return (
+                        <a href={file.downloadUrl} target = "_blank" rel = "noopener noreferrer"><span className="font-bold text-purple-600 block mb-1">{file.filename}</span></a>
+                    )
+                })}
+                <span className="chat__timestamp"> <TimeAgo date={timestamp} /></span>
+            </p>
+        )
+    } else {
+
     return (
         <p className={`chat__message ${isCurrentUser && "chat__receiver"}`}>
             <span className="chat__name">{username}</span>
@@ -16,6 +32,7 @@ function ChatMessage({ message, username, timestamp, isCurrentUser }) {
             <span className="chat__timestamp"> <TimeAgo date={timestamp} /></span>
         </p>
     )
+    }
 }
 
 export default ChatMessage

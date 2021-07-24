@@ -17,3 +17,8 @@
   align-items: center;
   margin-top: 30vh;
 }
+
+a{
+  text-decoration: none;
+  color: inherit;
+}
