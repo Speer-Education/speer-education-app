@@ -19,18 +19,22 @@ export default function MentorShowcase() {
     //Loads the mentors in mentor collection
     useEffect(() => {
 
+        //This algorithm will generate at most 3 and at least 1 mentor to showcase. It generates a random id and takes the 3 above it, or the 3 below it if there
+        //are none above it. So at the very least it will get 1, and at the very most it gets 3.
         const mentors = db.collection('mentors');
 
-        const key = mentors.doc().id;
+        const key = mentors.doc().id;//generate random id
 
         mentors.where(firebase.firestore.FieldPath.documentId(), '>=', key).limit(3).get()
             .then(snap => {
+                //It has to find at least 1.
                 if(snap.size > 0) {
                     setMentors(
                         snap.docs.map(doc => {
                             return { id: doc.id, ...doc.data() }
                         })
                     )
+                //Use the other direction since didn't find any above.
                 } else {
                     const mentor = mentors.where(firebase.firestore.FieldPath.documentId(), '<', key).limit(3).get()
                         .then(snap => {
