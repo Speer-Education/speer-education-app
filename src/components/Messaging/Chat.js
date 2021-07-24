@@ -124,16 +124,24 @@ function Chat() {
         // save startAt snapshot
         start = snapshots.docs[snapshots.docs.length - 1]
 
-        //There needs to be a start because chat might be empty
-        if (!start) return
+        let listener;
 
-        // create listener using startAt snapshot (starting boundary)    
-        let listener = ref.orderBy('date', 'asc')
-            .startAt(start)
-            .onSnapshot(snap => {
-                scrollToBottom()
-                handleUpdatedMessages(snap)
-            })
+        if (!start) {
+            listener = ref.orderBy('date', 'asc')
+                .onSnapshot(snap => {
+                    scrollToBottom()
+                    handleUpdatedMessages(snap)
+                })
+        } else {
+            // create listener using startAt snapshot (starting boundary)    
+            listener = ref.orderBy('date', 'asc')
+                .startAt(start)
+                .onSnapshot(snap => {
+                    scrollToBottom()
+                    handleUpdatedMessages(snap)
+                })
+        }
+
         // add listener to list
         listeners.push(listener)
     }
