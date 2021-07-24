@@ -44,19 +44,20 @@ const PostCard = ({ post }) => {
 
     const handleUserLikePost = async () => {
         if (!user?.uid) return;
-        await db.doc(`posts/${id}/likes/${user.uid}`).set({
+        if(!userLiked) await db.doc(`posts/${id}/likes/${user.uid}`).set({
             liked: true,
             likeUser: user.uid,
             _createdOn: firebase.firestore.FieldValue.serverTimestamp()
         })
+        if(userLiked) await db.doc(`posts/${id}/likes/${user.uid}`).delete()
     }
 
     const handleDeletePost = () => {
         db.doc(`posts/${post.id}`).delete()
     }
 
-    const PostAction = ({ IconComponent, label, ...props }) => {
-        return <button className="inline-flex items-center px-4 py-1 border border-transparent bg-white hover:bg-gray-100 hover:shadow-sm text-base leading-6 font-medium rounded-md text-gray-500 transition ease-in-out duration-150" {...props}>
+    const PostAction = ({ IconComponent, label, active, ...props }) => {
+        return <button className={`inline-flex items-center px-4 py-1 border border-transparent ${active?"bg-blue-200 hover:bg-blue-100 text-blue-200":"bg-white hover:bg-gray-100 text-gray-500"} hover:shadow-sm text-base leading-6 font-medium rounded-md transition ease-in-out duration-150`} {...props}>
             <IconComponent className="w-8 h-8 mr-1" />
             {label}
         </button>
@@ -93,7 +94,7 @@ const PostCard = ({ post }) => {
             </div>
             <MDEditor defaultValue={body} readOnly={true} />
             <div className="flex flex-row">
-                <PostAction IconComponent={ThumbUpAltIcon} onClick={handleUserLikePost} label={"Like " + (likeCount || "")} />
+                <PostAction IconComponent={ThumbUpAltIcon} onClick={handleUserLikePost} label={"Like" + (likeCount? ("\t" + likeCount):"")} active={userLiked}/>
                 <PostAction IconComponent={MessageIcon} label="Comment" />
             </div>
         </div>
