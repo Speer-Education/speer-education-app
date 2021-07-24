@@ -118,7 +118,7 @@ const useAuthProvider = () => {
             return db.doc(`user_claims/${user.uid}`).onSnapshot(async (snap) => {
                 console.log(lastCommitted)
                 const data = snap.data();
-                if (lastCommitted && !data._lastCommitted.isEqual(lastCommitted)) {
+                if (lastCommitted && !(data?._lastCommitted || {}).isEqual(lastCommitted)) {
                     setUserDetails({ ...await getUserTokenResult(true), ...userDetails })
                     console.log("Refreshing token");
                 }

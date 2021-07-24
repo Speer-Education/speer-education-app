@@ -123,6 +123,10 @@ function Chat() {
             .limit(DOCUMENTS_PER_PAGE))
         // save startAt snapshot
         start = snapshots.docs[snapshots.docs.length - 1]
+
+        //There needs to be a start because chat might be empty
+        if (!start) return
+
         // create listener using startAt snapshot (starting boundary)    
         let listener = ref.orderBy('date', 'asc')
             .startAt(start)
@@ -191,8 +195,14 @@ function Chat() {
             }))
 
             const attachments = fileMessagesStorageDetails.map((storageDetail, index) => {
+
+                let fileName = fileMessages[index].name;
+                
+                const isImage = (/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i).test(fileName);
+
                 return {
-                    filename: fileMessages[index].name,
+                    filename: fileName,
+                    fileType: isImage ? "image": "others",
                     bucketPath: storageDetail.path,
                     uploadedOn: fileSendDate,
                     downloadUrl: storageDetail.ref,
