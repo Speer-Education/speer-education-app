@@ -280,8 +280,15 @@ function Chat() {
             <div className="chat__body">
                 <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
                 {loading && <div className="w-full grid place-items-center"><Loader />,</div>}
-                {messages.map(({ message, messageType, date, id, senderId, senderUsername }) => (
-                    messageType === "file" ? "TODO: Add presentation for image and text files" : <ChatMessage
+                {messages.map(({ messageType, files, message, date, id, senderId, senderUsername }) => (
+                    messageType === "file" ?<ChatMessage
+                        key={id}
+                        hasFiles
+                        files={files}
+                        username={senderUsername}
+                        timestamp={date.toMillis()}
+                        isCurrentUser={senderId === user?.uid}
+                    /> : <ChatMessage
                         key={id}
                         message={filter.isProfane(message) ? filter.clean(message) : message}
                         username={senderUsername}
