@@ -10,9 +10,6 @@ import PostCard from './PostCard';
 const PostStream = () => {
     const [streamPosts, setStreamPosts] = useState([]);
 
-    //Attach the posts listener for the user, by chronological order
-    //TODO: should query only if user is following the author
-
     useEffect(() => {
         db.collection('posts').orderBy('_createdOn','desc').onSnapshot(snap => {
             let posts = snap.docs.map( docSnap => {
