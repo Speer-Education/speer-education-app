@@ -35,7 +35,7 @@ const PostCard = ({ post }) => {
             setAuthorProfile(snap.data())
             setLoading(false)
         })
-    }, [post]);
+    }, [post?.id]);
 
     useEffect(async () => {
         if (!user?.uid) return;
@@ -109,7 +109,7 @@ const PostCard = ({ post }) => {
                     colours="bg-white hover:bg-green-100 text-green-500"
                     IconComponent={MessageIcon} 
                     onClick={() => setShowComments(!showComments)}
-                    label="Comment" 
+                    label={"Comment" + (commentCount? ("\t" + commentCount):"")} 
                     active={showComments}/>
             </div>
         </div>
