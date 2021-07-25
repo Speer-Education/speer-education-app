@@ -76,11 +76,11 @@ export default function MentorShowcase() {
         <div className="mentorShowcase">
             <p>New Mentors To Find</p>
             {/* Randomly generates 2 mentors in random order*/}
-            {mentors.map(({ id, name, school, major, bio }) => <div className="flex flex-row p-2 ">
+            {mentors.map(({ id, name, school, major, bio }) => <div className="flex flex-row py-2 ">
                 <Link className="flex flex-row flex-1" to={`/app/profile/${id}`}>
                     <ProfilePicture className="w-10 h-10 rounded-full" uid={id}/>
                     <div className="ml-2">
-                        <h3>{name}</h3>
+                        <h3 className="font-medium">{name}</h3>
                         <p>{major.label}</p>
                     </div>
                 </Link>

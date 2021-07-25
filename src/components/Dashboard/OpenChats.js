@@ -39,7 +39,7 @@ export default function OpenChats() {
                 <div className="flex flex-row mt-2">
                     <ProfilePicture uid={senderId} className="w-10 h-10 rounded-full"/>
                     <div className="flex-1 ml-2">
-                        <p className="font-bold">{senderUsername}</p>
+                        <p className="font-medium">{senderUsername}</p>
                         <p>{message}</p>
                     </div>
                     <div className="flex flex-col items-center">
