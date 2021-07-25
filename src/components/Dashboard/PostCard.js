@@ -78,7 +78,7 @@ const PostCard = ({ post }) => {
                     </div>
                 </div>
             </div>
-        </div> : <>
+        </div> :
         <div className="py-4 px-6 m-2 bg-white rounded-xl shadow-lg">
             <div className="post-author_container w-full">
                 <div className="flex flex-row flex-1 items-center">
@@ -112,9 +112,8 @@ const PostCard = ({ post }) => {
                     label={"Comment" + (commentCount? ("\t" + commentCount):"")} 
                     active={showComments}/>
             </div>
+            {showComments && <PostComments post={post} />}
         </div>
-        {showComments && <PostComments post={post} />}
-        </>
 
 }
 
