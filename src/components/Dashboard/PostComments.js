@@ -53,7 +53,7 @@ export function PostComments({ post }) {
                     <h4 className="text-lg font-normal">{comment}</h4>
                 </div>
                 <div className="grid place-items-center ">
-                    <TimeAgo className="text-gray-700" date={commentedOn.toMillis()}/>
+                    {commentedOn && <TimeAgo className="text-gray-700" date={commentedOn.toMillis()}/>}
                 </div>
             </div>
         ))}
