@@ -122,11 +122,11 @@ const dark = {
   scrollbarThumb: colors.lightBlack,
 };
 
-const MDEditor = ({ docId, ...props }) => {
+const MDEditor = ({ docId, className, ...props }) => {
   return <>
     <Editor
       theme={light}
-      className={styles.markdown}
+      className={`${className} ${styles.markdown}`}
       uploadImage={async file => {
         const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
         return await result.ref.getDownloadURL();

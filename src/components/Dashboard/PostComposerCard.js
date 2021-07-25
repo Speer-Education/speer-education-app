@@ -38,8 +38,17 @@ const PostComposerCard = () => {
     return (
         <div className="post-composer">
             <p className="font-medium text-xl text-blue-900">Write something to tell the world!</p>
-            {!saving && <MDEditor docId={docId} onChange={val => setPostContent(val())}/>}
-            <Button disabled={saving || (postContent.length == 0)} variant="contained" color="primary" onClick={createNewPost}>Post</Button>
+            <div className="flex-1">
+                {!saving && <MDEditor docId={docId} onChange={val => setPostContent(val())}/>}
+            </div>
+            <div>
+                <Button 
+                    className="float-right"
+                    disabled={saving || (postContent.length == 0)} 
+                    variant="contained" 
+                    color="primary" 
+                    onClick={createNewPost}>Post</Button>
+            </div>
         </div>
     );
 }
