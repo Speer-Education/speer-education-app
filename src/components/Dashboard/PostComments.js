@@ -30,8 +30,9 @@ export function PostComments({ post }) {
             comment: userComment,
             author: { name, major, school, uid },
             parentPost: post.id,
-            commentedOn: firebase.firestore.FieldValue.serverTimestamp()
+            commentedOn: firebase.firestore.Timestamp.now()
         })
+        setUserComment("");
     }
 
     return (<div className="py-4 px-6 m-2 bg-white rounded-lg shadow-lg space-y-3">
