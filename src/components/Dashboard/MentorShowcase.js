@@ -1,7 +1,7 @@
 import { Button } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { db, functions } from '../../config/firebase';
+import { db, functions, firebase } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
 import PersonAddTwoToneIcon from '@material-ui/icons/PersonAddTwoTone';
 import { IconButton } from '@material-ui/core';
@@ -18,28 +18,40 @@ export default function MentorShowcase() {
     
     //Loads the mentors in mentor collection
     useEffect(() => {
-        return db.collection('mentors').onSnapshot(snap => {
-            //TODO: Proper method of fetching random mentor documents, this way is highly inefficient and is going to cost us a lot of reads
-            setMentors(
-                shuffleArray(
-                    snap.docs.map(doc => {
-                        return { id: doc.id, ...doc.data() }
-                    }
-                )
-            ).slice(0,9))
-        })
+
+        //This algorithm will generate at most 3 and at least 1 mentor to showcase. It generates a random id and takes the 3 above it, or the 3 below it if there
+        //are none above it. So at the very least it will get 1, and at the very most it gets 3.
+        const mentors = db.collection('mentors');
+
+        const key = mentors.doc().id;//generate random id
+
+        mentors.where(firebase.firestore.FieldPath.documentId(), '>=', key).limit(3).get()
+            .then(snap => {
+                //It has to find at least 1.
+                if(snap.size > 0) {
+                    setMentors(
+                        snap.docs.map(doc => {
+                            return { id: doc.id, ...doc.data() }
+                        })
+                    )
+                //Use the other direction since didn't find any above.
+                } else {
+                    const mentor = mentors.where(firebase.firestore.FieldPath.documentId(), '<', key).limit(3).get()
+                        .then(snap => {
+                            setMentors(
+                                snap.docs.map(doc => {
+                                    return { id: doc.id, ...doc.data() }
+                                })
+                            )
+                        })
+                        .catch(err => {
+                            console.log('Error getting documents', err);
+                        });
+                }
+            })
+
     }, [])
 
-    /* Randomize array in-place using Durstenfeld shuffle algorithm (to use to randomize the mentors we add) */
-    function shuffleArray(array) {
-        for (var i = array.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-        }
-        return array;
-    }
 
     // const handleAddMentor = async (mentorId) => {
     //     if(!user?.uid) return; //Check if user has loaded

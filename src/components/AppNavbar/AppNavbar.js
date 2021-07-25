@@ -41,7 +41,7 @@ const AppNavbar = () => {
         <NavBarLink IconComponent={MessageTwoToneIcon} title="Messaging" href="/app/messages"/>
         <NavBarLink IconComponent={NotificationsTwoToneIcon} title="Notifications"/>
       </div>
-      <Button variant="outlined" color="primary" endIcon={<ArrowDropDownTwoToneIcon/>}>
+      <Button variant="contained" color="primary" endIcon={<ArrowDropDownTwoToneIcon/>}>
         Compose a message
       </Button>
       <UserMenu />

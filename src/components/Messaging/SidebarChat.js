@@ -24,7 +24,7 @@ function SidebarChat({ id, roomName, isMentor, roomPic }) {
                 <Avatar src={roomPic}/> {/* Add src={*room_pic*} in the Avatar tag. Room pic defaults to the other user's prof pic if there are
                 only 2 users, and  the group pic if it is a group chat. <-- Implement this to come from Sidebar and be passed down as a prop */}
                 <div className="sidebarChat__info">
-                    <h2>{roomName} {isMentor ? <i class="fas fa-user-check"></i> : null}</h2> 
+                    <h2>{roomName} {isMentor ? <i className="fas fa-user-check"></i> : null}</h2> 
                     <p>{messages ? messages.message.substring(0,16) + "..." : "No Message History"}</p>
                 </div>
             </div>
