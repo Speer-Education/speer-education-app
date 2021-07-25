@@ -19,7 +19,7 @@ function Dashboard() {
                 <meta charSet="utf-8" />
                 <title>Dashboard | Speer Education</title>
             </Helmet>
-            <div>
+            <div className="dashboard_sidebar">
                 {/* left side bar */}
                 <MentorShowcase/>
                 <StatsCard/>
@@ -34,7 +34,7 @@ function Dashboard() {
                     <PostStream/>
                 </div>
             </div>
-            <div>
+            <div className="dashboard_sidebar">
                 {/* right side bar */}
                 <OpenChats/>
                 <YoutubeEmbed/>

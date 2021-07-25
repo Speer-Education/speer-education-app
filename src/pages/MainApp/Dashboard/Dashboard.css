@@ -13,3 +13,8 @@
     flex-direction: row;
     justify-content: center;
 }
+
+.dashboard_sidebar {
+    width: 370px;
+    max-width: 500px;
+}
