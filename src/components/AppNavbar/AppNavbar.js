@@ -6,6 +6,7 @@ import NotificationsTwoToneIcon from '@material-ui/icons/NotificationsTwoTone';
 import ArrowDropDownTwoToneIcon from '@material-ui/icons/ArrowDropDownTwoTone';
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import history from '../../hooks/history';
 
 /**
  * Component for the link in the navbar
@@ -19,7 +20,7 @@ const NavBarLink = ({IconComponent, title, href}) => {
   return <Link to={href} className="text-gray-800 no-underline">
     <div className="grid place-items-center h-full px-5 hover:bg-gray-100 cursor-pointer">
       <div className="flex-1 flex flex-col items-center">
-        <IconComponent className="h-8 w-8"/>
+        <IconComponent className="h-8 w-8" style={{ color: (href == history.location.pathname)?'#F58A07':'#084887'}}/>
         <p className="">{title}</p>
       </div>
     </div>

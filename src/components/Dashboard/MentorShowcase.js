@@ -85,7 +85,7 @@ export default function MentorShowcase() {
                     </div>
                 </Link>
                 {creatingRoom? "Loading..." : 
-                <IconButton onClick={() => connectWithMentor(id)}>
+                <IconButton onClick={() => connectWithMentor(id)} color="primary">
                     <PersonAddTwoToneIcon/>
                 </IconButton>}
             </div>)}
