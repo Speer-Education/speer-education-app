@@ -10,6 +10,7 @@ import TimeAgo from 'react-timeago';
 import './PostCard.css';
 import { useAuth } from '../../hooks/useAuth';
 import { Favorite } from '@material-ui/icons';
+import { PostComments } from './PostComments';
 
 /**
  * Creates the post card for this post
@@ -22,6 +23,7 @@ const PostCard = ({ post }) => {
     const [loading, setLoading] = useState(true);
     const [authorProfile, setAuthorProfile] = useState({});
     const [userLiked, setUserLiked] = useState(false);
+    const [showComments, setShowComments] = useState(false);
     const { author, body, likeCount, commentCount, id, _createdOn } = post;
 
     //Attach listener on the author
@@ -76,13 +78,13 @@ const PostCard = ({ post }) => {
                     </div>
                 </div>
             </div>
-        </div> :
-        <div className="py-4 px-6 m-2 bg-white rounded-lg shadow-lg">
+        </div> : <>
+        <div className="py-4 px-6 m-2 bg-white rounded-xl shadow-lg">
             <div className="post-author_container w-full">
                 <div className="flex flex-row flex-1 items-center">
                     <ProfilePicture uid={author} className="shadow-md bg-blue-400 overflow-hidden h-12 w-12 rounded-full" />
                     <div className="flex-1 space-y py-1 ml-2">
-                        <div className="text-xl">{authorProfile.name}</div>
+                        <div className="text-xl font-medium">{authorProfile.name}</div>
                         <div className="author-details_school">{authorProfile.major.label}@{authorProfile.school}</div>
                         {_createdOn && <div className="post-timestamp_text">Posted <TimeAgo date={_createdOn.toDate().getTime()} /></div>}
                     </div>
@@ -99,13 +101,20 @@ const PostCard = ({ post }) => {
                     activeColours="bg-red-100 hover:bg-red-200 text-red-500"
                     colours="bg-white hover:bg-red-100 text-red-500"
                     IconComponent={Favorite} 
-                    onClick={handleUserLikePost} label={"Like" + (likeCount? ("\t" + likeCount):"")} active={userLiked}/>
+                    onClick={handleUserLikePost} 
+                    label={"Like" + (likeCount? ("\t" + likeCount):"")} 
+                    active={userLiked}/>
                 <PostAction 
                     activeColours="bg-green-100 hover:bg-green-200 text-green-500"
                     colours="bg-white hover:bg-green-100 text-green-500"
-                    IconComponent={MessageIcon} label="Comment" />
+                    IconComponent={MessageIcon} 
+                    onClick={() => setShowComments(!showComments)}
+                    label="Comment" 
+                    active={showComments}/>
             </div>
         </div>
+        {showComments && <PostComments post={post} />}
+        </>
 
 }
 
