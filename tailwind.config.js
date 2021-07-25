@@ -1,6 +1,6 @@
 module.exports = {
   purge: {
-    content: ['./{components,pages,hooks,container,utils}/**/*.{js,ts,jsx,tsx}'],
+    content: ['**/*.{js,ts,jsx,tsx}'],
     options: {
       safelist: [
         'my-3',
@@ -29,7 +29,7 @@ module.exports = {
         'text-red-700'
       ],
     },
-    css: [['./{components,pages,hooks,container,utils}/**/*.css']]
+    css: [['**/*.css']]
   },
   darkMode: 'media', // or 'media' or 'class'
   theme: {
