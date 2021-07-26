@@ -4,6 +4,8 @@ import './Mentors.css'
 import MentorCard from '../../../components/Mentor/MentorCard/MentorCard';
 import { db } from '../../../config/firebase';
 import {Helmet} from "react-helmet";
+import StatsCard from '../../../components/Dashboard/StatsCard';
+import UserSmallProfileCard from '../../../components/Mentor/MentorCard/UserSmallProfileCard';
 
 const Mentors = () => {
     const [mentors, setMentors] = useState([]);
@@ -22,15 +24,22 @@ const Mentors = () => {
                 <meta charSet="utf-8" />
                 <title>Mentors | Speer Education</title>
             </Helmet>
-            <div className="mentors__grid">
-                {mentors.map(({id, name, school, major, bio}) => <MentorCard
-                    id={id}
-                    key={id}
-                    name={name}
-                    school={school}
-                    major={major}
-                    bio={bio}
-                    />)}
+            <div className="flex-1 p-10">
+                <div className="flex flex-row flex-wrap gap-2">
+                    {mentors.map(({id, name, school, major, bio}) => <MentorCard
+                        id={id}
+                        key={id}
+                        name={name}
+                        school={school}
+                        major={major}
+                        bio={bio}
+                        />)}
+                </div>
+
+            </div>
+            <div className="flex flex-col">
+                <UserSmallProfileCard />
+                <StatsCard/>
             </div>
         </div>
     );
