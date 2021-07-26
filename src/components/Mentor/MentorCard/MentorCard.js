@@ -1,13 +1,42 @@
 import './MentorCard.css'
-import { useState, useEffect } from 'react';
-import Button from '@material-ui/core/Button'
-import { Link } from 'react-router-dom';
-import { storage } from '../../../config/firebase';
-import Loader from '../../Loader/Loader';
 import ProfilePicture from '../../User/ProfilePicture';
 import SendIcon from '@material-ui/icons/Send';
+import { db, firebase, functions } from '../../../config/firebase';
+import { useAuth } from '../../../hooks/useAuth';
+import { useState } from 'react';
+import history from '../../../hooks/history';
+import Spinner from '../../Loader/Spinner';
 
 const MentorCard = ({ id, name, school, major, bio }) => {
+    const [message, setMessage] = useState("");
+    const { user, userDetails } = useAuth();
+    const [sendingMessage, setSendingMessage] = useState(false);
+
+
+    const connectWithMentor = async () => {
+        /* Send Mentor ID to backend for checking and room creation */
+        if(!user?.uid || !userDetails || sendingMessage) return;
+        setSendingMessage(true)
+        //send it in as profile id instead of mentor id (will need to change the backend so this still works)
+        try {
+            let { data: targetRoomId } = await functions.httpsCallable('createRoom')({ profileId: id })
+            .catch((error) => {
+                console.error(error)
+            })
+            await db.collection(`rooms/${targetRoomId}/messages`).add({
+                date: firebase.firestore.Timestamp.now(),
+                message: message || "Hi 👋",
+                senderId: user?.uid,
+                messageType: "text",
+                recipientIds: [ id ],
+                senderUsername: userDetails.name
+            })
+            history.push(`/app/messages/${targetRoomId}`)
+        } catch (e) {
+            setSendingMessage(false)
+            console.error(e)
+        }
+    }
 
     return (
         <div className="bg-white rounded-lg shadow-lg flex flex-col items-center p-3 w-60">
@@ -23,9 +52,18 @@ const MentorCard = ({ id, name, school, major, bio }) => {
 
                 </div>
                 <div className="flex flex-row">
-                    <input className="shadow-lg rounded-xl px-2 py-3 border-0 flex-1" placeholder="Break the ice. Say Hi 👋"/>
-                    <button className="shadow-lg rounded-xl p-2 bg-yellow-500 border-0 ml-2">
-                        <SendIcon className="w-8 h-8 text-white"/>
+                    <input 
+                        className="shadow-lg rounded-xl px-2 py-3 border-0 flex-1 focus:border-0" 
+                        placeholder="Break the ice. Say Hi 👋" 
+                        disabled={sendingMessage}
+                        value={message} 
+                        onChange={e => setMessage(e.target.value)}/>
+                    <button 
+                        type="button"
+                        disabled={sendingMessage}
+                        className="shadow-lg rounded-xl p-2 bg-yellow-500 border-0 ml-2" 
+                        onClick={connectWithMentor}>
+                        {!sendingMessage?<SendIcon className="w-8 h-8 text-white"/>: <Spinner className="w-6 h-6 text-white"/>}
                     </button>
                     
                 </div>

@@ -37,7 +37,7 @@ const Mentors = () => {
                 </div>
 
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-96">
                 <UserSmallProfileCard />
                 <StatsCard/>
             </div>
