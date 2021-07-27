@@ -38,7 +38,7 @@ const AppNavbar = () => {
       <img className="h-20" src="/full-transparent-logo.png"/>
       <div className="flex flex-row h-full">
         <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/app"/>
-        <NavBarLink IconComponent={PeopleTwoToneIcon} title="My Mentors" href="/app/mentors"/>
+        <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/app/mentors"/>
         <NavBarLink IconComponent={MessageTwoToneIcon} title="Messaging" href="/app/messages"/>
         <NavBarLink IconComponent={NotificationsTwoToneIcon} title="Notifications"/>
       </div>
