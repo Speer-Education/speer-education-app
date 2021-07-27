@@ -41,9 +41,9 @@ const MentorCard = ({ id, name, school, major, bio }) => {
     }
 
     return (
-        <div className="bg-white rounded-lg shadow-lg flex flex-col items-center p-3 w-60">
+        <div className="bg-white rounded-lg shadow-lg flex flex-col items-center p-3 w-72 mt-16 min-h-96">
             <ProfilePicture uid={id} alt="mentor" className="absolute transform -translate-y-16 rounded-full border-white border-8 border-solid shadow-lg"/>
-            <div className="mt-14 space-y-2 h-full flex flex-col">
+            <div className="mt-14 space-y-2 h-full flex flex-col w-full">
                 <div className="space-y-1 text-center">
                     <h3 className="font-medium">{name}</h3>
                     <p className="text-md text-gray-600">Mentor @ {school}</p>
@@ -53,7 +53,7 @@ const MentorCard = ({ id, name, school, major, bio }) => {
                     <p className="text-sm text-gray-600">{bio.substring(0, 125)}</p>
 
                 </div>
-                <div className="flex flex-row">
+                <div className="flex flex-row w-full">
                     <input 
                         className="shadow-lg rounded-xl px-2 py-3 border-0 flex-1 focus:border-0" 
                         placeholder="Break the ice. Say Hi 👋" 

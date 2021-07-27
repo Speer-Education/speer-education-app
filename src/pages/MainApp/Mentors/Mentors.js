@@ -25,7 +25,7 @@ const Mentors = () => {
                 <title>Mentors | Speer Education</title>
             </Helmet>
             <div className="flex-1 p-10">
-                <div className="flex flex-row flex-wrap gap-2">
+                <div className="flex flex-row flex-wrap gap-4 -mt-12">
                     {mentors.map(({id, name, school, major, bio}) => <MentorCard
                         id={id}
                         key={id}

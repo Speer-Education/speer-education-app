@@ -1,4 +1,5 @@
 module.exports = {
+  // mode: 'jit',
   purge: {
     content: ['**/*.{js,ts,jsx,tsx}'],
     options: {
@@ -33,7 +34,11 @@ module.exports = {
   },
   darkMode: 'media', // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      minHeight: (theme) => ({
+        ...theme('spacing'),
+      }),
+    }
   },
   variants: {
     extend: {},
