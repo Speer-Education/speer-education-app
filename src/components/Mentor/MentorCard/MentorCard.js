@@ -6,6 +6,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { useState } from 'react';
 import history from '../../../hooks/history';
 import Spinner from '../../Loader/Spinner';
+import { followUser } from '../../../utils/relationships';
 
 const MentorCard = ({ id, name, school, major, bio }) => {
     const [message, setMessage] = useState("");
@@ -23,6 +24,7 @@ const MentorCard = ({ id, name, school, major, bio }) => {
             .catch((error) => {
                 console.error(error)
             })
+            await followUser(user.uid, id)
             await db.collection(`rooms/${targetRoomId}/messages`).add({
                 date: firebase.firestore.Timestamp.now(),
                 message: message || "Hi 👋",

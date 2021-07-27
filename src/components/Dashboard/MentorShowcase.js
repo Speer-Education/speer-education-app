@@ -69,6 +69,7 @@ export default function MentorShowcase() {
             .catch((error) => {
                 console.error(error)
             })
+        await followUser(user.uid, mentorId)
         history.push(`/app/messages/${targetRoomId}`)
     }
 
