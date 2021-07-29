@@ -40,7 +40,7 @@ export default function OpenChats() {
                     <ProfilePicture uid={senderId} className="w-10 h-10 rounded-full"/>
                     <div className="flex-1 ml-2">
                         <p className="font-medium">{senderUsername}</p>
-                        <p>{message}</p>
+                        <p className="overflow-hidden overflow-ellipsis">{message}</p>
                     </div>
                     <div className="flex flex-col items-center">
                         <Link to={`/app/messages/${roomId}`}>

@@ -22,7 +22,7 @@ function Sidebar() {
         if (!user) return
 
         //Fetch rooms where the user is in them
-        const unsubscribe = db.collection('rooms').where('users', 'array-contains', user?.uid).onSnapshot(snap => {
+        const unsubscribe = db.collection('rooms').where('users', 'array-contains', user?.uid).orderBy('lastMessage.date','desc').onSnapshot(snap => {
 
             Promise.all(snap.docs.map(async doc => {
 
