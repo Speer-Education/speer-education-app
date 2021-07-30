@@ -83,9 +83,8 @@ const PostCard = ({ post }) => {
             <div className="post-author_container w-full">
                 <div className="flex flex-row flex-1 items-center">
                     <ProfilePicture uid={author} className="shadow-md bg-blue-400 overflow-hidden h-12 w-12 rounded-full" />
-                    <div className="flex-1 space-y py-1 ml-2">
+                    <div className="flex-1 space-y-2 py-1 ml-2">
                         <div className="text-xl font-medium">{authorProfile.name}</div>
-                        <div className="author-details_school">{authorProfile.major.label}@{authorProfile.school}</div>
                         {_createdOn && <div className="post-timestamp_text">Posted <TimeAgo date={_createdOn.toDate().getTime()} /></div>}
                     </div>
                 </div>
