@@ -53,7 +53,7 @@ export default function OpenChats() {
             ))}
             
             </>}
-            <div className="mt-auto"><Link to="/app/messages" className="text-blue-700 underline">See all Chats</Link></div>
+            <div className="mt-auto"><Link to="/app/messages" className="text-blue-700 underline text-xs">See all Chats</Link></div>
         </div>
     )
 }
