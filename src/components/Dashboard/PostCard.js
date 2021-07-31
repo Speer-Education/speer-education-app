@@ -62,7 +62,7 @@ const PostCard = ({ post }) => {
     const PostAction = ({ IconComponent, label, active, activeColours,icon_colour, colours, ...props }) => {
         return <button className={`inline-flex items-center px-4 py-1 border border-transparent ${active?activeColours:colours} hover:shadow-sm text-base leading-6 font-medium rounded-md transition ease-in-out duration-150`} {...props}>
             <IconComponent className={`w-8 h-8 mr-1 ${icon_colour}`} />
-            {label}
+            <span className="text-gray-500">{label}</span>
         </button>
     }
 
@@ -83,7 +83,7 @@ const PostCard = ({ post }) => {
             <div className="post-author_container w-full">
                 <div className="flex flex-row flex-1 items-center">
                     <ProfilePicture uid={author} className="shadow-md bg-blue-400 overflow-hidden h-12 w-12 rounded-full" />
-                    <div className="flex-1 space-y py-1 ml-2">
+                    <div className="flex-1 space-y-2 py-1 ml-2">
                         <div className="text-xl font-medium">{authorProfile.name}</div>
                         {_createdOn && <div className="post-timestamp_text"><TimeAgo date={_createdOn.toDate().getTime()} /></div>}
                     </div>
