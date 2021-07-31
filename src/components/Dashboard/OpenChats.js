@@ -32,7 +32,7 @@ export default function OpenChats() {
     }, [userDetails?.activeRooms])
 
     return (
-        <div className="rounded-md bg-white m-2 p-3 w-300 min-w-500 shadow-md" style={{'min-height': '500px'}}>
+        <div className="flex flex-col rounded-md bg-white m-2 p-3 w-300 min-w-500 shadow-md" style={{'min-height': '500px'}}>
             {!chatrooms ? "No notifications" : <>
             <p>Recent Chats</p>
             {chatrooms.map(({senderUsername, senderId, message, roomId})=> (
@@ -46,6 +46,7 @@ export default function OpenChats() {
             ))}
             
             </>}
+            <div className="mt-auto"><Link to="/app/messages" className="text-blue-700 underline text-xs">See all Chats</Link></div>
         </div>
     )
 }

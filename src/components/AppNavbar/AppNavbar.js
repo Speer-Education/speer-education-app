@@ -42,7 +42,7 @@ const AppNavbar = () => {
         <NavBarLink IconComponent={MessageTwoToneIcon} title="Messaging" href="/app/messages"/>
         <NavBarLink IconComponent={NotificationsTwoToneIcon} title="Notifications"/>
       </div>
-      <Button variant="contained" color="primary" endIcon={<ArrowDropDownTwoToneIcon/>}>
+      <Button variant="contained" color="primary" endIcon={<ArrowDropDownTwoToneIcon/>} style={{textTransform: "capitalize"}}>
         Compose a message
       </Button>
       <UserMenu />
