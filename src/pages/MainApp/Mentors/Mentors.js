@@ -34,6 +34,14 @@ const Mentors = () => {
                         major={major}
                         bio={bio}
                         />)}
+                    {mentors.map(({id, name, school, major, bio}) => <MentorCard
+                        id={id}
+                        key={id}
+                        name={name}
+                        school={school}
+                        major={major}
+                        bio={bio}
+                        />)}
                 </div>
 
             </div>
