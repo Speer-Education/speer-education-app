@@ -32,7 +32,7 @@ export default function OpenChats() {
     }, [userDetails?.activeRooms])
 
     return (
-        <div className="flex flex-col rounded-md bg-white m-2 p-3 w-300 min-w-500 shadow-md" style={{'min-height': '500px'}}>
+        <div className="flex flex-col rounded-md bg-white m-2 p-3 w-300 min-w-500 shadow-md" style={{'min-height': '400px'}}>
             {!chatrooms ? "No notifications" : <>
             <p>Recent Chats</p>
             {chatrooms.map(({senderUsername, senderId, message, roomId})=> (
