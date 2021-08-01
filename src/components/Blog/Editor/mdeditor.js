@@ -3,7 +3,7 @@ import styles from './mdeditor.css'
 import { storage } from '../../../config/firebase';
 
 const colors = {
-  almostBlack: "#181A1B",
+  almostBlack: "#878787",
   lightBlack: "#2F3336",
   almostWhite: "#E6E6E6",
   white: "#FFF",

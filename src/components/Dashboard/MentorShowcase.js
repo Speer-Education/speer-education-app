@@ -74,7 +74,7 @@ export default function MentorShowcase() {
     }
 
     return (
-        <div className="mentorShowcase"  style={{'min-height': '500px'}}>
+        <div className="flex flex-col mentorShowcase"  style={{'min-height': '500px'}}>
             <p>New Mentors To Find</p>
             {/* Randomly generates 2 mentors in random order*/}
             {mentors.map(({ id, name, school, major, bio }) => <div className="flex flex-row py-2 " key={id}>
@@ -90,6 +90,7 @@ export default function MentorShowcase() {
                     <PersonAddTwoToneIcon/>
                 </IconButton>}
             </div>)}
+            <div className="mt-auto"><Link to="/app/mentors" className="text-blue-700 underline text-xs">See all Mentors</Link></div>
         </div>
     )
 }
