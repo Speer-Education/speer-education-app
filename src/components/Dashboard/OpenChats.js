@@ -32,21 +32,22 @@ export default function OpenChats() {
     }, [userDetails?.activeRooms])
 
     return (
-        <div className="flex flex-col rounded-md bg-white m-2 p-3 w-300 min-w-500 shadow-md" style={{'min-height': '500px'}}>
+        <div className="flex flex-col rounded-md bg-white m-2 w-300 min-w-500 shadow-md" style={{'min-height': '500px'}}>
             {!chatrooms ? "No notifications" : <>
-            <p>Recent Chats</p>
-            {chatrooms.map(({senderUsername, senderId, message, roomId})=> (
-                <div className="flex flex-row mt-2 hover:bg-gray-300 cursor-pointer">
-                    <ProfilePicture uid={senderId} className="w-10 h-10 rounded-full"/>
-                    <div className="flex-1 ml-2 max-w-full">
-                        <p className="font-medium">{senderUsername}</p>
-                        <p className="overflow-hidden overflow-ellipsis whitespace-nowrap w-full">{message}</p>
+            <p className="p-3">Recent Chats</p>
+            {chatrooms.map(({senderUsername, senderId, message, roomId})=> (<Link to={`/app/messages/${roomId}`}>
+                    <div className="flex flex-row hover:bg-gray-100 cursor-pointer rounded-xl px-3 py-1">
+                        <ProfilePicture uid={senderId} className="w-10 h-10 rounded-full"/>
+                        <div className="flex-1 ml-2 max-w-full">
+                            <p className="font-medium">{senderUsername}</p>
+                            <p className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12">{message}</p>
+                        </div>
                     </div>
-                </div>
+                </Link>
             ))}
             
             </>}
-            <div className="mt-auto"><Link to="/app/messages" className="text-blue-700 underline text-xs">See all Chats</Link></div>
+            <div className="mt-auto p-3"><Link to="/app/messages" className="text-blue-700 underline text-xs">See all Chats</Link></div>
         </div>
     )
 }
