@@ -21,8 +21,10 @@ function Dashboard() {
             </Helmet>
             <div className="dashboard_sidebar">
                 {/* left side bar */}
-                <MentorShowcase/>
-                <StatsCard/>
+                <div className="fixed">
+                    <MentorShowcase/>
+                    <StatsCard/>
+                </div>
             </div>
             <div className="stream_container">
                 {/* center container */}
@@ -37,8 +39,10 @@ function Dashboard() {
             </div>
             <div className="dashboard_sidebar">
                 {/* right side bar */}
-                <OpenChats/>
-                <YoutubeEmbed/>
+                <div className="fixed">
+                    <OpenChats/>
+                    <YoutubeEmbed/>
+                </div>
             </div>
         </div>
     )
