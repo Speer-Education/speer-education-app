@@ -36,8 +36,10 @@ function Dashboard() {
             </div>
             <div className="dashboard_sidebar">
                 {/* right side bar */}
-                <OpenChats/>
-                <YoutubeEmbed/>
+                <div className="dashboard_sidebar fixed">
+                    <OpenChats/>
+                    <YoutubeEmbed/>
+                </div>
             </div>
         </div>
     )
