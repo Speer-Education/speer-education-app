@@ -122,6 +122,7 @@ const useAuthProvider = () => {
                     setUserDetails({ ...await getUserTokenResult(true), ...userDetails })
                     console.log("Refreshing token");
                 }
+                console.log('User Claims Updated', data);
                 setLastCommitted(data?._lastCommitted);
             });
         }
@@ -136,6 +137,7 @@ const useAuthProvider = () => {
                 .doc(user.uid)
                 .onSnapshot(async (doc) => {
                     setUserDetails({ ...await getUserTokenResult(), ...doc.data() })
+                    console.log('User Document Updated')
                 });
             return () => unsubscribe();
         }
