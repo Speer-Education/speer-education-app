@@ -5,7 +5,7 @@
     justify-content: center;
     height: 100%;
     overflow-y: auto;
-    @apply bg-gray-100
+    @apply bg-gray-100 
 }
 
 .stream_container {
@@ -17,4 +17,5 @@
 .dashboard_sidebar {
     width: 350px;
     max-width: 500px;
+    height: 100%;
 }
