@@ -31,7 +31,8 @@
 }
 
 .post-timestamp_text {
-    color:#000000a2;
+    color:#A3A3A3;
+    font-size: 14px;
 }
 
 @keyframes pulse {

@@ -4,9 +4,12 @@ import { useAuth } from '../../../hooks/useAuth';
 import styles from './UserMenu.css'
 
 const UserAvatar = ({ url, setOpen }) => {
-    return <button className="lg:w-12 lg:h-12 rounded-full w-10 h-10 border-blue-500 border-2 overflow-hidden shadow-xl cursor-pointer" onClick={() => setOpen(prevOpen => !prevOpen)}>
-        <img className="h-full w-full object-cover" src={url} alt="avatar" />
-    </button>
+    return <div className="flex flex-col">
+                <img className="lg:w-12 overflow-hidden shadow-xl object-cover " src={url} alt="avatar" />
+                <button className="border-none bg-transparent cursor-pointer" onClick={() => setOpen(prevOpen => !prevOpen)}>
+                    <span className="pr-1">Me</span><i className="fas fa-caret-down" style={{color: "#F58A07"}}></i>
+                </button>
+            </div>
 }
 
 const UserDropdown = ({ user, open, setOpen }) => {
