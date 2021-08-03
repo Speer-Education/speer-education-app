@@ -4,6 +4,7 @@ import { Button } from '@material-ui/core';
 import './PostComposerCard.css'
 import { db, firebase } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
+import ProfilePicture from '../User/ProfilePicture';
 
 /**
  * Handles the Editor View for posts
@@ -37,9 +38,11 @@ const PostComposerCard = () => {
 
     return (
         <div className="post-composer">
-            <p className="font-medium text-xl text-blue-900">Write something to tell the world!</p>
-            <div className="flex-1">
+            <div className="flex-1 flex flex-row">
+                <ProfilePicture uid={user?.uid} className="w-12 h-12 rounded-full"/>
+                <div className="pl-5 flex-1">
                 {!saving && <MDEditor docId={docId} onChange={val => setPostContent(val())}/>}
+                </div>
             </div>
             <div>
                 <Button 
