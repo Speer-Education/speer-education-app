@@ -17,5 +17,6 @@
 .dashboard_sidebar {
     width: 350px;
     max-width: 500px;
-    height: 100%;
+    height: calc(100vh - 7rem);
+    @apply flex flex-col
 }
