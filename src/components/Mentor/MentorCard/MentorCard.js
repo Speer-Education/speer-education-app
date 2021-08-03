@@ -49,7 +49,7 @@ const MentorCard = ({ id, name, school, major, bio }) => {
                     <p className="text-md text-gray-600">Mentor @ {school}</p>
                 </div>
                 <div className="space-y-1 text-center flex-1 transform -translate-y-16">
-                    <p className="text-md text-gray-600">{major.label}</p>
+                    <p className="text-md text-gray-600">{major}</p>
                     <p className="text-sm text-gray-600">{bio.substring(0, 125)}</p>
 
                 </div>

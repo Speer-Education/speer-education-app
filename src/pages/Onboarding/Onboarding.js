@@ -96,8 +96,8 @@ export default function UserDetails() {
             setSubmitting(false);
         }
         const submitForm = form;    
-        submitForm.country = form.country.value
-        submitForm.grade = form.grade.value
+        submitForm.country = form.country.label
+        submitForm.grade = form.grade.label
 
         await functions.httpsCallable('onBoarding')({form: submitForm})
             .catch((error) => {

@@ -82,7 +82,7 @@ export default function MentorShowcase() {
                     <ProfilePicture className="w-10 h-10 rounded-full" uid={id}/>
                     <div className="ml-2">
                         <h3 className="font-medium">{name}</h3>
-                        <p>{major.label}</p>
+                        <p>{major}</p>
                     </div>
                 </Link>
                 {creatingRoom? "Loading..." : 

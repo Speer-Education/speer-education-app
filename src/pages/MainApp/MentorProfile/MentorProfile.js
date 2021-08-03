@@ -54,7 +54,7 @@ const MentorProfile = () => {
                 <img src={profPic} alt="mentor profile" />
                 <h1>{mentor?.name}</h1>
                 <h2>{mentor?.school}</h2>
-                <h2>{mentor?.major.label}</h2>
+                <h2>{mentor?.major}</h2>
                 <p>{mentor?.bio}</p>
                 <button type="button" className={`inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white ${creatingRoom? "bg-red-600 hover:bg-red-500 focus:border-red-700 active:bg-red-700": "bg-blue-600 hover:bg-blue-500 focus:border-blue-700 active:bg-blue-700"} transition ease-in-out duration-150`}
                     disabled={creatingRoom} 

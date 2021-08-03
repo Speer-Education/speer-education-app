@@ -50,9 +50,9 @@ function ProfilePage() {
             {!loading ? <> <img src={profPic} alt="profile"></img>
             Name: {profileUser?.name}
             <br/>
-            Grade: {profileUser?.grade.label}
+            Grade: {profileUser?.grade}
             <br/>
-            Plans to Major In: {profileUser?.major.label}
+            Plans to Major In: {profileUser?.major}
             <br/>
             Bio: {profileUser?.bio}
             <button onClick={connectWithPerson}>Connect With Person</button></> : null }

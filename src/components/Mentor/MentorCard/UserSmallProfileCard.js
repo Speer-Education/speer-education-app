@@ -9,7 +9,7 @@ const UserSmallProfileCard = () => {
             <ProfilePicture uid={user?.uid} alt="user" className="rounded-full border-white border-8 border-solid shadow-lg"/>
             <div className="space-y-1 ">
                 <h3 className="font-medium">{name}</h3>
-                <p className="text-md text-gray-600">{major?.label} @ {school}</p>
+                <p className="text-md text-gray-600">{major} @ {school}</p>
             </div>
         </div>
 
