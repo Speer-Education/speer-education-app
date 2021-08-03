@@ -131,6 +131,7 @@ const MDEditor = ({ docId, className, ...props }) => {
         const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
         return await result.ref.getDownloadURL();
       }}
+      placeholder='Type "/" to access all the function'
       {...props}
     />
   </>
