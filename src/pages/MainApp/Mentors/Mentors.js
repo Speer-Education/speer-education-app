@@ -28,13 +28,13 @@ const Mentors = () => {
                 <meta charSet="utf-8" />
                 <title>Mentors | Speer Education</title>
             </Helmet>
-            <div className="flex-1 p-10">
-                <div className="flex flex-row flex-wrap gap-4 -mt-12">
+            <div className="p-10">   
+                <div className="grid grid-cols-3 grid-flow-row justify-start hover:place-items-center gap-4 -mt-12 flex-1">
                     {mentors.map(({id, name, school, major, bio, connectedMentees}) => {
                         
-                        if (connectedMentees.includes(user?.uid)){
-                            return <></>
-                        }
+                        // if (connectedMentees.includes(user?.uid)){
+                        //     return <></>
+                        // }
                         return (<MentorCard
                             id={id}
                             key={id}
