@@ -32,9 +32,9 @@ const Mentors = () => {
                 <div className="grid grid-cols-3 grid-flow-row justify-start hover:place-items-center gap-4 -mt-12 flex-1">
                     {mentors.map(({id, name, school, major, bio, connectedMentees}) => {
                         
-                        // if (connectedMentees.includes(user?.uid)){
-                        //     return <></>
-                        // }
+                        if (connectedMentees.includes(user?.uid)){
+                            return <></>
+                        }
                         return (<MentorCard
                             id={id}
                             key={id}
