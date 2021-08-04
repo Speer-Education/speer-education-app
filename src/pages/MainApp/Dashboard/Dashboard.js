@@ -28,7 +28,7 @@ function Dashboard() {
             </div>
             <div className="stream_container">
                 {/* center container */}
-                <div className="m-2 flex-1 max-w-4xl">
+                <div className="m-2 flex-1 max-w-full">
                     <p className="font-semibold text-lg pl-4 pt-4">Create a Post</p>
                     <PostComposerCard /> {/* only show if user wants to create a post */}
                     <div className="flex flex-row justify-between w-full">

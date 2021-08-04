@@ -34,7 +34,7 @@ const NavBarLink = ({IconComponent, title, href}) => {
  */
 const AppNavbar = () => {
   return (
-    <div className="sticky top-0 flex flex-row w-full justify-evenly items-center p-8 h-28 bg-white z-10">
+    <div className="hidden sticky top-0 w-full justify-evenly items-center p-8 h-28 bg-white z-10 lg:flex flex-row">
       <img className="h-20" src="/full-transparent-logo.png"/>
       <div className="flex flex-row h-full">
         <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/app"/>
