@@ -19,6 +19,7 @@
 }
 
 .chat__name{
+    white-space: nowrap;
     position: absolute;
     top: -15px;
     font-weight: 700;

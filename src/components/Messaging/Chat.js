@@ -6,7 +6,6 @@ import Filter from 'bad-words';
 import { firebase, db, storage } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import badWordsList from '../../config/badWords.json';
-import "./Chat.css";
 import ChatMessage from './ChatMessage';
 import Loader from '../Loader/Loader';
 import { useOnScreen } from '../../hooks/useHooks';
@@ -188,7 +187,7 @@ function Chat() {
 
         //Check whether there are files and then send them. (Don't need to worry about below, if the user adds files and adds a message, it will send the files as one message then
         //the text message as the next message. If not, it just sends the files (or vice versa if there are no files))
-        if (fileMessages.length > 0){
+        if (fileMessages.length > 0) {
 
             //TODO: Add a state here for fileSendLoading...
 
@@ -196,21 +195,21 @@ function Chat() {
             const fileSendDate = new Date();
 
             //Go through the files here and upload them to storage, keep track of the id. The room should be messageFiles/roomId/
-            const fileMessagesStorageDetails = await Promise.all(fileMessages.map( async (file, index) => {
+            const fileMessagesStorageDetails = await Promise.all(fileMessages.map(async (file, index) => {
                 const storagePath = `roomFiles/${roomId}/${`${roomId}_${fileSendDate.toISOString()}`}_${index}`;
                 const result = await storage.ref(storagePath).put(file);
-                return {path: storagePath, ref: await result.ref.getDownloadURL()};
+                return { path: storagePath, ref: await result.ref.getDownloadURL() };
             }))
 
             const attachments = fileMessagesStorageDetails.map((storageDetail, index) => {
 
                 let fileName = fileMessages[index].name;
-                
+
                 const isImage = (/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i).test(fileName);
 
                 return {
                     filename: fileName,
-                    fileType: isImage ? "image": "others",
+                    fileType: isImage ? "image" : "others",
                     bucketPath: storageDetail.path,
                     uploadedOn: fileSendDate,
                     downloadUrl: storageDetail.ref,
@@ -219,7 +218,7 @@ function Chat() {
 
             db.collection('rooms').doc(roomId).collection('messages').add({
                 messageType: "file",
-                files: attachments, 
+                files: attachments,
                 date: firebase.firestore.FieldValue.serverTimestamp(),
                 senderId: user.uid,
                 senderUsername: userDetails.name,
@@ -227,7 +226,7 @@ function Chat() {
             })
 
             setFileMessages([]); //Reset the files at the end
-        } 
+        }
 
         //Fixed bug (now requires text to send message)
         if (input !== "") {
@@ -280,26 +279,26 @@ function Chat() {
     }
     // console.log(messages)
     return (
-        <div className="chat">
-            <div className="chat__header">
+        <div className="flex flex-1 flex-col overflow-hidden">
+            <div className="p-5 flex items-center border-b border-solid border-gray-200">
                 {recipientId ?
                     <Link to={`/app/profile/${recipientId}`}>
                         <Avatar src={roomPic} />
-                        <div className="chat__headerInfo">
+                        <div className="pl-5 mb-1 font-medium">
                             <h3>{roomName} {isMentor ? <i className="fas fa-user-check"></i> : null}</h3>
                         </div>
                     </Link> : <>
                         <Avatar src={roomPic} />
-                        <div className="chat__headerInfo">
+                        <div className="pl-5 mb-1 font-medium">
                             <h3>{roomName}</h3>
                         </div>
                     </>}
             </div>
-            <div className="chat__body">
+            <div className="p-8 overflow-auto flex-1 bg-gray-200">
                 <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
                 {loading && <div className="w-full grid place-items-center"><Loader />,</div>}
                 {messages.map(({ messageType, files, message, date, id, senderId, senderUsername }) => (
-                    messageType === "file" ?<ChatMessage
+                    messageType === "file" ? <ChatMessage
                         key={id}
                         hasFiles
                         files={files}
@@ -315,22 +314,19 @@ function Chat() {
                 ))}
                 <div ref={messagesEndRef} />
             </div>
-            <div className="chat__footer">
-                <form>
-                    <input accept="*" multiple id="icon-button-file" type="file" hidden onChange={handleFileUpload}/>
+            <div className="flex h-24 border-t border-solid border-gray-200 items-center">
+                <form className="flex flex-1 m-2 leading-4 resize-none space-x-1 items-center">
+                    <input accept="*" multiple id="icon-button-file" type="file" hidden onChange={handleFileUpload} />
                     <label htmlFor="icon-button-file">
-                        <IconButton component="span">
+                        <IconButton className="w-min" component="span">
                             <AttachFile />
                         </IconButton>
                         {fileMessages.length === 1 ? "1 File Uploaded" : (fileMessages.length > 1 ? `${fileMessages.length} Files Uploaded` : null)}
                     </label>
-                    <div className="chat__footerInput">
-                        {/* <input type="text" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)}/> */}
-                        <textarea cols="2" rows="3" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)} />
-                        <IconButton type="submit" onClick={sendMessage}>
-                            <Send />
-                        </IconButton>
-                    </div>
+                    <textarea className="w-full rounded-xl p-2 border-none outline-none resize-none" cols="2" rows="3" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)} />
+                    <IconButton className="w-12" type="submit" onClick={sendMessage}>
+                        <Send />
+                    </IconButton>
                 </form>
             </div>
         </div >
