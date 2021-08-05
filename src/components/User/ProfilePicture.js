@@ -20,7 +20,7 @@ export default function ProfilePicture({ uid, ...params }) {
     }, [uid, user]);
 
     return <img
-        src={url || './user_placeholder.png'}
+        src={url || '../user_placeholder.png'}
         {...params}
     />
 }

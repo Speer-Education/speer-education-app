@@ -93,11 +93,6 @@ function Sidebar() {
                 {rooms.length === 0 && !loading? "You have no chat rooms yet!": null}
                 {loading? <div className="sidebar__loader"><Loader /></div>: null}
             </div>
-            <Link to="/app/mentors">
-                <Button className="sidebar__mentorButton">
-                    Connect with more mentors!
-                </Button>
-            </Link>
         </div>
     )
 }
