@@ -33,14 +33,17 @@ export default function OpenChats() {
 
     return (
         <div className="flex flex-col rounded-md bg-white m-2 w-300 min-w-500 shadow-md flex-1" style={{'height': '300px'}}>
-            {!chatrooms ? "No notifications" : <>
+            {!chatrooms ? <div className="h-full p-3 grid place-items-center">
+                {/* TOOD: Add No Recent Chats Icon */}
+                <h2 className="text-gray-500">No Recent Chats</h2>
+            </div> : <>
             <p className="p-3">Recent Chats</p>
             {chatrooms.map(({senderUsername, senderId, message, roomId})=> (<Link to={`/app/messages/${roomId}`}>
                     <div className="flex flex-row hover:bg-gray-100 cursor-pointer rounded-xl px-3 py-1">
                         <ProfilePicture uid={senderId} className="w-10 h-10 rounded-full"/>
                         <div className="flex-1 ml-2 max-w-full">
-                            <p className="font-medium">{senderUsername}</p>
-                            <p className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12">{message}</p>
+                            <h3 className="font-medium">{senderUsername}</h3>
+                            <p className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12 text-gray-500">{message}</p>
                         </div>
                     </div>
                 </Link>

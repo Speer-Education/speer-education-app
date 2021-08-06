@@ -41,7 +41,7 @@ export default function YoutubeEmbed() {
             <img src={`http://img.youtube.com/vi/${data.youtubeid}/0.jpg`} height="90px" width="160px"/>
             <div className="flex flex-col text-sm">
               <b>{data.title}</b>
-              <p>{data.description.slice(0, 30) + "..."}</p>
+              <p className="text-gray-500">{data.description.slice(0, 30) + "..."}</p>
             </div>
           </div>
         )}
