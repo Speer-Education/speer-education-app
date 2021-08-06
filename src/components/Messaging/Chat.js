@@ -279,10 +279,10 @@ function Chat() {
     }
     // console.log(messages)
     return (
-        <div className="flex flex-1 flex-col overflow-hidden">
-            <div className="p-5 flex items-center border-b border-solid border-gray-200">
+        <div className="flex flex-1 flex-col overflow-hidden space-y-2 p-2 max-h-full w-full" style={{height: 'calc(100vh - 6rem)'}}>
+            <div className="px-5 py-2 flex flex-row items-center bg-white rounded-lg shadow-lg">
                 {recipientId ?
-                    <Link to={`/app/profile/${recipientId}`}>
+                    <Link to={`/app/profile/${recipientId}`} className="flex flex-row items-center">
                         <Avatar src={roomPic} />
                         <div className="pl-5 mb-1 font-medium">
                             <h3>{roomName} {isMentor ? <i className="fas fa-user-check"></i> : null}</h3>
@@ -294,7 +294,7 @@ function Chat() {
                         </div>
                     </>}
             </div>
-            <div className="p-8 overflow-auto flex-1 bg-gray-200">
+            <div className="p-8 overflow-auto flex-1 flex flex-col w-full bg-white rounded-lg shadow-lg">
                 <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
                 {loading && <div className="w-full grid place-items-center"><Loader />,</div>}
                 {messages.map(({ messageType, files, message, date, id, senderId, senderUsername }) => (
@@ -314,7 +314,7 @@ function Chat() {
                 ))}
                 <div ref={messagesEndRef} />
             </div>
-            <div className="flex h-24 border-t border-solid border-gray-200 items-center">
+            <div className="flex min-h-16 items-center bg-white rounded-lg shadow-lg">
                 <form className="flex flex-1 m-2 leading-4 resize-none space-x-1 items-center">
                     <input accept="*" multiple id="icon-button-file" type="file" hidden onChange={handleFileUpload} />
                     <label htmlFor="icon-button-file">
@@ -323,7 +323,7 @@ function Chat() {
                         </IconButton>
                         {fileMessages.length === 1 ? "1 File Uploaded" : (fileMessages.length > 1 ? `${fileMessages.length} Files Uploaded` : null)}
                     </label>
-                    <textarea className="w-full rounded-xl p-2 border-none outline-none resize-none" cols="2" rows="3" value={input} placeholder="Type a Message!" onChange={(e) => setInput(e.target.value)} />
+                    <textarea className="w-full rounded-xl p-2 border-none outline-none resize-y overflow-hidden"value={input} placeholder="Write A Message" onChange={(e) => setInput(e.target.value)} />
                     <IconButton className="w-12" type="submit" onClick={sendMessage}>
                         <Send />
                     </IconButton>

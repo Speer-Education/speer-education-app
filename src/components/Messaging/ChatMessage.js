@@ -13,7 +13,7 @@ function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentU
 
     if (hasFiles) {
         return (
-            <p className={`chat__message ${isCurrentUser && "chat__receiver"}`}>
+            <p className={`my-2 p-2 rounded-lg w-max max-w-prose bg-gray-100 ${isCurrentUser && "bg-blue-200 ml-auto"}`}>
                 <span className="chat__name">{username}</span>
                 {files.map(file => {
                     return (
@@ -26,7 +26,7 @@ function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentU
     } else {
 
     return (
-        <p className={`chat__message ${isCurrentUser && "chat__receiver"}`}>
+        <p className={`my-2 p-2 rounded-lg w-max max-w-prose bg-gray-100 ${isCurrentUser && "bg-blue-200 ml-auto"}`}>
             <span className="chat__name">{username}</span>
             <span className="chat__messageText">{message}</span>
             <span className="chat__timestamp"> <TimeAgo date={timestamp} /></span>
