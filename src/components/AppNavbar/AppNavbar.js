@@ -18,7 +18,7 @@ import history from '../../hooks/history';
  */
 const NavBarLink = ({IconComponent, title, href}) => {
   return <Link to={href} className="text-gray-800 no-underline">
-    <div className="grid place-items-center h-full px-5 hover:bg-gray-100 cursor-pointer">
+    <div className="grid place-items-center h-full px-5 hover:bg-gray-100 cursor-pointer rounded-lg">
       <div className="flex-1 flex flex-col items-center">
         <IconComponent className="h-8 w-8" style={{ color: (href == history.location.pathname)?'#F58A07':'#084887'}}/>
         <p className="">{title}</p>
@@ -34,7 +34,7 @@ const NavBarLink = ({IconComponent, title, href}) => {
  */
 const AppNavbar = () => {
   return (
-    <div className="hidden sticky top-0 w-full justify-evenly items-center p-8 h-28 bg-white z-10 lg:flex flex-row">
+    <div className="hidden sticky top-0 w-full justify-evenly items-center p-4 h-24 bg-white z-10 lg:flex flex-row">
       <img className="h-20" src="/full-transparent-logo.png"/>
       <div className="flex flex-row h-full">
         <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/app"/>
