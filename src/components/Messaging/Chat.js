@@ -21,7 +21,7 @@ let end = null        // end position of listener
 
 const DOCUMENTS_PER_PAGE = 10;
 
-function Chat() {
+function Chat({screenSize}) {
 
     const { user, userDetails } = useAuth();
 
@@ -285,6 +285,7 @@ function Chat() {
     return (<>
         <div className="flex flex-1 flex-col overflow-hidden space-y-2 p-2 max-h-full w-full" style={{height: 'calc(100vh - 6rem)'}}>
             <div className="px-5 py-2 flex flex-row items-center bg-white rounded-lg shadow-lg">
+                {screenSize < 3 ? <Link to={`/app/messages`} className="mr-5"> <i className="fas fa-arrow-left"></i></Link> : null}
                 {recipientId ?
                     <Link to={`/app/profile/${recipientId}`} className="flex flex-row items-center">
                         <Avatar src={roomPic} />
@@ -297,6 +298,7 @@ function Chat() {
                             <h3>{roomName}</h3>
                         </div>
                     </>}
+                {screenSize >= 3 ? <Link to={`/app/messages`} className="ml-auto"><i className="far fa-times-circle text-red-500 text-2xl"></i></Link> : null}
             </div>
             <div className="p-8 overflow-auto flex-1 flex flex-col w-full bg-white rounded-lg shadow-lg">
                 <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
@@ -334,7 +336,7 @@ function Chat() {
                 </form>
             </div>
         </div >
-        <div style={{width: '350px'}}>
+        <div className={`${screenSize < 2 ? "hidden" : null}`} style={screenSize < 3 ? {width: '275px'} : {width: '300px'}}>
             <ProfileCard uid={recipientId}/>
             <AttachmentsCard attachments={roomDoc?.attachments}/>
         </div>
