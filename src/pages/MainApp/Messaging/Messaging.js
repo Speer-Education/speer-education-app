@@ -19,7 +19,7 @@ function Messaging() {
                 <title>Messaging | Speer Education</title>
             </Helmet>
             <div className="flex flex-row h-full max-h-full w-screen">
-                <div className="flex flex-col h-full" style={{height: 'calc(100vh - 6rem)'}}>
+                <div className="flex flex-col h-full" style={{height: 'calc(100vh - 6rem)', width: '350px'}}>
                     <Sidebar /> 
                     <StatsCard/>
                 </div>

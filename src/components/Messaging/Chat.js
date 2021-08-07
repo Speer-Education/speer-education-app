@@ -12,6 +12,7 @@ import { useOnScreen } from '../../hooks/useHooks';
 import { getSnapshot } from '../../hooks/firestore';
 import { InView } from 'react-intersection-observer';
 import ProfileCard from './ProfileCard';
+import AttachmentsCard from './AttachmentsCard';
 
 let messageArray = []
 let listeners = []    // list of listeners
@@ -333,8 +334,9 @@ function Chat() {
                 </form>
             </div>
         </div >
-        <div className="">
+        <div style={{width: '350px'}}>
             <ProfileCard uid={recipientId}/>
+            <AttachmentsCard attachments={roomDoc?.attachments}/>
         </div>
     </>)
 }
