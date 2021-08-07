@@ -34,17 +34,19 @@ const NavBarLink = ({IconComponent, title, href}) => {
  */
 const AppNavbar = () => {
   return (
-    <div className="hidden sticky top-0 w-full justify-evenly items-center p-4 h-24 bg-white z-10 lg:flex flex-row">
-      <img className="h-20" src="/full-transparent-logo.png"/>
+    <div className="fixed bottom-0 lg:sticky lg:top-0 w-full justify-evenly items-center p-4 h-24 bg-white z-10 flex flex-row">
+      <img className="h-20 hidden lg:block" src="/full-transparent-logo.png" alt="logo"/>
       <div className="flex flex-row h-full">
         <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/app"/>
         <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/app/mentors"/>
         <NavBarLink IconComponent={MessageTwoToneIcon} title="Messaging" href="/app/messages"/>
         <NavBarLink IconComponent={NotificationsTwoToneIcon} title="Notifications"/>
       </div>
-      <Button variant="contained" color="primary" endIcon={<ArrowDropDownTwoToneIcon/>} style={{textTransform: "capitalize"}}>
-        Compose a message
-      </Button>
+      <div className="hidden lg:block" >
+        <Button variant="contained" color="primary" endIcon={<ArrowDropDownTwoToneIcon/>} style={{textTransform: "capitalize"}}>
+          Compose a message
+        </Button>
+      </div>
       <UserMenu />
     </div>
   );

@@ -21,7 +21,7 @@ function Dashboard() {
             </Helmet>
             <div className="dashboard_sidebar">
                 {/* left side bar */}
-                <div className="dashboard_sidebar fixed">
+                <div className="dashboard_sidebar fixed hidden xl:visible">
                     <MentorShowcase/>
                     <StatsCard/>
                 </div>
