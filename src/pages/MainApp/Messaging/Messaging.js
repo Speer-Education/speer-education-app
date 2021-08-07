@@ -45,13 +45,12 @@ function Messaging() {
             <div className="flex flex-row h-full max-h-full w-screen">
                 {screenSize >= 1 ?
                     <div className="flex flex-col h-full" style={{ height: 'calc(100vh - 6rem)', width: `${leftSideSize}` }}>
-                        <Sidebar />
+                        <Sidebar screenSize={screenSize}/>
                         <StatsCard />
                     </div>
                     : <Route exact path={`/app/messages`}>
                         <div className="flex flex-col h-full ml-auto mr-auto" style={{ height: 'calc(100vh - 6rem)', width: `98%` }}>
-                            <Sidebar />
-                            <StatsCard />
+                            <Sidebar screenSize={screenSize}/>
                         </div>
                     </Route>}
                 <Route exact path={`${path}/:roomId`}>
