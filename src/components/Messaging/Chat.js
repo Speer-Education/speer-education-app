@@ -11,6 +11,7 @@ import Loader from '../Loader/Loader';
 import { useOnScreen } from '../../hooks/useHooks';
 import { getSnapshot } from '../../hooks/firestore';
 import { InView } from 'react-intersection-observer';
+import ProfileCard from './ProfileCard';
 
 let messageArray = []
 let listeners = []    // list of listeners
@@ -34,6 +35,7 @@ function Chat() {
     const [loading, setLoading] = useState(true);
     const [loadedAllMessages, setLoadedAllMessages] = useState(false);
     const [fileMessages, setFileMessages] = useState([]);
+    const [newMessageFlag, setNewMessageFlag] = useState(false);
 
     const messagesEndRef = useRef(null);
     const filter = new Filter({ emptyList: true, list: badWordsList });
@@ -125,10 +127,11 @@ function Chat() {
 
         let listener;
 
+        console.log(start)
         if (!start) {
             listener = ref.orderBy('date', 'asc')
                 .onSnapshot(snap => {
-                    scrollToBottom()
+                    setNewMessageFlag(true)
                     handleUpdatedMessages(snap)
                 })
         } else {
@@ -136,7 +139,7 @@ function Chat() {
             listener = ref.orderBy('date', 'asc')
                 .startAt(start)
                 .onSnapshot(snap => {
-                    scrollToBottom()
+                    setNewMessageFlag(true)
                     handleUpdatedMessages(snap)
                 })
         }
@@ -162,7 +165,6 @@ function Chat() {
         // previous starting boundary becomes new ending boundary
         end = start
         start = snapshots.docs[snapshots.docs.length - 1]
-
         // create another listener using new boundaries     
         if (!end) {
             console.log('no more posts');
@@ -258,9 +260,10 @@ function Chat() {
 
     }
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView()
-    }
+    useEffect(() => {
+        if(newMessageFlag) newMessageFlag.current?.scrollIntoView()
+        setNewMessageFlag(false);
+    },[newMessageFlag])
 
     const handleFileUpload = (e) => {
         let files = e.target.files;
@@ -278,7 +281,7 @@ function Chat() {
         setFileMessages(files);
     }
     // console.log(messages)
-    return (
+    return (<>
         <div className="flex flex-1 flex-col overflow-hidden space-y-2 p-2 max-h-full w-full" style={{height: 'calc(100vh - 6rem)'}}>
             <div className="px-5 py-2 flex flex-row items-center bg-white rounded-lg shadow-lg">
                 {recipientId ?
@@ -330,7 +333,10 @@ function Chat() {
                 </form>
             </div>
         </div >
-    )
+        <div className="">
+            <ProfileCard uid={recipientId}/>
+        </div>
+    </>)
 }
 
 export default Chat
