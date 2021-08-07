@@ -23,7 +23,7 @@ const ProfileCard = ({ uid }) => {
             <ProfilePicture uid={uid} alt="user" className="w-28 h-28 rounded-full border-white border-8 border-solid shadow-lg"/>
             <div className="space-y-1">
                 <h3 className="font-medium">{name}</h3>
-                <p className="text-md text-gray-600">Mentor @ {school}</p>
+                <p className="text-md text-gray-600">{details?.isMtr?"Mentor":"Mentee"} @ {school}</p>
             </div>
         </div>
         <div>
