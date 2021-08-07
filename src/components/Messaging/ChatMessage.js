@@ -17,7 +17,7 @@ function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentU
                 <span className="chat__name">{username}</span>
                 {files.map(file => {
                     return (
-                        <a href={file.downloadUrl} target = "_blank" rel = "noopener noreferrer"><span className="font-bold text-purple-600 block mb-1">{file.filename}</span></a>
+                        <a href={file.downloadUrl} target = "_blank" rel = "noopener noreferrer" key={`${file.downloadUrl} + ${file.filename}`}><span className="font-bold text-purple-600 block mb-1">{file.filename}</span></a>
                     )
                 })}
                 <span className="chat__timestamp"> <TimeAgo date={timestamp} /></span>

@@ -16,11 +16,11 @@ export default function StatsCard() {
             </div>
             <div className="flex flex-row w-full divide-x divide-y-0 divide-gray-400 divide-solid py-4 border-t border-0 border-gray-400 border-solid">
                 <div className="flex-1 px-3">
-                    <p className="font-medium text-2xl">{userDetails?.mentoryCount || 0}</p>
+                    <p className="font-medium text-4xl">{userDetails?.mentoryCount || 0}</p>
                     <p>Connection to Mentory</p>
                 </div>
                 <div className="flex-1 px-3">
-                    <p className="font-medium text-2xl">{(userDetails?.rooms || []).length}</p>
+                    <p className="font-medium text-4xl">{(userDetails?.rooms || []).length}</p>
                     <p>Open Chats</p>
                 </div>
             </div>
