@@ -8,6 +8,7 @@ import { functions } from '../../config/firebase';
 import Button from '@material-ui/core/Button';
 import { Helmet } from "react-helmet";
 import Spinner from '../../components/Loader/Spinner';
+import Picker from 'emoji-picker-react';
 
 
 const InputField = ({ className, label, id, required = false, onChange, ...props }) => {
@@ -63,10 +64,21 @@ export default function UserDetails() {
         country: "",
         school: "",
         major: "",
-        bio: ""
+        bio: "",
+        highlight1: {
+            emoji: "",
+            description: ""
+        },
+        highlight2: {
+            emoji: "",
+            description: ""
+        },
     });
     const [updatingClaims, setUpdatingClaims] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [showPicker1, setShowPicker1] = useState(false);
+    const [showPicker2, setShowPicker2] = useState(false);
+
 
     // To check if all fields are filled up
     const isValidForm = useMemo(() => {
@@ -77,6 +89,8 @@ export default function UserDetails() {
             && form.school !== undefined && form.school !== ""
             && form.major !== undefined && form.major !== ""
             && form.bio !== undefined && form.bio !== ""
+            && form.highlight1.emoji !== "" && form.highlight1.description !== ""
+            && form.highlight2.emoji !== "" && form.highlight2.description !== ""
     }, [form])
 
     //To submit the form when the user hits submit (Yet to implement)
@@ -99,8 +113,6 @@ export default function UserDetails() {
         submitForm.country = form.country.label;
         submitForm.grade = form.grade.label;
         //TODO: remove these once the highlight functionality is implemented so we can add them to user document no problem
-        delete submitForm.highlight1;
-        delete submitForm.highlight2;
 
         await functions.httpsCallable('onBoarding')({ form: submitForm })
             .catch((error) => {
@@ -125,8 +137,24 @@ export default function UserDetails() {
         setForm({ ...form, grade: value })
     }
 
+    const handleHighlight1Emoji = (event, emojiObject) => {
+        setForm({ ...form, highlight1: {
+            emoji: emojiObject,
+            description: form.highlight1.description
+        }})
+        setShowPicker1(false)
+    };
+
+    const handleHighlight2Emoji = (event, emojiObject) => {
+        setForm({ ...form, highlight2: {
+            emoji: emojiObject,
+            description: form.highlight2.description
+        }})
+        setShowPicker2(false)
+    };
+
     return (
-        <div className="bg-gray-100 h-screen">
+        <div className="bg-gray-100 h-screen overflow-x-hidden">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Sign Up | Speer Education</title>
@@ -161,13 +189,21 @@ export default function UserDetails() {
                             <h2 className="mb-2">Highlights</h2>
                             <FormRow>
                                 {/* TODO: Change this to the emoji selecter */}
-                                <InputSelect required className="md:w-1/3 mb-6 md:mb-0" label="Country" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
-                                <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Highlight 1" placeholder="Where you work, study etc..." id="highlight1" name="highlight1" value={form.highlight1} onChange={handleFormInput} />
+                                <div>
+                                    <label for="highlight1Emoji" className="block">Highlight 1 Emoji</label>
+                                    <button id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{form.highlight1.emoji.emoji || "Pick an emoji"}</button>
+                                </div>
+                                {showPicker1 ? <Picker onEmojiClick={handleHighlight1Emoji} /> : null}
+                                <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Highlight 1" placeholder="Where you work, study etc..." id="highlight1" name="highlight1" value={form.highlight1.description} onChange={(e) => setForm({...form, highlight1: {emoji: form.highlight1.emoji, description: e.target.value}})}/>
                             </FormRow>
                             <FormRow>
                                 {/* TODO: Change this to the emoji selecter */}
-                                <InputSelect required className="md:w-1/3 mb-6 md:mb-0" label="Country" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
-                                <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Highlight 2" placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2} onChange={handleFormInput} />
+                                <div>
+                                    <label for="highlight2Emoji" className="block">Highlight 2 Emoji</label>
+                                    <button id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{form.highlight2.emoji.emoji || "Pick an emoji"}</button>
+                                </div>
+                                {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} /> : null}
+                                <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Highlight 2" placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
                             </FormRow>
                         </div>
                         {/* Interests/hobbies */}

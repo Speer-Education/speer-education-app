@@ -14,6 +14,7 @@
     "animate.css": "^4.1.1",
     "bad-words": "^3.0.4",
     "emailjs-com": "^3.1.0",
+    "emoji-picker-react": "^3.4.8",
     "firebase": "^8.6.5",
     "react": "^17.0.2",
     "react-animate-on-scroll": "^2.1.5",
