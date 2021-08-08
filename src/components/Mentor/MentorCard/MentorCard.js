@@ -8,7 +8,7 @@ import history from '../../../hooks/history';
 import Spinner from '../../Loader/Spinner';
 import { followUser } from '../../../utils/relationships';
 
-const MentorCard = ({ id, name, school, major, bio }) => {
+const MentorCard = ({ id, name, school, major, bio, highlight1, highlight2 }) => {
     const [message, setMessage] = useState("");
     const { user, userDetails } = useAuth();
     const [sendingMessage, setSendingMessage] = useState(false);
@@ -41,17 +41,24 @@ const MentorCard = ({ id, name, school, major, bio }) => {
     }
 
     return (
-        <div className="bg-white rounded-lg shadow-lg flex flex-col items-center p-3 w-72 mt-16 min-h-96" style={{flex: "1 0 30%"}}>
-            <ProfilePicture uid={id} alt="mentor" className="w-28 h-28 transform -translate-y-16 rounded-full border-white border-8 border-solid shadow-lg"/>
+        <div className="bg-white rounded-lg shadow-lg flex flex-col items-center p-3 w-72 mt-16 min-h-80" style={{flex: "1 0 30%"}}>
+            <ProfilePicture uid={id} alt="mentor" className="w-28 h-28 transform rounded-full -mt-16 border-white border-8 border-solid shadow-lg"/>
             <div className="mt-2 space-y-2 h-full flex flex-col w-full">
-                <div className="space-y-1 text-center transform -translate-y-16">
+                <div className="space-y-1 text-center transform">
                     <h3 className="font-medium">{name}</h3>
                     <p className="text-md text-gray-600">Mentor @ {school}</p>
                 </div>
-                <div className="space-y-1 text-center flex-1 transform -translate-y-16">
+                <div className="space-y-1 text-center flex-1 transform">
                     <p className="text-md text-gray-600">{major}</p>
                     <p className="text-sm text-gray-600">{bio.substring(0, 125)}</p>
-
+                    <p>
+                        <span className="text-sm text-gray-600 pr-1">{highlight1?.emoji}</span>
+                        <span className="text-sm text-gray-600">{highlight1?.description}</span>
+                    </p>
+                    <p>
+                        <span className="text-sm text-gray-600 pr-1">{highlight2?.emoji}</span>
+                        <span className="text-sm text-gray-600">{highlight2?.description}</span>
+                    </p>
                 </div>
                 <div className="flex flex-row w-full">
                     <input 
@@ -67,9 +74,7 @@ const MentorCard = ({ id, name, school, major, bio }) => {
                         onClick={connectWithMentor}>
                         {!sendingMessage?<SendIcon className="w-8 h-8 text-white"/>: <Spinner className="w-6 h-6 text-white"/>}
                     </button>
-                    
                 </div>
-                
             </div>
         </div>
     );

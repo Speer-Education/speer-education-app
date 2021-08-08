@@ -30,7 +30,7 @@ const Mentors = () => {
             </Helmet>
             <div className="p-10">   
                 <div className="grid grid-cols-3 grid-flow-row justify-start hover:place-items-center gap-4 -mt-12 flex-1">
-                    {mentors.map(({id, name, school, major, bio, connectedMentees}) => {
+                    {mentors.map(({id, name, school, major, bio, connectedMentees, highlight1, highlight2}) => {
                         
                         if (connectedMentees.includes(user?.uid)){
                             return <></>
@@ -42,6 +42,8 @@ const Mentors = () => {
                             school={school}
                             major={major}
                             bio={bio}
+                            highlight1={highlight1}
+                            highlight2={highlight2}
                             />)
                         })}
                 </div>
