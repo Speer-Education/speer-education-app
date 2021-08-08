@@ -38,6 +38,7 @@ function Chat({screenSize}) {
     const [fileMessages, setFileMessages] = useState([]);
     const [newMessageFlag, setNewMessageFlag] = useState(false);
     const [showProfPicAndAttachments, setShowProfPicAndAttachments] = useState(false);
+    const [doneInitialScroll, setDoneInitialScroll] = useState(false);
 
     const messagesEndRef = useRef(null);
     const filter = new Filter({ emptyList: true, list: badWordsList });
@@ -93,10 +94,19 @@ function Chat({screenSize}) {
 
     }, [roomId, user])
 
-    // useEffect(() => {
-    //     scrollToBottom()
+    //To scroll to bottom when messages are loaded
+    useEffect(() => {
+        //Only scrolls once when messages have loaded
+        if (!doneInitialScroll && messages.length > 0){
+            scrollToBottom()
+            setDoneInitialScroll(true)
+        }        
+    }, [messages]);
 
-    // }, [messages, loading]);
+    //When room ID changes, setDoneInitialScroll to false so it scrolls to bottom again
+    useEffect(() => {
+        setDoneInitialScroll(false)
+    }, [roomId])
 
     function handleUpdatedMessages(snapshot) {
         // append new messages to message array
@@ -293,6 +303,10 @@ function Chat({screenSize}) {
     const toggleShowProfPicAndAttachments = () => {
         setShowProfPicAndAttachments(!showProfPicAndAttachments)
     }
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView()
+      }
     // console.log(messages)
     return (<>
         {showProfPicAndAttachments ? null : <div className="flex flex-1 flex-col overflow-hidden space-y-2 p-2 max-h-full w-full" style={{height: 'calc(100vh - 6rem)'}}>
