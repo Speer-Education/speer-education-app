@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import ProfilePicture from '../User/ProfilePicture';
 import Spinner from '../Loader/Spinner';
-function Sidebar() {
+function Sidebar({screenSize}) {
 
     const { user, userDetails } = useAuth();
 
@@ -76,7 +76,7 @@ function Sidebar() {
     }
 
     return (
-        <div className="flex flex-col flex-1 rounded-md bg-white m-2 shadow-lg">
+        <div className="flex flex-col flex-1 rounded-md bg-white m-2 shadow-lg" style={{maxHeight: `${screenSize >= 1 ? "calc(100vh - 20rem)" : "100%"}`}}>
             <div className="flex justify-between items-center px-4 py-3">
                 <ProfilePicture uid={user?.uid} className="h-8 w-8 rounded-full"/>
                 <h1 className="sidebar__headerUsername">{userDetails?.name}</h1>

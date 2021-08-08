@@ -27,10 +27,12 @@ const AttachmentsCard = ({ attachments = [] }) => {
                         IconComponent={FolderOpenOutlined}
                         title={title || url}
                         subtitle={url}
+                        key={`${uploadedOn} and  ${url}`}
                     /> : <AttachmentItem 
                         IconComponent={FolderOpenOutlined}
                         title={filename}
                         subtitle={uploadedOn.toDate().toISOString()}
+                        key={`${uploadedOn} and  ${url}`}
                     />
             })}
         </div>

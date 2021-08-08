@@ -20,7 +20,7 @@ function SidebarChat({ id, roomName, isMentor, roomPic }) {
 
     return (
         <Link to={`${url}/${id}`}>
-            <div className="flex items-center p-3">
+            <div className="flex items-center p-3 pr-5">
                 <Avatar src={roomPic}/> {/* Add src={*room_pic*} in the Avatar tag. Room pic defaults to the other user's prof pic if there are
                 only 2 users, and  the group pic if it is a group chat. <-- Implement this to come from Sidebar and be passed down as a prop */}
                 <div className="sidebarChat__info">
