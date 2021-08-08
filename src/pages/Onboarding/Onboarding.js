@@ -139,7 +139,7 @@ export default function UserDetails() {
 
     const handleHighlight1Emoji = (event, emojiObject) => {
         setForm({ ...form, highlight1: {
-            emoji: emojiObject,
+            emoji: emojiObject.emoji,
             description: form.highlight1.description
         }})
         setShowPicker1(false)
@@ -147,7 +147,7 @@ export default function UserDetails() {
 
     const handleHighlight2Emoji = (event, emojiObject) => {
         setForm({ ...form, highlight2: {
-            emoji: emojiObject,
+            emoji: emojiObject.emoji,
             description: form.highlight2.description
         }})
         setShowPicker2(false)
@@ -191,7 +191,7 @@ export default function UserDetails() {
                                 {/* TODO: Change this to the emoji selecter */}
                                 <div>
                                     <label for="highlight1Emoji" className="block">Highlight 1 Emoji</label>
-                                    <button id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{form.highlight1.emoji.emoji || "Pick an emoji"}</button>
+                                    <button id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{form.highlight1.emoji || "Pick an emoji"}</button>
                                 </div>
                                 {showPicker1 ? <Picker onEmojiClick={handleHighlight1Emoji} /> : null}
                                 <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Highlight 1" placeholder="Where you work, study etc..." id="highlight1" name="highlight1" value={form.highlight1.description} onChange={(e) => setForm({...form, highlight1: {emoji: form.highlight1.emoji, description: e.target.value}})}/>
@@ -200,7 +200,7 @@ export default function UserDetails() {
                                 {/* TODO: Change this to the emoji selecter */}
                                 <div>
                                     <label for="highlight2Emoji" className="block">Highlight 2 Emoji</label>
-                                    <button id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{form.highlight2.emoji.emoji || "Pick an emoji"}</button>
+                                    <button id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{form.highlight2.emoji || "Pick an emoji"}</button>
                                 </div>
                                 {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} /> : null}
                                 <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Highlight 2" placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
