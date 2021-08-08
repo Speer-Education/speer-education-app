@@ -1,6 +1,8 @@
 import Editor from 'rich-markdown-editor';
 import styles from './mdeditor.css'
 import { storage } from '../../../config/firebase';
+import { useEffect, useState } from 'react';
+import { ImageOutlined, PhotoAlbumTwoTone } from '@material-ui/icons';
 
 const colors = {
   almostBlack: "#878787",
@@ -122,18 +124,98 @@ const dark = {
   scrollbarThumb: colors.lightBlack,
 };
 
-const MDEditor = ({ docId, className, ...props }) => {
-  return <>
-    <Editor
-      theme={light}
-      className={`${className} ${styles.markdown}`}
-      uploadImage={async file => {
-        const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
-        return await result.ref.getDownloadURL();
-      }}
-      placeholder='Type "/" to access all the function'
-      {...props}
+const YoutubeEmbed = ({ attrs }) => {
+  const videoId = attrs.matches[1];
+  return (
+    <iframe
+      className={styles.youtube_embed}
+      title={`Youtube Embed ${videoId}`}
+      src={`https://www.youtube.com/embed/${videoId}?modestbranding=1`}
     />
+  );
+}
+
+const AddImageButton = ({fileCallback}) => (<>
+  <input id="uwu" type="file" name="file" accept="image/*" onChange={({ target }) => fileCallback(target.files[0])} hidden />
+  <label htmlFor="uwu" className="w-min flex flex-row items-center h-6 px-2 py-4 cursor-pointer mt-4 rounded-full text-blue-500">
+    <ImageOutlined />
+  </label >
+</>)
+
+const MDEditor = ({ docId, className, readOnly, onChange, defaultValue, ...props }) => {
+  const [intReadOnly, setIntReadOnly] = useState(false);
+  const [editorNewValue, setEditorNewValue] = useState("");
+  const [currentValue, setCurrentValue] = useState("");
+  useEffect(() => setIntReadOnly(readOnly), [readOnly])
+  useEffect(() => {
+    setCurrentValue(defaultValue || "")
+  }, [defaultValue])
+
+  useEffect(() => {
+    console.log(currentValue)
+  }, [currentValue])
+
+  const handleExternalImageUpload = async (file) => {
+    if (!file) return;
+    setIntReadOnly(true)
+    const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
+    let url = await result.ref.getDownloadURL();
+    setEditorNewValue((currentValue || "") + ` ![](${url}) `)
+    setIntReadOnly(false)
+  }
+
+  const handleAddYoutubeVideo = async (file) => {
+    if (!file) return;
+    setIntReadOnly(true)
+    const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
+    let url = await result.ref.getDownloadURL();
+    setEditorNewValue((currentValue || "") + ` ![](${url}) `)
+    setIntReadOnly(false)
+  }
+
+  return <>
+    <div className="min-h-32">
+      <Editor
+        theme={light}
+        className={`${className}`}
+        defaultValue={defaultValue}
+        value={editorNewValue}
+        readOnly={intReadOnly}
+        onChange={val => {
+          onChange(val)
+          setCurrentValue(val())
+        }}
+        uploadImage={async file => {
+          const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
+          return await result.ref.getDownloadURL();
+        }}
+        embeds={[
+          {
+            title: "YouTube",
+            keywords: "youtube video tube google",
+            icon: () => (
+              <img
+                alt="Youtube Logo"
+                src="https://upload.wikimedia.org/wikipedia/commons/7/75/YouTube_social_white_squircle_%282017%29.svg"
+                width={24}
+                height={24}
+              />
+            ),
+            matcher: url => {
+              return url.match(
+                /(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([a-zA-Z0-9_-]{11})$/i
+              );
+            },
+            component: YoutubeEmbed,
+          },
+        ]}
+        {...props}
+      />
+    </div>
+    <div className="flex flex-row w-full">
+      {!intReadOnly && <AddImageButton fileCallback={handleExternalImageUpload}/>}
+      
+    </div>
   </>
 }
 

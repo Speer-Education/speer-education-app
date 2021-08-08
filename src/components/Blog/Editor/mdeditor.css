@@ -16,3 +16,11 @@
 .markdown a {
     @apply text-blue-700 dark:text-blue-300 font-semibold !important;
 } */
+
+.youtube_embed {
+    max-height: 100vh;
+    aspect-ratio: 16/9;
+    max-width: calc(90vh/9*16);
+    width: 100%;
+    @apply w-full rounded-lg
+}
