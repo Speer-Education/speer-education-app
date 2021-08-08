@@ -113,8 +113,6 @@ export default function UserDetails() {
         submitForm.country = form.country.label;
         submitForm.grade = form.grade.label;
         //TODO: remove these once the highlight functionality is implemented so we can add them to user document no problem
-        delete submitForm.highlight1;
-        delete submitForm.highlight2;
 
         await functions.httpsCallable('onBoarding')({ form: submitForm })
             .catch((error) => {
