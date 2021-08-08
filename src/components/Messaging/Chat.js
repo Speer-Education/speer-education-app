@@ -13,6 +13,7 @@ import { getSnapshot } from '../../hooks/firestore';
 import { InView } from 'react-intersection-observer';
 import ProfileCard from './ProfileCard';
 import AttachmentsCard from './AttachmentsCard';
+import TextareaAutosize from 'react-textarea-autosize';
 
 let messageArray = []
 let listeners = []    // list of listeners
@@ -107,6 +108,8 @@ function Chat({screenSize}) {
     useEffect(() => {
         setDoneInitialScroll(false)
     }, [roomId])
+
+    
 
     function handleUpdatedMessages(snapshot) {
         // append new messages to message array
@@ -357,7 +360,7 @@ function Chat({screenSize}) {
                         </IconButton>
                         {fileMessages.length === 1 ? "1 File Uploaded" : (fileMessages.length > 1 ? `${fileMessages.length} Files Uploaded` : null)}
                     </label>
-                    <textarea className="w-full rounded-xl p-2 border-none outline-none resize-y overflow-hidden"value={input} placeholder="Write A Message" onChange={(e) => setInput(e.target.value)} />
+                    <TextareaAutosize className="w-full h-full rounded-xl p-2 border-none outline-none resize-none overflow-hidden" value={input} placeholder="Write A Message" onChange={(e) => setInput(e.target.value)} maxRows="10" minRows="2"/>
                     <IconButton className="w-12" type="submit" onClick={sendMessage}>
                         <Send />
                     </IconButton>
