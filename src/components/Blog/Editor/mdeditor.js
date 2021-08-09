@@ -1,7 +1,7 @@
 import Editor from 'rich-markdown-editor';
 import styles from './mdeditor.css'
 import { storage } from '../../../config/firebase';
-import { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { ImageOutlined, PhotoAlbumTwoTone } from '@material-ui/icons';
 
 const colors = {
@@ -135,41 +135,45 @@ const YoutubeEmbed = ({ attrs }) => {
   );
 }
 
-const AddImageButton = ({fileCallback}) => (<>
-  <input id="uwu" type="file" name="file" accept="image/*" onChange={({ target }) => fileCallback(target.files[0])} hidden />
-  <label htmlFor="uwu" className="w-min flex flex-row items-center h-6 px-2 py-4 cursor-pointer mt-4 rounded-full text-blue-500">
-    <ImageOutlined />
-  </label >
-</>)
-
-const MDEditor = ({ docId, className, readOnly, onChange, defaultValue, ...props }) => {
+const MDEditor = React.forwardRef(({ docId, className, readOnly, onChange, defaultValue, ...props }, ref) => {
   const [intReadOnly, setIntReadOnly] = useState(false);
   const [editorNewValue, setEditorNewValue] = useState("");
   const [currentValue, setCurrentValue] = useState("");
+
+  useImperativeHandle(ref, () => ({
+    handleExternalImageUpload,
+    handleAddYoutubeVideo,
+    readOnly: intReadOnly
+  }),[intReadOnly, currentValue, setEditorNewValue, setIntReadOnly])
+
   useEffect(() => setIntReadOnly(readOnly), [readOnly])
   useEffect(() => {
     setCurrentValue(defaultValue || "")
   }, [defaultValue])
 
-  useEffect(() => {
-    console.log(currentValue)
-  }, [currentValue])
 
   const handleExternalImageUpload = async (file) => {
     if (!file) return;
     setIntReadOnly(true)
     const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
     let url = await result.ref.getDownloadURL();
-    setEditorNewValue((currentValue || "") + ` ![](${url}) `)
+    console.log(currentValue)
+    const newValue = (currentValue || "") + `\n   ![](${url}) `
+    setEditorNewValue(newValue)
+    setCurrentValue(newValue)
+    onChange(() => newValue)
     setIntReadOnly(false)
   }
 
-  const handleAddYoutubeVideo = async (file) => {
-    if (!file) return;
+  const handleAddYoutubeVideo = async (url) => {
+    if (!url) return;
     setIntReadOnly(true)
-    const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
-    let url = await result.ref.getDownloadURL();
-    setEditorNewValue((currentValue || "") + ` ![](${url}) `)
+    // const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
+    // let url = await result.ref.getDownloadURL();
+    const newValue = (currentValue || "") + `\n   ![](${url}) `
+    setEditorNewValue(newValue)
+    setCurrentValue(newValue)
+    onChange(() => newValue)
     setIntReadOnly(false)
   }
 
@@ -212,11 +216,7 @@ const MDEditor = ({ docId, className, readOnly, onChange, defaultValue, ...props
         {...props}
       />
     </div>
-    <div className="flex flex-row w-full">
-      {!intReadOnly && <AddImageButton fileCallback={handleExternalImageUpload}/>}
-      
-    </div>
   </>
-}
+})
 
 export { MDEditor }
