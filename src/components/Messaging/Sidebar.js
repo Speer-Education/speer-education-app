@@ -92,7 +92,7 @@ function Sidebar({screenSize}) {
                     return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} isMentor={room.isMentor} roomPic={room.pic} />
                 })}
                 {rooms.length === 0 && !loading && <h3 className="text-gray-500">You have no chat rooms yet!</h3>}
-                {true&& <div className="grid place-items-center w-full h-14">
+                {loading&& <div className="grid place-items-center w-full h-14">
                     <div className="space-x-6">
                         <Spinner /> Loading Chats
                     </div>
