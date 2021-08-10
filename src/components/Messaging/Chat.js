@@ -369,12 +369,12 @@ function Chat({screenSize}) {
         </div >}
         <div className={`${screenSize < 2 ? "hidden" : null}`} style={screenSize < 3 ? {width: '275px'} : {width: '300px'}}>
             <ProfileCard uid={recipientId}/>
-            <AttachmentsCard attachments={roomDoc?.attachments}/>
+            <AttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
         </div>
         {showProfPicAndAttachments ? <div className={`${screenSize >= 2 ? "hidden" : null}`} style={{minWidth: 'calc(100vw - 260px)'}}>
             <button onClick={toggleShowProfPicAndAttachments} className="bg-transparent border-none p-5 cursor-pointer"><i className="fas fa-arrow-left text-2xl"></i></button>
             <ProfileCard uid={recipientId}/>
-            <AttachmentsCard attachments={roomDoc?.attachments}/>
+            <AttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
         </div> : null}
     </>)
 }
