@@ -16,9 +16,10 @@ const Mentors = () => {
     useEffect(() => {
         //Get all the mentors and set in mentors
         return db.collection('mentors').onSnapshot(snap => {
-            setMentors(snap.docs.map( doc => {
+            const allMentors = snap.docs.map( doc => {
                 return { id: doc.id, ...doc.data()}
-            }))
+            })
+            setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id != user?.uid))
         })
     },[])
 
@@ -31,10 +32,6 @@ const Mentors = () => {
             <div className="p-10">   
                 <div className="grid grid-cols-3 grid-flow-row justify-start hover:place-items-center gap-4 -mt-12 flex-1">
                     {mentors.map(({id, name, school, major, bio, connectedMentees, highlight1, highlight2}) => {
-                        
-                        if (connectedMentees.includes(user?.uid)){
-                            return <></>
-                        }
                         return (<MentorCard
                             id={id}
                             key={id}
@@ -47,9 +44,11 @@ const Mentors = () => {
                             />)
                         })}
                 </div>
-
+                {mentors.length == 0 && <div className="grid place-items-center h-full">
+                        <h1 className="text-gray-500">You've Connected with All Our Mentors!</h1>
+                </div>}
             </div>
-            <div className="flex flex-col w-96">
+            <div className="hidden md:flex flex-col w-96 ">
                 <UserSmallProfileCard />
                 <StatsCard/>
             </div>
