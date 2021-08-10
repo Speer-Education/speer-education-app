@@ -45,7 +45,7 @@ const Mentors = () => {
                         })}
                 </div>
                 {mentors.length == 0 && <div className="grid place-items-center h-full">
-                        <h1 className="text-gray-500">You've Connected with All Our Mentors!</h1>
+                        <h1 className="text-gray-500 lg:px-10">You've Connected with All Our Mentors!</h1>
                 </div>}
             </div>
             <div className="hidden md:flex flex-col w-96 ">
