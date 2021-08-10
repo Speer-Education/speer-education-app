@@ -17,7 +17,7 @@ export default function MentorShowcase() {
     const { user } = useAuth();
     
     //Loads the mentors in mentor collection
-    useEffect(() => {
+    useEffect(async () => {
 
         //This algorithm will generate at most 3 and at least 1 mentor to showcase. It generates a random id and takes the 3 above it, or the 3 below it if there
         //are none above it. So at the very least it will get 1, and at the very most it gets 3.
@@ -25,31 +25,20 @@ export default function MentorShowcase() {
 
         const key = mentors.doc().id;//generate random id
 
-        mentors.where(firebase.firestore.FieldPath.documentId(), '>=', key).limit(3).get()
-            .then(snap => {
-                //It has to find at least 1.
-                if(snap.size > 0) {
-                    setMentors(
-                        snap.docs.map(doc => {
-                            return { id: doc.id, ...doc.data() }
-                        })
-                    )
-                //Use the other direction since didn't find any above.
-                } else {
-                    const mentor = mentors.where(firebase.firestore.FieldPath.documentId(), '<', key).limit(3).get()
-                        .then(snap => {
-                            setMentors(
-                                snap.docs.map(doc => {
-                                    return { id: doc.id, ...doc.data() }
-                                })
-                            )
-                        })
-                        .catch(err => {
-                            console.log('Error getting documents', err);
-                        });
-                }
+        let snap = await mentors.where(firebase.firestore.FieldPath.documentId(), '>=', key).limit(3).get().catch(err => {
+            console.log('Error getting documents', err);
+        })
+        //It has to find at least 1.
+        //Use the other direction since didn't find any above.
+        if(snap.size == 0) {
+            snap = await mentors.where(firebase.firestore.FieldPath.documentId(), '<', key).limit(3).get().catch(err => {
+                console.log('Error getting documents', err);
             })
-
+        }
+        const allMentors = snap.docs.map(doc => {
+            return { id: doc.id, ...doc.data() }
+        })
+        setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id != user?.uid))
     }, [])
 
 
@@ -72,6 +61,13 @@ export default function MentorShowcase() {
         await followUser(user.uid, mentorId)
         history.push(`/app/messages/${targetRoomId}`)
     }
+
+    if(mentors.length == 0) return (
+        <div className="flex-1 mentorShowcase h-full p-3 grid place-items-center">
+            {/* TOOD: Add No Recent Chats Icon */}
+            <h2 className="text-gray-500">No New Mentors</h2>
+        </div>
+    )
 
     return (
         <div className="flex flex-col flex-1 mentorShowcase"  style={{'height': '400px'}}>
