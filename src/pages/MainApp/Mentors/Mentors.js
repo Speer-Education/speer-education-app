@@ -5,12 +5,12 @@ import MentorCard from '../../../components/Mentor/MentorCard/MentorCard';
 import { db } from '../../../config/firebase';
 import {Helmet} from "react-helmet";
 import StatsCard from '../../../components/Dashboard/StatsCard';
-import UserSmallProfileCard from '../../../components/Mentor/MentorCard/UserSmallProfileCard';
+import UserSmallProfileCard from '../../../components/User/UserSmallProfileCard';
 import { useAuth } from '../../../hooks/useAuth';
 
 const Mentors = () => {
 
-    const { user } = useAuth();
+    const { user, userDetails } = useAuth();
     const [mentors, setMentors] = useState([]);
 
     useEffect(() => {
@@ -49,7 +49,7 @@ const Mentors = () => {
                 </div>}
             </div>
             <div className="hidden md:flex flex-col w-96 ">
-                <UserSmallProfileCard />
+                <UserSmallProfileCard uid={user?.uid} userDetails={userDetails}/>
                 <StatsCard/>
             </div>
         </div>
