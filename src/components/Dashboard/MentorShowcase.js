@@ -76,8 +76,12 @@ export default function MentorShowcase() {
     return (
         <div className="flex flex-col flex-1 mentorShowcase"  style={{'height': '400px'}}>
             <p>New Mentors To Find</p>
-            {/* Randomly generates 2 mentors in random order*/}
-            {mentors.map(({ id, name, school, major, bio }) => <div className="flex flex-row py-2 " key={id}>
+            {/* Randomly generates 3 mentors in random order*/}
+            {mentors.map(({ id, name, school, connectedMentees, major, bio }) => { 
+                if (connectedMentees.includes(user?.uid)){
+                    return <></>
+                } 
+                return (<div className="flex flex-row py-2 " key={id}>
                 <Link className="flex flex-row flex-1" to={`/app/profile/${id}`}>
                     <ProfilePicture className="w-10 h-10 rounded-full" uid={id}/>
                     <div className="ml-2">
@@ -89,7 +93,7 @@ export default function MentorShowcase() {
                 <IconButton onClick={() => connectWithMentor(id)} color="primary">
                     <PersonAddTwoToneIcon/>
                 </IconButton>}
-            </div>)}
+            </div>)})}
             <div className="mt-auto"><Link to="/app/mentors" className="text-blue-700 underline text-xs">See all Mentors</Link></div>
         </div>
     )
