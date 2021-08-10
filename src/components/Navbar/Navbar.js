@@ -50,6 +50,18 @@ export default function Navbar() {
                             LAUNCHING SOON
                         </a>
                     </li>
+                    {/* This nav-item-desktop will only appear when above 960px */}
+                    <li className="nav-item-desktop">
+                        <Link to ="/login" className="nav-links nav-links-desktop" onClick={closeMobileMenu}>
+                            LOGIN
+                        </Link>
+                    </li>
+                    {/* this nav-item-mobile will only appear when below 960px */}
+                    <li className="nav-item-mobile">
+                        <Link to ="/login" className="nav-links-mobile" onClick={closeMobileMenu}>
+                            LOGIN
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </nav>

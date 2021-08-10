@@ -4,7 +4,7 @@
     padding: 6px 7px 8px 9px;
     background-color: #ffffff;
     border-radius: 10px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     width: fit-content; /*will dynamically expand based on how much text ther eis in the message*/
     max-width: calc(200px + 20vw);
 }
@@ -19,6 +19,7 @@
 }
 
 .chat__name{
+    white-space: nowrap;
     position: absolute;
     top: -15px;
     font-weight: 700;

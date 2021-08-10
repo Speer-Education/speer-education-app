@@ -1,11 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import styles from './UserMenu.css'
 
 const UserAvatar = ({ url, setOpen }) => {
-    return <button className="lg:w-12 lg:h-12 rounded-full w-10 h-10 border-blue-500 border-2 overflow-hidden shadow-xl cursor-pointer" onClick={() => setOpen(prevOpen => !prevOpen)}>
-        <img className="h-full w-full object-cover" src={url} alt="avatar" />
-    </button>
+    return <div className="flex flex-col">
+                <img className="lg:w-12 overflow-hidden shadow-xl object-cover " src={url} alt="avatar" />
+                <button className="border-none bg-transparent cursor-pointer" onClick={() => setOpen(prevOpen => !prevOpen)}>
+                    <span className="pr-1">Me</span><i className="fas fa-caret-down" style={{color: "#F58A07"}}></i>
+                </button>
+            </div>
 }
 
 const UserDropdown = ({ user, open, setOpen }) => {
@@ -31,23 +35,15 @@ const UserDropdown = ({ user, open, setOpen }) => {
         };
     }, [open, wrapperRef]);
     
-    return <div ref={wrapperRef} className={`${open ? 'block' : 'hidden'} absolute break-words right-0 w-40 mt-1 py-2 bg-white dark:bg-gray-800 rounded shadow-2xl z-50 ${styles.dropdown_menu}`}>
-        <p className="dark:text-gray-400 font-light text-xs px-4 py-2">{user.email}</p>
-        <a href="/app" className="transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300">
-            Dashboard
+    return <div ref={wrapperRef} className={`${open ? 'block' : 'hidden'} absolute break-words right-0 max-w-min mt-1 py-2 bg-white dark:bg-gray-800 rounded shadow-2xl z-50 ${styles.dropdown_menu}`}>
+        <b className="whitespace-nowrap overflow-hidden dark:text-gray-400 font-light text-xs px-4 py-2">{user.email}</b>
+        <br></br>
+        <a href="/app/editProfile" className="no-underline transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300">
+                Edit Profile
         </a>
-        <a href="/app/mentors" className="transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300">
-            Connect With Mentors
-        </a>
-        <a href="/app/editProfile" className="transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300">
-            Edit Profile
-        </a>
-        <a href="/app/messages" className="transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300">
-            Messages
-        </a>
-        <a href="/" className="cursor-pointer transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300"
+        <a href="/" className="cursor-pointer transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 dark:text-gray-100 rounded dark:hover:bg-blue-700 hover:bg-blue-300 no-underline"
             onClick={() => signOut()}>
-            Logout
+            Log out
         </a>
     </div>
 }
@@ -55,7 +51,7 @@ const UserDropdown = ({ user, open, setOpen }) => {
 const UserMenu = () => {
     const { user } = useAuth();
     const [open, setOpen] = useState(false);
-    if (!user) return <a className="text-red-800 font-semibold" href="/login">Sign In</a>;
+    if (!user) return <div></div>;
     return <div className="relative" >
         <UserAvatar url={user.photoURL} setOpen={setOpen}/>
         <UserDropdown user={user} open={open} setOpen={setOpen}/>

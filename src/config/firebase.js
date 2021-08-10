@@ -17,10 +17,12 @@ const firebaseConfig = {
   measurementId: "G-19MWDB3T0C"
 };
 
+//Make sure there are firebase apps loaded to initialize
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
+//make sure firestore caches everything that it needs
 firebase.firestore().settings({
   cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
 });
@@ -42,6 +44,12 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
   analytics = firebase.analytics();
 }
 
+// FOR LOCAL EMULATORS  =================
+// db.useEmulator("localhost", 8080);
+// rtdb.useEmulator("localhost", 9000);
+// functions.useEmulator("localhost", 5001);
+
+//Enable persistence for firestore so it saves in browser
 db.enablePersistence()
 
 export { firebase, auth, db, now, storage, rtdb, functions, analytics };

@@ -8,8 +8,9 @@ import { useAuth } from '../../hooks/useAuth';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import Loader from '../Loader/Loader';
-
-function Sidebar() {
+import ProfilePicture from '../User/ProfilePicture';
+import Spinner from '../Loader/Spinner';
+function Sidebar({screenSize}) {
 
     const { user, userDetails } = useAuth();
 
@@ -21,7 +22,8 @@ function Sidebar() {
         //If user is blank
         if (!user) return
 
-        const unsubscribe = db.collection('rooms').where('users', 'array-contains', user?.uid).onSnapshot(snap => {
+        //Fetch rooms where the user is in them
+        const unsubscribe = db.collection('rooms').where('users', 'array-contains', user?.uid).orderBy('lastMessage.date','desc').onSnapshot(snap => {
 
             Promise.all(snap.docs.map(async doc => {
 
@@ -58,6 +60,8 @@ function Sidebar() {
     }, [user?.uid])
 
 
+    //resolve a room name for this
+    //TODO: should add the name to the room document instead of loading like this
     const findRoomNameAndRoomPic = async (data) => {
         let recipientId = data.users.filter((id) => id !== user?.uid)[0]
 
@@ -72,9 +76,9 @@ function Sidebar() {
     }
 
     return (
-        <div className="sidebar">
-            <div className="sidebar__header">
-                <Avatar src={userDetails?.picture} />
+        <div className="flex flex-col flex-1 rounded-md bg-white m-2 shadow-lg" style={{maxHeight: `${screenSize >= 1 ? "calc(100vh - 20rem)" : "100%"}`}}>
+            <div className="flex justify-between items-center px-4 py-3">
+                <ProfilePicture uid={user?.uid} className="h-8 w-8 rounded-full"/>
                 <h1 className="sidebar__headerUsername">{userDetails?.name}</h1>
             </div>
             <div className="sidebar__searchContainer">
@@ -83,18 +87,13 @@ function Sidebar() {
                     <input type="text" placeholder="Search by name" value={search} onChange={(e) => setSearch(e.target.value)}/>
                 </div>
             </div>
-            <div className="sidebar__chats">
+            <div className="flex flex-col overflow-y-auto">
                 {rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase())).map(room => {
                     return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} isMentor={room.isMentor} roomPic={room.pic} />
                 })}
-                {rooms.length === 0 && !loading? "You have no chat rooms yet!": null}
-                {loading? <div className="sidebar__loader"><Loader /></div>: null}
+                {rooms.length === 0 && !loading && <h3 className="text-gray-500">You have no chat rooms yet!</h3>}
+                {loading? <div className="sidebar__loader"><Spinner /> Loading Chats</div>: null}
             </div>
-            <Link to="/app/mentors">
-                <Button className="sidebar__mentorButton">
-                    Connect with more mentors!
-                </Button>
-            </Link>
         </div>
     )
 }

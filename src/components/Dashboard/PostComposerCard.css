@@ -1,8 +1,6 @@
 .post-composer {
-    padding:24px 36px;
-    margin:12px;
-    border-radius: 12px;
-    @apply shadow-lg
+    min-height: 250px;
+    @apply flex flex-col shadow-lg rounded-lg bg-white py-6 px-8 m-2;
 }
 
 .post-composer button {

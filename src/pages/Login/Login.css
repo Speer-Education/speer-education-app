@@ -13,3 +13,9 @@
     display: flex;
     flex-direction: column;
 }
+
+a{
+    @apply text-gray-800;
+    @apply no-underline;
+    @apply font-normal;
+  }

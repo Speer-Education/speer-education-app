@@ -2,6 +2,10 @@ html{
     scroll-behavior: smooth;
 }
 
+.home *{
+    font-family: 'Rubik', sans-serif !important;
+}
+
 .home__spacer {
     display: inline;
     position: relative;

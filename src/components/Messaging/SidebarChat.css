@@ -17,10 +17,19 @@ a{
 
 .sidebarChat__info {
     margin-left: 15px;
+    flex:1;
+    width: calc(100% - 48px);
 }
 
 .sidebarChat__info > h2{
     font-size: 16px;
     margin-bottom: 8px;
+}
+
+.sidebarChat__info > p {
+    text-overflow: ellipsis;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
 }
 

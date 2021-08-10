@@ -9,22 +9,23 @@ function SidebarChat({ id, roomName, isMentor, roomPic }) {
     const [messages, setMessages] = useState('');
     let { url } = useRouteMatch();
 
+    //Fetches the latest message for display
     useEffect(() => {
         if (id) {
-            db.collection('rooms').doc(id).collection('messages').orderBy('date', 'desc').limit(1).onSnapshot(snap => {
-                setMessages(snap.docs.map( doc => doc.data()))
+            db.collection('rooms').doc(id).onSnapshot(doc => {
+                setMessages(doc.data().lastMessage)
             })
         }
     }, [id])
 
     return (
         <Link to={`${url}/${id}`}>
-            <div className="sidebarChat">
+            <div className="flex items-center p-3 pr-5">
                 <Avatar src={roomPic}/> {/* Add src={*room_pic*} in the Avatar tag. Room pic defaults to the other user's prof pic if there are
                 only 2 users, and  the group pic if it is a group chat. <-- Implement this to come from Sidebar and be passed down as a prop */}
                 <div className="sidebarChat__info">
-                    <h2>{roomName} {isMentor ? <i class="fas fa-user-check"></i> : null}</h2> 
-                    <p>{messages[0] ? messages[0].message.substring(0,16) + "..." : "No Message History"}</p>
+                    <h2>{roomName} {isMentor ? <i className="fas fa-user-check"></i> : null}</h2> 
+                    <p>{messages ? messages.message : "No Message History"}</p>
                 </div>
             </div>
         </Link>

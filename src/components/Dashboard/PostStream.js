@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { db } from '../../config/firebase';
 import PostCard from './PostCard';
+
+/**
+ * Loads the current Post Stream for the dashboard
+ * @component
+ * @returns PostCards
+ */
 const PostStream = () => {
     const [streamPosts, setStreamPosts] = useState([]);
 

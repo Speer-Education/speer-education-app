@@ -5,6 +5,7 @@ import Select from 'react-select';
 import { gradeOptions, majorOptions, countryOptions } from '../../Onboarding/OnboardingConfig';
 import { useAuth } from '../../../hooks/useAuth';
 import Button from '@material-ui/core/Button';
+import {Helmet} from "react-helmet";
 
 export default function EditProfile() {
 
@@ -100,6 +101,10 @@ export default function EditProfile() {
 
     return (
         <div className="editProfile">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Edit Profile | Speer Education</title>
+            </Helmet>
             {console.log(userDetails)}
             Edit Profile
             <form>

@@ -10,13 +10,17 @@ import { TeamCard } from '../../components/Team/TeamCard';
 import { useMediaQuery } from 'react-responsive'
 import "animate.css/animate.min.css";
 import './Home.css';
-
+import {Helmet} from "react-helmet";
 export default function Home() {
 
     const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
 
     return (
         <div className="home">
+             <Helmet>
+                <meta charSet="utf-8" />
+                <title>Speer Education</title>
+            </Helmet>
             <Navbar />
             <section className="home-intro">
                 <div className="home__spacer" id="intro"></div>
