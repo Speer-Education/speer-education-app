@@ -63,6 +63,7 @@
 }
 
 .sidebar__loader{
+    height: 24px;
     display: flex;
     justify-content: center;
     transform: scale(1);
