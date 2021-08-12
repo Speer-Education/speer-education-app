@@ -303,6 +303,13 @@ function Chat({screenSize}) {
         setFileMessages(files);
     }
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey && !e.altKey && !e.metaKey) {
+            e.preventDefault();
+            sendMessage(e);
+        }
+    }
+
     const toggleShowProfPicAndAttachments = () => {
         setShowProfPicAndAttachments(!showProfPicAndAttachments)
     }
@@ -352,7 +359,7 @@ function Chat({screenSize}) {
                 <div ref={messagesEndRef} />
             </div>
             <div className="flex min-h-16 items-center bg-white rounded-lg shadow-lg">
-                <form className="flex flex-1 m-2 leading-4 resize-none space-x-1 items-center">
+                <form className="flex flex-1 m-2 leading-4 resize-none space-x-1 items-center" onKeyPress={handleKeyPress}>
                     <input accept="*" multiple id="icon-button-file" type="file" hidden onChange={handleFileUpload} />
                     <label htmlFor="icon-button-file">
                         <IconButton className="w-min" component="span">
