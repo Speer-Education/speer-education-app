@@ -11,9 +11,19 @@ import { Link } from 'react-router-dom';
  */
 function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentUser }) {
 
+    const URL_REGEX = /\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]/ig;
+
+    const renderText = txt =>
+        txt
+        .split(" ")
+        .map(part =>
+        URL_REGEX.test(part) ? <a href={part} className="font-medium text-blue-800">{part} </a> : part + " "
+        );
+
     if (hasFiles) {
-        return (
-            <p className={`my-2 p-2 rounded-lg w-max max-w-prose bg-gray-100 ${isCurrentUser && "bg-blue-200 ml-auto"}`}>
+        return (<div className="my-1">
+            {!isCurrentUser && <span className="text-sm text-gray-500">{username}</span>}
+            <p className={`p-2 rounded-lg w-max max-w-prose bg-gray-100 ${isCurrentUser && "bg-blue-200 ml-auto"}`}>
                 <span className="chat__name">{username}</span>
                 {files.map(file => {
                     return (
@@ -22,16 +32,16 @@ function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentU
                 })}
                 <span className="chat__timestamp"> <TimeAgo date={timestamp} /></span>
             </p>
-        )
+        </div>)
     } else {
 
-    return (
-        <p className={`my-2 p-2 rounded-lg w-max max-w-prose bg-gray-100 ${isCurrentUser && "bg-blue-200 ml-auto"}`}>
-            <span className="chat__name">{username}</span>
-            <span className="chat__messageText">{message}</span>
+    return (<div className="my-1">
+        {!isCurrentUser && <span className="text-sm text-gray-500">{username}</span>}
+        <p className={`p-2 rounded-lg w-max max-w-prose bg-gray-100 ${isCurrentUser && "bg-blue-200 ml-auto"}`}>
+            <span className="text-gray-800 break-words">{renderText(message)}</span>
             <span className="chat__timestamp"> <TimeAgo date={timestamp} /></span>
         </p>
-    )
+    </div>)
     }
 }
 
