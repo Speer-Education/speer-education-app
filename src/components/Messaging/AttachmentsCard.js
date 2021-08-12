@@ -5,7 +5,7 @@ import AttachmentItem from "./AttachmentItem";
 
 const AttachmentsCard = ({ roomId, attachments = []}) => {
     const [open, setOpen] = useState(false);
-    console.log(roomId)
+    
     return <>
         <AttachmentsDialog open={open} onClose={_ => setOpen(false)} roomId={roomId}/>
         <div className="p-3 m-2 shadow-lg rounded-md bg-white space-y-3">
