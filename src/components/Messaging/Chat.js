@@ -20,7 +20,7 @@ let listeners = []    // list of listeners
 let start = null      // start position of listener
 let end = null        // end position of listener
 
-const DOCUMENTS_PER_PAGE = 10;
+const DOCUMENTS_PER_PAGE = 15;
 
 function Chat({screenSize}) {
 
@@ -142,8 +142,8 @@ function Chat({screenSize}) {
         // single query to get startAt snapshot
 
         let ref = db.collection('rooms').doc(roomId).collection('messages')
-        let snapshots = await getSnapshot(ref.orderBy('date', 'desc')
-            .limit(DOCUMENTS_PER_PAGE))
+        let snapshots = await ref.orderBy('date', 'desc')
+            .limit(DOCUMENTS_PER_PAGE).get()
         // save startAt snapshot
         start = snapshots.docs[snapshots.docs.length - 1]
 
@@ -181,9 +181,9 @@ function Chat({screenSize}) {
             return;
         }
         // single query to get new startAt snapshot
-        let snapshots = await getSnapshot(ref.orderBy('date', 'desc')
+        let snapshots = await ref.orderBy('date', 'desc')
             .startAt(start)
-            .limit(DOCUMENTS_PER_PAGE))
+            .limit(DOCUMENTS_PER_PAGE).get()
         // previous starting boundary becomes new ending boundary
         end = start
         start = snapshots.docs[snapshots.docs.length - 1]
