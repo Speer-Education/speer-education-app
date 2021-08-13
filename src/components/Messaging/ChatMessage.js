@@ -38,7 +38,7 @@ function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentU
     return (<div className="my-1">
         {!isCurrentUser && <span className="text-sm text-gray-500">{username}</span>}
         <p className={`p-2 rounded-lg w-max max-w-prose bg-gray-100 ${isCurrentUser && "bg-blue-200 ml-auto"}`}>
-            <span className="text-gray-800 break-words">{renderText(message)}</span>
+            <span className="text-gray-800 break-words whitespace-pre-wrap">{renderText(message)}</span>
             <span className="chat__timestamp"> <TimeAgo date={timestamp} /></span>
         </p>
     </div>)

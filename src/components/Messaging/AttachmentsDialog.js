@@ -38,7 +38,7 @@ const AttachmentsDialog = ({open, onClose, roomId}) => {
                         /> : <AttachmentItem 
                             IconComponent={FolderOpenOutlined}
                             title={filename}
-                            subtitle={uploadedOn.toDate().toISOString()}
+                            date={uploadedOn.toDate().toISOString()}
                             key={`${uploadedOn} and  ${url}`}
                         />
                 })}

@@ -13,7 +13,7 @@ const AttachmentsCard = ({ roomId, attachments = []}) => {
                 <p className="font-medium">Shared Files and Links</p>
                 <div className="mt-auto text-blue-700 underline text-xs cursor-pointer" onClick={_ => setOpen(true)}>See All</div>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col max-h-40 overflow-scroll overflow-x-hidden">
                 {attachments.sort(({uploadedOn: x},{uploadedOn: y}) => y-x).map(({ attachmentType, url, title, image, downloadUrl, filename, filetype, uploadedOn }) => {
                     return (attachmentType == 'url') ?  <AttachmentItem 
                             image={image}
@@ -24,7 +24,7 @@ const AttachmentsCard = ({ roomId, attachments = []}) => {
                         /> : <AttachmentItem 
                             IconComponent={FolderOpenOutlined}
                             title={filename}
-                            subtitle={uploadedOn.toDate().toISOString()}
+                            date={uploadedOn.toDate().toISOString()}
                             key={`${uploadedOn} and  ${url}`}
                         />
                 })}
