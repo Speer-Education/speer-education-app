@@ -28,6 +28,10 @@ export const useAuth = () => {
  * Logic required to run the auth methods for Firebase
  * @returns { user, userDetails, signInWithEmailAndPassword, signOut, initGoogleSignIn, initFacebookSignIn }
  */
+
+//Use variable as userDetails might be immediately needed before react even renders
+let latestUserDetails = {}
+
 const useAuthProvider = () => {
     const [user, setUser] = useState(null); 
     const [userDetails, setUserDetails] = useState(null);
@@ -87,7 +91,7 @@ const useAuthProvider = () => {
         if (!claims.finishSetup) {
             console.log(history.location.pathname)
             history.push('/onboarding');
-        } else if(history.location.pathname.startsWith('/onboarding')) { //If user completed setup but is on onboarding page, redirect to app
+        } else if(history.location.pathname.startsWith('/onboarding') || history.location.pathname.startsWith('/login')) { //If user completed setup but is on onboarding page, redirect to app
             history.push('/app');
         }
         return claims
@@ -122,7 +126,7 @@ const useAuthProvider = () => {
                 if(!data?._lastCommitted) return;
 
                 if (lastCommitted && !(data?._lastCommitted || {}).isEqual(lastCommitted)) {
-                    setUserDetails({ ...await getUserTokenResult(true), ...userDetails })
+                    setUserDetails({ ...await getUserTokenResult(true), ...latestUserDetails })
                     console.log("Refreshing token");
                 }
                 console.log('User Claims Updated', data);
@@ -139,7 +143,8 @@ const useAuthProvider = () => {
                 .collection("users")
                 .doc(user.uid)
                 .onSnapshot(async (doc) => {
-                    setUserDetails({ ...await getUserTokenResult(), ...doc.data() })
+                    latestUserDetails = { ...await getUserTokenResult(), ...doc.data() }
+                    setUserDetails(latestUserDetails)
                     console.log('User Document Updated')
                 });
             return () => unsubscribe();

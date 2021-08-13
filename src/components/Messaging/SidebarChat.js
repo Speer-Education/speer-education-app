@@ -3,9 +3,10 @@ import "./SidebarChat.css";
 import { Avatar } from "@material-ui/core";
 import { Link, useRouteMatch } from 'react-router-dom';
 import { db } from '../../config/firebase';
+import { useAuth } from '../../hooks/useAuth';
 
 function SidebarChat({ id, roomName, isMentor, roomPic }) {
-
+    const { user } = useAuth();
     const [messages, setMessages] = useState('');
     let { url } = useRouteMatch();
 
@@ -25,7 +26,7 @@ function SidebarChat({ id, roomName, isMentor, roomPic }) {
                 only 2 users, and  the group pic if it is a group chat. <-- Implement this to come from Sidebar and be passed down as a prop */}
                 <div className="sidebarChat__info">
                     <h2>{roomName} {isMentor ? <i className="fas fa-user-check"></i> : null}</h2> 
-                    <p>{messages ? messages.message : "No Message History"}</p>
+                    <p className="text-sm text-gray-600">{messages ? `${messages.senderId == user?.uid?"You: ":""}${messages.message}` : "No Message History"}</p>
                 </div>
             </div>
         </Link>

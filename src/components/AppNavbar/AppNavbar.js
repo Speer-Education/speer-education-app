@@ -17,11 +17,11 @@ import history from '../../hooks/history';
  * @returns 
  */
 const NavBarLink = ({IconComponent, title, href}) => {
-  return <Link to={href} className="text-gray-800 no-underline">
-    <div className="grid place-items-center h-full px-5 hover:bg-gray-100 cursor-pointer rounded-lg">
+  return <Link to={href} className="text-gray-800 no-underline flex-1 lg:flex-none">
+    <div className="grid place-items-center h-full lg:px-5 hover:bg-gray-100 cursor-pointer rounded-lg">
       <div className="flex-1 flex flex-col items-center">
-        <IconComponent className="h-8 w-8" style={{ color: (href == history.location.pathname)?'#F58A07':'#084887'}}/>
-        <p className="">{title}</p>
+        <IconComponent className="w-4 h-4 lg:h-8 lg:w-8" style={{ color: (href == history.location.pathname)?'#F58A07':'#084887'}}/>
+        <p className="text-xs text-center lg:text-base">{title}</p>
       </div>
     </div>
   </Link>
@@ -34,12 +34,12 @@ const NavBarLink = ({IconComponent, title, href}) => {
  */
 const AppNavbar = () => {
   return (
-    <div className="fixed bottom-0 lg:sticky lg:top-0 w-full justify-evenly items-center p-4 h-24 bg-white z-10 flex flex-row">
+    <div className="fixed bottom-0 lg:sticky lg:top-0 w-full justify-evenly items-center h-14 lg:p-4 lg:h-24 bg-white z-10 flex flex-row">
       <img className="h-20 hidden lg:block" src="/full-transparent-logo.png" alt="logo"/>
-      <div className="flex flex-row h-full">
+      <div className="flex flex-row h-full flex-1 lg:flex-none">
         <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/app"/>
         <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/app/mentors"/>
-        <NavBarLink IconComponent={MessageTwoToneIcon} title="Messaging" href="/app/messages"/>
+        <NavBarLink IconComponent={MessageTwoToneIcon} title="Contacts" href="/app/messages"/>
         <NavBarLink IconComponent={NotificationsTwoToneIcon} title="Notifications"/>
       </div>
       <div className="hidden lg:block" >

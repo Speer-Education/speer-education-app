@@ -24,20 +24,25 @@ export default function Login() {
     }
 
     return (
-        <div className="login">
+        <div className="bg-gray-100 h-screen overflow-x-hidden">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Login | Speer Education</title>
             </Helmet>
-            <form>
-                <h1>Speer Education</h1>
-                { user ? <p>Logged In!</p>: <> <p>Not Logged In</p>
-                <div className="login__buttons">
-                    <Button type="submit" onClick={googleSignIn}>Sign In With Google<i className="fab fa-google"></i></Button>
-                    <Button type="submit" onClick={facebookSignIn}>Sign In With Facebook<i className="fab fa-facebook"></i></Button>
-                </div> </> }
-                { user ? <div><Link to="/app">Go To App</Link><Button type="submit" onClick={logOut}>Sign Out</Button></div>: null}
-            </form>
+            <div className="flex flex-row w-screen h-screen">
+                <div className="flex-1 text-left p-20 bg-white space-y-4">
+                    <img className="h-24 -ml-4" src="./full-transparent-logo.png"/>
+                    <div className="space-y-2 text-speer-yellow font-extrabold">
+                        <h1><span className="text-speer-blue">We Are</span> Speer</h1>
+                        <h1>We help you connect to people</h1>
+                    </div>
+                    <p className="text-gray-600">Sign in or register to find out what we can do for you!</p>
+                    <Button type="submit" onClick={googleSignIn} variant="contained" color="primary" startIcon={<i className="fab fa-google"></i>}>Sign In With Google</Button>
+                </div>
+                <div className="flex-1 hidden md:block">
+                    <img className="w-full h-full object-contain p-32" src="./rocket-logo@3x.png" />
+                </div>
+            </div>
         </div>
     )
 }

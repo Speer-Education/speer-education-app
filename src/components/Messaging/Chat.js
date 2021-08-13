@@ -20,7 +20,7 @@ let listeners = []    // list of listeners
 let start = null      // start position of listener
 let end = null        // end position of listener
 
-const DOCUMENTS_PER_PAGE = 10;
+const DOCUMENTS_PER_PAGE = 15;
 
 function Chat({screenSize}) {
 
@@ -142,8 +142,8 @@ function Chat({screenSize}) {
         // single query to get startAt snapshot
 
         let ref = db.collection('rooms').doc(roomId).collection('messages')
-        let snapshots = await getSnapshot(ref.orderBy('date', 'desc')
-            .limit(DOCUMENTS_PER_PAGE))
+        let snapshots = await ref.orderBy('date', 'desc')
+            .limit(DOCUMENTS_PER_PAGE).get()
         // save startAt snapshot
         start = snapshots.docs[snapshots.docs.length - 1]
 
@@ -181,9 +181,9 @@ function Chat({screenSize}) {
             return;
         }
         // single query to get new startAt snapshot
-        let snapshots = await getSnapshot(ref.orderBy('date', 'desc')
+        let snapshots = await ref.orderBy('date', 'desc')
             .startAt(start)
-            .limit(DOCUMENTS_PER_PAGE))
+            .limit(DOCUMENTS_PER_PAGE).get()
         // previous starting boundary becomes new ending boundary
         end = start
         start = snapshots.docs[snapshots.docs.length - 1]
@@ -303,6 +303,13 @@ function Chat({screenSize}) {
         setFileMessages(files);
     }
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey && !e.altKey && !e.metaKey) {
+            e.preventDefault();
+            sendMessage(e);
+        }
+    }
+
     const toggleShowProfPicAndAttachments = () => {
         setShowProfPicAndAttachments(!showProfPicAndAttachments)
     }
@@ -352,7 +359,7 @@ function Chat({screenSize}) {
                 <div ref={messagesEndRef} />
             </div>
             <div className="flex min-h-16 items-center bg-white rounded-lg shadow-lg">
-                <form className="flex flex-1 m-2 leading-4 resize-none space-x-1 items-center">
+                <form className="flex flex-1 m-2 leading-4 resize-none space-x-1 items-center" onKeyPress={handleKeyPress}>
                     <input accept="*" multiple id="icon-button-file" type="file" hidden onChange={handleFileUpload} />
                     <label htmlFor="icon-button-file">
                         <IconButton className="w-min" component="span">
@@ -369,12 +376,12 @@ function Chat({screenSize}) {
         </div >}
         <div className={`${screenSize < 2 ? "hidden" : null}`} style={screenSize < 3 ? {width: '275px'} : {width: '300px'}}>
             <ProfileCard uid={recipientId}/>
-            <AttachmentsCard attachments={roomDoc?.attachments}/>
+            <AttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
         </div>
         {showProfPicAndAttachments ? <div className={`${screenSize >= 2 ? "hidden" : null}`} style={{minWidth: 'calc(100vw - 260px)'}}>
             <button onClick={toggleShowProfPicAndAttachments} className="bg-transparent border-none p-5 cursor-pointer"><i className="fas fa-arrow-left text-2xl"></i></button>
             <ProfileCard uid={recipientId}/>
-            <AttachmentsCard attachments={roomDoc?.attachments}/>
+            <AttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
         </div> : null}
     </>)
 }

@@ -1,6 +1,8 @@
 import Editor from 'rich-markdown-editor';
 import styles from './mdeditor.css'
 import { storage } from '../../../config/firebase';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { ImageOutlined, PhotoAlbumTwoTone } from '@material-ui/icons';
 
 const colors = {
   almostBlack: "#878787",
@@ -122,19 +124,99 @@ const dark = {
   scrollbarThumb: colors.lightBlack,
 };
 
-const MDEditor = ({ docId, className, ...props }) => {
-  return <>
-    <Editor
-      theme={light}
-      className={`${className} ${styles.markdown}`}
-      uploadImage={async file => {
-        const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
-        return await result.ref.getDownloadURL();
-      }}
-      placeholder='Type "/" to access all the function'
-      {...props}
+const YoutubeEmbed = ({ attrs }) => {
+  const videoId = attrs.matches[1];
+  return (
+    <iframe
+      className={styles.youtube_embed}
+      title={`Youtube Embed ${videoId}`}
+      src={`https://www.youtube.com/embed/${videoId}?modestbranding=1`}
     />
-  </>
+  );
 }
+
+const MDEditor = React.forwardRef(({ docId, className, readOnly, onChange, defaultValue, ...props }, ref) => {
+  const [intReadOnly, setIntReadOnly] = useState(false);
+  const [editorNewValue, setEditorNewValue] = useState("");
+  const [currentValue, setCurrentValue] = useState("");
+
+  useImperativeHandle(ref, () => ({
+    handleExternalImageUpload,
+    handleAddYoutubeVideo,
+    readOnly: intReadOnly
+  }),[intReadOnly, currentValue, setEditorNewValue, setIntReadOnly])
+
+  useEffect(() => setIntReadOnly(readOnly), [readOnly])
+  useEffect(() => {
+    setCurrentValue(defaultValue || "")
+  }, [defaultValue])
+
+
+  const handleExternalImageUpload = async (file) => {
+    if (!file) return;
+    setIntReadOnly(true)
+    const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
+    let url = await result.ref.getDownloadURL();
+    console.log(currentValue)
+    const newValue = (currentValue || "") + `\n   ![](${url}) `
+    setEditorNewValue(newValue)
+    setCurrentValue(newValue)
+    onChange(() => newValue)
+    setIntReadOnly(false)
+  }
+
+  const handleAddYoutubeVideo = async (url) => {
+    if (!url) return;
+    setIntReadOnly(true)
+    // const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
+    // let url = await result.ref.getDownloadURL();
+    const newValue = (currentValue || "") + `\n   [${url}](${url}) `
+    setEditorNewValue(newValue)
+    setCurrentValue(newValue)
+    onChange(() => newValue)
+    setIntReadOnly(false)
+  }
+
+  return <>
+    <div className="min-h-32">
+      <Editor
+        theme={light}
+        className={`${className}`}
+        defaultValue={defaultValue}
+        value={editorNewValue}
+        readOnly={intReadOnly}
+        onChange={val => {
+          onChange(val)
+          setCurrentValue(val())
+        }}
+        uploadImage={async file => {
+          const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
+          return await result.ref.getDownloadURL();
+        }}
+        embeds={[
+          {
+            title: "YouTube",
+            keywords: "youtube video tube google",
+            icon: () => (
+              <img
+                alt="Youtube Logo"
+                src="https://upload.wikimedia.org/wikipedia/commons/7/75/YouTube_social_white_squircle_%282017%29.svg"
+                width={24}
+                height={24}
+              />
+            ),
+            matcher: url => {
+              return url.match(
+                /(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([a-zA-Z0-9_-]{11})$/i
+              );
+            },
+            component: YoutubeEmbed,
+          },
+        ]}
+        {...props}
+      />
+    </div>
+  </>
+})
 
 export { MDEditor }

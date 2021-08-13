@@ -1,39 +1,29 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { db } from "../../config/firebase"; 
-import ProfilePicture from "../User/ProfilePicture";
+import UserSmallProfileCard from "../User/UserSmallProfileCard";
 
 const ProfileCard = ({ uid }) => {
-    const { userDetails, user } = useAuth();
+    const { user } = useAuth();
     const [details, setDetails] = useState({});
-    const { name , major, school } = details || {};
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if(!user) return;
+        setLoading(true)
         return db.doc(`users/${uid}`).onSnapshot(snap => {
             setDetails({
                 id: snap.id,
                 ...snap.data()
             })
+            setLoading(false)
         })
     }, [user, uid]);
 
-    return <div className="p-3 m-2 shadow-lg rounded-md bg-white space-y-3">
-        <div className="flex flex-row space-x-2 items-center">
-            <ProfilePicture uid={uid} alt="user" className="w-28 h-28 rounded-full border-white border-8 border-solid shadow-lg"/>
-            <div className="space-y-1">
-                <h3 className="font-medium">{name}</h3>
-                <p className="text-md text-gray-600">{details?.isMtr?"Mentor":"Mentee"} @ {school}</p>
-            </div>
-        </div>
-        <div>
-            <h3 className="text-gray-500 mb-2">{name}'s Education</h3>
-            <div className="p-3 rounded-lg shadow-lg space-y-2">
-                <h3>{major}</h3>
-                <p>{school}</p>
-            </div>
-        </div>
-    </div>
+    if(loading) return <div className="p-3 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6">
+        <h3 className="text-gray-500">Loading</h3>
+    </div> 
+    return <UserSmallProfileCard uid={uid} userDetails={details}/>
 }   
 
 export default ProfileCard

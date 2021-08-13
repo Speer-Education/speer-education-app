@@ -4,10 +4,10 @@ import { useAuth } from '../../../hooks/useAuth';
 import styles from './UserMenu.css'
 
 const UserAvatar = ({ url, setOpen }) => {
-    return <div className="flex flex-col">
-                <img className="lg:w-12 overflow-hidden shadow-xl object-cover " src={url} alt="avatar" />
+    return <div className="flex flex-col px-3">
+                <img className="w-6 h-6 lg:w-10 lg:h-10 overflow-hidden shadow-xl object-cover " src={url} alt="avatar" />
                 <button className="border-none bg-transparent cursor-pointer" onClick={() => setOpen(prevOpen => !prevOpen)}>
-                    <span className="pr-1">Me</span><i className="fas fa-caret-down" style={{color: "#F58A07"}}></i>
+                    <span className="pr-1 lg:text-base text-xs">Me</span><i className="fas fa-caret-down" style={{color: "#F58A07"}}></i>
                 </button>
             </div>
 }
