@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 export default function OpenChats() {
 
-    const { userDetails } = useAuth();
+    const { user, userDetails } = useAuth();
 
     const [chatrooms, setChatrooms] = useState();
 
@@ -44,7 +44,7 @@ export default function OpenChats() {
                             <ProfilePicture uid={senderId} className="w-10 h-10 rounded-full" />
                             <div className="flex-1 ml-2 max-w-full">
                                 <h3 className="font-medium">{senderUsername}</h3>
-                                <p className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12 text-gray-500">{message}</p>
+                                <p className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12 text-gray-500 text-sm">{senderId == user?.uid?"You: ":""}{message}</p>
                             </div>
                         </div>
                     </Link>

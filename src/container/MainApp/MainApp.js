@@ -36,6 +36,10 @@ export default function MainApp() {
                     <Route path={`${path}/profile/:profileId`}>
                         <LazyProfilePage />
                     </Route>
+                    {/* Profile Page */}
+                    <Route exact path={`${path}/profile/`}>
+                        <LazyProfilePage isUser={true}/>
+                    </Route>
                     {/* Edit Profile Page */}
                     <Route path={`${path}/editProfile`}>
                         <LazyEditProfile />
