@@ -1,8 +1,6 @@
 .circleLoader{
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 30vh;
+    display: grid;
+    place-items: center;
+    width: 100vw;
+    height: calc(100vh - 6rem);
 }

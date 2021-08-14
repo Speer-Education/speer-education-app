@@ -6,6 +6,7 @@ import { Router, Switch, Route, Redirect } from "react-router-dom";
 import history from './hooks/history';
 import CircleLoader from './components/Loader/CircleLoader';
 import ServiceWorkerWrapper from './components/ServiceWorker/ServiceWorkerWrapper';
+import AppLoader from './components/Loader/AppLoader';
 
 const LazyLogin = lazy(() => import("./pages/Login/Login"))
 const LazyOnboarding = lazy(() => import("./pages/Onboarding/Onboarding"))
@@ -18,7 +19,7 @@ function App() {
   return (
     <Router history={history}>
       <div className="app">
-        <Suspense fallback={<div className="circleLoader"> <CircleLoader/> </div>}>
+        <Suspense fallback={<AppLoader/>}>
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path={"/login"} component={LazyLogin} />

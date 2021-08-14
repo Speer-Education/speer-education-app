@@ -42,7 +42,7 @@ const MentorCard = ({ id, name, school, major, bio, highlight1, highlight2 }) =>
 
     return (
         <div className="bg-white rounded-lg shadow-lg flex flex-col items-center p-3 w-72 mt-16 min-h-80" style={{flex: "1 0 30%"}}>
-            <ProfilePicture uid={id} alt="mentor" className="w-28 h-28 transform rounded-full -mt-16 border-white border-8 border-solid shadow-lg"/>
+            <ProfilePicture uid={id} alt="mentor" className="w-28 h-28 transform rounded-full -mt-16 border-white border-8 border-solid shadow-lg" style={{aspectRatio: '1'}}/>
             <div className="mt-2 space-y-2 h-full flex flex-col w-full">
                 <div className="space-y-1 text-center transform">
                     <h3 className="font-medium">{name}</h3>

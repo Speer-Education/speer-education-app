@@ -18,7 +18,7 @@ export default function MainApp() {
     return (
         <>
             <AppNavbar />
-            <Suspense fallback={<div className="circleLoader"> <CircleLoader /> </div>}>
+            <Suspense fallback={<div className="circleLoader bg-gray-100"> <CircleLoader /> </div>}>
                 <Switch>
                     {/* Main Page */}
                     <Route exact path={`${path}`}>
