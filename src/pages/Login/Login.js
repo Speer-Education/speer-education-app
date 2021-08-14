@@ -31,7 +31,7 @@ export default function Login() {
             </Helmet>
             <div className="flex flex-row w-screen h-screen">
                 <div className="flex-1 text-left p-20 bg-white space-y-4">
-                    <img className="h-24 -ml-4" src="./full-transparent-logo.png"/>
+                    <img className="h-24 -ml-4" src="/full-transparent-logo.png"/>
                     <div className="space-y-2 text-speer-yellow font-extrabold">
                         <h1><span className="text-speer-blue">We Are</span> Speer</h1>
                         <h1>We help you connect to people</h1>
@@ -40,7 +40,7 @@ export default function Login() {
                     <Button type="submit" onClick={googleSignIn} variant="contained" color="primary" startIcon={<i className="fab fa-google"></i>}>Sign In With Google</Button>
                 </div>
                 <div className="flex-1 hidden md:block">
-                    <img className="w-full h-full object-contain p-32" src="./rocket-logo@3x.png" />
+                    <img className="w-full h-full object-contain p-32" src="/rocket-logo@3x.png" />
                 </div>
             </div>
         </div>

@@ -36,7 +36,7 @@ export default function YoutubeEmbed() {
       {/**? display the video img base on list read from firebase */}
       <div className="flex flex-col w-300 p-3 min-w-500 m-2 shadow-lg rounded-md bg-white space-y-3">
         <div className="flex flex-row space-x-2">
-          <img src="./full-transparent-logo.png" className="h-7" alt="logo" />
+          <img src="/full-transparent-logo.png" className="h-7" alt="logo" />
           <h3 className="text-base">Education</h3>
         </div>
         {Video_data.map(data =>

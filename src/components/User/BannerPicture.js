@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 
 /**
- * This component is used to laod the profile picture of a uid in a img, the url is dynamic thus this component handles the state for it.
+ * This component is used to laod the banner photo of a uid in a img, the url is dynamic thus this component handles the state for it.
  * @component
  * @param {string} uid 
  * @returns 
@@ -19,7 +19,7 @@ export default function BannerPicture({ uid, ...params }) {
     }, [uid, user]);
 
     return <img
-        src={url || '../../banner_placeholder.png'}
+        src={url || '/banner_placeholder.png'}
         {...params}
     />
 }

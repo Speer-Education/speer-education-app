@@ -11,6 +11,7 @@ import './PostCard.css';
 import { useAuth } from '../../hooks/useAuth';
 import { Favorite } from '@material-ui/icons';
 import { PostComments } from './PostComments';
+import history from '../../hooks/history';
 
 /**
  * Creates the post card for this post
@@ -81,7 +82,7 @@ const PostCard = ({ post }) => {
         </div> :
         <div className="py-4 px-6 m-2 bg-white rounded-xl shadow-lg">
             <div className="post-author_container w-full">
-                <div className="flex flex-row flex-1 items-center">
+                <div className="flex flex-row flex-1 items-center cursor-pointer" onClick={e => history.push(`/app/profile/${author}`)}>
                     <ProfilePicture uid={author} className="shadow-md bg-blue-400 overflow-hidden h-12 w-12 rounded-full" />
                     <div className="flex-1 space-y-2 py-1 ml-2">
                         <div className="text-xl font-medium">{authorProfile.name}</div>

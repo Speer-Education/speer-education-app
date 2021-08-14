@@ -222,11 +222,11 @@ export default function UserDetails() {
                     </div>
                 </div>
                 <div className="flex-1 bg-white">
-                    <img className="w-full h-full object-contain p-32" src="./rocket-logo@3x.png" />
+                    <img className="w-full h-full object-contain p-32" src="/rocket-logo@3x.png" />
                 </div>
             </div> : <div className="grid place-items-center w-screen h-screen">
                 <div className="flex flex-col items-center space-y-2">
-                    <img className="object-contain w-24 p-4" src="./rocket-logo@3x.png" />
+                    <img className="object-contain w-24 p-4" src="/rocket-logo@3x.png" />
                     <h2>Setting Up Your Account...</h2>
                     <p>Please Wait</p>
                     <div className="animate-pulse h-2 rounded-md w-52 bg-gray-400"></div>
