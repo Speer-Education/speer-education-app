@@ -4,10 +4,12 @@ import { Button } from '@material-ui/core';
 import { useAuth } from "../../hooks/useAuth";
 import { Link } from 'react-router-dom';
 import {Helmet} from "react-helmet";
+import { useSkipPageAfterAuth } from '../../hooks/useSkipPageAfterAuth';
 
 export default function Login() {
 
     const { user , initGoogleSignIn, initFacebookSignIn, signOut } = useAuth();
+    useSkipPageAfterAuth();
 
     const googleSignIn = (e) => {
         e.preventDefault();

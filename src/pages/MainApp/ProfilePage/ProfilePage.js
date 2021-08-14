@@ -18,7 +18,7 @@ import EducationCard from '../../../components/Profile/EducationCard';
 
 function ProfilePage({ isUser=false }) {
     const { profileId } = useParams();
-    const { user, userDetails: currentUserDetails } = useAuth();
+    const { user, userDetails: currentUserDetails, signOut } = useAuth();
     const [userDetails, setUserDetails] = useState({});
     const [isMentor, setIsMentor] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -63,6 +63,12 @@ function ProfilePage({ isUser=false }) {
                                 <p className="font-semibold text-lg">About Me</p>
                                 <p>{bio}</p>
                             </div>
+                            {/* Temporary */}
+                            {isUser && <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white py-3 px-8">
+                                <p className="font-semibold text-lg">Settings</p>
+                                {/* Logout Button */}
+                                <Button variant="outlined" onClick={() => signOut()}>Logout</Button>
+                            </div>}
                         </div>
                     </div>
                     <div className="flex flex-col h-full" style={{ height: 'calc(100vh - 6rem)', width: `350px` }}>
