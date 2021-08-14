@@ -1,5 +1,6 @@
 import { useAuth } from "../../hooks/useAuth"
 import ProfilePicture from "./ProfilePicture";
+import UserHighlight from "./UserHighlight";
 
 const UserSmallProfileCard = ({ userDetails, uid }) => {
     const { user } = useAuth();
@@ -14,18 +15,19 @@ const UserSmallProfileCard = ({ userDetails, uid }) => {
         </div>
         <div>
             <h3 className="text-gray-500 mb-2">{(user?.uid == uid)?"Your":`${name}'s`} Education</h3>
-            <div className="p-3 rounded-lg shadow-lg space-y-2">
-                <h3>{major}</h3>
-                <p>{school}</p>
+            <div className="flex flex-row items-center rounded-xl shadow-lg px-3 py-5 space-x-2">
+                <p className="text-4xl w-16 text-center">🏫</p>
+                <div className="space-y-2">
+                    <h3>{major}</h3>
+                    <p>{school}</p>
+                </div>
             </div>
         </div>
         <div className="mt-5 mb-6">
             <h3 className="font-medium text-gray-600">{(user?.uid == uid)?"Your":`${name}'s`}  Highlights</h3>
-            <div className="flex flex-row items-center mt-3">
-                <div className="w-1/6 p-3 text-center text-2xl bg-white rounded-xl flex justify-center items-center shadow-md mr-2">{highlight1?.emoji}</div>
-                <span className="w-1/3 text-sm text-gray-500">{highlight1?.description}</span>
-                <span className="w-1/6 p-3 text-center text-2xl bg-white rounded-xl flex justify-center items-center shadow-md mx-2">{highlight2?.emoji}</span>
-                <span className="w-1/3 text-sm text-gray-500">{highlight2?.description}</span>
+            <div className="flex flex-row items-center my-5 space-x-3">
+                <UserHighlight highlight={highlight1}/>
+                <UserHighlight highlight={highlight2}/>
             </div>
         </div>
 

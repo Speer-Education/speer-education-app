@@ -36,7 +36,7 @@ export default function ContactsSidebar({ profileId }) {
 
     return (
         <div className="flex flex-col flex-1 p-3 m-2 shadow-lg rounded-md bg-white">
-            <p>New Mentors To Find</p>
+            <p>Connected Contacts</p>
             {/* Randomly generates 3 mentors in random order*/}
             {followers.map(({ id, name, school, major, bio }) => { 
                 return (<div className="flex flex-row py-2 " key={id}>
