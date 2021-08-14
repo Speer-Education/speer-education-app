@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import history from '../../../hooks/history';
 import { useAuth } from '../../../hooks/useAuth';
 import styles from './UserMenu.css'
 
 const UserAvatar = ({ url, setOpen }) => {
     return <div className="flex flex-col px-3">
                 <img className="w-6 h-6 lg:w-10 lg:h-10 overflow-hidden shadow-xl object-cover " src={url} alt="avatar" />
-                <button className="border-none bg-transparent cursor-pointer" onClick={() => setOpen(prevOpen => !prevOpen)}>
+                <button className="border-none bg-transparent cursor-pointer" onClick={() => history.push('/app/profile')}>
                     <span className="pr-1 lg:text-base text-xs">Me</span><i className="fas fa-caret-down" style={{color: "#F58A07"}}></i>
                 </button>
             </div>
