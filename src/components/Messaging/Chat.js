@@ -319,7 +319,7 @@ function Chat({screenSize}) {
       }
     // console.log(messages)
     return (<>
-        {showProfPicAndAttachments ? null : <div className="flex flex-1 flex-col overflow-hidden space-y-2 p-2 max-h-full w-full" style={{height: 'calc(100vh - 6rem)'}}>
+        {showProfPicAndAttachments ? null : <div className="flex flex-1 flex-col overflow-hidden space-y-2 p-2 max-h-full w-full h-app">
             <button onClick={screenSize >= 2 ? null : toggleShowProfPicAndAttachments} className="border-none"> {/* This toggles on and off the prof pic and attachment sections */}
                 <div className={`px-5 py-2 flex flex-row items-center bg-white ${screenSize >= 2 ? null : "hover:bg-gray-200"} rounded-lg shadow-lg`}>
                     {screenSize < 3 ? <Link to={`/app/messages`} className="mr-5"> <i className="fas fa-arrow-left"></i></Link> : null}
@@ -374,11 +374,11 @@ function Chat({screenSize}) {
                 </form>
             </div>
         </div >}
-        <div className={`${screenSize < 2 ? "hidden" : null}`} style={screenSize < 3 ? {width: '275px'} : {width: '350px'}}>
+        <div className={`${screenSize < 2 ? "hidden" : ""} flex flex-col h-app`} style={screenSize < 3 ? {width: '275px'} : {width: '350px'}}>
             <ProfileCard uid={recipientId}/>
             <AttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
         </div>
-        {showProfPicAndAttachments ? <div className={`${screenSize >= 2 ? "hidden" : null}`} style={{minWidth: 'calc(100vw - 260px)'}}>
+        {showProfPicAndAttachments ? <div className={`${screenSize >= 2 ? "hidden" : "h-app overflow-auto"}`} style={{minWidth: 'calc(100vw - 260px)'}}>
             <button onClick={toggleShowProfPicAndAttachments} className="bg-transparent border-none p-5 cursor-pointer"><i className="fas fa-arrow-left text-2xl"></i></button>
             <ProfileCard uid={recipientId}/>
             <AttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>

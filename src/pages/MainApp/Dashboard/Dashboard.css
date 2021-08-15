@@ -47,7 +47,6 @@
     overflow: hidden;
     min-width: 320px;
     width: 20vw;
-    height: calc(100vh - 7rem);
     @apply flex flex-col
 }
 }

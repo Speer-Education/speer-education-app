@@ -51,13 +51,13 @@ function ProfilePage({ isUser=false }) {
     }, [isUser, profileId]);
 
     return (
-        <div className="profilePage">
+        <div className="profilePage h-app">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>{isUser?"Your":name || ""} Profile | Speer Education</title>
             </Helmet>
             <div className="w-screen h-full flex flex-row">
-                <div className="hidden xl:flex flex-col h-full" style={{ height: 'calc(100vh - 6rem)', width: `350px` }}>
+                <div className="hidden xl:flex flex-col h-full h-app" style={{ width: `350px` }}>
                     <ContactsSidebar profileId={profileId || user?.uid}/>
                     <StatsCard />
                 </div>
@@ -78,7 +78,7 @@ function ProfilePage({ isUser=false }) {
                             </div>}
                         </div>
                     </div>
-                    <div className=" hidden md:flex flex-col h-full" style={{ height: 'calc(100vh - 6rem)', width: `350px` }}>
+                    <div className=" hidden md:flex flex-col h-app" style={{ width: `350px` }}>
                         {socials && <div className="flex flex-col p-3 m-2 shadow-lg rounded-md bg-white">
                             <p className="font-semibold text-lg">Socials</p>
                             <div className="flex flex-row items-center space-x-2 text-gray-600">

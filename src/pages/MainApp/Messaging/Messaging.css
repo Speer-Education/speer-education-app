@@ -1,7 +1,6 @@
 .messaging{
     display: grid;
     place-items: center;
-    height: calc(100vh - 6rem);
     overflow: hidden;
     @apply bg-gray-100
 }

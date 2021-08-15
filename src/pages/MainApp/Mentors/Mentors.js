@@ -24,7 +24,7 @@ const Mentors = () => {
     },[])
 
     return (
-        <div className="mentors">
+        <div className="mentors h-app">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Mentors | Speer Education</title>

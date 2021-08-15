@@ -1,9 +1,7 @@
 .mentors {
     display: flex;
     flex-direction: row;
-    min-height: calc(100vh - 6rem ) !important;
     justify-content: center;
-    height: calc(100vh - 6rem );
     overflow-y: auto;
     padding:20px 12px;
     @apply bg-gray-100

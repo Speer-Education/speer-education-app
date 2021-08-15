@@ -1,6 +1,0 @@
-.circleLoader{
-    display: grid;
-    place-items: center;
-    width: 100vw;
-    height: calc(100vh - 6rem);
-}

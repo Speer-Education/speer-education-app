@@ -8,12 +8,12 @@ const AttachmentsCard = ({ roomId, attachments = []}) => {
     
     return <>
         <AttachmentsDialog open={open} onClose={_ => setOpen(false)} roomId={roomId}/>
-        <div className="p-3 m-2 shadow-lg rounded-md bg-white space-y-3">
+        <div className="p-3 m-2 shadow-lg rounded-md bg-white space-y-3 flex-1 max-h-full overflow-auto">
             <div className="w-full flex flex-row justify-between">
                 <p className="font-medium">Shared Files and Links</p>
                 <div className="mt-auto text-blue-700 underline text-xs cursor-pointer" onClick={_ => setOpen(true)}>See All</div>
             </div>
-            <div className="flex flex-col max-h-40 overflow-scroll overflow-x-hidden">
+            <div className="flex flex-col">
                 {attachments.sort(({uploadedOn: x},{uploadedOn: y}) => y-x).map(({ attachmentType, url, title, image, downloadUrl, filename, filetype, uploadedOn }) => {
                     return (attachmentType == 'url') ?  <AttachmentItem 
                             image={image}

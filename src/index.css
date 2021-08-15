@@ -31,3 +31,13 @@ code {
 .text-speer-yellow {
   color:#F58A07;
 }
+
+.h-app {
+  height: calc(100vh - 3.5rem);
+}
+
+@media (min-width: 1024px) {
+  .h-app {
+    height: calc(100vh - 6rem);
+  }
+}

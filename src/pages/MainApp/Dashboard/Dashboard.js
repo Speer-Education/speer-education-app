@@ -14,14 +14,14 @@ import YoutubeEmbed from "../../../components/Dashboard/Video";
 
 function Dashboard() {
     return (
-        <div className="dashboard">
+        <div className="dashboard h-app">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Dashboard | Speer Education</title>
             </Helmet>
             <div className="dashboard_sidebar">
                 {/* left side bar */}
-                <div className="dashboard_sidebar fixed hidden xl:visible">
+                <div className="dashboard_sidebar h-app fixed hidden xl:visible">
                     <MentorShowcase/>
                     <StatsCard/>
                 </div>
@@ -39,7 +39,7 @@ function Dashboard() {
             </div>
             <div className="dashboard_sidebar">
                 {/* right side bar */}
-                <div className="dashboard_sidebar fixed">
+                <div className="dashboard_sidebar h-app fixed">
                     <OpenChats/>
                     <YoutubeEmbed/>
                 </div>
