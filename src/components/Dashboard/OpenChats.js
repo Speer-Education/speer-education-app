@@ -6,6 +6,7 @@ import { useAuth } from '../../hooks/useAuth';
 import NotificationCard from './NotificationCard';
 import ProfilePicture from '../User/ProfilePicture';
 import { Link } from 'react-router-dom';
+import ReactTimeago from 'react-timeago';
 
 export default function OpenChats() {
 
@@ -27,7 +28,7 @@ export default function OpenChats() {
                 }
             })
             //Order Active chats by chronological order
-            setChatrooms(rooms.sort(({ date: x }, { date: y }) => x.toMillis() - y.toMillis()))
+            setChatrooms(rooms.sort(({ date: x }, { date: y }) => y.toMillis() - x.toMillis()))
         }
     }, [userDetails?.activeRooms])
 
@@ -39,12 +40,15 @@ export default function OpenChats() {
             </div> : <>
                 <p className="p-3">Recent Chats</p>
                 <div className="overflow-hidden">
-                    {chatrooms.map(({ senderUsername, senderId, message, roomId }) => (<Link to={`/app/messages/${roomId}`}>
+                    {chatrooms.map(({ senderUsername, senderId, message, roomId, date }) => (<Link to={`/app/messages/${roomId}`}>
                         <div className="flex flex-row hover:bg-gray-100 cursor-pointer rounded-xl px-3 py-1 ">
                             <ProfilePicture uid={senderId} className="w-10 h-10 rounded-full" />
                             <div className="flex-1 ml-2 max-w-full">
                                 <h3 className="font-medium">{senderUsername}</h3>
-                                <p className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12 text-gray-500 text-sm">{senderId == user?.uid?"You: ":""}{message}</p>
+                                <div className="w-full flex flex-row text-gray-500 text-sm">
+                                    <p className="overflow-hidden overflow-ellipsis whitespace-nowrap flex-1">{senderId == user?.uid?"You: ":""}{message}</p>
+                                    <ReactTimeago className="text-gray-400" date={date.toMillis()} />
+                                </div>
                             </div>
                         </div>
                     </Link>
