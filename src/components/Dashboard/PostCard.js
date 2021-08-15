@@ -68,7 +68,7 @@ const PostCard = ({ post }) => {
     }
 
     return loading ?
-        <div class="py-4 px-6 m-2 bg-white rounded-lg shadow-lg w-screen max-w-4xl">
+        <div class="py-4 px-6 m-2 bg-white rounded-lg shadow-lg flex-1">
             <div class="animate-pulse flex space-x-4">
                 <div class="rounded-full bg-gray-300 h-12 w-12"></div>
                 <div class="flex-1 space-y-4 py-1">
