@@ -29,26 +29,17 @@ const Mentors = () => {
                 <meta charSet="utf-8" />
                 <title>Mentors | Speer Education</title>
             </Helmet>
-            <div className="p-10">   
-                <div className="grid grid-cols-3 grid-flow-row justify-start hover:place-items-center gap-4 -mt-12 flex-1">
-                    {mentors.map(({id, name, school, major, bio, connectedMentees, highlight1, highlight2}) => {
-                        return (<MentorCard
-                            id={id}
-                            key={id}
-                            name={name}
-                            school={school}
-                            major={major}
-                            bio={bio}
-                            highlight1={highlight1}
-                            highlight2={highlight2}
-                            />)
+            <div className="pt-10 p-3 2xl:p-10">   
+                <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 grid-flow-row justify-start hover:place-items-center gap-4 -mt-12 flex-1">
+                    {mentors.map((props) => {
+                        return (<MentorCard {...props} />)
                         })}
                 </div>
                 {mentors.length == 0 && <div className="grid place-items-center h-full">
                         <h1 className="text-gray-500 lg:px-10">You've Connected with All Our Mentors!</h1>
                 </div>}
             </div>
-            <div className="hidden md:flex flex-col w-96 ">
+            <div className="hidden lg:flex flex-col w-96 ">
                 <UserSmallProfileCard uid={user?.uid} userDetails={userDetails}/>
                 <StatsCard/>
             </div>
