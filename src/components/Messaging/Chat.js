@@ -374,7 +374,7 @@ function Chat({screenSize}) {
                 </form>
             </div>
         </div >}
-        <div className={`${screenSize < 2 ? "hidden" : null}`} style={screenSize < 3 ? {width: '275px'} : {width: '300px'}}>
+        <div className={`${screenSize < 2 ? "hidden" : null}`} style={screenSize < 3 ? {width: '275px'} : {width: '350px'}}>
             <ProfileCard uid={recipientId}/>
             <AttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
         </div>
