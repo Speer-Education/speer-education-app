@@ -1,4 +1,5 @@
-import { Button } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
+import { EditOutlined, MessageOutlined } from "@material-ui/icons";
 import { functions } from "../../config/firebase";
 import history from "../../hooks/history";
 import { useAuth } from "../../hooks/useAuth";
@@ -36,8 +37,21 @@ export default function UserFullProfile({profileId, isMentor, isUser, userDetail
                 <div className="flex flex-row justify-between">
                     <h1 className="text-2xl text-gray-800">{name}</h1>
                     {/* Show Edit Profile if is User, else show Message User */}
-                    {isUser?<Button variant="contained" color="primary">Edit Your Profile</Button>:
-                    <Button variant="contained" color="primary" onClick={() => connectWithPerson()}>Message {name}</Button>}
+                    {isUser?<>
+                        <div className="hidden md:inline">
+                            <Button variant="contained" color="primary">Edit Your Profile</Button>
+                        </div>
+                        <div className="md:hidden">
+                            <IconButton><EditOutlined /></IconButton>
+                        </div>
+                    </>:<>
+                        <div className="hidden md:inline">
+                            <Button variant="contained" color="primary" startIcon={<MessageOutlined />} onClick={() => connectWithPerson()}>Message</Button>
+                        </div>
+                        <div className="md:hidden">
+                            <IconButton onClick={() => connectWithPerson()}><MessageOutlined /></IconButton>
+                        </div>
+                    </>}
                 </div>
                 <p className="text-gray-600 text-sm">{isMentor?"Mentor":major} at {school}</p>
                 <p className="text-gray-600 text-sm">{country}</p>

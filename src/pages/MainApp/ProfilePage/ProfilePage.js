@@ -78,7 +78,7 @@ function ProfilePage({ isUser=false }) {
                             </div>}
                         </div>
                     </div>
-                    <div className="flex flex-col h-full" style={{ height: 'calc(100vh - 6rem)', width: `350px` }}>
+                    <div className=" hidden md:flex flex-col h-full" style={{ height: 'calc(100vh - 6rem)', width: `350px` }}>
                         {socials && <div className="flex flex-col p-3 m-2 shadow-lg rounded-md bg-white">
                             <p className="font-semibold text-lg">Socials</p>
                             <div className="flex flex-row items-center space-x-2 text-gray-600">
