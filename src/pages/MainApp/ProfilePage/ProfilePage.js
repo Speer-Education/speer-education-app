@@ -24,6 +24,13 @@ function ProfilePage({ isUser=false }) {
     const [loading, setLoading] = useState(true);
     const { name, major, school, country,highlight1,highlight2, bio, socials } = userDetails || {};
 
+    //If profileId is userId, then redirect to profile page
+    useEffect(() => {
+        if (profileId === user?.uid) {
+            history.push('/app/profile');
+        }
+    }, [profileId, user])
+
     //If Profile Page is current user, set user details with current user details
     useEffect(() => {
         if (isUser) {
@@ -56,7 +63,7 @@ function ProfilePage({ isUser=false }) {
                 </div>
                 <div className="flex-1 flex flex-row w-full">
                     <div className="flex flex-row justify-center flex-1">
-                        <div className="flex flex-col h-full p-3 space-y-4 w-max flex-1" style={{ minWidth: "628px", maxWidth: "768px" }}>
+                        <div className="flex flex-col h-full p-3 space-y-4 w-max flex-1" style={{ maxWidth: "768px" }}>
                             <p className="font-semibold text-lg">{isUser?"Your":name} Profile</p>
                             <UserFullProfile profileId={profileId || user?.uid} isUser={isUser} isMentor={isMentor} userDetails={userDetails}/>
                             <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white py-3 px-8">
