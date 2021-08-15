@@ -32,7 +32,7 @@ export default function UserFullProfile({profileId, isMentor, isUser, userDetail
     return <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white">
         <BannerPicture className="w-full h-32 rounded-xl shadow-md object-cover" uid={profileId}/>
         <div className="flex flex-row p-3 w-full">
-            <ProfilePicture className="w-32 h-32 rounded-full border-white border-8 border-solid shadow-lg transform -translate-y-16 mx-3" uid={profileId}/>
+            <ProfilePicture className="w-24 h-24 md:w-32 md:h-32 rounded-full border-white border-8 border-solid shadow-lg transform -translate-y-16 mx-1 md:mx-3" uid={profileId}/>
             <div className="flex flex-col space-y-1 w-full">
                 <div className="flex flex-row justify-between">
                     <h1 className="text-2xl text-gray-800">{name}</h1>

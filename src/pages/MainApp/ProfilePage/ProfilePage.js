@@ -62,16 +62,16 @@ function ProfilePage({ isUser=false }) {
                     <StatsCard />
                 </div>
                 <div className="flex-1 flex flex-row w-full">
-                    <div className="flex flex-row justify-center flex-1">
-                        <div className="flex flex-col h-full p-3 space-y-4 w-max flex-1" style={{ maxWidth: "768px" }}>
+                    <div className="flex flex-row justify-center flex-1 w-full p-3 md:p-0">
+                        <div className="flex flex-col h-full p-3 space-y-4 flex-1" style={{ maxWidth: "1024px" }}>
                             <p className="font-semibold text-lg">{isUser?"Your":name} Profile</p>
                             <UserFullProfile profileId={profileId || user?.uid} isUser={isUser} isMentor={isMentor} userDetails={userDetails}/>
-                            <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white py-3 px-8">
+                            <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white py-5 px-8">
                                 <p className="font-semibold text-lg">About Me</p>
                                 <p>{bio}</p>
                             </div>
                             {/* Temporary */}
-                            {isUser && <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white py-3 px-8">
+                            {isUser && <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white py-5 px-8 space-y-2">
                                 <p className="font-semibold text-lg">Settings</p>
                                 {/* Logout Button */}
                                 <Button variant="outlined" onClick={() => signOut()}>Logout</Button>
