@@ -15,6 +15,7 @@ export default function ProfilePicture({ uid, ...params }) {
     //Fetches the URL for the user's profile picture
     useEffect(async () => {
         if(!user) return;
+        setUrl("");
         let imageUrl = await storage.ref(`/profilepics/${uid}.png`).getDownloadURL()
         setUrl(imageUrl)
     }, [uid, user]);
