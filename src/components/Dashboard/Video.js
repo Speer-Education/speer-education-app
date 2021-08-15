@@ -41,7 +41,7 @@ export default function YoutubeEmbed() {
         </div>
         {Video_data.map(data =>
           <div className="flex flex-row space-x-2 cursor-pointer" onClick={() => openModal(data.youtubeid)}>
-            <img src={`http://img.youtube.com/vi/${data.youtubeid}/0.jpg`} height="90px" width="160px"/>
+            <img src={`http://img.youtube.com/vi/${data.youtubeid}/0.jpg`} height="90px" width="160px" style={{aspectRatio:'16/9'}}/>
             <div className="flex flex-col text-sm">
               <b>{data.title}</b>
               <p className="text-gray-500">{data.description.slice(0, 30) + "..."}</p>
