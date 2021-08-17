@@ -6,7 +6,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { useState } from 'react';
 import history from '../../../hooks/history';
 import Spinner from '../../Loader/Spinner';
-import { followUser } from '../../../utils/relationships';
+import { getMessageUserRoom } from '../../../utils/chats';
 
 const MentorCard = ({ id, name, school, major, bio, highlight1, highlight2 }) => {
     const [message, setMessage] = useState("");
@@ -20,11 +20,7 @@ const MentorCard = ({ id, name, school, major, bio, highlight1, highlight2 }) =>
         setSendingMessage(true)
         //send it in as profile id instead of mentor id (will need to change the backend so this still works)
         try {
-            let { data: targetRoomId } = await functions.httpsCallable('createRoom')({ profileId: id })
-            .catch((error) => {
-                console.error(error)
-            })
-            await followUser(user.uid, id)
+            const targetRoomId = await getMessageUserRoom(id, user.uid)
             await db.collection(`rooms/${targetRoomId}/messages`).add({
                 date: firebase.firestore.Timestamp.now(),
                 message: message || "Hi 👋",

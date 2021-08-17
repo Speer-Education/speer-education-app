@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { db, storage, functions } from '../../../config/firebase';
+import { db } from '../../../config/firebase';
 import { useParams } from 'react-router-dom';
 import history from '../../../hooks/history';
 import {Helmet} from "react-helmet";
@@ -7,12 +7,8 @@ import './ProfilePage.css'
 import { useAuth } from '../../../hooks/useAuth';
 import StatsCard from '../../../components/Dashboard/StatsCard';
 import ContactsSidebar from '../../../components/Profile/ContactsSidebar';
-import ProfilePicture from '../../../components/User/ProfilePicture';
 import { Button } from '@material-ui/core';
-import UserHighlight from '../../../components/User/UserHighlight';
-import BannerPicture from '../../../components/User/BannerPicture';
 import { LinkedIn } from '@material-ui/icons';
-import { followUser } from '../../../utils/relationships';
 import UserFullProfile from '../../../components/Profile/UserFullProfile';
 import EducationCard from '../../../components/Profile/EducationCard';
 import PostCard from '../../../components/Dashboard/PostCard';

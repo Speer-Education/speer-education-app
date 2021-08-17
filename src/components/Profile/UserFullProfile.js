@@ -3,7 +3,7 @@ import { EditOutlined, MessageOutlined } from "@material-ui/icons";
 import { functions } from "../../config/firebase";
 import history from "../../hooks/history";
 import { useAuth } from "../../hooks/useAuth";
-import { followUser } from "../../utils/relationships";
+import { getMessageUserRoom } from "../../utils/chats";
 import BannerPicture from "../User/BannerPicture";
 import ProfilePicture from "../User/ProfilePicture";
 import UserHighlight from "../User/UserHighlight";
@@ -14,15 +14,9 @@ export default function UserFullProfile({profileId, isMentor, isUser, userDetail
     const { name, major, school, country,highlight1,highlight2, bio, socials } = userDetails || {};
 
     const connectWithPerson = async () => {
-        /* Send Mentor ID to backend for checking and room creation */
         if(!user?.uid || !profileId) return;
-        //send it in as profile id instead of mentor id (will need to change the backend so this still works)
         try {
-            let { data: targetRoomId } = await functions.httpsCallable('createRoom')({ profileId })
-            .catch((error) => {
-                console.error(error)
-            })
-            await followUser(user.uid, profileId)
+            const targetRoomId = await getMessageUserRoom(profileId, user.uid)
             history.push(`/app/messages/${targetRoomId}`)
         } catch (e) {
             console.error(e)

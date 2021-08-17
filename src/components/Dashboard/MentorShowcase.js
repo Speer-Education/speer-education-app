@@ -9,6 +9,7 @@ import './MentorShowcase.css';
 import { useAuth } from '../../hooks/useAuth';
 import { followUser } from '../../utils/relationships';
 import history from '../../hooks/history';
+import { getMessageUserRoom } from '../../utils/chats';
 
 export default function MentorShowcase() {
 
@@ -42,23 +43,10 @@ export default function MentorShowcase() {
     }, [])
 
 
-    // const handleAddMentor = async (mentorId) => {
-    //     if(!user?.uid) return; //Check if user has loaded
-    //     await followUser(user.uid, mentorId)
-    //     console.log('followed user')
-    // }
-
     const connectWithMentor = async (mentorId) => {
-        /* Send Mentor ID to backend for checking and room creation */
-
         setCreatingRoom(true);
 
-        //send it in as profile id instead of mentor id (will need to change the backend so this still works)
-        let { data: targetRoomId } = await functions.httpsCallable('createRoom')({ profileId: mentorId })
-            .catch((error) => {
-                console.error(error)
-            })
-        await followUser(user.uid, mentorId)
+        const targetRoomId = await getMessageUserRoom(mentorId, user.uid)
         history.push(`/app/messages/${targetRoomId}`)
     }
 
