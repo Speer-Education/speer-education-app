@@ -1,29 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Login.css';
 import { Button } from '@material-ui/core';
 import { useAuth } from "../../hooks/useAuth";
 import { Link } from 'react-router-dom';
 import {Helmet} from "react-helmet";
 import { useSkipPageAfterAuth } from '../../hooks/useSkipPageAfterAuth';
-
+import { auth } from '../../config/firebase';
+import AppLoader from '../../components/Loader/AppLoader';
 export default function Login() {
 
     const { user , initGoogleSignIn, initFacebookSignIn, signOut } = useAuth();
+    const [loggingIn, setLoggingIn] = useState(true);
     useSkipPageAfterAuth();
 
     const googleSignIn = (e) => {
         e.preventDefault();
         initGoogleSignIn();
     }
+    
+    //Check if user is trying to login, else show login page
+    useEffect(() => {
+        auth.getRedirectResult().then(result => {
+            // If user just signed in or already signed in, hide spinner.
+            if (result.user || auth.currentUser) {
+                setLoggingIn(true);
+            } else {
+                setLoggingIn(false);
+            }
+          });
+    });
 
-    const facebookSignIn = (e) => {
-        e.preventDefault();
-        initFacebookSignIn();
-    }
-
-    const logOut = () => {
-        signOut()
-    }
+    if(loggingIn) return <AppLoader/>
 
     return (
         <div className="bg-gray-100 h-screen overflow-x-hidden">
