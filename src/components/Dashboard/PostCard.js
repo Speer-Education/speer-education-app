@@ -68,7 +68,7 @@ const PostCard = ({ post }) => {
     }
 
     return loading ?
-        <div class="py-4 px-6 m-2 bg-white rounded-lg shadow-lg flex-1">
+        <div class="py-4 px-6 bg-white rounded-lg shadow-lg flex-1">
             <div class="animate-pulse flex space-x-4">
                 <div class="rounded-full bg-gray-300 h-12 w-12"></div>
                 <div class="flex-1 space-y-4 py-1">
@@ -80,7 +80,7 @@ const PostCard = ({ post }) => {
                 </div>
             </div>
         </div> :
-        <div className="py-4 px-6 m-2 bg-white rounded-xl shadow-lg">
+        <div className="py-4 px-6 bg-white rounded-xl shadow-lg">
             <div className="post-author_container w-full">
                 <div className="flex flex-row flex-1 items-center cursor-pointer" onClick={e => history.push(`/app/profile/${author}`)}>
                     <ProfilePicture uid={author} className="shadow-md bg-blue-400 overflow-hidden h-12 w-12 rounded-full" />

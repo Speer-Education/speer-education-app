@@ -23,9 +23,9 @@ const PostStream = () => {
     },[]);
 
     return (
-        <>
+        <div className="p-2 space-y-2">
             {streamPosts.map(post => <PostCard key={post.id} post={post}/>)}
-        </>
+        </div>
     );
 }
 
