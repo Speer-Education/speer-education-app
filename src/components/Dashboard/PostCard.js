@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { MDEditor } from '../Blog/Editor/mdeditor';
 import { db, storage, firebase } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
@@ -68,19 +68,19 @@ const PostCard = ({ post }) => {
     }
 
     return loading ?
-        <div class="py-4 px-6 bg-white rounded-lg shadow-lg flex-1">
-            <div class="animate-pulse flex space-x-4">
-                <div class="rounded-full bg-gray-300 h-12 w-12"></div>
-                <div class="flex-1 space-y-4 py-1">
-                    <div class="h-4 bg-gray-300 rounded w-3/12"></div>
-                    <div class="space-y-2">
-                        <div class="h-4 bg-gray-300 rounded"></div>
-                        <div class="h-4 bg-gray-300 rounded w-5/6"></div>
+        <div className="py-4 px-6 bg-white rounded-lg shadow-lg flex-1">
+            <div className="animate-pulse flex space-x-4">
+                <div className="rounded-full bg-gray-300 h-12 w-12"></div>
+                <div className="flex-1 space-y-4 py-1">
+                    <div className="h-4 bg-gray-300 rounded w-3/12"></div>
+                    <div className="space-y-2">
+                        <div className="h-4 bg-gray-300 rounded"></div>
+                        <div className="h-4 bg-gray-300 rounded w-5/6"></div>
                     </div>
                 </div>
             </div>
         </div> :
-        <div className="py-4 px-6 bg-white rounded-xl shadow-lg">
+        <div className="py-4 px-6 bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="post-author_container w-full">
                 <div className="flex flex-row flex-1 items-center cursor-pointer" onClick={e => history.push(`/app/profile/${author}`)}>
                     <ProfilePicture uid={author} className="shadow-md bg-blue-400 overflow-hidden h-12 w-12 rounded-full" />
@@ -95,7 +95,9 @@ const PostCard = ({ post }) => {
                     </IconButton>
                 </div>}
             </div>
-            <MDEditor defaultValue={body} readOnly={true} />
+            <div>
+                <MDEditor defaultValue={body} readOnly={true} />
+            </div>
             <div className="flex flex-row">
                 <PostAction 
                     activeColours="bg-red-100 hover:bg-red-200 text-red-500"
