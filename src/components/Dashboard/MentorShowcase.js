@@ -19,27 +19,12 @@ export default function MentorShowcase() {
     
     //Loads the mentors in mentor collection
     useEffect(async () => {
-
-        //This algorithm will generate at most 3 and at least 1 mentor to showcase. It generates a random id and takes the 3 above it, or the 3 below it if there
-        //are none above it. So at the very least it will get 1, and at the very most it gets 3.
-        const mentors = db.collection('mentors');
-
-        const key = mentors.doc().id;//generate random id
-
-        let snap = await mentors.where(firebase.firestore.FieldPath.documentId(), '>=', key).limit(3).get().catch(err => {
-            console.log('Error getting documents', err);
-        })
-        //It has to find at least 1.
-        //Use the other direction since didn't find any above.
-        if(snap.size == 0) {
-            snap = await mentors.where(firebase.firestore.FieldPath.documentId(), '<', key).limit(3).get().catch(err => {
-                console.log('Error getting documents', err);
+        return db.collection('mentors').orderBy('_updatedOn','desc').onSnapshot(snap => {
+            const allMentors = snap.docs.map( doc => {
+                return { id: doc.id, ...doc.data()}
             })
-        }
-        const allMentors = snap.docs.map(doc => {
-            return { id: doc.id, ...doc.data() }
+            setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id != user?.uid))
         })
-        setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id != user?.uid))
     }, [])
 
 
@@ -61,23 +46,25 @@ export default function MentorShowcase() {
         <div className="flex flex-col flex-1 mentorShowcase"  style={{'height': '400px'}}>
             <p>New Mentors To Find</p>
             {/* Randomly generates 3 mentors in random order*/}
-            {mentors.map(({ id, name, school, connectedMentees, major, bio }) => { 
-                if (connectedMentees.includes(user?.uid)){
-                    return <></>
-                } 
-                return (<div className="flex flex-row py-2 " key={id}>
-                <Link className="flex flex-row flex-1" to={`/app/profile/${id}`}>
-                    <ProfilePicture className="w-10 h-10 rounded-full" uid={id}/>
-                    <div className="ml-2">
-                        <h3 className="font-medium">{name}</h3>
-                        <p className="text-gray-500">{major}</p>
-                    </div>
-                </Link>
-                {creatingRoom? "Loading..." : 
-                <IconButton onClick={() => connectWithMentor(id)} color="primary">
-                    <PersonAddTwoToneIcon/>
-                </IconButton>}
-            </div>)})}
+            <div className="overflow-hidden">
+                {mentors.map(({ id, name, school, connectedMentees, major, bio }) => { 
+                    if (connectedMentees.includes(user?.uid)){
+                        return <></>
+                    } 
+                    return (<div className="flex flex-row py-2 " key={id}>
+                    <Link className="flex flex-row flex-1" to={`/app/profile/${id}`}>
+                        <ProfilePicture className="w-10 h-10 rounded-full" uid={id}/>
+                        <div className="ml-2">
+                            <h3 className="font-medium">{name}</h3>
+                            <p className="text-gray-500">{major}</p>
+                        </div>
+                    </Link>
+                    {creatingRoom? "Loading..." : 
+                    <IconButton onClick={() => connectWithMentor(id)} color="primary">
+                        <PersonAddTwoToneIcon/>
+                    </IconButton>}
+                </div>)})}
+            </div>
             <div className="mt-auto"><Link to="/app/mentors" className="text-blue-700 underline text-xs">See all Mentors</Link></div>
         </div>
     )
