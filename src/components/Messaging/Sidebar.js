@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import ProfilePicture from '../User/ProfilePicture';
 import Spinner from '../Loader/Spinner';
+import history from '../../hooks/history';
 function Sidebar({screenSize}) {
 
     const { user, userDetails } = useAuth();
@@ -48,6 +49,9 @@ function Sidebar({screenSize}) {
                     }
                 }
             })).then(res => {
+                if(res.length > 0 && history.location.pathname == '/app/messages') {
+                    history.push(`/app/messages/${res[0].id}`);
+                }
                 setLoading(false)
                 setRooms(res)
             })
