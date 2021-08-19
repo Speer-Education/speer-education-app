@@ -47,14 +47,14 @@ export function PostComments({ post }) {
             margin="normal"/>
         <Button variant="contained" onClick={handleSubmitCommment} color="primary">Comment</Button>
         {comments.map(({ comment, author, id, commentedOn}) => (
-            <div className="w-full flex flex-row space-x-2">
-                <div className="flex flex-row space-x-2 flex-1">
-                    <ProfilePicture uid={author?.uid} className="w-7 h-7 rounded-full"/>
-                    <h4 className="text-lg font-medium">{author?.name}</h4>
-                    <h4 className="text-lg font-normal">{comment}</h4>
-                </div>
-                <div className="grid place-items-center ">
-                    {commentedOn && <TimeAgo className="text-gray-700" date={commentedOn.toMillis()}/>}
+            <div className="w-full flex flex-row space-x-2 flex-1 items-top">
+                <ProfilePicture uid={author?.uid} className="w-10 h-10 rounded-full mt-1"/>
+                <div className="flex flex-col">
+                    <div className="flex flex-row space-x-2 items-baseline">
+                        <h4 className="font-semibold">{author?.name}</h4>
+                        {commentedOn && <TimeAgo className="text-gray-400 text-sm" date={commentedOn.toMillis()}/>}
+                    </div>
+                    <h4 className="text-gray-600 text-normal font-normal">{comment}</h4>
                 </div>
             </div>
         ))}
