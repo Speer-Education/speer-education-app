@@ -8,10 +8,11 @@ import { useAuth } from '../../../hooks/useAuth';
 import StatsCard from '../../../components/Dashboard/StatsCard';
 import ContactsSidebar from '../../../components/Profile/ContactsSidebar';
 import { Button } from '@material-ui/core';
-import { LinkedIn } from '@material-ui/icons';
+import { LanguageOutlined, LinkedIn } from '@material-ui/icons';
 import UserFullProfile from '../../../components/Profile/UserFullProfile';
 import EducationCard from '../../../components/Profile/EducationCard';
 import PostCard from '../../../components/Dashboard/PostCard';
+import SocialsCard from '../../../components/Profile/SocialsCard';
 
 function ProfilePage({ isUser=false }) {
     const { profileId } = useParams();
@@ -68,7 +69,7 @@ function ProfilePage({ isUser=false }) {
             </Helmet>
             <div className="w-screen h-full flex flex-row">
                 <div className="hidden xl:flex flex-col h-full h-app" style={{ width: `350px` }}>
-                    <ContactsSidebar profileId={profileId || user?.uid}/>
+                    <ContactsSidebar profileId={profileId || user?.uid} userDetails={userDetails} isUser={isUser}/>
                     <StatsCard />
                 </div>
                 <div className="flex-1 flex flex-row w-full">
@@ -90,14 +91,8 @@ function ProfilePage({ isUser=false }) {
                         </div>
                     </div>
                     <div className=" hidden md:flex flex-col h-app" style={{ width: `350px` }}>
-                        {socials && <div className="flex flex-col p-3 m-2 shadow-lg rounded-md bg-white">
-                            <p className="font-semibold text-lg">Socials</p>
-                            <div className="flex flex-row items-center space-x-2 text-gray-600">
-                                <LinkedIn/>
-                                <a className="text-sm" href={socials.linkedin}>{socials.linkedin}</a>
-                            </div>
-                        </div>}
                         <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMentor} />
+                        {socials && <SocialsCard socials={socials}/>}
                     </div>
                 </div>
             </div>

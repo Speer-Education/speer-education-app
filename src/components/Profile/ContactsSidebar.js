@@ -5,7 +5,7 @@ import { db, functions, firebase } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
 import { useAuth } from '../../hooks/useAuth';
 
-export default function ContactsSidebar({ profileId }) {
+export default function ContactsSidebar({ profileId, userDetails, isUser }) {
 
     const [followers, setFollowers] = useState([]);
     const { user } = useAuth();
@@ -36,7 +36,7 @@ export default function ContactsSidebar({ profileId }) {
 
     return (
         <div className="flex flex-col flex-1 p-3 m-2 shadow-lg rounded-md bg-white">
-            <p>Connected Contacts</p>
+            <p>{isUser?"Your":`${userDetails.name}'s` || ""} Contacts</p>
             {/* Randomly generates 3 mentors in random order*/}
             {followers.map(({ id, name, school, major, bio }) => { 
                 return (<div className="flex flex-row py-2 " key={id}>
