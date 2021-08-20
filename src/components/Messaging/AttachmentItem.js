@@ -1,7 +1,7 @@
 import TimeAgo from 'react-timeago';
 
-const AttachmentItem = ({ image, IconComponent, title, subtitle,date, onClick }) => (
-    <div className="flex flex-row space-x-2 py-1 rounded-lg cursor-pointer hover:bg-gray-100 w-full" onClick={onClick}>
+const AttachmentItem = ({ image, IconComponent, title, hoverClass="hover:bg-gray-100", subtitle,date, onClick }) => (
+    <div className={`flex flex-row space-x-2 py-1 rounded-lg cursor-pointer ${hoverClass} w-full`} onClick={onClick}>
         <div className="h-12 w-12 bg-red-200 grid place-items-center rounded-xl overflow-hidden">
             {image?<img className="h-full w-full object-cover" src={image}/>:<IconComponent />}
         </div>

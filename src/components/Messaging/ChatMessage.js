@@ -30,6 +30,7 @@ function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentU
                 {files.map(({downloadUrl, filename},index) => {
                     return (
                         <AttachmentItem 
+                            hoverClass={isCurrentUser&&"hover:bg-blue-300 hover:bg-opacity-50"}
                             IconComponent={FolderOpenOutlined}
                             title={filename}
                             key={index}
