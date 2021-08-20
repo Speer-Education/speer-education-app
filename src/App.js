@@ -18,7 +18,7 @@ function App() {
   const { user } = useAuth();
   return (
     <Router history={history}>
-      <div className="app">
+      <div className="app bg-gray-100 min-h-screen">
         <Suspense fallback={<AppLoader/>}>
           <Switch>
             <Route exact path="/" component={Home} />
