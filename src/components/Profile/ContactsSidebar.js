@@ -11,6 +11,7 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }) {
     const { user } = useAuth();
 
     //Get list of all contacts from firestore
+    //TODO: Limit to how many contacts we can display.
     useEffect(() => {
         if(!user || !profileId) return;
         let ref = db.collection('relationships').where('followedId','==', profileId);
@@ -35,7 +36,7 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }) {
     )
 
     return (
-        <div className="flex flex-col flex-1 p-3 m-2 shadow-lg rounded-md bg-white">
+        <div className="flex flex-col flex-1 p-3 m-2 shadow-lg rounded-md bg-white overflow-hidden">
             <p>{isUser?"Your":`${userDetails.name}'s` || ""} Contacts</p>
             {/* Randomly generates 3 mentors in random order*/}
             {followers.map(({ id, name, school, major, bio }) => { 

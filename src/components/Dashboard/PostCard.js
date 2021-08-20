@@ -12,6 +12,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { EditOutlined, Favorite } from '@material-ui/icons';
 import { PostComments } from './PostComments';
 import history from '../../hooks/history';
+import useRefDimensions from '../../hooks/useRefDimensions';
 
 /**
  * Creates the post card for this post
@@ -25,7 +26,20 @@ const PostCard = ({ post }) => {
     const [authorProfile, setAuthorProfile] = useState({});
     const [userLiked, setUserLiked] = useState(false);
     const [showComments, setShowComments] = useState(false);
+    const [postCollapsed, setPostCollapsed] = useState(false);
+    const [oversizedPost, setOversizedPost] = useState(false);
     const { author, body, likeCount, commentCount, id, _createdOn } = post;
+
+    const divRef = useRef()
+    const dimensions = useRefDimensions(divRef)
+
+    useEffect(() => {
+        if(dimensions.height > 500 && !oversizedPost){
+            setPostCollapsed(true);
+            setOversizedPost(true);
+        }
+        console.log(dimensions.height)
+    },[dimensions])
 
     //Attach listener on the author
     //TODO: should have author details in post
@@ -98,9 +112,10 @@ const PostCard = ({ post }) => {
                     </IconButton>
                 </div>}
             </div>
-            <div>
+            <div ref={divRef} className="overflow-hidden" style={{'maxHeight':postCollapsed?'500px':''}}>
                 <MDEditor defaultValue={body} readOnly={true} />
             </div>
+            {postCollapsed && <span className="-mt-2 text-sm cursor-pointer text-blue-600" onClick={() => setPostCollapsed(false)}>See More</span>}
             <div className="flex flex-row">
                 <PostAction 
                     activeColours="bg-red-100 hover:bg-red-200 text-red-500"
