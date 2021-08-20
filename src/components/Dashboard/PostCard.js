@@ -33,13 +33,29 @@ const PostCard = ({ post }) => {
     const divRef = useRef()
     const dimensions = useRefDimensions(divRef)
 
+    // useEffect(() => {
+    //     if(dimensions.height > 500 && !oversizedPost){
+    //         setPostCollapsed(true);
+    //         setOversizedPost(true);
+    //     }
+    //     console.log(dimensions.height)
+    // },[dimensions])
+
+    //Checks for length of body of post and colapses long posts
     useEffect(() => {
-        if(dimensions.height > 500 && !oversizedPost){
+        const imageRegex = /!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/g;
+        const images = body.match(imageRegex);
+        const numImages = images?.length;
+
+        const newLineRegex = /[\r\n]/g;
+        const newLine = body.match(newLineRegex);
+        const numNewLine = newLine?.length;
+
+        if((body.length > 1000 || numImages > 2 || numNewLine >= 10) && !oversizedPost){
             setPostCollapsed(true);
             setOversizedPost(true);
         }
-        console.log(dimensions.height)
-    },[dimensions])
+    },[body])
 
     //Attach listener on the author
     //TODO: should have author details in post
