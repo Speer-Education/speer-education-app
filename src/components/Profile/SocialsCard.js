@@ -4,7 +4,7 @@ import React from 'react';
 const SocialLink = ({ link, icon }) => (
     <div className="flex flex-row items-center space-x-2 text-gray-600">
         {icon}
-        <a className="text-sm" href={link}>{link}</a>
+        <a className="text-sm" target="_blank" href={'//'+link}>{link}</a>
     </div>
 )
 const SocialsCard = ({socials}) => {

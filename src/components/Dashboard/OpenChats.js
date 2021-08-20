@@ -42,7 +42,7 @@ export default function OpenChats() {
                 <div className="overflow-hidden">
                     {chatrooms.map(({ senderUsername, senderId, message, roomId, date }) => (<Link to={`/app/messages/${roomId}`} key={roomId}>
                         <div className="flex flex-row hover:bg-gray-100 cursor-pointer rounded-xl px-3 py-1 ">
-                            <ProfilePicture uid={senderId} className="w-10 h-10 rounded-full" />
+                            <ProfilePicture uid={senderId} thumb className="w-10 h-10 rounded-full" />
                             <div className="flex-1 ml-2 max-w-full">
                                 <h3 className="font-medium">{senderUsername}</h3>
                                 <div className="w-full flex flex-row text-gray-500 text-sm">

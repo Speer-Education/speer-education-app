@@ -50,7 +50,7 @@ export default function MentorShowcase() {
                 {mentors.map(({ id, name, school, connectedMentees, major, bio }) => { 
                     return (<div className="flex flex-row py-2 hover:bg-gray-100" key={id}>
                     <Link className="flex flex-row flex-1" to={`/app/profile/${id}`}>
-                        <ProfilePicture className="w-10 h-10 rounded-full" uid={id}/>
+                        <ProfilePicture className="w-10 h-10 rounded-full" thumb uid={id}/>
                         <div className="ml-2">
                             <h3 className="font-medium">{name}</h3>
                             <p className="text-gray-500">{major}</p>

@@ -8,7 +8,7 @@ import { useAuth } from '../../hooks/useAuth';
  * @param {string} uid 
  * @returns 
  */
-export default function ProfilePicture({ uid, ...params }) {
+export default function ProfilePicture({ uid, thumb = false, ...params }) {
     const [url, setUrl] = useState(false);
     const { user } = useAuth();
 
@@ -16,7 +16,7 @@ export default function ProfilePicture({ uid, ...params }) {
     useEffect(async () => {
         if(!user) return;
         setUrl("");
-        let imageUrl = await storage.ref(`/profilepics/${uid}.png`).getDownloadURL()
+        let imageUrl = await storage.ref(`/profilepics/${thumb?"thumb-":""}${uid}.png`).getDownloadURL()
         setUrl(imageUrl)
     }, [uid, user]);
 
