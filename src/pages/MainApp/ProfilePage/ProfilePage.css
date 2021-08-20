@@ -1,6 +1,6 @@
 .profilePage{
     display: grid;
     place-items: center;
-    overflow: hidden;
+    overflow-x: hidden;
     @apply bg-gray-100
 }
