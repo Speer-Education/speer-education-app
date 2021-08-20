@@ -21,11 +21,13 @@ const AttachmentsCard = ({ roomId, attachments = []}) => {
                             title={title || url}
                             subtitle={url}
                             key={`${uploadedOn} and  ${url}`}
+                            onClick={() => window.open(url, "_blank")}
                         /> : <AttachmentItem 
                             IconComponent={FolderOpenOutlined}
                             title={filename}
                             date={uploadedOn.toDate().toISOString()}
-                            key={`${uploadedOn} and  ${url}`}
+                            key={`${uploadedOn} and  ${downloadUrl}`}
+                            onClick={() => window.open(downloadUrl, "_blank")}
                         />
                 })}
             </div>

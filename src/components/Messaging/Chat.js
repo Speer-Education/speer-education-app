@@ -234,6 +234,7 @@ function Chat({screenSize}) {
                 return {
                     filename: fileName,
                     fileType: isImage ? "image" : "others",
+                    fileSize: fileMessages[index].size,
                     bucketPath: storageDetail.path,
                     uploadedOn: fileSendDate,
                     downloadUrl: storageDetail.ref,
@@ -360,13 +361,15 @@ function Chat({screenSize}) {
             </div>
             <div className="flex min-h-16 items-center bg-white rounded-lg shadow-lg">
                 <form className="flex flex-1 m-2 leading-4 resize-none space-x-1 items-center" onKeyPress={handleKeyPress}>
-                    <input accept="*" multiple id="icon-button-file" type="file" hidden onChange={handleFileUpload} />
-                    <label htmlFor="icon-button-file">
-                        <IconButton className="w-min" component="span">
-                            <AttachFile />
-                        </IconButton>
-                        {fileMessages.length === 1 ? "1 File Uploaded" : (fileMessages.length > 1 ? `${fileMessages.length} Files Uploaded` : null)}
-                    </label>
+                    <div className="flex flex-1 flex-col items-center">
+                        <input accept="*" multiple id="icon-button-file" type="file" hidden onChange={handleFileUpload} />
+                        <label htmlFor="icon-button-file">
+                            <IconButton className="w-min" component="span">
+                                <AttachFile />
+                            </IconButton>
+                        </label>
+                        {fileMessages.length > 0 ? <span className="text-sm text-gray-500">{fileMessages.length} files</span> : null}
+                    </div>
                     <TextareaAutosize className="w-full h-full rounded-xl p-2 border-none outline-none resize-none overflow-hidden" value={input} placeholder="Write A Message" onChange={(e) => setInput(e.target.value)} maxRows="10" minRows="2"/>
                     <IconButton className="w-12" type="submit" onClick={sendMessage}>
                         <Send />
