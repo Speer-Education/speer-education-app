@@ -1,27 +1,27 @@
 const gradeOptions = [
   {
-    "value" : "<9",
-    "label" : "Younger"
+    "value" : "<2021",
+    "label" : "Before 2021"
   },
   {
-    "value" : "9",
-    "label" : "Grade 9/Year 10"
+    "value" : "2021",
+    "label" : "2021"
   },
   {
-    "value" : "10",
-    "label" : "Grade 10/Year 11"
+    "value" : "2022",
+    "label" : "2022"
   },
   {
-    "value" : "11",
-    "label" : "Grade 11 /Year 12"
+    "value" : "2023",
+    "label" : "2023"
   },
   {
-    "value" : "12",
-    "label" : "Grade 12/Year 13"
+    "value" : "2024",
+    "label" : "2024"
   },
   {
-    "value" : ">12",
-    "label" : "Older/Graduated"
+    "value" : "2025",
+    "label" : "2025"
   }
 ]
 
