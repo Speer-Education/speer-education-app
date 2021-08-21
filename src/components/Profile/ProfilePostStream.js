@@ -3,7 +3,7 @@ import InView from 'react-intersection-observer';
 import { db } from '../../config/firebase';
 import { getSnapshot } from '../../hooks/firestore';
 import { useAuth } from '../../hooks/useAuth';
-import PostCard from './PostCard';
+import PostCard from '../Dashboard/PostCard';
 
 let postsArray = []
 let listeners = []    // list of listeners
@@ -17,7 +17,7 @@ const DOCUMENTS_PER_PAGE = 3;
  * @component
  * @returns PostCards
  */
-const PostStream = () => {
+const ProfilePostStream = ({uid}) => {
     const { user } = useAuth();
     const [streamPosts, setStreamPosts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -34,7 +34,7 @@ const PostStream = () => {
         getPosts();
 
         return () => detachListeners();
-    }, [user]);
+    }, [user, uid]);
 
     function handleUpdatedPosts(snapshot) {
         // append new messages to message array
@@ -62,11 +62,11 @@ const PostStream = () => {
         setLoading(false)
     }
 
-    async function getPosts() {
-        // query reference for the messages we want
-        let ref = db.collection('posts')
+    
 
+    async function getPosts() {
         // single query to get startAt snapshot
+        const ref = db.collection('posts').where('author','==',uid)
         let snapshots = await getSnapshot(ref.orderBy('_createdOn', 'desc')
             .limit(DOCUMENTS_PER_PAGE))
         // save startAt snapshot
@@ -82,9 +82,6 @@ const PostStream = () => {
     async function getMoreMessages() {
         console.log('getting more messages')
 
-        // query reference for the messages we want
-        let ref = db.collection('posts')
-
         setLoading(true)
         if (!end) {
             console.log('no more posts');
@@ -93,6 +90,7 @@ const PostStream = () => {
             return;
         }
         // single query to get new startAt snapshot
+        const ref = db.collection('posts').where('author','==',uid)
         let snapshots = await getSnapshot(ref.orderBy('_createdOn', 'desc')
             .startAfter(end)
             .limit(DOCUMENTS_PER_PAGE))
@@ -118,11 +116,11 @@ const PostStream = () => {
     }
 
     return (
-        <div className="p-2 space-y-2">
+        <div className="space-y-2">
             {streamPosts.map(post => <PostCard key={post.id} post={post}/>)}
             <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
         </div>
     );
 }
 
-export default PostStream;
+export default ProfilePostStream;
