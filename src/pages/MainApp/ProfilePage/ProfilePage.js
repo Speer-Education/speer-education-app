@@ -69,10 +69,12 @@ function ProfilePage({ isUser=false }) {
             </Helmet>
             <div className="w-screen h-full flex flex-row">
                 <div className="hidden xl:flex flex-col h-full h-app" style={{ width: `350px` }}>
-                    <ContactsSidebar profileId={profileId || user?.uid} userDetails={userDetails} isUser={isUser}/>
-                    <StatsCard />
+                    <div className="fixed">
+                        <ContactsSidebar profileId={profileId || user?.uid} userDetails={userDetails} isUser={isUser}/>
+                        <StatsCard />
+                    </div>
                 </div>
-                <div className="flex-1 flex flex-row w-full">
+                <div className="flex-1 flex flex-row w-full pr-5">
                     <div className="flex flex-row justify-center flex-1 w-full p-3 md:p-0">
                         <div className="flex flex-col h-full p-3 space-y-4 flex-1" style={{ maxWidth: "1024px" }}>
                             <p className="font-semibold text-lg">{isUser?"Your":name} Profile</p>
@@ -91,8 +93,10 @@ function ProfilePage({ isUser=false }) {
                         </div>
                     </div>
                     <div className=" hidden md:flex flex-col h-app" style={{ width: `350px` }}>
-                        <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMentor} />
-                        {socials && <SocialsCard socials={socials}/>}
+                        <div className="fixed">
+                            <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMentor} />
+                            {socials && <SocialsCard socials={socials}/>}
+                        </div>
                     </div>
                 </div>
             </div>

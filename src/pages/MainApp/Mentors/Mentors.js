@@ -39,9 +39,11 @@ const Mentors = () => {
                         <h1 className="text-gray-500 lg:px-10">You've Connected with All Our Mentors!</h1>
                 </div>}
             </div>
-            <div className="hidden lg:flex flex-col w-96 ">
-                <UserSmallProfileCard uid={user?.uid} userDetails={userDetails}/>
-                <StatsCard/>
+            <div className="hidden lg:flex flex-col lg:w-96">
+                <div className="fixed lg:w-96">
+                    <UserSmallProfileCard uid={user?.uid} userDetails={userDetails}/>
+                    <StatsCard/>
+                </div>
             </div>
         </div>
     );
