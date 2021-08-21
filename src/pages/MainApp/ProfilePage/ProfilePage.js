@@ -69,7 +69,7 @@ function ProfilePage({ isUser=false }) {
             </Helmet>
             <div className="w-screen h-full flex flex-row">
                 <div className="hidden xl:flex flex-col h-full h-app" style={{ width: `350px` }}>
-                    <div className="fixed">
+                    <div className="fixed flex flex-col cc_cursor h-app">
                         <ContactsSidebar profileId={profileId || user?.uid} userDetails={userDetails} isUser={isUser}/>
                         <StatsCard />
                     </div>
@@ -93,7 +93,7 @@ function ProfilePage({ isUser=false }) {
                         </div>
                     </div>
                     <div className=" hidden md:flex flex-col h-app" style={{ width: `350px` }}>
-                        <div className="fixed">
+                        <div className="fixed flex flex-col cc_cursor h-app">
                             <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMentor} />
                             {socials && <SocialsCard socials={socials}/>}
                         </div>
