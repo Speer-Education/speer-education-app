@@ -20,7 +20,7 @@ const InputField = ({ className, label, id, required = false, onChange, ...props
     }
 
     return <div className={`w-full px-3 ${className}`}>
-        {label && <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for={id}>
+        {label && <label className="block titlecase tracking-wide text-xs font-bold mb-2" style={{color: "#2596be"}} for={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>}
         <input className={`appearance-none block w-full ${empty && required ? "bg-red-100" : "bg-gray-200"} text-gray-700 border-0 focus:border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500`}
@@ -32,7 +32,7 @@ const InputField = ({ className, label, id, required = false, onChange, ...props
 
 const InputAreaField = ({ className, label, id, required = false, ...props }) => {
     return <div className={`w-full px-3 ${className}`}>
-        {label && <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for={id}>
+        {label && <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} for={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>}
         <textarea className="appearance-none block w-full bg-gray-200 text-gray-700 border-0 focus:border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -43,7 +43,7 @@ const InputAreaField = ({ className, label, id, required = false, ...props }) =>
 
 const InputSelect = ({ className, label, id, required = false, ...props }) => {
     return <div className={`w-full px-3 ${className}`}>
-        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for={id}>
+        <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} for={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>
         <Select className="user-details__custom-select" id={id} {...props} />
@@ -56,21 +56,24 @@ const FormRow = ({ children }) => (
 
 export default function UserDetails() {
     const { user } = useAuth();
+
+    const [pageNumber, setPageNumber] = useState(1);
+
     // Hard coding default values for the select fields first
     const [form, setForm] = useState({
         name: "",
-        grade: "",
+        hsGradYear: "",
         dateOfBirth: "",
         country: "",
         school: "",
         major: "",
         bio: "",
         highlight1: {
-            emoji: "",
+            emoji: "🚀",
             description: ""
         },
         highlight2: {
-            emoji: "",
+            emoji: "🗣",
             description: ""
         },
     });
@@ -83,7 +86,7 @@ export default function UserDetails() {
     // To check if all fields are filled up
     const isValidForm = useMemo(() => {
         return form.name !== undefined && form.name !== ""
-            && form.grade !== undefined && form.grade !== ""
+            && form.hsGradYear !== undefined && form.hsGradYear !== ""
             && form.dateOfBirth !== undefined && form.dateOfBirth !== ""
             && form.country !== undefined && form.country !== ""
             && form.school !== undefined && form.school !== ""
@@ -111,7 +114,7 @@ export default function UserDetails() {
         }
         const submitForm = form;
         submitForm.country = form.country.label;
-        submitForm.grade = form.grade.label;
+        submitForm.hsGradYear = form.hsGradYear.label;
         //TODO: remove these once the highlight functionality is implemented so we can add them to user document no problem
 
         await functions.httpsCallable('onBoarding')({ form: submitForm })
@@ -133,8 +136,8 @@ export default function UserDetails() {
         setForm({ ...form, country: value })
     }
 
-    const handleGradeSelectFormInput = value => {
-        setForm({ ...form, grade: value })
+    const handleHsGradYearSelectFormInput = value => {
+        setForm({ ...form, hsGradYear: value })
     }
 
     const handleHighlight1Emoji = (event, emojiObject) => {
@@ -154,75 +157,84 @@ export default function UserDetails() {
     };
 
     return (
-        <div className="bg-gray-100 h-screen overflow-x-hidden">
+        <div className="bg-gray-100 h-screen overflow-x-hidden flex justify-center items-center">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Sign Up | Speer Education</title>
             </Helmet>
-            {!updatingClaims ? <div className="flex flex-row w-screen h-screen">
-                <div className="flex-1 text-left p-12">
-                    <h1>Tell us about yourself!</h1>
+            {!updatingClaims ? <div className="flex flex-row bg-white rounded-3xl pb-2" style={{maxWidth: "800px", height: "420px"}}>
+                <div className="flex-1 pr-2" style={{borderRight: "3px solid #F08E17"}}>
+                    <img className="w-full object-contain" src="/full-transparent-logo.png"/>
+                    <h1 className="text-5xl pl-10 w-72">We're so <span style={{color: "#F08E17"}}>excited</span> for you to join us!</h1>
+                </div>
+                <div className="flex-1 text-left p-12 relative">
                     <div className="flex flex-col">
                         {/* Ask which to make mandatory and then force them to be required*/}
                         <div className="mt-2">
-                            <FormRow>
+                            {pageNumber === 1? <><FormRow>
                                 {/* Name */}
-                                <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="Full Name" placeholder="John Doe" id="fullname" name="name" value={form.name} onChange={handleFormInput} />
+                                <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="What is your full name" placeholder="John Doe" id="fullname" name="name" value={form.name} onChange={handleFormInput} />
                             </FormRow>
                             <FormRow>
                                 {/* Date Of Birth */}
-                                <InputField required type="date" className="md:w-1/2 mb-6 md:mb-0" label="Date of Birth" id="dateofbirth" name="dateOfBirth" value={form.dateOfBirth} onChange={handleFormInput} />
+                                <InputField required type="date" className="md:w-1/2 mb-6 md:mb-0" label="Your Date of Birth" id="dateofbirth" name="dateOfBirth" value={form.dateOfBirth} onChange={handleFormInput} />
                                 {/* Insert Country They Live In (Use a country list)*/}
-                                <InputSelect required className="md:w-1/2 mb-6 md:mb-0" label="Country" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
                             </FormRow>
                             <FormRow>
+                                <InputSelect required className="md:w-1/2 mb-6 md:mb-0" label="Country of Residence" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
+                            </FormRow></> : null}
+                            {pageNumber === 2 ? 
+                            <><FormRow>
                                 {/* Their school Name: */}
-                                <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Current Education Institute" id="school" name="school" placeholder="Harvard University" value={form.school} onChange={handleFormInput} />
+                                <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="Name of Your School" id="school" name="school" placeholder="Harvard University" value={form.school} onChange={handleFormInput} />
                                 {/* Grade */}
-                                <InputSelect required className="md:w-1/3 mb-6 md:mb-0" label="Grade" id="grade" name="grade" options={gradeOptions} value={form.grade} onChange={handleGradeSelectFormInput} />
-                                {/* What they plan to major in */}
-                                <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major" value={form.major} onChange={handleFormInput} />
                             </FormRow>
                             <FormRow>
+                                <InputSelect required className="md:w-full mb-6 md:mb-0" label="Year Of Graduation from High School" id="hsGradYear" name="hsGradYear" options={gradeOptions} value={form.hsGradYear} onChange={handleHsGradYearSelectFormInput} />
+                            </FormRow>
+                                {/* What they plan to major in */}
+                            <FormRow>
+                                <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major" value={form.major} onChange={handleFormInput} />
+                            </FormRow></> : null }
+                            {pageNumber === 3? 
+                            <><FormRow>
                                 <InputAreaField type="text" label="Short Biography" id="bio" name="bio" placeholder="Tell us something about yourself........" value={form.bio} onChange={handleFormInput} />
                             </FormRow>
-                            <h2 className="mb-2">Highlights</h2>
+                            <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
+                                Give us the two things you are most proud of
+                            </p>                            
                             <FormRow>
                                 {/* TODO: Change this to the emoji selecter */}
-                                <div>
-                                    <label for="highlight1Emoji" className="block">Highlight 1 Emoji</label>
-                                    <button id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{form.highlight1.emoji || "Pick an emoji"}</button>
+                                <div className="px-3">
+                                    <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{form.highlight1.emoji || "Pick an emoji"}</Button>
                                 </div>
                                 {showPicker1 ? <Picker onEmojiClick={handleHighlight1Emoji} /> : null}
-                                <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Highlight 1" placeholder="Where you work, study etc..." id="highlight1" name="highlight1" value={form.highlight1.description} onChange={(e) => setForm({...form, highlight1: {emoji: form.highlight1.emoji, description: e.target.value}})}/>
+                                <InputField required type="text" className="md:w-3/4 mb-6 md:mb-0" placeholder="Where you work, study etc..." id="highlight1" name="highlight1" value={form.highlight1.description} onChange={(e) => setForm({...form, highlight1: {emoji: form.highlight1.emoji, description: e.target.value}})}/>
                             </FormRow>
                             <FormRow>
                                 {/* TODO: Change this to the emoji selecter */}
-                                <div>
-                                    <label for="highlight2Emoji" className="block">Highlight 2 Emoji</label>
-                                    <button id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{form.highlight2.emoji || "Pick an emoji"}</button>
+                                <div className="px-3">
+                                    <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{form.highlight2.emoji || "Pick an emoji"}</Button>
                                 </div>
                                 {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} /> : null}
-                                <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Highlight 2" placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
-                            </FormRow>
+                                <InputField required type="text" className="md:w-3/4 mb-6 md:mb-0" placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
+                            </FormRow></> : null}
                         </div>
-                        {/* Interests/hobbies */}
-                        {!isValidForm && <p className="text-red-600">Error! Please fill in all the blanks.</p>}
-                        {/* Submission Button */}
-                        <Button
+                        {pageNumber === 3? !isValidForm && <p className="text-red-600">Please fill in all the blanks.</p> : null}
+                    </div>
+                    <div className="absolute bottom-5 right-5">
+                        {/* Only render the back button if not on first section*/}
+                        {pageNumber !== 1? <Button onClick={() => setPageNumber(pageNumber-1)} style={{backgroundColor: "#597398", color: 'white', marginRight : "5px"}}>Back</Button> : null}
+                        {/* Only render the next button if not on last section */}
+                        {pageNumber !== 3? <Button onClick={() => setPageNumber(pageNumber+1)} style={{backgroundColor: "#F08E17", color: 'white'}}>Next</Button> : <Button
                             type="submit"
                             onClick={handleFormSubmit}
                             disabled={!isValidForm || submitting}
                             variant="outlined"
                         >
                             {submitting ? <Spinner /> : "Submit"}
-                        </Button>
-
-                        {/* Change the other selects to the cool select form */}
+                        </Button>}
                     </div>
-                </div>
-                <div className="flex-1 bg-white">
-                    <img className="w-full h-full object-contain p-32" src="/rocket-logo@3x.png" />
                 </div>
             </div> : <div className="grid place-items-center w-screen h-screen">
                 <div className="flex flex-col items-center space-y-2">
