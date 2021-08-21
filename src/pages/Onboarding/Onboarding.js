@@ -162,9 +162,9 @@ export default function UserDetails() {
                 <meta charSet="utf-8" />
                 <title>Sign Up | Speer Education</title>
             </Helmet>
-            {!updatingClaims ? <div className="flex flex-row bg-white rounded-3xl pb-2" style={{maxWidth: "800px", height: "420px"}}>
+            {!updatingClaims ? <div className="flex flex-row bg-white rounded-3xl pb-2 shadow-lg" style={{maxWidth: "800px", height: "420px"}}>
                 <div className="flex-1 pr-2" style={{borderRight: "3px solid #F08E17"}}>
-                    <img className="w-full object-contain" src="/full-transparent-logo.png"/>
+                    <img className="w-full object-contain " src="/full-transparent-logo.png"/>
                     <h1 className="text-5xl pl-10 w-72">We're so <span style={{color: "#F08E17"}}>excited</span> for you to join us!</h1>
                 </div>
                 <div className="flex-1 text-left p-12 relative">
