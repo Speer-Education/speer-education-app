@@ -56,6 +56,9 @@ const FormRow = ({ children }) => (
 
 export default function UserDetails() {
     const { user } = useAuth();
+
+    const [pageNumber, setPageNumber] = useState(1);
+
     // Hard coding default values for the select fields first
     const [form, setForm] = useState({
         name: "",
@@ -154,27 +157,33 @@ export default function UserDetails() {
     };
 
     return (
-        <div className="bg-gray-100 h-screen overflow-x-hidden">
+        <div className="bg-gray-100 h-screen overflow-x-hidden flex justify-center items-center">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Sign Up | Speer Education</title>
             </Helmet>
-            {!updatingClaims ? <div className="flex flex-row w-screen h-screen">
-                <div className="flex-1 text-left p-12">
-                    <h1>Tell us about yourself!</h1>
+            {!updatingClaims ? <div className="flex flex-row bg-white" style={{maxWidth: "800px"}}>
+                <div className="flex-1 pr-2" style={{borderRight: "3px solid #F08E17"}}>
+                    <img className="w-full object-contain" src="/full-transparent-logo.png"/>
+                    <h1 className="text-5xl pl-10 w-72">We're so <span style={{color: "#F08E17"}}>excited</span> for you to join us!</h1>
+                </div>
+                <div className="flex-1 text-left p-12 relative">
                     <div className="flex flex-col">
                         {/* Ask which to make mandatory and then force them to be required*/}
                         <div className="mt-2">
-                            <FormRow>
+                            {pageNumber === 1? <><FormRow>
                                 {/* Name */}
-                                <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="Full Name" placeholder="John Doe" id="fullname" name="name" value={form.name} onChange={handleFormInput} />
+                                <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="What is your full name" placeholder="John Doe" id="fullname" name="name" value={form.name} onChange={handleFormInput} />
                             </FormRow>
                             <FormRow>
                                 {/* Date Of Birth */}
-                                <InputField required type="date" className="md:w-1/2 mb-6 md:mb-0" label="Date of Birth" id="dateofbirth" name="dateOfBirth" value={form.dateOfBirth} onChange={handleFormInput} />
+                                <InputField required type="date" className="md:w-1/2 mb-6 md:mb-0" label="Your Date of Birth" id="dateofbirth" name="dateOfBirth" value={form.dateOfBirth} onChange={handleFormInput} />
                                 {/* Insert Country They Live In (Use a country list)*/}
-                                <InputSelect required className="md:w-1/2 mb-6 md:mb-0" label="Country" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
                             </FormRow>
+                            <FormRow>
+                                <InputSelect required className="md:w-1/2 mb-6 md:mb-0" label="Country of Residence" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
+                            </FormRow></> : null}
+                            {pageNumber === 2 ? 
                             <FormRow>
                                 {/* Their school Name: */}
                                 <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Current Education Institute" id="school" name="school" placeholder="Harvard University" value={form.school} onChange={handleFormInput} />
@@ -182,8 +191,9 @@ export default function UserDetails() {
                                 <InputSelect required className="md:w-1/3 mb-6 md:mb-0" label="Grade" id="grade" name="grade" options={gradeOptions} value={form.grade} onChange={handleGradeSelectFormInput} />
                                 {/* What they plan to major in */}
                                 <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major" value={form.major} onChange={handleFormInput} />
-                            </FormRow>
-                            <FormRow>
+                            </FormRow> : null }
+                            {pageNumber === 3? 
+                            <><FormRow>
                                 <InputAreaField type="text" label="Short Biography" id="bio" name="bio" placeholder="Tell us something about yourself........" value={form.bio} onChange={handleFormInput} />
                             </FormRow>
                             <h2 className="mb-2">Highlights</h2>
@@ -204,25 +214,23 @@ export default function UserDetails() {
                                 </div>
                                 {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} /> : null}
                                 <InputField required type="text" className="md:w-1/3 mb-6 md:mb-0" label="Highlight 2" placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
-                            </FormRow>
+                            </FormRow></> : null}
                         </div>
-                        {/* Interests/hobbies */}
-                        {!isValidForm && <p className="text-red-600">Error! Please fill in all the blanks.</p>}
-                        {/* Submission Button */}
-                        <Button
+                        {!isValidForm && <p className="text-red-600">Please fill in all the blanks.</p>}
+                    </div>
+                    <div className="absolute bottom-5 right-5">
+                        {/* Only render the back button if not on first section*/}
+                        {pageNumber !== 1? <Button onClick={() => setPageNumber(pageNumber-1)} style={{backgroundColor: "#597398", color: 'white', marginRight : "5px"}}>Back</Button> : null}
+                        {/* Only render the next button if not on last section */}
+                        {pageNumber !== 3? <Button onClick={() => setPageNumber(pageNumber+1)} style={{backgroundColor: "#F08E17", color: 'white'}}>Next</Button> : <Button
                             type="submit"
                             onClick={handleFormSubmit}
                             disabled={!isValidForm || submitting}
                             variant="outlined"
                         >
                             {submitting ? <Spinner /> : "Submit"}
-                        </Button>
-
-                        {/* Change the other selects to the cool select form */}
+                        </Button>}
                     </div>
-                </div>
-                <div className="flex-1 bg-white">
-                    <img className="w-full h-full object-contain p-32" src="/rocket-logo@3x.png" />
                 </div>
             </div> : <div className="grid place-items-center w-screen h-screen">
                 <div className="flex flex-col items-center space-y-2">
