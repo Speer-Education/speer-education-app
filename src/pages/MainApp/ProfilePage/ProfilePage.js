@@ -13,6 +13,7 @@ import UserFullProfile from '../../../components/Profile/UserFullProfile';
 import EducationCard from '../../../components/Profile/EducationCard';
 import PostCard from '../../../components/Dashboard/PostCard';
 import SocialsCard from '../../../components/Profile/SocialsCard';
+import ProfilePostStream from '../../../components/Profile/ProfilePostStream';
 
 function ProfilePage({ isUser=false }) {
     const { profileId } = useParams();
@@ -50,17 +51,6 @@ function ProfilePage({ isUser=false }) {
         })
     }, [isUser, profileId]);
 
-    useEffect(() => {
-        if(!user) return;
-        return db.collection('posts').where('author','==',(profileId || user?.uid)).orderBy('_createdOn','desc').onSnapshot(async snap => {
-            const posts = snap.docs.map(doc => ({
-                ...doc.data(),
-                id: doc.id
-            }))
-            setPosts(posts);
-        })
-    }, [user]);
-    
     return (
         <div className="profilePage h-app">
             <Helmet>
@@ -69,7 +59,7 @@ function ProfilePage({ isUser=false }) {
             </Helmet>
             <div className="w-screen h-full flex flex-row">
                 <div className="hidden xl:flex flex-col h-full h-app" style={{ width: `350px` }}>
-                    <div className="fixed">
+                    <div className="fixed flex flex-col cc_cursor h-app">
                         <ContactsSidebar profileId={profileId || user?.uid} userDetails={userDetails} isUser={isUser}/>
                         <StatsCard />
                     </div>
@@ -89,11 +79,11 @@ function ProfilePage({ isUser=false }) {
                                 {/* Logout Button */}
                                 <Button variant="outlined" onClick={() => signOut()}>Logout</Button>
                             </div>}
-                            {posts.map(post => <PostCard key={post.id} post={post}/>)}
+                            <ProfilePostStream uid={profileId || user?.uid} />
                         </div>
                     </div>
                     <div className=" hidden md:flex flex-col h-app" style={{ width: `350px` }}>
-                        <div className="fixed">
+                        <div className="fixed flex flex-col cc_cursor h-app">
                             <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMentor} />
                             {socials && <SocialsCard socials={socials}/>}
                         </div>

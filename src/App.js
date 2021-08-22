@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import "./App.css";
 import Home from "./pages/Home/Home";
 import { useAuth } from "./hooks/useAuth";
@@ -7,6 +7,7 @@ import history from './hooks/history';
 import CircleLoader from './components/Loader/CircleLoader';
 import ServiceWorkerWrapper from './components/ServiceWorker/ServiceWorkerWrapper';
 import AppLoader from './components/Loader/AppLoader';
+import { hotjar } from 'react-hotjar';
 
 const LazyLogin = lazy(() => import("./pages/Login/Login"))
 const LazyOnboarding = lazy(() => import("./pages/Onboarding/Onboarding"))
@@ -16,6 +17,16 @@ const LazyAdminApp = lazy(() => import("./container/AdminApp/AdminApp"))
 function App() {
 
   const { user } = useAuth();
+
+  useEffect(() => {
+    hotjar.initialize(2565266, 6);
+  });
+
+  useEffect(() => {
+    if(!user) return;
+    hotjar.identify('USER_ID', { userProperty: user.uid });
+  }, [user]);
+
   return (
     <Router history={history}>
       <div className="app bg-gray-100 min-h-screen">
