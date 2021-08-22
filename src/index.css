@@ -36,6 +36,10 @@ code {
   height: calc(100vh - 3.5rem);
 }
 
+.w-sidebar {
+  width: 350px;
+}
+
 @media (min-width: 1024px) {
   .h-app {
     height: calc(100vh - 6rem);

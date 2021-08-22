@@ -71,10 +71,9 @@ const ProfilePostStream = ({uid}) => {
             .limit(DOCUMENTS_PER_PAGE))
         // save startAt snapshot
         end = snapshots.docs[snapshots.docs.length - 1]
-        // create listener using startAt snapshot (starting boundary)    
-        let listener = ref.orderBy('_createdOn', 'desc')
-            .endAt(end)
-            .onSnapshot(handleUpdatedPosts)
+        // create listener using startAt snapshot (starting boundary)   
+        const query = end?ref.orderBy('_createdOn', 'desc').endAt(end):ref.orderBy('_createdOn', 'desc')
+        let listener = query.onSnapshot(handleUpdatedPosts)
         // add listener to list
         listeners.push(listener)
     }

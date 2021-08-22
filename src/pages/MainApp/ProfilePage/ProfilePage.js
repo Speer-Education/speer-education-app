@@ -58,7 +58,7 @@ function ProfilePage({ isUser=false }) {
                 <title>{isUser?"Your":name || ""} Profile | Speer Education</title>
             </Helmet>
             <div className="w-screen h-full flex flex-row">
-                <div className="hidden xl:flex flex-col h-full h-app" style={{ width: `350px` }}>
+                <div className="hidden xl:flex flex-col h-full h-app w-sidebar">
                     <div className="fixed flex flex-col cc_cursor h-app">
                         <ContactsSidebar profileId={profileId || user?.uid} userDetails={userDetails} isUser={isUser}/>
                         <StatsCard />
@@ -82,8 +82,8 @@ function ProfilePage({ isUser=false }) {
                             <ProfilePostStream uid={profileId || user?.uid} />
                         </div>
                     </div>
-                    <div className=" hidden md:flex flex-col h-app" style={{ width: `350px` }}>
-                        <div className="fixed flex flex-col cc_cursor h-app">
+                    <div className=" hidden md:flex flex-col h-app w-sidebar">
+                        <div className="fixed flex flex-col cc_cursor h-app w-sidebar">
                             <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMentor} />
                             {socials && <SocialsCard socials={socials}/>}
                         </div>
