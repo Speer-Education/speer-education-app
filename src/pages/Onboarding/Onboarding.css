@@ -1,3 +1,40 @@
+.onboardingForm{
+    max-width: 800px;
+    height: 420px;
+}
+
+.onboardingForm__welcomeContainer{
+    border-right: 3px solid #F08E17;
+}
+
+.onboardingForm__welcomeContainer > img{
+    width: 92%;
+}
+
+@media (max-width: 767px){
+    .onboardingForm{
+        max-width: 100%;
+        height: 100%;
+    }
+
+    .onboardingForm__welcomeContainer{
+        border-right: none;
+        border-bottom: 3px solid #F08E17;
+    }
+
+    .onboardingForm__welcomeContainer > img{
+        width: 80%;
+        min-width: 280px;
+    }
+}
+
+@media(max-width: 300px){
+    .onboardingForm__welcomeContainer > h1{
+        padding-left: 1.5rem;
+        padding-right: 1rem;
+    }
+}
+
 .user-details{
     display: flex;
     flex-direction: column;

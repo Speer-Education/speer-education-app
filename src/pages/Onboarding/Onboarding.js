@@ -157,15 +157,15 @@ export default function UserDetails() {
     };
 
     return (
-        <div className="bg-gray-100 h-screen overflow-x-hidden flex justify-center items-center">
+        <div className="bg-gray-100 md:h-screen overflow-x-hidden flex justify-center md:items-center">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Sign Up | Speer Education</title>
             </Helmet>
-            {!updatingClaims ? <div className="flex flex-row bg-white rounded-3xl pb-2" style={{maxWidth: "800px", height: "420px"}}>
-                <div className="flex-1 pr-2" style={{borderRight: "3px solid #F08E17"}}>
-                    <img className="w-full object-contain" src="/full-transparent-logo.png"/>
-                    <h1 className="text-5xl pl-10 w-72">We're so <span style={{color: "#F08E17"}}>excited</span> for you to join us!</h1>
+            {!updatingClaims ? <div className="flex flex-col md:flex-row  bg-white rounded-3xl onboardingForm">
+                <div className="flex-1 pr-2 py-3 onboardingForm__welcomeContainer">
+                    <img className="object-contain" src="/full-transparent-logo.png"/>
+                    <h1 className="text-4xl md:text-5xl pl-10 w-72 pb-3 md:pb-0">We're so <span style={{color: "#F08E17"}}>excited</span> for you to join us!</h1>
                 </div>
                 <div className="flex-1 text-left p-12 relative">
                     <div className="flex flex-col">
@@ -198,10 +198,10 @@ export default function UserDetails() {
                             </FormRow></> : null }
                             {pageNumber === 3? 
                             <><FormRow>
-                                <InputAreaField type="text" label="Short Biography" id="bio" name="bio" placeholder="Tell us something about yourself........" value={form.bio} onChange={handleFormInput} />
+                                <InputAreaField required type="text" label="Short Biography" id="bio" name="bio" placeholder="Tell us something about yourself........" value={form.bio} onChange={handleFormInput} />
                             </FormRow>
                             <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
-                                Give us the two things you are most proud of
+                                Give us the two things you are most proud of <span className="text-red-600">*</span>
                             </p>                            
                             <FormRow>
                                 {/* TODO: Change this to the emoji selecter */}
@@ -217,10 +217,10 @@ export default function UserDetails() {
                                     <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{form.highlight2.emoji || "Pick an emoji"}</Button>
                                 </div>
                                 {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} /> : null}
-                                <InputField required type="text" className="md:w-3/4 mb-6 md:mb-0" placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
+                                <InputField required type="text" className="md:w-3/4 mb-2 md:mb-0" placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
                             </FormRow></> : null}
                         </div>
-                        {pageNumber === 3? !isValidForm && <p className="text-red-600">Please fill in all the blanks.</p> : null}
+                        {pageNumber === 3? !isValidForm && <p className="mb-5 text-red-600">Not all fields are filled.</p> : null}
                     </div>
                     <div className="absolute bottom-5 right-5">
                         {/* Only render the back button if not on first section*/}
