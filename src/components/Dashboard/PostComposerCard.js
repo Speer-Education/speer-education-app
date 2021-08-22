@@ -93,7 +93,7 @@ const PostComposerCard = () => {
         await db.doc('posts/' + docId).set({
             author: user.uid,
             body: postContent,
-            _createdOn: firebase.firestore.FieldValue.serverTimestamp()
+            _createdOn: firebase.firestore.Timestamp.now(),
         })
         setSaving(false)
         setPostContent("") //reset editor content

@@ -9,10 +9,11 @@ import MessageIcon from '@material-ui/icons/Message';
 import TimeAgo from 'react-timeago';
 import './PostCard.css';
 import { useAuth } from '../../hooks/useAuth';
-import { EditOutlined, Favorite } from '@material-ui/icons';
+import { EditOutlined, Favorite, Cancel } from '@material-ui/icons';
 import { PostComments } from './PostComments';
 import history from '../../hooks/history';
 import useRefDimensions from '../../hooks/useRefDimensions';
+import { Button } from '@material-ui/core';
 
 /**
  * Creates the post card for this post
@@ -29,6 +30,9 @@ const PostCard = ({ post }) => {
     const [postCollapsed, setPostCollapsed] = useState(false);
     const [oversizedPost, setOversizedPost] = useState(false);
     const { author, body, likeCount, commentCount, id, _createdOn } = post;
+    const [saving, setSaving] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+    const [editedPostContent, setEditedPostContent] = useState(body);
 
     const divRef = useRef()
     const dimensions = useRefDimensions(divRef)
@@ -90,15 +94,30 @@ const PostCard = ({ post }) => {
         db.doc(`posts/${post.id}`).delete()
     }
 
+    //Save the post the user created
+    const createNewPost = async () => {
+        if(!user) return;
+        if(!post.id) return;
+        if (body === editedPostContent) return;
+        setSaving(true) //set saving to true to show loading
+        await db.doc('posts/' + post.id).update({
+            body: editedPostContent,
+            _updatedOn: firebase.firestore.Timestamp.now(),
+        })
+        setSaving(false)
+        setIsEdit(false);
+    }
+
     const PostAction = ({ IconComponent, label, active, activeColours,icon_colour, colours, ...props }) => {
         return <button className={`inline-flex items-center px-4 py-1 border border-transparent ${active?activeColours:colours} hover:shadow-sm text-base leading-6 font-medium rounded-md transition ease-in-out duration-150 cursor-pointer`} {...props}>
             <IconComponent className={`w-8 h-8 mr-1 ${icon_colour}`} />
             <span className="text-gray-500">{label}</span>
         </button>
     }
+    
 
     return loading ?
-        <div className="py-4 px-6 bg-white rounded-lg shadow-lg flex-1">
+        <div className={`py-4 px-6 bg-white rounded-lg shadow-lg flex-1`}>
             <div className="animate-pulse flex space-x-4">
                 <div className="rounded-full bg-gray-300 h-12 w-12"></div>
                 <div className="flex-1 space-y-4 py-1">
@@ -110,7 +129,7 @@ const PostCard = ({ post }) => {
                 </div>
             </div>
         </div> :
-        <div className="py-4 px-6 bg-white rounded-xl shadow-lg overflow-hidden space-y-2">
+        <div className={`py-4 px-6 bg-white rounded-xl shadow-lg overflow-hidden space-y-2 ${isEdit ? "border-solid border-2 border-blue-500" : null}`}>
             <div className="post-author_container w-full">
                 <div className="flex flex-row flex-1 items-center cursor-pointer" onClick={e => history.push(`/app/profile/${author}`)}>
                     <ProfilePicture uid={author} className="shadow-md bg-blue-400 overflow-hidden h-12 w-12 rounded-full" />
@@ -123,13 +142,15 @@ const PostCard = ({ post }) => {
                     <IconButton aria-label="delete" className="float-right" onClick={handleDeletePost}>
                         <DeleteIcon className="text-red-600" />
                     </IconButton>
-                    <IconButton aria-label="delete" className="float-right">
-                        <EditOutlined className="text-blue-600" />
-                    </IconButton>
+                    {!isEdit? <IconButton aria-label="delete" className="float-right">
+                        <EditOutlined className="text-blue-600" onClick={() => setIsEdit(true)}/>
+                    </IconButton> : <IconButton aria-label="delete" className="float-right">
+                        <Cancel className="text-blue-600" onClick={() => setIsEdit(false)}/>
+                    </IconButton>}
                 </div>}
             </div>
             <div ref={divRef} className="overflow-hidden" style={{'maxHeight':postCollapsed?'500px':''}}>
-                <MDEditor defaultValue={body} readOnly={true} />
+                <MDEditor defaultValue={body} readOnly={!isEdit} onChange={val => setEditedPostContent(val())}/>
             </div>
             {postCollapsed && <span className="-mt-2 text-sm cursor-pointer text-blue-600" onClick={() => setPostCollapsed(false)}>See More</span>}
             <div className="flex flex-row">
@@ -149,6 +170,12 @@ const PostCard = ({ post }) => {
                     onClick={() => setShowComments(!showComments)}
                     label={"Comment" + (commentCount? ("\t" + commentCount):"")} 
                     active={showComments}/>
+                    {isEdit ? <Button 
+                        className="float-right"
+                        disabled={saving || (editedPostContent.length === 0) || body === editedPostContent} 
+                        variant="contained" 
+                        color="primary" 
+                        onClick={createNewPost}>Save</Button> : null}
             </div>
             {showComments && <PostComments post={post} />}
         </div>
