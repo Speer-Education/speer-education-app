@@ -12,7 +12,7 @@ import Picker from 'emoji-picker-react';
 import { GitHub, LanguageOutlined } from '@material-ui/icons';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 
-const InputField = ({ className, label, id, required = false, onChange, ...props }) => {
+const InputField = ({ className, label, id, required = false, onChange, autoWidth, ...props }) => {
     const [empty, setEmpty] = useState(false);
 
     const handleInputChange = e => {
@@ -20,7 +20,7 @@ const InputField = ({ className, label, id, required = false, onChange, ...props
         if (required) setEmpty(e.target.value.length == 0)
     }
 
-    return <div className={`w-full px-3 ${className}`}>
+    return <div className={`${autoWidth ? "" : "w-full"} px-3 ${className}`}>
         {label && <label className="block titlecase tracking-wide text-xs font-bold mb-2" style={{color: "#2596be"}} for={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>}
@@ -216,7 +216,7 @@ export default function UserDetails() {
                                     <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{form.highlight1.emoji || "Pick an emoji"}</Button>
                                 </div>
                                 {showPicker1 ? <Picker onEmojiClick={handleHighlight1Emoji} /> : null}
-                                <InputField required type="text" className="md:w-3/4 mb-6 md:mb-0" placeholder="Where you work, study etc..." id="highlight1" name="highlight1" value={form.highlight1.description} onChange={(e) => setForm({...form, highlight1: {emoji: form.highlight1.emoji, description: e.target.value}})}/>
+                                <InputField required type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Where you work, study etc..." id="highlight1" name="highlight1" value={form.highlight1.description} onChange={(e) => setForm({...form, highlight1: {emoji: form.highlight1.emoji, description: e.target.value}})}/>
                             </FormRow>
                             <FormRow>
                                 {/* TODO: Change this to the emoji selecter */}
@@ -224,7 +224,7 @@ export default function UserDetails() {
                                     <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{form.highlight2.emoji || "Pick an emoji"}</Button>
                                 </div>
                                 {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} /> : null}
-                                <InputField required type="text" className="md:w-3/4 mb-2 md:mb-0" placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
+                                <InputField required type="text" className="md:w-3/4 mb-2 md:mb-0" autoWidth placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
                             </FormRow></> : null}
                             {pageNumber === 4? <>
                             <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
@@ -234,19 +234,19 @@ export default function UserDetails() {
                                 <div className={`px-3`}>
                                     <GitHub style={{ fontSize: 42 }}></GitHub>
                                 </div>                                
-                                <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" placeholder="Github Link" value={form.socials.github} onChange={(e) => setForm({...form, socials : {...form.socials, github : e.target.value}})} />   
+                                <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Github Link" value={form.socials.github} onChange={(e) => setForm({...form, socials : {...form.socials, github : e.target.value}})} />   
                             </FormRow>
                             <FormRow >
                                 <div className={`px-3`}>
                                     <LanguageOutlined style={{ fontSize: 42 }}></LanguageOutlined>
                                 </div>                                
-                                <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" placeholder="Personal Website Link" value={form.socials.personal} onChange={(e) => setForm({...form, socials : {...form.socials, personal : e.target.value}})} />   
+                                <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Personal Website Link" value={form.socials.personal} onChange={(e) => setForm({...form, socials : {...form.socials, personal : e.target.value}})} />   
                             </FormRow>
-                            <FormRow >
+                            <FormRow>
                                 <div className={`px-3`}>
                                     <YouTubeIcon style={{ fontSize: 42 }}></YouTubeIcon>
                                 </div>                                
-                                <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" placeholder="Youtube Link" value={form.socials.youtube} onChange={(e) => setForm({...form, socials : {...form.socials, youtube : e.target.value}})} />   
+                                <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Youtube Link" value={form.socials.youtube} onChange={(e) => setForm({...form, socials : {...form.socials, youtube : e.target.value}})} />   
                             </FormRow>
                             </>: null}
                         </div>
