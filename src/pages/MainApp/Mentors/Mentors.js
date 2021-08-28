@@ -19,9 +19,9 @@ const Mentors = () => {
             const allMentors = snap.docs.map( doc => {
                 return { id: doc.id, ...doc.data()}
             })
-            setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id != user?.uid))
+            setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id !== user?.uid))
         })
-    },[])
+    },[user.uid])
 
     return (
         <div className="mentors h-app">
@@ -35,7 +35,7 @@ const Mentors = () => {
                         return (<MentorCard {...props} />)
                         })}
                 </div>
-                {mentors.length == 0 && <div className="grid place-items-center h-full">
+                {mentors.length === 0 && <div className="grid place-items-center h-full">
                         <h1 className="text-gray-500 lg:px-10">You've Connected with All Our Mentors!</h1>
                 </div>}
             </div>

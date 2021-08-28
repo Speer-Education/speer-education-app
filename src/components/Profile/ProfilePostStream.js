@@ -34,7 +34,7 @@ const ProfilePostStream = ({uid}) => {
         getPosts();
 
         return () => detachListeners();
-    }, [user, uid]);
+    }, [user, uid, getPosts]);
 
     function handleUpdatedPosts(snapshot) {
         // append new messages to message array

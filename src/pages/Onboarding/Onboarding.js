@@ -1,9 +1,8 @@
 import { useState, useMemo } from 'react';
 import './Onboarding.css';
 import Select from 'react-select';
-import { gradeOptions, majorOptions, countryOptions, socialOptions } from './OnboardingConfig';
-import { updateDoc } from '../../hooks/firestore';
-import { useAuth } from '../../hooks/useAuth';
+import { gradeOptions, countryOptions } from './OnboardingConfig';
+// import { useAuth } from '../../hooks/useAuth';
 import { functions } from '../../config/firebase';
 import Button from '@material-ui/core/Button';
 import { Helmet } from "react-helmet";
@@ -17,7 +16,7 @@ const InputField = ({ className, label, id, required = false, onChange, autoWidt
 
     const handleInputChange = e => {
         onChange(e)
-        if (required) setEmpty(e.target.value.length == 0)
+        if (required) setEmpty(e.target.value.length === 0)
     }
 
     return <div className={`${autoWidth ? "" : "w-full"} px-3 ${className}`}>
@@ -57,7 +56,7 @@ const FormRow = ({ children }) => (
 
 
 export default function UserDetails() {
-    const { user } = useAuth();
+    // const { user } = useAuth();
 
     const [pageNumber, setPageNumber] = useState(1);
 
@@ -171,7 +170,7 @@ export default function UserDetails() {
             </Helmet>
             {!updatingClaims ? <div className="flex flex-col md:flex-row  bg-white rounded-3xl onboardingForm">
                 <div className="flex-1 pr-2 py-3 onboardingForm__welcomeContainer">
-                    <img className="object-contain" src="/full-transparent-logo.png"/>
+                    <img className="object-contain" src="/full-transparent-logo.png" alt="speer logo"/>
                     <h1 className="text-4xl md:text-5xl pl-10 w-72 pb-3 md:pb-0">We're so <span style={{color: "#F08E17"}}>excited</span> for you to join us!</h1>
                 </div>
                 <div className="flex-1 text-left p-12 relative">
@@ -268,7 +267,7 @@ export default function UserDetails() {
                 </div>
             </div> : <div className="grid place-items-center w-screen h-screen">
                 <div className="flex flex-col items-center space-y-2">
-                    <img className="object-contain w-24 p-4" src="/rocket-logo@3x.png" />
+                    <img className="object-contain w-24 p-4" src="/rocket-logo@3x.png" alt="speer rocket logo"/>
                     <h2>Setting Up Your Account...</h2>
                     <p>Please Wait</p>
                     <div className="animate-pulse h-2 rounded-md w-52 bg-gray-400"></div>

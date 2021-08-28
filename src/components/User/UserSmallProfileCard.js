@@ -14,7 +14,7 @@ const UserSmallProfileCard = ({ userDetails, uid }) => {
             </div>
         </div>
         <div>
-            <h3 className="text-gray-500 mb-2">{(user?.uid == uid)?"Your":`${name}'s`} Education</h3>
+            <h3 className="text-gray-500 mb-2">{(user?.uid === uid)?"Your":`${name}'s`} Education</h3>
             <div className="flex flex-row items-center rounded-xl shadow-lg px-3 py-5 space-x-2">
                 <p className="text-4xl w-16 text-center">🏫</p>
                 <div className="space-y-2">
@@ -24,7 +24,7 @@ const UserSmallProfileCard = ({ userDetails, uid }) => {
             </div>
         </div>
         <div className="mt-5 mb-6">
-            <h3 className="font-medium text-gray-600">{(user?.uid == uid)?"Your":`${name}'s`}  Highlights</h3>
+            <h3 className="font-medium text-gray-600">{(user?.uid === uid)?"Your":`${name}'s`}  Highlights</h3>
             <div className="flex flex-row items-center my-5 space-x-3">
                 <UserHighlight highlight={highlight1}/>
                 <UserHighlight highlight={highlight2}/>

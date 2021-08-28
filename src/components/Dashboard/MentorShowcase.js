@@ -25,7 +25,7 @@ export default function MentorShowcase() {
             })
             setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id != user?.uid))
         })
-    }, [])
+    }, [user.id])
 
 
     const connectWithMentor = async (mentorId) => {
@@ -47,7 +47,7 @@ export default function MentorShowcase() {
             <p>New Mentors To Find</p>
             {/* Randomly generates 3 mentors in random order*/}
             <div className="overflow-hidden">
-                {mentors.map(({ id, name, school, connectedMentees, major, bio }) => { 
+                {mentors.map(({ id, name, major }) => { 
                     return (<div className="flex flex-row py-2 hover:bg-gray-100" key={id}>
                     <Link className="flex flex-row flex-1" to={`/app/profile/${id}`}>
                         <ProfilePicture className="w-10 h-10 rounded-full" thumb uid={id}/>

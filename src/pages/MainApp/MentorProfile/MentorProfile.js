@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { db, storage, functions } from '../../../config/firebase';
-import { useAuth } from '../../../hooks/useAuth';
-import Button from '@material-ui/core/Button'
 import './MentorProfile.css';
 import Loader from '../../../components/Loader/Loader';
 import history from '../../../hooks/history';
@@ -14,8 +12,6 @@ const MentorProfile = () => {
     const [profPic, setProfPic] = useState();
     const [creatingRoom, setCreatingRoom] = useState(false);
     const [loading, setLoading] = useState(true);
-
-    const { user } = useAuth();
 
     //Getting the data on the mentor
     useEffect(() => {

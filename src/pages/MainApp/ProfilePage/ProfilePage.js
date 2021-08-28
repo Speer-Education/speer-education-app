@@ -8,10 +8,8 @@ import { useAuth } from '../../../hooks/useAuth';
 import StatsCard from '../../../components/Dashboard/StatsCard';
 import ContactsSidebar from '../../../components/Profile/ContactsSidebar';
 import { Button } from '@material-ui/core';
-import { LanguageOutlined, LinkedIn } from '@material-ui/icons';
 import UserFullProfile from '../../../components/Profile/UserFullProfile';
 import EducationCard from '../../../components/Profile/EducationCard';
-import PostCard from '../../../components/Dashboard/PostCard';
 import SocialsCard from '../../../components/Profile/SocialsCard';
 import ProfilePostStream from '../../../components/Profile/ProfilePostStream';
 
@@ -21,9 +19,8 @@ function ProfilePage({ isUser=false }) {
     const [userDetails, setUserDetails] = useState({});
     const [isMentor, setIsMentor] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [posts, setPosts] = useState([]);
     
-    const { name, major, school, country,highlight1,highlight2, bio, socials } = userDetails || {};
+    const { name, bio, socials } = userDetails || {};
 
     //If profileId is userId, then redirect to profile page
     useEffect(() => {

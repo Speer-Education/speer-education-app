@@ -21,6 +21,7 @@ export default function BannerPicture({ uid, ...params }) {
 
     return <img
         src={url || '/banner_placeholder.png'}
+        alt="banner"
         {...params}
     />
 }

@@ -10,7 +10,6 @@ import ProfilePicture from "../User/ProfilePicture";
 import UserHighlight from "../User/UserHighlight";
 
 const UserProfilePicture = ({ profileId, isUser }) => {
-    const { user } = useAuth();
     const profileUpload = useRef();
 
     const handleUploadProfilePic = async (file) => {
@@ -78,7 +77,7 @@ const UserBannerPicture = ({ profileId, isUser }) => {
 export default function UserFullProfile({ profileId, isMentor, isUser, userDetails }) {
 
     const { user } = useAuth();
-    const { name, major, school, country, highlight1, highlight2, bio, socials } = userDetails || {};
+    const { name, major, school, country, highlight1, highlight2 } = userDetails || {};
 
     const connectWithPerson = async () => {
         if (!user?.uid || !profileId) return;
