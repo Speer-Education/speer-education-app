@@ -213,6 +213,22 @@ function Chat({screenSize}) {
         //the text message as the next message. If not, it just sends the files (or vice versa if there are no files))
         if (fileMessages.length > 0) {
 
+            //Creating read object
+            const read = {}
+            roomDoc.users.forEach((id) => read[id] = false)
+            read[user.uid] = true
+
+            //Creating roomNameObject
+            const roomNameObject = {};
+            //If more than 2 users, it's a group, just use roomName for all
+            if (roomDoc.users.length > 2){
+                roomDoc.users.forEach((id) => roomNameObject[id] = roomName)
+            } else {
+                //Since only 2 users, we put both the id's and the our users' name
+                roomDoc.users.forEach((id) => roomNameObject[id] = userDetails.name) 
+                roomNameObject[user.uid] = roomName //We don't want our id to be our own name, we set it to the current roomName 
+            }
+
             //TODO: Add a state here for fileSendLoading...
 
             //Record current Timestamp.
@@ -247,7 +263,9 @@ function Chat({screenSize}) {
                 date: firebase.firestore.FieldValue.serverTimestamp(),
                 senderId: user.uid,
                 senderUsername: userDetails.name,
-                recipientIds: roomDoc.users.filter(mod => mod != user.uid)
+                recipientIds: roomDoc.users.filter(mod => mod !== user.uid),
+                roomName: roomNameObject,
+                read: read,
             })
 
             setFileMessages([]); //Reset the files at the end
@@ -256,13 +274,31 @@ function Chat({screenSize}) {
         //Fixed bug (now requires text to send message)
         if (input !== "") {
 
+            //Creating read object
+            const read = {}
+            roomDoc.users.forEach((id) => read[id] = false)
+            read[user.uid] = true
+
+            //Creating roomNameObject
+            const roomNameObject = {};
+            //If more than 2 users, it's a group, just use roomName for all
+            if (roomDoc.users.length > 2){
+                roomDoc.users.forEach((id) => roomNameObject[id] = roomName)
+            } else {
+                //Since only 2 users, we put both the id's and the our users' name
+                roomDoc.users.forEach((id) => roomNameObject[id] = userDetails.name) 
+                roomNameObject[user.uid] = roomName //We don't want our id to be our own name, we set it to the current roomName 
+            }
+
             db.collection('rooms').doc(roomId).collection('messages').add({
                 messageType: "text",
                 message: input,
                 date: firebase.firestore.FieldValue.serverTimestamp(),
                 senderId: user.uid,
                 senderUsername: userDetails.name,
-                recipientIds: roomDoc.users.filter(mod => mod != user.uid)
+                recipientIds: roomDoc.users.filter(mod => mod !== user.uid),
+                roomName: roomNameObject,
+                read: read,
             })
 
             setInput(""); /* Reset the input at the end */
