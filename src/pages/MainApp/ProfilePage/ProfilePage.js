@@ -85,7 +85,7 @@ function ProfilePage({ isUser=false }) {
                     <div className=" hidden md:flex flex-col h-app w-sidebar">
                         <div className="fixed flex flex-col cc_cursor h-app w-sidebar">
                             <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMentor} />
-                            {socials && <SocialsCard socials={socials}/>}
+                            <SocialsCard socials={socials} isUser={isUser}/>
                         </div>
                     </div>
                 </div>
