@@ -1,7 +1,7 @@
 module.exports = {
   // mode: 'jit',
   purge: {
-    content: ['**/*.{js,ts,jsx,tsx}'],
+    content: ['./{components,pages,hooks,container,utils}/**/*.{js,ts,jsx,tsx}'],
     options: {
       safelist: [
         'my-3',
@@ -30,7 +30,7 @@ module.exports = {
         'text-red-700'
       ],
     },
-    css: [['**/*.css']]
+    css: [['./{components,pages,hooks,container,utils}/**/*.css']]
   },
   darkMode: 'media', // or 'media' or 'class'
   theme: {
