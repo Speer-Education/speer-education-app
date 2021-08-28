@@ -7,14 +7,15 @@ const SocialLink = ({ link, icon }) => (
         <a className="text-sm" target="_blank" href={'//'+link}>{link}</a>
     </div>
 )
-const SocialsCard = ({socials}) => {
-    return (
-        <div className="flex flex-col p-3 m-2 shadow-lg rounded-md bg-white space-y-2">
+const SocialsCard = ({socials, isUser}) => {
+    return (<>
+        {(isUser || socials) && <div className="flex flex-col p-3 m-2 shadow-lg rounded-md bg-white space-y-2">
             <p className="font-semibold text-lg">Socials</p>
-            {socials.github && <SocialLink link={socials.github} icon={<GitHub/>} />}
-            {socials.personal && <SocialLink link={socials.personal} icon={<LanguageOutlined/>} />}
-        </div>
-    );
+            {socials?.github && <SocialLink link={socials?.github} icon={<GitHub/>} />}
+            {socials?.personal && <SocialLink link={socials?.personal} icon={<LanguageOutlined/>} />}
+            {!socials && <h3 className="text-gray-500">No Social Links Added</h3>}
+        </div>}
+    </>);
 }
 
 export default SocialsCard;
