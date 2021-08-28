@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import './Onboarding.css';
 import Select from 'react-select';
-import { gradeOptions, majorOptions, countryOptions } from './OnboardingConfig';
+import { gradeOptions, majorOptions, countryOptions, socialOptions } from './OnboardingConfig';
 import { updateDoc } from '../../hooks/firestore';
 import { useAuth } from '../../hooks/useAuth';
 import { functions } from '../../config/firebase';
@@ -9,7 +9,8 @@ import Button from '@material-ui/core/Button';
 import { Helmet } from "react-helmet";
 import Spinner from '../../components/Loader/Spinner';
 import Picker from 'emoji-picker-react';
-
+import { GitHub, LanguageOutlined } from '@material-ui/icons';
+import YouTubeIcon from '@material-ui/icons/YouTube';
 
 const InputField = ({ className, label, id, required = false, onChange, ...props }) => {
     const [empty, setEmpty] = useState(false);
@@ -54,6 +55,7 @@ const FormRow = ({ children }) => (
     <div class="flex flex-wrap -mx-3 mb-6">{children}</div>
 )
 
+
 export default function UserDetails() {
     const { user } = useAuth();
 
@@ -76,6 +78,11 @@ export default function UserDetails() {
             emoji: "🗣",
             description: ""
         },
+        socials: {
+            github: "",
+            personal: "",
+            youtube: "",
+        }
     });
     const [updatingClaims, setUpdatingClaims] = useState(false);
     const [submitting, setSubmitting] = useState(false);
@@ -219,14 +226,37 @@ export default function UserDetails() {
                                 {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} /> : null}
                                 <InputField required type="text" className="md:w-3/4 mb-2 md:mb-0" placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
                             </FormRow></> : null}
+                            {pageNumber === 4? <>
+                            <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
+                                Link your socials (optional):
+                            </p>
+                            <FormRow >
+                                <div className={`px-3`}>
+                                    <GitHub style={{ fontSize: 42 }}></GitHub>
+                                </div>                                
+                                <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" placeholder="Github Link" value={form.socials.github} onChange={(e) => setForm({...form, socials : {...form.socials, github : e.target.value}})} />   
+                            </FormRow>
+                            <FormRow >
+                                <div className={`px-3`}>
+                                    <LanguageOutlined style={{ fontSize: 42 }}></LanguageOutlined>
+                                </div>                                
+                                <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" placeholder="Personal Website Link" value={form.socials.personal} onChange={(e) => setForm({...form, socials : {...form.socials, personal : e.target.value}})} />   
+                            </FormRow>
+                            <FormRow >
+                                <div className={`px-3`}>
+                                    <YouTubeIcon style={{ fontSize: 42 }}></YouTubeIcon>
+                                </div>                                
+                                <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" placeholder="Youtube Link" value={form.socials.youtube} onChange={(e) => setForm({...form, socials : {...form.socials, youtube : e.target.value}})} />   
+                            </FormRow>
+                            </>: null}
                         </div>
-                        {pageNumber === 3? !isValidForm && <p className="mb-5 text-red-600">Not all fields are filled.</p> : null}
+                        {pageNumber === 4? !isValidForm && <p className="mb-5 text-red-600">Not all fields are filled.</p> : null}
                     </div>
                     <div className="absolute bottom-5 right-5">
                         {/* Only render the back button if not on first section*/}
                         {pageNumber !== 1? <Button onClick={() => setPageNumber(pageNumber-1)} style={{backgroundColor: "#597398", color: 'white', marginRight : "5px"}}>Back</Button> : null}
                         {/* Only render the next button if not on last section */}
-                        {pageNumber !== 3? <Button onClick={() => setPageNumber(pageNumber+1)} style={{backgroundColor: "#F08E17", color: 'white'}}>Next</Button> : <Button
+                        {pageNumber !== 4? <Button onClick={() => setPageNumber(pageNumber+1)} style={{backgroundColor: "#F08E17", color: 'white'}}>Next</Button> : <Button
                             type="submit"
                             onClick={handleFormSubmit}
                             disabled={!isValidForm || submitting}

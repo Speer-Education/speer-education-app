@@ -1,3 +1,18 @@
+const socialOptions = [
+  {
+    "value" : "Github",
+    "label" : "Github"
+  },
+  {
+    "value" : "Personal",
+    "label" : "Personal"
+  },
+  {
+    "value" : "Youtube",
+    "label" : "Youtube"
+  }
+]
+
 const gradeOptions = [
   {
     "value" : "<2021",
@@ -1047,4 +1062,4 @@ const countryOptions =[
     }
   ]
 
-  export { gradeOptions, majorOptions, countryOptions };
+  export { gradeOptions, majorOptions, countryOptions, socialOptions };
