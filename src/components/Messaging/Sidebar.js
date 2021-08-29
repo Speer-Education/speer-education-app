@@ -30,26 +30,26 @@ function Sidebar({screenSize}) {
 
                 const docData = doc.data();
                 //Means it is a group chat
-                if (docData.name) {
+                if (docData.users.length > 2) {
                     return {
                         id: doc.id,
                         data: docData,
-                        name: docData.name, //Straight away can put name there if there is a name for the group (will be the case for when multiple people)
-                        pic: docData.picture || ""
+                        name: docData.roomName[user?.uid], //Straight away can put name there if there is a name for the group (will be the case for when multiple people)
+                        pic: docData.picture || "" //TODO: No picture property, will need to add this for group rooms.
                     }
                 } else {
-                    const { roomName, isMentor, roomPic } = await findRoomNameAndRoomPic(docData);
+                    const { isMentor, roomPic } = await findRoomPicAndIsMentor(docData);
 
                     return {
                         id: doc.id,
                         data: docData,
-                        name: roomName,
+                        name: docData.roomName[user?.uid],
                         isMentor: isMentor,
                         pic: roomPic,
                     }
                 }
             })).then(res => {
-                if(res.length > 0 && history.location.pathname == '/app/messages') {
+                if(res.length > 0 && history.location.pathname === '/app/messages') {
                     history.push(`/app/messages/${res[0].id}`);
                 }
                 setLoading(false)
@@ -65,14 +65,12 @@ function Sidebar({screenSize}) {
 
 
     //resolve a room name for this
-    //TODO: should add the name to the room document instead of loading like this
-    const findRoomNameAndRoomPic = async (data) => {
+    const findRoomPicAndIsMentor = async (data) => {
         let recipientId = data.users.filter((id) => id !== user?.uid)[0]
 
         const userData = (await db.doc(`users/${recipientId}`).get()).data()
 
         return {
-            roomName: userData?.name, //<-- asynchrously fetch user id's
             roomPic: await storage.ref(`/profilepics/thumb-${recipientId}.png`)?.getDownloadURL(),
             isMentor: userData?.isMtr,
         }
