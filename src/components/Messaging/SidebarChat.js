@@ -5,8 +5,9 @@ import { Link, useRouteMatch } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import history from '../../hooks/history';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
-function SidebarChat({ id, roomName, isMentor, roomPic }) {
+function SidebarChat({ id, roomName, isMentor, roomPic, read }) {
     const { user } = useAuth();
     const [messages, setMessages] = useState('');
     let { url } = useRouteMatch();
@@ -29,6 +30,7 @@ function SidebarChat({ id, roomName, isMentor, roomPic }) {
                     <h2>{roomName} {isMentor ? <i className="fas fa-user-check"></i> : null}</h2> 
                     <p className="text-sm text-gray-600">{messages ? `${messages.senderId == user?.uid?"You: ":""}${messages.message}` : "No Message History"}</p>
                 </div>
+                {!read ? <FiberManualRecordIcon style={{color: "#F58B09"}}/> : null}
             </div>
         </Link>
     )

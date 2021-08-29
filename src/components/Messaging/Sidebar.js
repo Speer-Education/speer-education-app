@@ -45,7 +45,7 @@ function Sidebar({screenSize}) {
                         data: docData,
                         name: roomName,
                         isMentor: isMentor,
-                        pic: roomPic
+                        pic: roomPic,
                     }
                 }
             })).then(res => {
@@ -93,7 +93,8 @@ function Sidebar({screenSize}) {
             </div>
             <div className="flex flex-col overflow-y-auto">
                 {rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase())).map(room => {
-                    return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} isMentor={room.isMentor} roomPic={room.pic} />
+                    console.log(room.name, room.data.lastMessage)
+                    return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} isMentor={room.isMentor} roomPic={room.pic} read={(room.data.lastMessage.read || {})[user?.uid]}/>
                 })}
                 {rooms.length === 0 && !loading && <h3 className="text-gray-500">You have no chat rooms yet!</h3>}
                 {loading&& <div className="grid place-items-center w-full h-14">
