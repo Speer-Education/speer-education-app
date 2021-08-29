@@ -19,7 +19,7 @@ function Messaging() {
 
     const isScreenXtraLarge = useMediaQuery({ query: '(max-width: 1280px' })
     const isScreenLarge = useMediaQuery({ query: '(max-width: 1024px)' })
-    const isScreenMedium = useMediaQuery({ query: '(max-width: 768px)' })
+    const isScreenMedium = useMediaQuery({ query: '(max-width: 767px)' })
 
     useEffect(() => {
         if (isScreenMedium) {

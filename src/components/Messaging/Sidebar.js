@@ -49,7 +49,7 @@ function Sidebar({screenSize}) {
                     }
                 }
             })).then(res => {
-                if(res.length > 0 && history.location.pathname === '/app/messages') {
+                if(res.length > 0 && history.location.pathname === '/app/messages' && screenSize >= 1) {
                     history.push(`/app/messages/${res[0].id}`);
                 }
                 setLoading(false)
