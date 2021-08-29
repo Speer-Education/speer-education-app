@@ -114,6 +114,11 @@ function Chat({screenSize}) {
     function handleUpdatedMessages(snapshot) {
         // append new messages to message array
         snapshot.forEach((message) => {
+            //Update the message's read field for the user to true
+            if(!(message.data()?.read || {})[user.uid]){
+                message.ref.update({ [`read.${user.uid}`] : true })
+            } 
+
             // filter out any duplicates (from modify/delete events)         
             messageArray = messageArray.filter(x => x.id !== message.id)
             messageArray.push({ id: message.id, ...message.data() })

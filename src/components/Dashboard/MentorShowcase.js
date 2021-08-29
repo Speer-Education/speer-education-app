@@ -25,7 +25,7 @@ export default function MentorShowcase() {
             })
             setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id != user?.uid))
         })
-    }, [user.id])
+    }, [user?.id])
 
 
     const connectWithMentor = async (mentorId) => {

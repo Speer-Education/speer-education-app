@@ -21,7 +21,7 @@ const Mentors = () => {
             })
             setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id !== user?.uid))
         })
-    },[user.uid])
+    },[user?.uid])
 
     return (
         <div className="mentors h-app">
