@@ -122,7 +122,7 @@ export default function UserDetails() {
         submitForm.country = form.country.label;
         submitForm.hsGradYear = form.hsGradYear.label;
         //TODO: remove these once the highlight functionality is implemented so we can add them to user document no problem
-
+        //TODO: maybe scope function to "us-central1" so we wont have CORS issue
         await functions.httpsCallable('onBoarding')({ form: submitForm })
             .catch((error) => {
                 console.error(error)
