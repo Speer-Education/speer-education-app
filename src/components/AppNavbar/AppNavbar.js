@@ -40,13 +40,13 @@ const AppNavbar = () => {
         <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/app"/>
         <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/app/mentors"/>
         <NavBarLink IconComponent={MessageTwoToneIcon} title="Contacts" href="/app/messages"/>
-        <NavBarLink IconComponent={NotificationsTwoToneIcon} title="Notifications"/>
+        {/* <NavBarLink IconComponent={NotificationsTwoToneIcon} title="Notifications"/> */}
       </div>
-      <div className="hidden lg:block" >
+      {/* <div className="hidden lg:block" >
         <Button variant="contained" color="primary" endIcon={<ArrowDropDownTwoToneIcon/>} style={{textTransform: "capitalize"}}>
           Compose a message
         </Button>
-      </div>
+      </div> */}
       <UserMenu />
     </div>
   );

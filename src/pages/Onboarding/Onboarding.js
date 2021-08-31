@@ -23,7 +23,7 @@ const InputField = ({ className, label, id, required = false, onChange, autoWidt
         {label && <label className="block titlecase tracking-wide text-xs font-bold mb-2" style={{color: "#2596be"}} for={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>}
-        <input className={`appearance-none block w-full ${empty && required ? "bg-red-100" : "bg-gray-200"} text-gray-700 border-0 focus:border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500`}
+        <input className={`appearance-none block w-full ${empty && required ? "bg-red-100" : "bg-gray-200"} text-gray-700 border-0 focus:border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-gray-300 focus:border-gray-500`}
             id={id}
             onChange={handleInputChange}
             {...props} />
@@ -168,10 +168,10 @@ export default function UserDetails() {
                 <meta charSet="utf-8" />
                 <title>Sign Up | Speer Education</title>
             </Helmet>
-            {!updatingClaims ? <div className="flex flex-col md:flex-row  bg-white rounded-3xl onboardingForm">
+            {!updatingClaims ? <div className="flex flex-col md:flex-row  bg-white rounded-3xl onboardingForm shadow-xl">
                 <div className="flex-1 pr-2 py-3 onboardingForm__welcomeContainer">
                     <img className="object-contain" src="/full-transparent-logo.png" alt="speer logo"/>
-                    <h1 className="text-4xl md:text-5xl pl-10 w-72 pb-3 md:pb-0">We're so <span style={{color: "#F08E17"}}>excited</span> for you to join us!</h1>
+                    <h1 className="text-3xl md:text-5xl pl-10 w-72 pb-3 md:pb-0">We're so <span style={{color: "#F08E17"}}>excited</span> for you to join us!</h1>
                 </div>
                 <div className="flex-1 text-left p-12 relative">
                     <div className="flex flex-col">
