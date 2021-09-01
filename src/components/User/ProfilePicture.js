@@ -8,7 +8,7 @@ import { useAuth } from '../../hooks/useAuth';
  * @param {string} uid 
  * @returns 
  */
-export default function ProfilePicture({ uid, thumb = false, ...params }) {
+export default function ProfilePicture({ uid, thumb = false, className, ...params }) {
     const [url, setUrl] = useState(false);
     const { user } = useAuth();
 
@@ -22,6 +22,7 @@ export default function ProfilePicture({ uid, thumb = false, ...params }) {
 
     return <img
         src={url || '/user_placeholder.png'}
+        className={`${className} bg-white`}
         {...params}
     />
 }
