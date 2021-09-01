@@ -15,7 +15,7 @@ const Mentors = () => {
 
     useEffect(() => {
         //Get all the mentors and set in mentors
-        return db.collection('mentors').orderBy('_updatedOn','desc').onSnapshot(snap => {
+        return db.collection('mentors').orderBy('_addedDate','desc').onSnapshot(snap => {
             const allMentors = snap.docs.map( doc => {
                 return { id: doc.id, ...doc.data()}
             })
