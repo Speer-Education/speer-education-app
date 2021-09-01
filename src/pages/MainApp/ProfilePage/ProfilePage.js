@@ -7,7 +7,7 @@ import './ProfilePage.css'
 import { useAuth } from '../../../hooks/useAuth';
 import StatsCard from '../../../components/Dashboard/StatsCard';
 import ContactsSidebar from '../../../components/Profile/ContactsSidebar';
-import { Button } from '@material-ui/core';
+import { Button, IconButton } from '@material-ui/core';
 import UserFullProfile from '../../../components/Profile/UserFullProfile';
 import EducationCard from '../../../components/Profile/EducationCard';
 import SocialsCard from '../../../components/Profile/SocialsCard';
@@ -70,12 +70,6 @@ function ProfilePage({ isUser=false }) {
                                 <p className="font-semibold text-lg">About Me</p>
                                 <p className="text-gray-600">{bio}</p>
                             </div>
-                            {/* Temporary */}
-                            {isUser && <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white py-5 px-8 space-y-2">
-                                <p className="font-semibold text-lg">Settings</p>
-                                {/* Logout Button */}
-                                <Button variant="outlined" onClick={() => signOut()}>Logout</Button>
-                            </div>}
                             <ProfilePostStream uid={profileId || user?.uid} />
                         </div>
                     </div>

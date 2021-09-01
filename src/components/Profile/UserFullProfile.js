@@ -1,6 +1,6 @@
 import { Button, IconButton } from "@material-ui/core";
-import { EditOutlined, MessageOutlined } from "@material-ui/icons";
-import { useRef } from "react";
+import { EditOutlined, ExitToAppOutlined, MessageOutlined } from "@material-ui/icons";
+import { useRef, useState } from "react";
 import { functions, storage } from "../../config/firebase";
 import history from "../../hooks/history";
 import { useAuth } from "../../hooks/useAuth";
@@ -8,6 +8,7 @@ import { getMessageUserRoom } from "../../utils/chats";
 import BannerPicture from "../User/BannerPicture";
 import ProfilePicture from "../User/ProfilePicture";
 import UserHighlight from "../User/UserHighlight";
+import EditDetailsDialog from "./EditDetailsDialog";
 
 const UserProfilePicture = ({ profileId, isUser }) => {
     const profileUpload = useRef();
@@ -76,8 +77,9 @@ const UserBannerPicture = ({ profileId, isUser }) => {
 
 export default function UserFullProfile({ profileId, isMentor, isUser, userDetails }) {
 
-    const { user } = useAuth();
+    const { user, signOut } = useAuth();
     const { name, major, school, country, highlight1, highlight2 } = userDetails || {};
+    const [openEditDetails, setOpenEditDetails] = useState(false);
 
     const connectWithPerson = async () => {
         if (!user?.uid || !profileId) return;
@@ -90,23 +92,26 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
     }
 
 
-    return <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white relative">
+    return <><div className="rounded-xl shadow-lg w-full overflow-hidden bg-white relative">
         <UserBannerPicture profileId={profileId} isUser={isUser} />
         <div className="flex flex-row p-3 w-full">
             <UserProfilePicture profileId={profileId} isUser={isUser} />
 
             <div className="flex flex-col space-y-1 w-full">
-                <div className="flex flex-row justify-between">
+                <div className="flex flex-row justify-between items-center">
                     <h1 className="text-2xl text-gray-800">{name}</h1>
                     {/* Show Edit Profile if is User, else show Message User */}
-                    {isUser ? <>
+                    {isUser ? <div className="flex flex-row space-y-1">
+                        <IconButton onClick={() => signOut()}>
+                            <ExitToAppOutlined className="text-red-600"/>
+                        </IconButton>
                         <div className="hidden md:inline">
-                            <Button variant="contained" color="primary">Edit Your Profile</Button>
+                            <Button variant="contained" color="primary" onClick={e => setOpenEditDetails(true)}>Edit Your Profile</Button>
                         </div>
                         <div className="md:hidden">
                             <IconButton><EditOutlined /></IconButton>
                         </div>
-                    </> : <>
+                    </div> : <>
                         <div className="hidden md:inline">
                             <Button variant="contained" color="primary" startIcon={<MessageOutlined />} onClick={() => connectWithPerson()}>Message</Button>
                         </div>
@@ -124,4 +129,6 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
             </div>
         </div>
     </div>
+    <EditDetailsDialog open={openEditDetails} onClose={()=> setOpenEditDetails(false)} />
+    </>
 }
