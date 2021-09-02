@@ -62,37 +62,6 @@ export default function Home() {
                     </div>
                 </ScrollAnimation>
             </section>
-            <section className="home-team">
-                <ScrollAnimation animateOnce duration={0.5} animateIn="animate__fadeInUp">
-                    <div className="home__spacer" id="team"></div>
-                    <h1 className="home-team__heading">TEAM</h1>
-                    {/* Flexbox container, 2 div's , then inside each div, a div with image as background and below, title and name */}
-                    {isMobile ? <Slider className="home-universities__carousel" {...teamSliderSettings}>
-                        {teamMembers.map(member => {
-                            return (<TeamCard
-                                key={member.fullName}
-                                fullname={member.fullName}
-                                title={member.title}
-                                linkedinUrl={member.linkedInIrl}
-                                imageUrl={member.imageUrl}
-                            />)
-                        })}
-                    </Slider> :
-                        <div className="home-team__container">
-                            <div className="home-team__grid">
-                                {teamMembers.map(member => {
-                                    return (<TeamCard
-                                        key={member.fullName}
-                                        fullname={member.fullName}
-                                        title={member.title}
-                                        linkedinUrl={member.linkedInIrl}
-                                        imageUrl={member.imageUrl}
-                                    />)
-                                })}
-                            </div>
-                        </div>}
-                </ScrollAnimation>
-            </section>
             <section className="home-universities">
                 <ScrollAnimation animateOnce duration={0.5} animateIn="animate__fadeInUp">
                     <div className="home__spacer" id="universities"></div>
