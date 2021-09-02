@@ -91,7 +91,6 @@ function Sidebar({screenSize}) {
             </div>
             <div className="flex flex-col overflow-y-auto">
                 {rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase())).map(room => {
-                    console.log(room.name, room.data.lastMessage)
                     return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} isMentor={room.isMentor} roomPic={room.pic} read={(room.data.lastMessage.read || {})[user?.uid] !== false}/>
                 })}
                 {rooms.length === 0 && !loading && <h3 className="text-gray-500">You have no chat rooms yet!</h3>}

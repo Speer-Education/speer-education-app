@@ -16,9 +16,7 @@ const MentorProfile = () => {
     //Getting the data on the mentor
     useEffect(() => {
         setLoading(true)
-        console.log(`mentors/${mentorId}`)
         return db.doc(`mentors/${mentorId}`).onSnapshot(async snap => {
-            console.log(snap.data())
             setMentor(snap.data());
             setProfPic(await storage.ref(`/profilepics/${mentorId}.png`)?.getDownloadURL());
             setLoading(false)

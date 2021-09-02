@@ -20,7 +20,6 @@ export default function NotificationShowcase() {
 
     return (
         <div className="notificationShowcase">
-            {console.log(notifications)}
             {!notifications ? "No notifications" : <>
             <h2>Recent Messages</h2>
             {notifications.map((message,index) => (

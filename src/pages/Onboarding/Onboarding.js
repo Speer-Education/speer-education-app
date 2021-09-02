@@ -69,7 +69,6 @@ export default function UserDetails() {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setSubmitting(true);
-        console.log(countryOptions);
 
         console.log("Form:", form);
         console.log("Is valid form", isValidForm);
@@ -95,7 +94,6 @@ export default function UserDetails() {
 
     //Updates state whenever the user change fields in the form
     const handleFormInput = (e) => {
-        console.log(e.target.value);
         const { value, name } = e.target;
         setForm({ ...form, [name]: value });
     };

@@ -1,22 +1,26 @@
 import { Dialog } from '@headlessui/react';
 import { useEffect, useMemo, useState } from 'react';
+import { db, firebase } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import { countryOptions } from '../../pages/Onboarding/OnboardingConfig';
 import DialogBase from '../Dialog/DialogBase';
 import { InputField, InputSelect } from '../Forms/Inputs';
+import Spinner from '../Loader/Spinner'
 
 const EditDetailsDialog = ({open, onClose}) => {
 
-    const {userDetails} = useAuth();
+    const {user, userDetails} = useAuth();
     const [form, setForm] = useState({})
+    const [saving, setSaving] = useState(false)
 
     useEffect(() => {
         const { name, school, major, country, highlight1, highlight2 } = userDetails || {};
-        setForm({ name, school, major, country, highlight1, highlight2 })
+        let formState = { name, school, major, country: countryOptions.filter(mod => mod.label == country)[0], highlight1, highlight2 }
+        if(formState == form) return;
+        setForm(formState)
     },[userDetails])
 
     const { name, school, major, country, highlight1, highlight2 } = form;
-    const userCountryValueLabel = useMemo(() => countryOptions.filter(mod => mod.label == country)[0],[country])
     
     const handleFormChange = (e) => {
         const { name, value } = e.target;
@@ -25,6 +29,20 @@ const EditDetailsDialog = ({open, onClose}) => {
 
     const handleSelectInput = (name, value) => {
         setForm({ ...form, [name]: value })
+    }
+
+    const handleSaveDetails = () => {
+      if(!user) return;
+      setSaving(true)
+      const submittingForm = JSON.parse(JSON.stringify(form));
+      submittingForm.country = submittingForm.country.label;
+      console.log('Submitting Update Request to db')
+      db.doc(`users/${user.uid}`).update({
+        ...submittingForm,
+        _updatedOn: firebase.firestore.Timestamp.now()
+      })
+      setSaving(false)
+      onClose();
     }
 
     return (
@@ -73,8 +91,10 @@ const EditDetailsDialog = ({open, onClose}) => {
                         label="Country of Residence" 
                         id="country" 
                         name="country" 
+                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                        menuPortalTarget={document.body}
                         options={countryOptions} 
-                        value={userCountryValueLabel} 
+                        value={country} 
                         onChange={value => handleSelectInput('country',value)} />
 
                 </div>
@@ -82,9 +102,9 @@ const EditDetailsDialog = ({open, onClose}) => {
                   <button
                     type="button"
                     className="ml-2 inline-flex justify-center px-4 py-2 float-right text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={onClose}
+                    onClick={handleSaveDetails}
                   >
-                    Save
+                    {saving?<Spinner/>:"Save"}
                   </button>
                   <button
                     type="button"

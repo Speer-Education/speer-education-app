@@ -132,7 +132,7 @@ function Chat({screenSize}) {
                 messageArray = messageArray.filter(x => x.id !== message.id)
             }
         });
-        console.log(messageArray)
+        
         messageArray = messageArray.filter(({ date }) => date != null);
         //Sort array because it is unsorted, filter date as it might be null
         messageArray.sort(({ date: x }, { date: y }) => {
@@ -154,7 +154,6 @@ function Chat({screenSize}) {
 
         let listener;
 
-        console.log(start)
         if (!start) {
             listener = ref.orderBy('date', 'asc')
                 .onSnapshot(snap => {

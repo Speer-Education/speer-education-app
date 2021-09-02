@@ -120,7 +120,6 @@ const useAuthProvider = () => {
     useEffect(() => {
         if (user?.uid) {
             return db.doc(`user_claims/${user.uid}`).onSnapshot(async (snap) => {
-                console.log(lastCommitted)
                 const data = snap.data();
                 
                 if(!data?._lastCommitted) return;

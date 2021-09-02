@@ -105,7 +105,6 @@ export default function EditProfile() {
                 <meta charSet="utf-8" />
                 <title>Edit Profile | Speer Education</title>
             </Helmet>
-            {console.log(userDetails)}
             Edit Profile
             <form>
                 <label htmlFor="name">Full Name (Put first name before last name):</label>

@@ -157,7 +157,6 @@ const MDEditor = React.forwardRef(({ docId, className, readOnly, onChange, defau
     setIntReadOnly(true)
     const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
     let url = await result.ref.getDownloadURL();
-    console.log(currentValue)
     const newValue = (currentValue || "") + `\n   ![](${url}) `
     setEditorNewValue(newValue)
     setCurrentValue(newValue)

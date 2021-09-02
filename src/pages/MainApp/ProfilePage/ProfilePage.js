@@ -39,7 +39,6 @@ function ProfilePage({ isUser=false }) {
     useEffect(() => {
         if(isUser) return;
         return db.doc(`users/${profileId}`).onSnapshot(async snap => {
-            console.log(snap.data())
             setUserDetails(snap.data());
             if (snap.data().isMtr){
                 setIsMentor(true)
