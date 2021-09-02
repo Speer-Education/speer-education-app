@@ -12,6 +12,8 @@ import UserFullProfile from '../../../components/Profile/UserFullProfile';
 import EducationCard from '../../../components/Profile/EducationCard';
 import SocialsCard from '../../../components/Profile/SocialsCard';
 import ProfilePostStream from '../../../components/Profile/ProfilePostStream';
+import { EditOutlined } from '@material-ui/icons';
+import EditBiographyDialog from '../../../components/Profile/EditBiographyDialog';
 
 function ProfilePage({ isUser=false }) {
     const { profileId } = useParams();
@@ -19,6 +21,7 @@ function ProfilePage({ isUser=false }) {
     const [userDetails, setUserDetails] = useState({});
     const [isMentor, setIsMentor] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [openEditBio, setOpenEditBio] = useState(false);
     
     const { name, bio, socials } = userDetails || {};
 
@@ -65,10 +68,16 @@ function ProfilePage({ isUser=false }) {
                         <div className="flex flex-col h-full p-3 space-y-4 flex-1" style={{ maxWidth: "1024px" }}>
                             <p className="font-semibold text-lg">{isUser?"Your":name} Profile</p>
                             <UserFullProfile profileId={profileId || user?.uid} isUser={isUser} isMentor={isMentor} userDetails={userDetails}/>
-                            <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white py-5 px-8 space-y-2">
+                            <div className="relative rounded-xl shadow-lg w-full overflow-hidden bg-white py-5 px-8 space-y-2">
                                 <p className="font-semibold text-lg">About Me</p>
+                                <div className="absolute top-0 right-0 m-1 text-white rounded-full bg-gray-100 transform scale-75">
+                                    <IconButton onClick={e => setOpenEditBio(true)}>
+                                        <EditOutlined />
+                                    </IconButton>
+                                </div>
                                 <p className="text-gray-600">{bio}</p>
                             </div>
+                            <EditBiographyDialog open={openEditBio} onClose={() => setOpenEditBio(false)}/>
                             <ProfilePostStream uid={profileId || user?.uid} />
                         </div>
                     </div>
