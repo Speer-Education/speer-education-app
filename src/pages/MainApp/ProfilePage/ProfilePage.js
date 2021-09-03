@@ -63,7 +63,7 @@ function ProfilePage({ isUser=false }) {
                         <StatsCard />
                     </div>
                 </div>
-                <div className="flex-1 flex flex-row w-full pr-5">
+                <div className="flex-1 flex flex-row w-full">
                     <div className="flex flex-row justify-center flex-1 w-full p-3 md:p-0">
                         <div className="flex flex-col h-full p-3 space-y-4 flex-1" style={{ maxWidth: "1024px" }}>
                             <p className="font-semibold text-lg">{isUser?"Your":name} Profile</p>
@@ -81,8 +81,8 @@ function ProfilePage({ isUser=false }) {
                             <ProfilePostStream uid={profileId || user?.uid} />
                         </div>
                     </div>
-                    <div className=" hidden md:flex flex-col h-app w-sidebar">
-                        <div className="fixed flex flex-col cc_cursor h-app w-sidebar">
+                    <div className=" hidden md:flex flex-col h-app w-sidebar pl-3">
+                        <div className="fixed flex flex-col cc_cursor h-app">
                             <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMentor} />
                             <SocialsCard socials={socials} isUser={isUser}/>
                         </div>
