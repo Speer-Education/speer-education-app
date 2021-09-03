@@ -36,8 +36,8 @@ const UserProfilePicture = ({ profileId, isUser }) => {
     }
 
     return (
-        <div className="absolute md:relative">
-            <ProfilePicture className="w-24 h-24 md:w-32 md:h-32 rounded-full border-white border-8 border-solid shadow-lg transform -translate-y-16 mx-1 md:mx-3" uid={profileId} />
+        <div className="relative">
+            <ProfilePicture className="w-24 h-24 md:w-32 md:h-32 rounded-full border-white border-8 border-solid shadow-lg transform -translate-y-16 mx-1" uid={profileId} />
             <input ref={profileUpload} type="file" name="file" accept="image/*" onChange={({ target }) => handleUploadProfilePic(target.files[0])} hidden />
             {isUser && <div className="absolute top-0 right-0 text-white transform -translate-y-16 rounded-full bg-gray-800 scale-75">
                 <IconButton onClick={e => profileUpload.current.click()}>
@@ -93,53 +93,11 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
 
 
     return <>
-    <div className="hidden rounded-xl shadow-lg w-full overflow-hidden bg-white relative md:inline">
+        <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white">
         <UserBannerPicture profileId={profileId} isUser={isUser} />
-        <div className="flex flex-row p-3 w-full">
+        <div className="flex flex-col p-3 w-full items-center md:items-start">
             <UserProfilePicture profileId={profileId} isUser={isUser} />
-
-            <div className="flex flex-col space-y-1 w-full">
-                <div className="flex flex-row justify-between items-center">
-                    <h1 className="text-2xl text-gray-800">{name}</h1>
-                    {/* Show Edit Profile if is User, else show Message User */}
-                    {isUser ? <div className="flex flex-row space-y-1">
-                        <IconButton onClick={() => signOut()}>
-                            <ExitToAppOutlined className="text-red-600"/>
-                        </IconButton>
-                        <div className="hidden md:inline">
-                            <Button variant="contained" color="primary" onClick={e => setOpenEditDetails(true)}>Edit Your Profile</Button>
-                        </div>
-                        <div className="md:hidden">
-                            <IconButton><EditOutlined /></IconButton>
-                        </div>
-                    </div> : <>
-                        <div className="hidden md:inline">
-                            <Button variant="contained" color="primary" startIcon={<MessageOutlined />} onClick={() => connectWithPerson()}>Message</Button>
-                        </div>
-                        <div className="md:hidden">
-                            <IconButton onClick={() => connectWithPerson()}><MessageOutlined /></IconButton>
-                        </div>
-                    </>}
-                </div>
-                <p className="text-gray-600 text-sm">{isMentor ? "Mentor" : major} at {school}</p>
-                <p className="text-gray-600 text-sm">{country}</p>
-                <div className="flex flex-row items-center my-5 space-x-3">
-                    <UserHighlight highlight={highlight1} />
-                    <UserHighlight highlight={highlight2} />
-                </div>
-            </div>
-        </div>
-    </div>
-    <EditDetailsDialog open={openEditDetails} onClose={()=> setOpenEditDetails(false)} />
-
-
-    <div className="inline rounded-xl shadow-lg w-full overflow-hidden bg-white relative md:hidden">
-        <UserBannerPicture profileId={profileId} isUser={isUser} />
-        <div className="flex flex-col p-3 w-full items-center">
-            <UserProfilePicture profileId={profileId} isUser={isUser} />
-            <br></br>
-            <br></br>
-            <div className="flex flex-col space-y-1 w-full">
+            <div className="flex flex-col space-y-1 w-full relative transform -translate-y-16">
                 <div className="flex flex-row justify-between items-center">
                     <h1 className="text-2xl text-gray-800">{name}</h1>
                     {/* Show Edit Profile if is User, else show Message User */}
