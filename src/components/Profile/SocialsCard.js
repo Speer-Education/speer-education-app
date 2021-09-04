@@ -1,5 +1,5 @@
 import { IconButton } from '@material-ui/core';
-import { EditOutlined, GitHub, LanguageOutlined } from '@material-ui/icons';
+import { EditOutlined, GitHub, LanguageOutlined, YouTube } from '@material-ui/icons';
 import React, { useState } from 'react';
 import EditSocialsDialog from './EditSocialsDialog';
 
@@ -25,6 +25,7 @@ const SocialsCard = ({socials, isUser}) => {
             </div>
             {socials?.github && <SocialLink link={socials?.github} icon={<GitHub/>} />}
             {socials?.personal && <SocialLink link={socials?.personal} icon={<LanguageOutlined/>} />}
+            {socials?.youtube && <SocialLink link={socials?.youtube} icon={<YouTube/>} />}
             {!socials && <h3 className="text-gray-500">No Social Links Added</h3>}
         </div>}
     </>);
