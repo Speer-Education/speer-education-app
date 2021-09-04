@@ -19,13 +19,13 @@ function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentU
         txt
         .split(" ")
         .map(part =>
-        URL_REGEX.test(part) ? <a href={part} className="font-medium text-blue-800">{part} </a> : part + " "
+        URL_REGEX.test(part) ? <a href={part} className="font-medium text-blue-800 break-all">{part} </a> : part + " "
         );
 
     if (hasFiles) {
         return (<div className="my-1">
             {!isCurrentUser && <span className="text-sm text-gray-500">{username}</span>}
-            <p className={`p-2 rounded-lg w-max max-w-prose bg-gray-100 ${isCurrentUser && "bg-blue-200 ml-auto"}`}>
+            <p className={`p-2 rounded-lg max-w-prose bg-gray-100 ${isCurrentUser && "bg-blue-200 ml-auto"}`} style={{width: "fit-content"}}>
                 <span className="chat__name">{username}</span>
                 {files.map(({downloadUrl, filename},index) => {
                     return (
@@ -45,7 +45,7 @@ function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentU
 
     return (<div className="my-1">
         {!isCurrentUser && <span className="text-sm text-gray-500">{username}</span>}
-        <p className={`p-2 rounded-lg w-max max-w-prose bg-gray-100 ${isCurrentUser && "bg-blue-200 ml-auto"}`}>
+        <p className={`p-2 rounded-lg max-w-prose bg-gray-100 ${isCurrentUser && "bg-blue-200 ml-auto"}`} style={{width: "fit-content"}}>
             <span className="text-gray-800 break-words whitespace-pre-wrap">{renderText(message)}</span>
             <span className="chat__timestamp"> <TimeAgo date={timestamp} /></span>
         </p>

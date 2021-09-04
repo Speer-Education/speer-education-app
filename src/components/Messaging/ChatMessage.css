@@ -27,11 +27,7 @@
 }
 
 .chat__messageText{
-    font-weight: 400;
-    font-size: 1rem;
-    display: block;
-    overflow-wrap: break-word;
-    white-space: pre-wrap;
+    max-width: 280px;
 }
 
 .chat__timestamp{
