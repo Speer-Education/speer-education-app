@@ -51,6 +51,9 @@ const EditBiographyDialog = ({open, onClose}) => {
                 </Dialog.Title>
                 <div className="mt-2 h-full space-y-2 py-2">
                     <InputAreaField 
+                        style={{ resize: "none"}} 
+                        rows="3" 
+                        maxlength="300"
                         type="text" 
                         className="md:w-full mb-6 md:mb-0" 
                         label="Short Description about yourself" 

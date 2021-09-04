@@ -165,7 +165,7 @@ export default function UserDetails() {
                             </FormRow></> : null }
                             {pageNumber === 3? 
                             <><FormRow>
-                                <InputAreaField required type="text" label="Short Biography" id="bio" name="bio" placeholder="Tell us something about yourself........" value={form.bio} onChange={handleFormInput} />
+                                <InputAreaField required style={{ resize: "none"}} rows="3" maxlength="300" type="text" label="Short Biography (Max of 300 characters)" id="bio" name="bio" placeholder="Tell us something about yourself........" value={form.bio} onChange={handleFormInput} />
                             </FormRow>
                             <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
                                 Give us the two things you are most proud of <span className="text-red-600">*</span>
@@ -210,7 +210,7 @@ export default function UserDetails() {
                             </FormRow>
                             </>: null}
                         </div>
-                        {pageNumber === 4? !isValidForm && <p className="mb-5 text-red-600">Not all fields are filled.</p> : null}
+                        {pageNumber === 4? !isValidForm && <p className="mb-5 text-red-600">Please go back and fill all fields. Not all fields are filled.</p> : null}
                     </div>
                     <div className="absolute bottom-5 right-5">
                         {/* Only render the back button if not on first section*/}
