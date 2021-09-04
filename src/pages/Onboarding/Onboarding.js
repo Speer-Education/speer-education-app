@@ -139,16 +139,16 @@ export default function UserDetails() {
                         <div className="mt-2">
                             <Transition
                                 show={pageNumber === 1}
-                                enter="transform transition duration-200"
-                                enterFrom="-translate-x-96"
-                                enterTo="translate-x-0 absolute"
-                                leave="transform transition duration-200"
-                                leaveFrom="translate-x-0"
-                                leaveTo="translate-x-96 -translate-y-24 absolute"
+                                enter="transform transition ease-linear duration-200"
+                                enterFrom="-translate-x-96 opacity-0"
+                                enterTo="translate-x-0 opacity-100 absolute"
+                                leave="transform transition ease-linear duration-200"
+                                leaveFrom="translate-x-0 opacity-100"
+                                leaveTo="translate-x-96 opacity-0 -translate-y-24 absolute"
                             >
                                 <FormRow>
                                     {/* Name */}
-                                    <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="What is your full name" placeholder="John Doe" id="fullname" name="name" value={form.name} onChange={handleFormInput} />
+                                    <InputField required type="text" className="md:w-64 mb-6 md:mb-0" label="What is your full name" placeholder="John Doe" id="fullname" name="name" value={form.name} onChange={handleFormInput} />
                                 </FormRow>
                                 <FormRow>
                                     {/* Date Of Birth */}
@@ -161,16 +161,16 @@ export default function UserDetails() {
                             </Transition>
                             <Transition
                                 show={pageNumber === 2}
-                                enter="transform transition duration-200"
-                                enterFrom="-translate-x-96"
-                                enterTo="translate-x-0 absolute"
-                                leave="transform transition duration-200"
-                                leaveFrom="translate-x-0"
-                                leaveTo="translate-x-96 translate-y-24 absolute"
+                                enter="transform transition ease-linear duration-200"
+                                enterFrom="-translate-x-96 opacity-0"
+                                enterTo="translate-x-0 opacity-100 absolute"
+                                leave="transform transition ease-linear duration-200"
+                                leaveFrom="translate-x-0 opacity-100"
+                                leaveTo="translate-x-96 opacity-0 translate-y-24 absolute"
                             >
                                 <FormRow>
                                     {/* Their school Name: */}
-                                    <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="Name of Your School" id="school" name="school" placeholder="Harvard University" value={form.school} onChange={handleFormInput} />
+                                    <InputField required type="text" className="md:w-64 mb-6 md:mb-0" label="Name of Your School" id="school" name="school" placeholder="Harvard University" value={form.school} onChange={handleFormInput} />
                                     {/* Grade */}
                                 </FormRow>
                                 <FormRow>
@@ -178,17 +178,17 @@ export default function UserDetails() {
                                 </FormRow>
                                     {/* What they plan to major in */}
                                 <FormRow>
-                                    <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major" value={form.major} onChange={handleFormInput} />
+                                    <InputField required type="text" className="md:w-64 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major" value={form.major} onChange={handleFormInput} />
                                 </FormRow>
                             </Transition>
                             <Transition
                                 show={pageNumber === 3}
-                                enter="transform transition duration-200"
-                                enterFrom="-translate-x-96"
-                                enterTo="translate-x-0 absolute"
-                                leave="transform transition duration-200"
-                                leaveFrom="translate-x-0"
-                                leaveTo="translate-x-96 -translate-y-24 absolute"
+                                enter="transform transition ease-linear duration-200"
+                                enterFrom="-translate-x-96 opacity-0"
+                                enterTo="translate-x-0 opacity-100 absolute"
+                                leave="transform transition ease-linear duration-200"
+                                leaveFrom="translate-x-0 opacity-100"
+                                leaveTo="translate-x-96 opacity-0 -translate-y-24 absolute"
                             >
                                 <FormRow>
                                     <InputAreaField required style={{ resize: "none"}} rows="3" maxLength="300" type="text" label="Short Biography (Max of 300 characters)" id="bio" name="bio" placeholder="Tell us something about yourself........" value={form.bio} onChange={handleFormInput} />
@@ -215,12 +215,12 @@ export default function UserDetails() {
                             </Transition>
                             <Transition
                                 show={pageNumber === 4}
-                                enter="transform transition duration-200"
-                                enterFrom="-translate-x-96"
-                                enterTo="translate-x-0 absolute"
-                                leave="transform transition duration-200"
-                                leaveFrom="translate-x-0"
-                                leaveTo="translate-x-96 translate-y-24 absolute"
+                                enter="transform transition ease-linear duration-200"
+                                enterFrom="-translate-x-96 opacity-0"
+                                enterTo="translate-x-0 opacity-100 absolute"
+                                leave="transform transition ease-linear duration-200"
+                                leaveFrom="translate-x-0 opacity-100"
+                                leaveTo="translate-x-96 opacity-0 translate-y-24 absolute"
                             >
                                 <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
                                     Link your socials (optional):
