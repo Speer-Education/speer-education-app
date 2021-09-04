@@ -111,7 +111,7 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
                                 <Button variant="contained" color="primary" onClick={e => setOpenEditDetails(true)}>Edit Your Profile</Button>
                             </div>
                             <div className="md:hidden">
-                                <IconButton><EditOutlined /></IconButton>
+                                <IconButton onClick={e => setOpenEditDetails(true)}><EditOutlined /></IconButton>
                             </div>
                         </div> : <>
                             <div className="hidden md:inline">
