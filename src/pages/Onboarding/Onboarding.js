@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import './Onboarding.css';
 import { gradeOptions, countryOptions } from './OnboardingConfig';
-// import { useAuth } from '../../hooks/useAuth';
 import { functions } from '../../config/firebase';
 import Button from '@material-ui/core/Button';
 import { Helmet } from "react-helmet";
@@ -10,7 +9,7 @@ import Picker from 'emoji-picker-react';
 import { GitHub, LanguageOutlined } from '@material-ui/icons';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import { InputAreaField, InputField, InputSelect } from '../../components/Forms/Inputs';
-
+import { Transition } from "@headlessui/react";
 
 
 const FormRow = ({ children }) => (
@@ -136,79 +135,115 @@ export default function UserDetails() {
                 </div>
                 <div className="flex-1 text-left p-12 relative">
                     <div className="flex flex-col">
-                        {/* Ask which to make mandatory and then force them to be required*/}
+                        {/* Looks weird on Mobile*/}
                         <div className="mt-2">
-                            {pageNumber === 1? <><FormRow>
-                                {/* Name */}
-                                <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="What is your full name" placeholder="John Doe" id="fullname" name="name" value={form.name} onChange={handleFormInput} />
-                            </FormRow>
-                            <FormRow>
-                                {/* Date Of Birth */}
-                                <InputField required type="date" className="md:w-1/2 mb-6 md:mb-0" label="Your Date of Birth" id="dateofbirth" name="dateOfBirth" value={form.dateOfBirth} onChange={handleFormInput} />
-                                {/* Insert Country They Live In (Use a country list)*/}
-                            </FormRow>
-                            <FormRow>
-                                <InputSelect required className="md:w-1/2 mb-6 md:mb-0" label="Country of Residence" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
-                            </FormRow></> : null}
-                            {pageNumber === 2 ? 
-                            <><FormRow>
-                                {/* Their school Name: */}
-                                <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="Name of Your School" id="school" name="school" placeholder="Harvard University" value={form.school} onChange={handleFormInput} />
-                                {/* Grade */}
-                            </FormRow>
-                            <FormRow>
-                                <InputSelect required className="md:w-full mb-6 md:mb-0" label="Year Of Graduation from High School" id="hsGradYear" name="hsGradYear" options={gradeOptions} value={form.hsGradYear} onChange={handleHsGradYearSelectFormInput} />
-                            </FormRow>
-                                {/* What they plan to major in */}
-                            <FormRow>
-                                <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major" value={form.major} onChange={handleFormInput} />
-                            </FormRow></> : null }
-                            {pageNumber === 3? 
-                            <><FormRow>
-                                <InputAreaField required style={{ resize: "none"}} rows="3" maxlength="300" type="text" label="Short Biography (Max of 300 characters)" id="bio" name="bio" placeholder="Tell us something about yourself........" value={form.bio} onChange={handleFormInput} />
-                            </FormRow>
-                            <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
-                                Give us the two things you are most proud of <span className="text-red-600">*</span>
-                            </p>                            
-                            <FormRow>
-                                {/* TODO: Change this to the emoji selecter */}
-                                <div className="px-3">
-                                    <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{form.highlight1.emoji || "Pick an emoji"}</Button>
-                                </div>
-                                {showPicker1 ? <Picker onEmojiClick={handleHighlight1Emoji} pickerStyle={{ position: "relative", zIndex:1,position:"absolute",left: "130px" }} /> : null}
-                                <InputField required type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Where you work, study etc..." id="highlight1" name="highlight1" value={form.highlight1.description} onChange={(e) => setForm({...form, highlight1: {emoji: form.highlight1.emoji, description: e.target.value}})}/>
-                            </FormRow>
-                            <FormRow>
-                                {/* TODO: Change this to the emoji selecter */}
-                                <div className="px-3">
-                                    <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{form.highlight2.emoji || "Pick an emoji"}</Button>
-                                </div>
-                                {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} pickerStyle={{ position: "relative", zIndex:1,position:"absolute",left: "130px" }} /> : null}
-                                <InputField required type="text" className="md:w-3/4 mb-2 md:mb-0" autoWidth placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
-                            </FormRow></> : null}
-                            {pageNumber === 4? <>
-                            <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
-                                Link your socials (optional):
-                            </p>
-                            <FormRow >
-                                <div className={`px-3`}>
-                                    <GitHub style={{ fontSize: 42 }}></GitHub>
-                                </div>                                
-                                <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Github Link" value={form.socials.github} onChange={(e) => setForm({...form, socials : {...form.socials, github : e.target.value}})} />   
-                            </FormRow>
-                            <FormRow >
-                                <div className={`px-3`}>
-                                    <LanguageOutlined style={{ fontSize: 42 }}></LanguageOutlined>
-                                </div>                                
-                                <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Personal Website Link" value={form.socials.personal} onChange={(e) => setForm({...form, socials : {...form.socials, personal : e.target.value}})} />   
-                            </FormRow>
-                            <FormRow>
-                                <div className={`px-3`}>
-                                    <YouTubeIcon style={{ fontSize: 42 }}></YouTubeIcon>
-                                </div>                                
-                                <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Youtube Link" value={form.socials.youtube} onChange={(e) => setForm({...form, socials : {...form.socials, youtube : e.target.value}})} />   
-                            </FormRow>
-                            </>: null}
+                            <Transition
+                                show={pageNumber === 1}
+                                enter="transform transition duration-200"
+                                enterFrom="-translate-x-96"
+                                enterTo="translate-x-0 absolute"
+                                leave="transform transition duration-200"
+                                leaveFrom="translate-x-0"
+                                leaveTo="translate-x-96 -translate-y-24 absolute"
+                            >
+                                <FormRow>
+                                    {/* Name */}
+                                    <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="What is your full name" placeholder="John Doe" id="fullname" name="name" value={form.name} onChange={handleFormInput} />
+                                </FormRow>
+                                <FormRow>
+                                    {/* Date Of Birth */}
+                                    <InputField required type="date" className="md:w-1/2 mb-6 md:mb-0" label="Your Date of Birth" id="dateofbirth" name="dateOfBirth" value={form.dateOfBirth} onChange={handleFormInput} />
+                                    {/* Insert Country They Live In (Use a country list)*/}
+                                </FormRow>
+                                <FormRow>
+                                    <InputSelect required className="md:w-1/2 mb-6 md:mb-0" label="Country of Residence" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
+                                </FormRow>
+                            </Transition>
+                            <Transition
+                                show={pageNumber === 2}
+                                enter="transform transition duration-200"
+                                enterFrom="-translate-x-96"
+                                enterTo="translate-x-0 absolute"
+                                leave="transform transition duration-200"
+                                leaveFrom="translate-x-0"
+                                leaveTo="translate-x-96 translate-y-24 absolute"
+                            >
+                                <FormRow>
+                                    {/* Their school Name: */}
+                                    <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="Name of Your School" id="school" name="school" placeholder="Harvard University" value={form.school} onChange={handleFormInput} />
+                                    {/* Grade */}
+                                </FormRow>
+                                <FormRow>
+                                    <InputSelect required className="md:w-full mb-6 md:mb-0" label="Year Of Graduation from High School" id="hsGradYear" name="hsGradYear" options={gradeOptions} value={form.hsGradYear} onChange={handleHsGradYearSelectFormInput} />
+                                </FormRow>
+                                    {/* What they plan to major in */}
+                                <FormRow>
+                                    <InputField required type="text" className="md:w-full mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major" value={form.major} onChange={handleFormInput} />
+                                </FormRow>
+                            </Transition>
+                            <Transition
+                                show={pageNumber === 3}
+                                enter="transform transition duration-200"
+                                enterFrom="-translate-x-96"
+                                enterTo="translate-x-0 absolute"
+                                leave="transform transition duration-200"
+                                leaveFrom="translate-x-0"
+                                leaveTo="translate-x-96 -translate-y-24 absolute"
+                            >
+                                <FormRow>
+                                    <InputAreaField required style={{ resize: "none"}} rows="3" maxLength="300" type="text" label="Short Biography (Max of 300 characters)" id="bio" name="bio" placeholder="Tell us something about yourself........" value={form.bio} onChange={handleFormInput} />
+                                </FormRow>
+                                <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
+                                    Give us the two things you are most proud of <span className="text-red-600">*</span>
+                                </p>                            
+                                <FormRow>
+                                    {/* TODO: Change this to the emoji selecter */}
+                                    <div className="px-3">
+                                        <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{form.highlight1.emoji || "Pick an emoji"}</Button>
+                                    </div>
+                                    {showPicker1 ? <Picker onEmojiClick={handleHighlight1Emoji} pickerStyle={{ position: "relative", zIndex:1,position:"absolute",left: "130px" }} /> : null}
+                                    <InputField required type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Where you work, study etc..." id="highlight1" name="highlight1" value={form.highlight1.description} onChange={(e) => setForm({...form, highlight1: {emoji: form.highlight1.emoji, description: e.target.value}})}/>
+                                </FormRow>
+                                <FormRow>
+                                    {/* TODO: Change this to the emoji selecter */}
+                                    <div className="px-3">
+                                        <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{form.highlight2.emoji || "Pick an emoji"}</Button>
+                                    </div>
+                                    {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} pickerStyle={{ position: "relative", zIndex:1,position:"absolute",left: "130px" }} /> : null}
+                                    <InputField required type="text" className="md:w-3/4 mb-2 md:mb-0" autoWidth placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
+                                </FormRow>
+                            </Transition>
+                            <Transition
+                                show={pageNumber === 4}
+                                enter="transform transition duration-200"
+                                enterFrom="-translate-x-96"
+                                enterTo="translate-x-0 absolute"
+                                leave="transform transition duration-200"
+                                leaveFrom="translate-x-0"
+                                leaveTo="translate-x-96 translate-y-24 absolute"
+                            >
+                                <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
+                                    Link your socials (optional):
+                                </p>
+                                <FormRow >
+                                    <div className={`px-3`}>
+                                        <GitHub style={{ fontSize: 42 }}></GitHub>
+                                    </div>                                
+                                    <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Github Link" value={form.socials.github} onChange={(e) => setForm({...form, socials : {...form.socials, github : e.target.value}})} />   
+                                </FormRow>
+                                <FormRow >
+                                    <div className={`px-3`}>
+                                        <LanguageOutlined style={{ fontSize: 42 }}></LanguageOutlined>
+                                    </div>                                
+                                    <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Personal Website Link" value={form.socials.personal} onChange={(e) => setForm({...form, socials : {...form.socials, personal : e.target.value}})} />   
+                                </FormRow>
+                                <FormRow>
+                                    <div className={`px-3`}>
+                                        <YouTubeIcon style={{ fontSize: 42 }}></YouTubeIcon>
+                                    </div>                                
+                                    <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Youtube Link" value={form.socials.youtube} onChange={(e) => setForm({...form, socials : {...form.socials, youtube : e.target.value}})} />   
+                                </FormRow>
+                            </Transition>
                         </div>
                         {pageNumber === 4? !isValidForm && <p className="mb-5 text-red-600">Please go back and fill all fields. Not all fields are filled.</p> : null}
                     </div>
