@@ -4,10 +4,11 @@ import Home from "./pages/Home/Home";
 import { useAuth } from "./hooks/useAuth";
 import { Router, Switch, Route, Redirect } from "react-router-dom";
 import history from './hooks/history';
-import CircleLoader from './components/Loader/CircleLoader';
 import ServiceWorkerWrapper from './components/ServiceWorker/ServiceWorkerWrapper';
 import AppLoader from './components/Loader/AppLoader';
 import { hotjar } from 'react-hotjar';
+import FallbackPage from './pages/Fallback/FallbackPage';
+import {ErrorBoundary} from 'react-error-boundary';
 
 const LazyLogin = lazy(() => import("./pages/Login/Login"))
 const LazyOnboarding = lazy(() => import("./pages/Onboarding/Onboarding"))
@@ -27,26 +28,32 @@ function App() {
     hotjar.identify('USER_ID', { userProperty: user.uid });
   }, [user]);
 
+  const errorHandler= (error,errorInfo) => {
+    console.log('logging error:', error, errorInfo)
+  }
+
   return (
-    <Router history={history}>
-      <div className="app bg-gray-100 min-h-screen">
-        <Suspense fallback={<AppLoader/>}>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path={"/login"} component={LazyLogin} />
-            {user !== false ? <>
-              <Route path="/app" component={LazyMainApp} /> {/* In the future, we make it so it only renders if user is logged in */}
-              <Route path="/admin-app" component={LazyAdminApp} /> {/* Only render if user is logged in as admin*/}
-              <Route exact path={"/onboarding"} component={LazyOnboarding} /> {/* Onboarding form to get the neccesary details before starting */}
-            </> : null}
-            {user === false && <Route path="/">
-              <Redirect to="/" />
-            </Route>}
-          </Switch>
-        </Suspense>
-        <ServiceWorkerWrapper/>
-      </div>
-    </Router>
+    <ErrorBoundary FallbackComponent={FallbackPage} onError={errorHandler}>
+      <Router history={history}>
+        <div className="app bg-gray-100 min-h-screen">
+          <Suspense fallback={<AppLoader/>}>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path={"/login"} component={LazyLogin} />
+              {user !== false ? <>
+                <Route path="/app" component={LazyMainApp} /> {/* In the future, we make it so it only renders if user is logged in */}
+                <Route path="/admin-app" component={LazyAdminApp} /> {/* Only render if user is logged in as admin*/}
+                <Route exact path={"/onboarding"} component={LazyOnboarding} /> {/* Onboarding form to get the neccesary details before starting */}
+              </> : null}
+              {user === false && <Route path="/">
+                <Redirect to="/" />
+              </Route>}
+            </Switch>
+          </Suspense>
+          <ServiceWorkerWrapper/>
+        </div>
+      </Router>
+    </ErrorBoundary>
   );
 }
 
