@@ -66,7 +66,7 @@ function ProfilePage({ isUser=false }) {
                 <div className="flex-1 flex flex-row w-full">
                     <div className="flex flex-row justify-center flex-1 w-full p-3 md:p-0">
                         <div className="flex flex-col h-full p-3 space-y-4 flex-1" style={{ maxWidth: "1024px" }}>
-                            <p className="font-semibold text-lg">{isUser?"Your":name} Profile</p>
+                            <p className="font-semibold text-lg">{isUser?"Your":name +"'s"} Profile</p>
                             <UserFullProfile profileId={profileId || user?.uid} isUser={isUser} isMentor={isMentor} userDetails={userDetails}/>
                             <div className="relative rounded-xl shadow-lg w-full overflow-hidden bg-white py-5 px-8 space-y-2">
                                 <p className="font-semibold text-lg">About Me</p>
@@ -78,7 +78,7 @@ function ProfilePage({ isUser=false }) {
                                 <p className="text-gray-600">{bio}</p>
                             </div>
                             <EditBiographyDialog open={openEditBio} onClose={() => setOpenEditBio(false)}/>
-                            <ProfilePostStream uid={profileId || user?.uid} />
+                            <ProfilePostStream uid={profileId || user?.uid} isUser={isUser} name={name}/>
                         </div>
                     </div>
                     <div className=" hidden md:flex flex-col h-app w-sidebar pl-3">

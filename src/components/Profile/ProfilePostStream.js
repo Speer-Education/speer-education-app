@@ -17,7 +17,7 @@ const DOCUMENTS_PER_PAGE = 3;
  * @component
  * @returns PostCards
  */
-const ProfilePostStream = ({uid}) => {
+const ProfilePostStream = ({uid, isUser, name}) => {
     const { user } = useAuth();
     const [streamPosts, setStreamPosts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -115,10 +115,15 @@ const ProfilePostStream = ({uid}) => {
     }
 
     return (
-        <div className="space-y-2">
-            {streamPosts.map(post => <PostCard key={post.id} post={post}/>)}
-            <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
-        </div>
+        <>
+            {streamPosts.length > 0 ? <p className="font-semibold text-lg">{isUser?"Your":name +"'s"} Posts</p> : <p className="font-semibold text-red-500 text-lg">
+                You haven't made any posts yet!
+            </p>}
+            <div className="space-y-2">
+                {streamPosts.map(post => <PostCard key={post.id} post={post}/>)}
+                <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
+            </div>
+        </>
     );
 }
 
