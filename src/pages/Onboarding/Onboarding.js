@@ -201,7 +201,7 @@ export default function UserDetails() {
                                     <div className="px-3">
                                         <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{form.highlight1.emoji || "Pick an emoji"}</Button>
                                     </div>
-                                    {showPicker1 ? <Picker onEmojiClick={handleHighlight1Emoji} pickerStyle={{ position: "relative", zIndex:1,position:"absolute",left: "130px" }} /> : null}
+                                    {showPicker1 ? <Picker onEmojiClick={handleHighlight1Emoji} pickerStyle={{ zIndex:1,position:"absolute",left: "130px" }} /> : null}
                                     <InputField required type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Where you work, study etc..." id="highlight1" name="highlight1" value={form.highlight1.description} onChange={(e) => setForm({...form, highlight1: {emoji: form.highlight1.emoji, description: e.target.value}})}/>
                                 </FormRow>
                                 <FormRow>
@@ -209,7 +209,7 @@ export default function UserDetails() {
                                     <div className="px-3">
                                         <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{form.highlight2.emoji || "Pick an emoji"}</Button>
                                     </div>
-                                    {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} pickerStyle={{ position: "relative", zIndex:1,position:"absolute",left: "130px" }} /> : null}
+                                    {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} pickerStyle={{ zIndex:1,position:"absolute",left: "130px" }} /> : null}
                                     <InputField required type="text" className="md:w-3/4 mb-2 md:mb-0" autoWidth placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
                                 </FormRow>
                             </Transition>
