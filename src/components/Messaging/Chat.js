@@ -40,6 +40,7 @@ function Chat({screenSize}) {
     const [newMessageFlag, setNewMessageFlag] = useState(false);
     const [showProfPicAndAttachments, setShowProfPicAndAttachments] = useState(false);
     const [doneInitialScroll, setDoneInitialScroll] = useState(false);
+    const [fileSizeWarning, setFileSizeWarning] = useState(false);
 
     const messagesEndRef = useRef(null);
     const filter = new Filter({ emptyList: true, list: badWordsList });
@@ -109,7 +110,14 @@ function Chat({screenSize}) {
         setDoneInitialScroll(false)
     }, [roomId])
 
-    
+    //UseEffect to run everytime the fileSize warning comes up so the warning is only there for 5 seconds.
+    useEffect(() => {
+        if (fileSizeWarning === true){
+            setTimeout(() => {
+                setFileSizeWarning(false);
+            }, 5000)
+        }
+    }, [fileSizeWarning])
 
     function handleUpdatedMessages(snapshot) {
         // append new messages to message array
@@ -237,6 +245,21 @@ function Chat({screenSize}) {
 
             //Record current Timestamp.
             const fileSendDate = new Date();
+
+            //GO through the files to ensure they are all the suitable size.
+            for (let i=0; i < fileMessages.length; i++){
+
+                //Check whether the file is an image
+                const isImage = (/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i).test(fileMessages[i].name);
+
+                //For images, limit is 0.5MB, for other files (like PDFS), limit is 5MB
+                if ((isImage && fileMessages[i].size > 500000) || fileMessages[i].size > 5000000) {
+                    //Since the file is too big, we empty fileMessages, set off the alert to the user, and stop the uploading.
+                    setFileMessages([]);
+                    setFileSizeWarning(true);
+                    return;
+                } 
+            }
 
             //Go through the files here and upload them to storage, keep track of the id. The room should be messageFiles/roomId/
             const fileMessagesStorageDetails = await Promise.all(fileMessages.map(async (file, index) => {
@@ -397,6 +420,16 @@ function Chat({screenSize}) {
                         timestamp={date.toMillis()}
                         isCurrentUser={senderId === user?.uid} />
                 ))}
+                {fileSizeWarning ? <><ChatMessage 
+                    message={"One or more of the files were too large."}
+                    isCurrentUser={true}
+                    isErrorMessage={true}
+                /> 
+                <ChatMessage 
+                    message={"We have imposed a maximum file size of 0.5MB for Images, and 5MB for PDFs and other files."}
+                    isCurrentUser={true}
+                    isErrorMessage={true}
+                /></> : null}
                 <div ref={messagesEndRef} />
             </div>
             <div className="flex min-h-16 items-center bg-white rounded-lg shadow-lg">

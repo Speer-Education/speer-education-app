@@ -11,7 +11,7 @@ import { FolderOpenOutlined } from '@material-ui/icons';
  * @param {params} param0 message, username, timestamp, isCurrentUser
  * @returns Component
  */
-function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentUser }) {
+function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentUser, isErrorMessage }) {
 
     const URL_REGEX = /\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]/ig;
 
@@ -46,7 +46,7 @@ function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentU
     return (<div className="my-1">
         {!isCurrentUser && <span className="text-sm text-gray-500">{username}</span>}
         <p className={`p-2 rounded-lg max-w-prose bg-gray-100 ${isCurrentUser && "bg-blue-200 ml-auto"}`} style={{width: "fit-content"}}>
-            <span className="text-gray-800 break-words whitespace-pre-wrap">{renderText(message)}</span>
+            <span className={`${isErrorMessage ? "text-red-600": "text-gray-800"} break-words whitespace-pre-wrap`}>{renderText(message)}</span>
             <span className="chat__timestamp"> <TimeAgo date={timestamp} /></span>
         </p>
     </div>)
