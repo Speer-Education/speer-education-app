@@ -1,8 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import history from '../../../hooks/history';
 import { useAuth } from '../../../hooks/useAuth';
-import styles from './UserMenu.css'
 
 
 const UserMenu = () => {

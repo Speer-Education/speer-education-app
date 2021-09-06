@@ -2,9 +2,6 @@ import { UserMenu } from './UserMenu/UserMenu'
 import HomeTwoToneIcon from '@material-ui/icons/HomeTwoTone';
 import PeopleTwoToneIcon from '@material-ui/icons/PeopleTwoTone';
 import MessageTwoToneIcon from '@material-ui/icons/MessageTwoTone';
-import NotificationsTwoToneIcon from '@material-ui/icons/NotificationsTwoTone';
-import ArrowDropDownTwoToneIcon from '@material-ui/icons/ArrowDropDownTwoTone';
-import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import history from '../../hooks/history';
 

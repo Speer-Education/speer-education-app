@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { useEffect, useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { db } from '../../config/firebase';

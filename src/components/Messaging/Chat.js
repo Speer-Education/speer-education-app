@@ -8,8 +8,6 @@ import { useAuth } from '../../hooks/useAuth';
 import badWordsList from '../../config/badWords.json';
 import ChatMessage from './ChatMessage';
 import Loader from '../Loader/Loader';
-import { useOnScreen } from '../../hooks/useHooks';
-import { getSnapshot } from '../../hooks/firestore';
 import { InView } from 'react-intersection-observer';
 import ProfileCard from './ProfileCard';
 import AttachmentsCard from './AttachmentsCard';

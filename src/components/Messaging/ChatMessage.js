@@ -1,7 +1,6 @@
 import React from 'react';
 import './ChatMessage.css';
 import TimeAgo from 'react-timeago';
-import { Link } from 'react-router-dom';
 import AttachmentItem from './AttachmentItem';
 import { FolderOpenOutlined } from '@material-ui/icons';
 

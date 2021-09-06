@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Sidebar.css';
-import { Avatar } from "@material-ui/core";
 import { SearchOutlined } from '@material-ui/icons';
 import SidebarChat from './SidebarChat';
 import { db, storage } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
-import Loader from '../Loader/Loader';
 import ProfilePicture from '../User/ProfilePicture';
 import Spinner from '../Loader/Spinner';
 import history from '../../hooks/history';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import './MentorShowcase.css';

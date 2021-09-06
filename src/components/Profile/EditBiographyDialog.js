@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { db, firebase } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import DialogBase from '../Dialog/DialogBase';
-import { InputAreaField, InputField } from '../Forms/Inputs';
+import { InputAreaField } from '../Forms/Inputs';
 import Spinner from '../Loader/Spinner'
 
 const EditBiographyDialog = ({open, onClose}) => {

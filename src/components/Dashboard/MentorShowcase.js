@@ -1,13 +1,11 @@
-import { Button } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { db, functions, firebase } from '../../config/firebase';
+import { db } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
 import PersonAddTwoToneIcon from '@material-ui/icons/PersonAddTwoTone';
 import { IconButton } from '@material-ui/core';
 import './MentorShowcase.css';
 import { useAuth } from '../../hooks/useAuth';
-import { followUser } from '../../utils/relationships';
 import history from '../../hooks/history';
 import { getMessageUserRoom } from '../../utils/chats';
 

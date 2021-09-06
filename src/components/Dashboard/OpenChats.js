@@ -1,9 +1,5 @@
-import { IconButton } from '@material-ui/core';
-import { MessageTwoTone } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
-import { db } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
-import NotificationCard from './NotificationCard';
 import ProfilePicture from '../User/ProfilePicture';
 import { Link } from 'react-router-dom';
 import ReactTimeago from 'react-timeago';

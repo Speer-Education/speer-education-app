@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MDEditor } from '../Blog/Editor/mdeditor';
-import { db, storage, firebase } from '../../config/firebase';
+import { db, firebase } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import MessageIcon from '@material-ui/icons/Message';
 import TimeAgo from 'react-timeago';
 import './PostCard.css';

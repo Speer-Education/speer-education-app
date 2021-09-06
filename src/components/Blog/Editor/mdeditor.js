@@ -1,8 +1,7 @@
 import Editor from 'rich-markdown-editor';
 import styles from './mdeditor.css'
 import { storage } from '../../../config/firebase';
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import { ImageOutlined, PhotoAlbumTwoTone } from '@material-ui/icons';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 
 const colors = {
   almostBlack: "#878787",

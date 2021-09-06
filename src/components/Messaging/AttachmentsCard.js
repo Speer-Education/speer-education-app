@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FolderOpenOutlined } from "@material-ui/icons";
 import AttachmentsDialog from "./AttachmentsDialog";
 import AttachmentItem from "./AttachmentItem";

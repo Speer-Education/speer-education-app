@@ -3,7 +3,7 @@ import React from 'react'
 function FallbackPage({error}) {
     return (
         <div>
-            If you are seeing this, an error has occured!
+            <h1 className="text-xl text-center">If you are seeing this, an error has occured! Please refresh the page.</h1>
         </div>
     )
 }

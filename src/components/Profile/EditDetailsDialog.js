@@ -1,6 +1,6 @@
 import { Dialog } from '@headlessui/react';
 import { Button } from '@material-ui/core';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { db, firebase } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import { countryOptions } from '../../pages/Onboarding/OnboardingConfig';
