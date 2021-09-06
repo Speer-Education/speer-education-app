@@ -4,16 +4,12 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import ScrollAnimation from 'react-animate-on-scroll';
-import { uniSliderSettings, teamSliderSettings, sliderItems, teamMembers } from './HomeConfig';
+import { uniSliderSettings, sliderItems } from './HomeConfig';
 import { ContactUsForm } from '../../components/Forms/contactus'
-import { TeamCard } from '../../components/Team/TeamCard';
-import { useMediaQuery } from 'react-responsive'
 import "animate.css/animate.min.css";
 import './Home.css';
 import {Helmet} from "react-helmet";
 export default function Home() {
-
-    const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
 
     return (
         <div className="home">
@@ -82,9 +78,9 @@ export default function Home() {
                     <div className="home-launch__container">
                         <div className="home-launch__info">
                             <p>Dubai, United Arab Emirates</p>
-                            <p><a href="mailto:speereducation@gmail.com"><i class="far fa-envelope"></i> speereducation@gmail.com</a></p>
+                            <p><a href="mailto:speereducation@gmail.com"><i className="far fa-envelope"></i> speereducation@gmail.com</a></p>
                             <p>Share your contact information and we'll keep you informed about launch dates, beta programs and new features!</p>
-                            <a href="https://www.linkedin.com/company/speereducation/" target="_blank" rel="noopener noreferrer"><span>Speer Linkedin Link</span><i class="fab fa-2x fa-linkedin-in"></i></a>
+                            <a href="https://www.linkedin.com/company/speereducation/" target="_blank" rel="noopener noreferrer"><span>Speer Linkedin Link</span><i className="fab fa-2x fa-linkedin-in"></i></a>
                         </div>
                         <ContactUsForm mainClassName="home-launch" />
                     </div>
