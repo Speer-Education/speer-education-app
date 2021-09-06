@@ -26,7 +26,7 @@ const SocialsCard = ({socials, isUser}) => {
             {socials?.github && <SocialLink link={socials?.github} icon={<GitHub/>} />}
             {socials?.personal && <SocialLink link={socials?.personal} icon={<LanguageOutlined/>} />}
             {socials?.youtube && <SocialLink link={socials?.youtube} icon={<YouTube/>} />}
-            {!socials && <h3 className="text-gray-500">No Social Links Added</h3>}
+            {(socials?.github === "" && socials?.personal === "" && socials?.youtube === "") && <h3 className="text-gray-500">No Social Links Added</h3>}
         </div>}
     </>);
 }
