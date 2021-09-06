@@ -7,7 +7,7 @@ import './ProfilePage.css'
 import { useAuth } from '../../../hooks/useAuth';
 import StatsCard from '../../../components/Dashboard/StatsCard';
 import ContactsSidebar from '../../../components/Profile/ContactsSidebar';
-import { Button, IconButton } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import UserFullProfile from '../../../components/Profile/UserFullProfile';
 import EducationCard from '../../../components/Profile/EducationCard';
 import SocialsCard from '../../../components/Profile/SocialsCard';

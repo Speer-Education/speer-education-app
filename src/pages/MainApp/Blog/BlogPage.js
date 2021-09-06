@@ -1,6 +1,6 @@
 import { MDEditor } from '../../../components/Blog/Editor/mdeditor';
 import { useParams } from "react-router-dom";
-import { useDocListener, updateDoc } from '../../../hooks/firestore';
+import { useDocListener } from '../../../hooks/firestore';
 import {Helmet} from "react-helmet";
 
 export default function BlogPage(){

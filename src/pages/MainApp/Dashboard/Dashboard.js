@@ -4,7 +4,7 @@ import PostComposerCard from '../../../components/Dashboard/PostComposerCard';
 import PostStream from '../../../components/Dashboard/PostStream';
 import OpenChats from '../../../components/Dashboard/OpenChats';
 import StatsCard from '../../../components/Dashboard/StatsCard';
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 import './Dashboard.css';
 import YoutubeEmbed from "../../../components/Dashboard/Video";
 
