@@ -42,7 +42,7 @@ export default function OpenChats() {
                             <div className="flex-1 ml-2 max-w-full">
                                 <h3 className="font-medium">{senderUsername}</h3>
                                 <div className="w-full flex flex-row text-gray-500 text-sm">
-                                    <p className="overflow-hidden overflow-ellipsis whitespace-nowrap flex-1">{senderId == user?.uid?"You: ":""}{message}</p>
+                                    <p className="overflow-hidden overflow-ellipsis whitespace-nowrap flex-1">{senderId === user?.uid?"You: ":""}{message}</p>
                                     {date && <ReactTimeago className="text-gray-400" date={date.toMillis()} />}
                                 </div>
                             </div>

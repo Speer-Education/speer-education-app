@@ -29,7 +29,7 @@ const AttachmentsDialog = ({open, onClose, roomId}) => {
                 </Dialog.Title>
                 <div className="mt-2 h-full">
                 {attachments.map(({ attachmentType, url, title, image, downloadUrl, filename, filetype, uploadedOn }) => {
-                    return (attachmentType == 'url') ?  <AttachmentItem 
+                    return (attachmentType === 'url') ?  <AttachmentItem 
                             image={image}
                             IconComponent={FolderOpenOutlined}
                             title={title || url}

@@ -15,7 +15,7 @@ const AttachmentsCard = ({ roomId, attachments = []}) => {
             </div>
             <div className="flex flex-col">
                 {attachments.sort(({uploadedOn: x},{uploadedOn: y}) => y-x).map(({ attachmentType, url, title, image, downloadUrl, filename, filetype, uploadedOn }) => {
-                    return (attachmentType == 'url') ?  <AttachmentItem 
+                    return (attachmentType === 'url') ?  <AttachmentItem 
                             image={image}
                             IconComponent={FolderOpenOutlined}
                             title={title || url}

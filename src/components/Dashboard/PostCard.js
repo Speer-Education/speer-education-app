@@ -137,7 +137,7 @@ const PostCard = ({ post }) => {
                         {_createdOn && <div className="post-timestamp_text"><TimeAgo date={_createdOn.toDate().getTime()} /></div>}
                     </div>
                 </div>
-                {(user?.uid == author) && <div>
+                {(user?.uid === author) && <div>
                     <IconButton aria-label="delete" className="float-right" onClick={handleDeletePost}>
                         <DeleteIcon className="text-red-600" />
                     </IconButton>

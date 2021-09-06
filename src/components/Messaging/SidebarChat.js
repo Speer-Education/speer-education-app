@@ -23,12 +23,12 @@ function SidebarChat({ id, roomName, isMentor, roomPic, read }) {
 
     return (
         <Link to={`${url}/${id}`}>
-            <div className={`flex items-center p-3 pr-5 ${(`${url}/${id}` == history.location.pathname)?'bg-gray-100':''}`}>
+            <div className={`flex items-center p-3 pr-5 ${(`${url}/${id}` === history.location.pathname)?'bg-gray-100':''}`}>
                 <Avatar src={roomPic}/> {/* Add src={*room_pic*} in the Avatar tag. Room pic defaults to the other user's prof pic if there are
                 only 2 users, and  the group pic if it is a group chat. <-- Implement this to come from Sidebar and be passed down as a prop */}
                 <div className="sidebarChat__info">
                     <h2>{roomName} {isMentor ? <i className="fas fa-user-check"></i> : null}</h2> 
-                    <p className="text-sm text-gray-600">{messages ? `${messages.senderId == user?.uid?"You: ":""}${messages.message}` : "No Message History"}</p>
+                    <p className="text-sm text-gray-600">{messages ? `${messages.senderId === user?.uid?"You: ":""}${messages.message}` : "No Message History"}</p>
                 </div>
                 {!read ? <FiberManualRecordIcon style={{color: "#F58B09"}}/> : null}
             </div>

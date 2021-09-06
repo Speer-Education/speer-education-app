@@ -33,7 +33,7 @@ export default function MentorShowcase() {
         history.push(`/app/messages/${targetRoomId}`)
     }
 
-    if(mentors.length == 0) return (
+    if(mentors.length === 0) return (
         <div className="flex-1 mentorShowcase h-full p-3 grid place-items-center">
             {/* TOOD: Add No Recent Chats Icon */}
             <h2 className="text-gray-500">No New Mentors</h2>

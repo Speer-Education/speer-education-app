@@ -28,7 +28,7 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }) {
     }, [profileId, user])
 
     if(followers.length === 0) return (
-        <div className="flex-1 p-3 m-2 shadow-lg rounded-md bg-white h-full p-3 grid place-items-center">
+        <div className="flex-1 m-2 shadow-lg rounded-md bg-white h-full p-3 grid place-items-center">
             {/* TOOD: Add No Recent Chats Icon */}
             <h2 className="text-gray-500">No Contacts</h2>
         </div>

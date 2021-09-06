@@ -116,7 +116,7 @@ const PostComposerCard = () => {
                 
                 <Button 
                     className="float-right"
-                    disabled={saving || (postContent.length == 0)} 
+                    disabled={saving || (postContent.length === 0)} 
                     variant="contained" 
                     color="primary" 
                     onClick={createNewPost}>Post</Button>

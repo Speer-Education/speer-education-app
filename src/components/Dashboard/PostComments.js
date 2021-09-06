@@ -26,7 +26,7 @@ export function PostComments({ post }) {
     }, [post?.id])
 
     const handleSubmitCommment = async () => {
-        if(userComment.length == 0) return;
+        if(userComment.length === 0) return;
         await db.collection(`posts/${post.id}/comments`).add({
             comment: userComment,
             author: { name, major, school, uid },

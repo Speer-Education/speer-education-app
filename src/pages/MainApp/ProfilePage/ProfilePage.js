@@ -17,7 +17,7 @@ import EditBiographyDialog from '../../../components/Profile/EditBiographyDialog
 
 function ProfilePage({ isUser=false }) {
     const { profileId } = useParams();
-    const { user, userDetails: currentUserDetails, signOut } = useAuth();
+    const { user, userDetails: currentUserDetails } = useAuth();
     const [userDetails, setUserDetails] = useState({});
     const [isMentor, setIsMentor] = useState(false);
     const [loading, setLoading] = useState(true);
