@@ -74,8 +74,9 @@ export function PostComments({ post }) {
         // save startAt snapshot
         end = snapshots.docs[snapshots.docs.length - 1]
         // create listener using startAt snapshot (starting boundary)    
-        let listener = ref.orderBy('commentedOn', 'desc')
-            .endAt(end)
+        let listener = (end?
+            ref.orderBy('commentedOn', 'desc').endAt(end):
+            ref.orderBy('commentedOn', 'desc'))
             .onSnapshot(handleUpdatedComments)
         // add listener to list
         listeners.push(listener)
