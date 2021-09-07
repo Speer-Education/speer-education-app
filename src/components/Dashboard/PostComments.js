@@ -156,6 +156,6 @@ export function PostComments({ post }) {
                 </IconButton>}
             </div>
         ))}
-        <a className="underline text-blue-700 block" onClick={getMoreComments}>Load More</a>
+        {!loadedAllPosts && <a className="underline text-blue-700 block" onClick={getMoreComments}>Load More</a>}
     </div>)
 }
