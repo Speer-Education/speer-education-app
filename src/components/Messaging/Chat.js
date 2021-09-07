@@ -12,6 +12,8 @@ import { InView } from 'react-intersection-observer';
 import ProfileCard from './ProfileCard';
 import AttachmentsCard from './AttachmentsCard';
 import TextareaAutosize from 'react-textarea-autosize';
+import imageCompression from 'browser-image-compression';
+import SendMessageLoader from '../Loader/SendMessageLoader';
 
 let messageArray = []
 let listeners = []    // list of listeners
@@ -33,6 +35,7 @@ function Chat({screenSize}) {
     const [isMentor, setIsMentor] = useState();
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [sendLoading, setSendLoading] = useState(false);
     const [loadedAllMessages, setLoadedAllMessages] = useState(false);
     const [fileMessages, setFileMessages] = useState([]);
     const [newMessageFlag, setNewMessageFlag] = useState(false);
@@ -223,6 +226,9 @@ function Chat({screenSize}) {
         //the text message as the next message. If not, it just sends the files (or vice versa if there are no files))
         if (fileMessages.length > 0) {
 
+            setSendLoading(true);
+            console.log("1", sendLoading);
+
             //Creating read object
             const read = {}
             roomDoc.users.forEach((id) => read[id] = false)
@@ -250,11 +256,19 @@ function Chat({screenSize}) {
                 //Check whether the file is an image
                 const isImage = (/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i).test(fileMessages[i].name);
 
+                //If image is less than 1MB but bigger than 0.5MB, we compress it down to 0.5MB.
+                if (isImage && fileMessages[i].size > 500000 && fileMessages[i].size <= 1000000){
+                    const compressedFile = await imageCompression(fileMessages[i], {maxSizeMB: 0.49});
+                    fileMessages[i] = compressedFile;
+                }
+
                 //For images, limit is 0.5MB, for other files (like PDFS), limit is 5MB
                 if ((isImage && fileMessages[i].size > 500000) || fileMessages[i].size > 5000000) {
                     //Since the file is too big, we empty fileMessages, set off the alert to the user, and stop the uploading.
                     setFileMessages([]);
                     setFileSizeWarning(true);
+                    setSendLoading(false);
+                    scrollToBottom();
                     return;
                 } 
             }
@@ -291,13 +305,21 @@ function Chat({screenSize}) {
                 recipientIds: roomDoc.users.filter(mod => mod !== user.uid),
                 roomName: roomNameObject,
                 read: read,
+            }).then(() => {
+                if (input === ""){
+                    setSendLoading(false)
+                    scrollToBottom()
+                } 
             })
-
+            
             setFileMessages([]); //Reset the files at the end
         }
 
         //Fixed bug (now requires text to send message)
         if (input !== "") {
+
+            setSendLoading(true);
+            console.log("2", sendLoading);
 
             //Creating read object
             const read = {}
@@ -324,8 +346,11 @@ function Chat({screenSize}) {
                 recipientIds: roomDoc.users.filter(mod => mod !== user.uid),
                 roomName: roomNameObject,
                 read: read,
+            }).then(() => {
+                setSendLoading(false);
+                scrollToBottom();
             })
-
+            
             setInput(""); /* Reset the input at the end */
         }
     }
@@ -377,7 +402,7 @@ function Chat({screenSize}) {
     }
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView()
+        messagesEndRef.current?.scrollIntoView({behavior: "smooth"})
       }
     // console.log(messages)
     return (<>
@@ -424,7 +449,7 @@ function Chat({screenSize}) {
                     isErrorMessage={true}
                 /> 
                 <ChatMessage 
-                    message={"We have imposed a maximum file size of 0.5MB for Images, and 5MB for PDFs and other files."}
+                    message={"We have imposed a maximum file size of 1MB for Images, and 5MB for PDFs and other files."}
                     isCurrentUser={true}
                     isErrorMessage={true}
                 /></> : null}
@@ -442,8 +467,8 @@ function Chat({screenSize}) {
                         {fileMessages.length > 0 ? <span className="text-sm text-gray-500">{fileMessages.length} files</span> : null}
                     </div>
                     <TextareaAutosize className="w-full h-full rounded-xl p-2 border-none outline-none resize-none overflow-hidden" value={input} placeholder="Write A Message" onChange={(e) => setInput(e.target.value)} maxRows="10" minRows="2"/>
-                    <IconButton className="w-12" type="submit" onClick={sendMessage}>
-                        <Send />
+                    <IconButton className="w-12" type="submit" onClick={sendMessage} disabled={sendLoading}>
+                        {sendLoading ? <SendMessageLoader/> : <Send />}
                     </IconButton>
                 </form>
             </div>
