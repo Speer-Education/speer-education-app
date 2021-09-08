@@ -14,8 +14,8 @@ export default function BannerPicture({ uid, ...params }) {
 
     //Fetches the URL for the user's profile picture
     useEffect(() => {
+        if(!user || !uid) return;
         setUrl(false);
-        if(!user) return;
         storage.ref(`/banners/${uid}.png`).getDownloadURL().then(setUrl);
     }, [uid, user]);
 
