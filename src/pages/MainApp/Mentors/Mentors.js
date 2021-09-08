@@ -32,7 +32,7 @@ const Mentors = () => {
             <div className="pt-10 p-3 2xl:p-10">   
                 <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 grid-flow-row justify-start hover:place-items-center gap-4 -mt-12 flex-1">
                     {mentors.map((props) => {
-                        return (<MentorCard {...props} />)
+                        return (<MentorCard {...props} key={props.id} />)
                         })}
                 </div>
                 {mentors.length === 0 && <div className="grid place-items-center h-full">

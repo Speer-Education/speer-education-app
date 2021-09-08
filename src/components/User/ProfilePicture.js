@@ -13,11 +13,13 @@ export default function ProfilePicture({ uid, thumb = false, className, ...param
     const { user } = useAuth();
 
     //Fetches the URL for the user's profile picture
-    useEffect(async () => {
-        if(!user) return;
+    useEffect(() => {
+        if(!user || !uid) return;
         setUrl("");
-        let imageUrl = await storage.ref(`/profilepics/${thumb?"thumb-":""}${uid}.png`).getDownloadURL().catch(e => console.log(e))
-        setUrl(imageUrl)
+        storage.ref(`/profilepics/${thumb?"thumb-":""}${uid}.png`)
+            .getDownloadURL()
+            .then(setUrl)
+            .catch(console.error);
     }, [uid, user]);
 
     return <img
