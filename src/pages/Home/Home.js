@@ -9,10 +9,17 @@ import { ContactUsForm } from '../../components/Forms/contactus'
 import "animate.css/animate.min.css";
 import './Home.css';
 import {Helmet} from "react-helmet";
+import { useAuth } from '../../hooks/useAuth';
+import { Redirect } from "react-router-dom";
+
+
 export default function Home() {
+
+    const { user } = useAuth();
 
     return (
         <div className="home">
+            {user ? <Redirect to="/app"/> : null}
              <Helmet>
                 <meta charSet="utf-8" />
                 <title>Speer Education</title>

@@ -64,6 +64,19 @@ export default function UserDetails() {
             && form.highlight2.emoji !== "" && form.highlight2.description !== ""
     }, [form])
 
+    const callOnboarding = async (numTries, form) => {
+
+        if (numTries > 9){
+            throw new Error ("Onboarding function failed too many times")
+        }
+
+        await functions.httpsCallable('onBoarding')({ form: form })
+            .catch((error) => {
+                callOnboarding(numTries +1, form)
+            })
+
+    }
+
     //To submit the form when the user hits submit (Yet to implement)
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -84,10 +97,10 @@ export default function UserDetails() {
         submitForm.hsGradYear = form.hsGradYear.label;
         //TODO: remove these once the highlight functionality is implemented so we can add them to user document no problem
         //TODO: maybe scope function to "us-central1" so we wont have CORS issue
-        await functions.httpsCallable('onBoarding')({ form: submitForm })
-            .catch((error) => {
-                console.error(error)
-            })
+        
+        await callOnboarding(0, submitForm)
+            .catch(e => console.log(e))
+
         setUpdatingClaims(true);
     }
 

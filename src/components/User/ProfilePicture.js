@@ -18,7 +18,8 @@ export default function ProfilePicture({ uid, thumb = false, className, ...param
         setUrl("");
         storage.ref(`/profilepics/${thumb?"thumb-":""}${uid}.png`)
             .getDownloadURL()
-            .then(setUrl);
+            .then(setUrl)
+            .catch(console.error);
     }, [uid, user]);
 
     return <img
