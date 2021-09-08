@@ -22,7 +22,7 @@ export default function Navbar() {
                     <Link to="/" onClick={closeMobileMenu}><img className="navbar-logo__image" src="./rocket-logo@2x.png" alt="speer logo"></img></Link>
                 </div> {/*Link replaces the A tag once we ihave multiple pages and install React Router Dom*/}
                 <div className="menu-icon" onClick={handleClick}>
-                    <i className={click ? 'fas fa-times' : 'fas fa-bars'}/>
+                    <i className={click ? 'fas fa-times' : 'fas fa-bars'}></i>
                 </div>
                 <ul className={click ? 'nav-menu active' : 'nav-menu'}>
                     <li className="nav-item">
