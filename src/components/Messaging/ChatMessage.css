@@ -10,3 +10,7 @@
     font-size: xx-small;
     @apply mx-1 opacity-60 font-semibold;
 }
+
+.mozilla-fit-content{
+    width: -moz-fit-content;
+}

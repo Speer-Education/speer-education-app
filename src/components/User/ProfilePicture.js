@@ -16,7 +16,7 @@ export default function ProfilePicture({ uid, thumb = false, className, ...param
     useEffect(async () => {
         if(!user) return;
         setUrl("");
-        let imageUrl = await storage.ref(`/profilepics/${thumb?"thumb-":""}${uid}.png`).getDownloadURL()
+        let imageUrl = await storage.ref(`/profilepics/${thumb?"thumb-":""}${uid}.png`).getDownloadURL().catch(e => console.log(e))
         setUrl(imageUrl)
     }, [uid, user]);
 
