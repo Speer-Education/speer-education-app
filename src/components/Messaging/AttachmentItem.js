@@ -6,8 +6,8 @@ const AttachmentItem = ({ image, IconComponent, title, hoverClass="hover:bg-gray
             {image?<img className="h-full w-full object-cover" src={image}/>:<IconComponent />}
         </div>
         <div className="flex flex-col space-y-1 flex-1 overflow-hidden">
-            <h4 className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12">{title}</h4>
-            <span className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12 text-gray-500"><TimeAgo date={date} />{subtitle}</span>
+            <div className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12 font-bold">{title}</div>
+            <div className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12 text-gray-500"><TimeAgo date={date} />{subtitle}</div >
         </div>
     </attachment>)
 
