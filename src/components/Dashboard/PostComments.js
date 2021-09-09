@@ -143,7 +143,7 @@ export function PostComments({ post }) {
             margin="normal"/>
         <Button variant="contained" onClick={handleSubmitCommment} color="primary">Comment</Button>
         {comments.map(({ comment, author, id, commentedOn}) => (
-            <div className="w-full flex flex-row space-x-2 flex-1 items-top">
+            <div className="w-full flex flex-row space-x-2 flex-1 items-top" key={id}>
                 <ProfilePicture uid={author?.uid} thumb className="w-10 h-10 rounded-full mt-1 cursor-pointer" onClick={() => history.push(`/app/profile/${author?.uid}`)}/>
                 <div className="flex flex-col flex-1">
                     <div className="flex flex-row space-x-2 items-baseline">
