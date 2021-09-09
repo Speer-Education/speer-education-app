@@ -16,7 +16,12 @@ export default function BannerPicture({ uid, ...params }) {
     useEffect(() => {
         if(!user || !uid) return;
         setUrl(false);
-        storage.ref(`/banners/${uid}.png`).getDownloadURL().then(setUrl);
+        storage.ref(`/banners/${uid}.png`).getDownloadURL().then(setUrl)
+            .catch(e => {
+                if(e.code != 'storage/object-not-found') {
+                    console.error(e);
+                }
+            });
     }, [uid, user]);
 
     return <img

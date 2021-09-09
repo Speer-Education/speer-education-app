@@ -10,7 +10,7 @@ const InputField = ({ className, label, id, required = false, onChange, autoWidt
     }
 
     return <div className={`${autoWidth ? "" : "w-full"} px-3 ${className}`}>
-        {label && <label className="block titlecase tracking-wide text-xs font-bold mb-2" style={{color: "#2596be"}} for={id}>
+        {label && <label className="block titlecase tracking-wide text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>}
         <input className={`appearance-none block w-full ${empty && required ? "bg-red-100" : "bg-gray-200"} text-gray-700 border-0 focus:border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-gray-300 focus:border-gray-500`}
@@ -22,7 +22,7 @@ const InputField = ({ className, label, id, required = false, onChange, autoWidt
 
 const InputAreaField = ({ className, label, id, required = false, ...props }) => {
     return <div className={`w-full px-3 ${className}`}>
-        {label && <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} for={id}>
+        {label && <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>}
         <textarea className="appearance-none block w-full bg-gray-200 text-gray-700 border-0 focus:border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -33,7 +33,7 @@ const InputAreaField = ({ className, label, id, required = false, ...props }) =>
 
 const InputSelect = ({ className, label, id, required = false, ...props }) => {
     return <div className={`w-full px-3 ${className}`}>
-        <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} for={id}>
+        <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>
         <Select className="user-details__custom-select" id={id} {...props} />

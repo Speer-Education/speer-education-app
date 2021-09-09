@@ -117,8 +117,8 @@ const ProfilePostStream = ({uid, isUser, name}) => {
 
     return (
         <>
-            {streamPosts.length > 0 ? <p className="font-semibold text-lg">{isUser?"Your":name +"'s"} Posts</p> : <p className="font-semibold text-red-500 text-lg">
-                You haven't made any posts yet!
+            {streamPosts.length > 0 ? <p className="font-semibold text-lg">{isUser?"Your":name +"'s"} Posts</p> : <p className="font-semibold text-gray-600 text-lg text-center w-full">
+                {isUser?"You haven't":`${name} hasn't`}  made any posts yet!
             </p>}
             <div className="space-y-2">
                 {streamPosts.map(post => <PostCard key={post.id} post={post}/>)}

@@ -21,14 +21,11 @@ export default function ProfilePicture({ uid, thumb = false, className, isRoom, 
             storage.ref(`/roompics/${thumb?"thumb-":""}${uid}.png`)
             .getDownloadURL()
             .then(setUrl)
-            .catch(console.error);
-        } else {
-            storage.ref(`/profilepics/${thumb?"thumb-":""}${uid}.png`)
-            .getDownloadURL()
-            .then(setUrl)
-            .catch(console.error);
-        }
-
+            .catch(e => {
+                if(e.code != 'storage/object-not-found') {
+                    console.error(e);
+                }
+            }); 
     }, [uid, user]);
 
     return <img
