@@ -229,27 +229,6 @@ function Chat({screenSize}) {
             setSendLoading(true);
             console.log("1", sendLoading);
 
-            //Creating read object
-            const read = {}
-            roomDoc.users.forEach((id) => read[id] = false)
-            read[user.uid] = true
-
-            //Creating roomNameObject
-            const roomNameObject = {};
-            //If more than 2 users, it's a group, just use roomName for all
-            if (roomDoc.users.length > 2){
-                roomDoc.users.forEach((id) => roomNameObject[id] = roomName)
-            } else {
-                //Since only 2 users, we put both the id's and the our users' name
-                roomDoc.users.forEach((id) => roomNameObject[id] = userDetails.name) 
-                roomNameObject[user.uid] = roomName //We don't want our id to be our own name, we set it to the current roomName 
-            }
-
-            //TODO: Add a state here for fileSendLoading...
-
-            //Record current Timestamp.
-            const fileSendDate = new Date();
-
             //GO through the files to ensure they are all the suitable size.
             for (let i=0; i < fileMessages.length; i++){
 
@@ -272,6 +251,44 @@ function Chat({screenSize}) {
                     return;
                 } 
             }
+
+            //Creating read object
+            const read = {}
+            roomDoc.users.forEach((id) => read[id] = false)
+            read[user.uid] = true
+
+            //Creating roomNameObject and recipientUsernames object
+            const roomNameObject = {};
+            const recipientUsernames = {};
+
+            //If more than 2 users, it's a group
+            if (roomDoc.users.length > 2){
+
+                //For roomNameObject, just use roomName for all
+                roomDoc.users.forEach((id) => roomNameObject[id] = roomName)
+
+                //For recipientUsernames, we loop through all the recipient Ids
+                roomDoc.users.filter(mod => mod !== user.uid).forEach(async reciId => {
+                    //we need to take their recipientId and fetch their username.
+                    const {name: reciUsername} = (await db.collection('users').doc(reciId).get()).data();
+                    recipientUsernames[reciId] = reciUsername; //And then put it in the recipientUsernames object assigned to their Id
+                })
+
+            } else {
+                //Since only 2 users, we put both the id's and the our users' name
+                roomDoc.users.forEach((id) => roomNameObject[id] = userDetails.name) 
+                //We don't want our id to be our own name, we set it to the current roomName (the other user's name)
+                roomNameObject[user.uid] = roomName 
+            
+                //It is not a group, so the recipient is the other user, and their name is the roomName. No need to fetch from DB.
+                //Since only 1 recipient, after filtering array will just be the other recipient's id.
+                const recipientId = roomDoc.users.filter(mod => mod !== user.uid)[0] 
+                //The roomName will be the recipient's username
+                recipientUsernames[recipientId] = roomName 
+            }
+
+            //Record current Timestamp.
+            const fileSendDate = new Date();
 
             //Go through the files here and upload them to storage, keep track of the id. The room should be messageFiles/roomId/
             const fileMessagesStorageDetails = await Promise.all(fileMessages.map(async (file, index) => {
@@ -303,6 +320,7 @@ function Chat({screenSize}) {
                 senderId: user.uid,
                 senderUsername: userDetails.name,
                 recipientIds: roomDoc.users.filter(mod => mod !== user.uid),
+                recipientUsernames: recipientUsernames,
                 roomName: roomNameObject,
                 read: read,
             }).then(() => {
@@ -326,15 +344,34 @@ function Chat({screenSize}) {
             roomDoc.users.forEach((id) => read[id] = false)
             read[user.uid] = true
 
-            //Creating roomNameObject
+            //Creating roomNameObject and recipientUsernames object
             const roomNameObject = {};
-            //If more than 2 users, it's a group, just use roomName for all
+            const recipientUsernames = {};
+
+            //If more than 2 users, it's a group
             if (roomDoc.users.length > 2){
+
+                //For roomNameObject, just use roomName for all
                 roomDoc.users.forEach((id) => roomNameObject[id] = roomName)
+
+                //For recipientUsernames, we loop through all the recipient Ids
+                roomDoc.users.filter(mod => mod !== user.uid).forEach(async reciId => {
+                    //we need to take their recipientId and fetch their username.
+                    const {name: reciUsername} = (await db.collection('users').doc(reciId).get()).data();
+                    recipientUsernames[reciId] = reciUsername; //And then put it in the recipientUsernames object assigned to their Id
+                })
+
             } else {
                 //Since only 2 users, we put both the id's and the our users' name
                 roomDoc.users.forEach((id) => roomNameObject[id] = userDetails.name) 
-                roomNameObject[user.uid] = roomName //We don't want our id to be our own name, we set it to the current roomName 
+                //We don't want our id to be our own name, we set it to the current roomName (the other user's name)
+                roomNameObject[user.uid] = roomName 
+            
+                //It is not a group, so the recipient is the other user, and their name is the roomName. No need to fetch from DB.
+                //Since only 1 recipient, after filtering array will just be the other recipient's id.
+                const recipientId = roomDoc.users.filter(mod => mod !== user.uid)[0] 
+                //The roomName will be the recipient's username
+                recipientUsernames[recipientId] = roomName 
             }
 
             db.collection('rooms').doc(roomId).collection('messages').add({
@@ -344,6 +381,7 @@ function Chat({screenSize}) {
                 senderId: user.uid,
                 senderUsername: userDetails.name,
                 recipientIds: roomDoc.users.filter(mod => mod !== user.uid),
+                recipientUsernames: recipientUsernames,
                 roomName: roomNameObject,
                 read: read,
             }).then(() => {

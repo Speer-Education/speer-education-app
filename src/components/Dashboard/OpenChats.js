@@ -37,7 +37,7 @@ export default function OpenChats() {
             </div> : <>
                 <p className="p-3">Recent Chats</p>
                 <div className="overflow-hidden">
-                    {chatrooms.map(({ senderUsername, senderId, recipientIds, message, roomId, date, recipientUsernames }) => {
+                    {chatrooms.map(({ senderUsername, senderId, recipientIds, message, roomId, date, recipientUsernames, roomName }) => {
                     
                     console.log("recipient Ids:", recipientIds);
                     //For non group chats
@@ -82,9 +82,11 @@ export default function OpenChats() {
                             <div className="flex flex-row hover:bg-gray-100 cursor-pointer rounded-xl px-3 py-1 ">
                                 <ProfilePicture uid={roomId} isRoom thumb className="w-10 h-10 rounded-full" />
                                 <div className="flex-1 ml-2 max-w-full">
-                                    <h3 className="font-medium">{senderUsername}</h3>
+                                    {/* TODO: This should switch to roomName */}
+                                    <h3 className="font-medium">{roomName[user?.uid]}</h3>
                                     <div className="w-full flex flex-row text-gray-500 text-sm">
-                                        <p className="overflow-hidden overflow-ellipsis whitespace-nowrap flex-1">{senderId === user?.uid?"You: ":""}{message}</p>
+                                        {/* TODO: This should switch to the sender's username instead of just "You" */}
+                                        <p className="overflow-hidden overflow-ellipsis whitespace-nowrap flex-1">{senderId === user?.uid?"You: ":`${senderUsername}:`}{message}</p>
                                         {date && <ReactTimeago className="text-gray-400" date={date.toMillis()} />}
                                     </div>
                                 </div>
