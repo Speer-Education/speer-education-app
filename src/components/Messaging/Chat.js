@@ -252,8 +252,8 @@ function Chat({screenSize}) {
                 } 
             }
 
-            //Creating roomNameObject and recipientUsernames object
-            const {read, roomNameObject, recipientUsernames} = createReadAndRoomNameAndRecipientUsername(roomDoc)
+            //Creating roomNameObject object
+            const {read, roomNameObject} = createReadAndRoomName(roomDoc)
 
             //Record current Timestamp.
             const fileSendDate = new Date();
@@ -288,7 +288,6 @@ function Chat({screenSize}) {
                 senderId: user.uid,
                 senderUsername: userDetails.name,
                 recipientIds: roomDoc.users.filter(mod => mod !== user.uid),
-                recipientUsernames: recipientUsernames,
                 roomName: roomNameObject,
                 read: read,
             }).then(() => {
@@ -307,8 +306,8 @@ function Chat({screenSize}) {
             setSendLoading(true);
             console.log("2", sendLoading);
 
-            //Creating roomNameObject and recipientUsernames object
-            const {read, roomNameObject, recipientUsernames} = createReadAndRoomNameAndRecipientUsername(roomDoc)
+            //Creating roomNameObject object
+            const {read, roomNameObject} = createReadAndRoomName(roomDoc)
 
             db.collection('rooms').doc(roomId).collection('messages').add({
                 messageType: "text",
@@ -317,7 +316,6 @@ function Chat({screenSize}) {
                 senderId: user.uid,
                 senderUsername: userDetails.name,
                 recipientIds: roomDoc.users.filter(mod => mod !== user.uid),
-                recipientUsernames: recipientUsernames,
                 roomName: roomNameObject,
                 read: read,
             }).then(() => {
@@ -343,16 +341,15 @@ function Chat({screenSize}) {
 
     }
 
-    const createReadAndRoomNameAndRecipientUsername = (roomDoc) => {
+    const createReadAndRoomName = (roomDoc) => {
 
             //Creating read object
             const read = {}
             roomDoc.users.forEach((id) => read[id] = false) //Set all as false
             read[user.uid] = true //then set our current user to true (since we are sending we obv have read it)
 
-            //Creating roomNameObject and recipientUsernames object
+            //Creating roomNameObject object
             const roomNameObject = {};
-            const recipientUsernames = {};
 
             //If more than 2 users, it's a group
             if (roomDoc.users.length > 2){
@@ -360,28 +357,15 @@ function Chat({screenSize}) {
                 //For roomNameObject, just use roomName for all
                 roomDoc.users.forEach((id) => roomNameObject[id] = roomName)
 
-                //For recipientUsernames, we loop through all the recipient Ids
-                roomDoc.users.filter(mod => mod !== user.uid).forEach(async reciId => {
-                    //we need to take their recipientId and fetch their username.
-                    const {name: reciUsername} = (await db.collection('users').doc(reciId).get()).data();
-                    recipientUsernames[reciId] = reciUsername; //And then put it in the recipientUsernames object assigned to their Id
-                })
-
             } else {
                 //Since only 2 users, we put both the id's and the our users' name
                 roomDoc.users.forEach((id) => roomNameObject[id] = userDetails.name) 
                 //We don't want our id to be our own name, we set it to the current roomName (the other user's name)
                 roomNameObject[user.uid] = roomName 
-            
-                //It is not a group, so the recipient is the other user, and their name is the roomName. No need to fetch from DB.
-                //Since only 1 recipient, after filtering array will just be the other recipient's id.
-                const recipientId = roomDoc.users.filter(mod => mod !== user.uid)[0] 
-                //The roomName will be the recipient's username
-                recipientUsernames[recipientId] = roomName 
             }
 
 
-        return {read: read, roomNameObject: roomNameObject, recipientUsernames: recipientUsernames}
+        return {read: read, roomNameObject: roomNameObject}
     }
 
     useEffect(() => {
