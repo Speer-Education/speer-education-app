@@ -22,10 +22,17 @@ export default function ProfilePicture({ uid, thumb = false, className, isRoom, 
             .getDownloadURL()
             .then(setUrl)
             .catch(e => {
-                if(e.code != 'storage/object-not-found') {
+                if(e.code !== 'storage/object-not-found') {
                     console.error(e);
                 }
-            }); 
+            });
+        } else {
+            storage.ref(`/profilepics/${thumb?"thumb-":""}${uid}.png`)
+            .getDownloadURL()
+            .then(setUrl)
+            .catch(console.error);
+        }
+
     }, [uid, user]);
 
     return <img
