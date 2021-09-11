@@ -72,9 +72,9 @@ function ProfilePage({ isUser=false }) {
                             <div className="relative rounded-xl shadow-lg w-full overflow-hidden bg-white py-5 px-8 space-y-2">
                                 <p className="font-semibold text-lg">About Me</p>
                                 <div className="absolute top-0 right-0 m-1 text-white rounded-full bg-gray-100 transform scale-75">
-                                    <IconButton onClick={e => setOpenEditBio(true)}>
+                                    {isUser? <IconButton onClick={e => setOpenEditBio(true)}>
                                         <EditOutlined />
-                                    </IconButton>
+                                    </IconButton> : null}
                                 </div>
                                 <p className="text-gray-600">{bio}</p>
                             </div>
