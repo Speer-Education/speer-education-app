@@ -43,6 +43,7 @@ function Chat({screenSize}) {
     const [showProfPicAndAttachments, setShowProfPicAndAttachments] = useState(false);
     const [doneInitialScroll, setDoneInitialScroll] = useState(false);
     const [fileSizeWarning, setFileSizeWarning] = useState(false);
+    const [tooManyFilesWarning, setTooManyFilesWarning] = useState(false);
 
     const messagesEndRef = useRef(null);
     const filter = new Filter({ emptyList: true, list: badWordsList });
@@ -371,6 +372,7 @@ function Chat({screenSize}) {
         //Too many files
         if (files.length > 3) {
             //TODO: Notify user that we only take the first 3 files, too many files.
+            setTooManyFilesWarning(true);
 
             //Then cut the files array to only the first 3.
             files.splice(3);
@@ -387,7 +389,7 @@ function Chat({screenSize}) {
                 setSendLoading(false);
                 scrollToBottom();
 
-                //TODO: add a sound to notify user
+                //TODO: add a sound to notify user (actually shouldn't do this here, should do this in a useEffect that listens to the Warning becoming true)
                 return;
             } 
         }
