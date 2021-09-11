@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy } from 'react';
 import { db } from '../../../config/firebase';
 import { useParams } from 'react-router-dom';
 import history from '../../../hooks/history';
@@ -13,7 +13,8 @@ import EducationCard from '../../../components/Profile/EducationCard';
 import SocialsCard from '../../../components/Profile/SocialsCard';
 import ProfilePostStream from '../../../components/Profile/ProfilePostStream';
 import { EditOutlined } from '@material-ui/icons';
-import EditBiographyDialog from '../../../components/Profile/EditBiographyDialog';
+
+const LazyEditBiographyDialog = lazy(() => import('../../../components/Profile/EditBiographyDialog'));
 
 function ProfilePage({ isUser=false }) {
     const { profileId } = useParams();
@@ -77,7 +78,7 @@ function ProfilePage({ isUser=false }) {
                                 </div>
                                 <p className="text-gray-600">{bio}</p>
                             </div>
-                            <EditBiographyDialog open={openEditBio} onClose={() => setOpenEditBio(false)}/>
+                            <LazyEditBiographyDialog open={openEditBio} onClose={() => setOpenEditBio(false)}/>
                             <ProfilePostStream uid={profileId || user?.uid} isUser={isUser} name={name}/>
                         </div>
                     </div>

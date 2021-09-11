@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy } from 'react';
 import { Avatar, IconButton } from '@material-ui/core';
 import { AttachFile, Send } from '@material-ui/icons';
 import { useParams, Link } from 'react-router-dom';
@@ -9,11 +9,12 @@ import badWordsList from '../../config/badWords.json';
 import ChatMessage from './ChatMessage';
 import Loader from '../Loader/Loader';
 import { InView } from 'react-intersection-observer';
-import ProfileCard from './ProfileCard';
-import AttachmentsCard from './AttachmentsCard';
 import TextareaAutosize from 'react-textarea-autosize';
 import imageCompression from 'browser-image-compression';
 import SendMessageLoader from '../Loader/SendMessageLoader';
+
+const LazyProfileCard = lazy(() => import('./ProfileCard'));
+const LazyAttachmentsCard = lazy(() => import('./AttachmentsCard'));
 
 let messageArray = []
 let listeners = []    // list of listeners
@@ -479,13 +480,13 @@ function Chat({screenSize}) {
             </div>
         </div >}
         <div className={`${screenSize < 2 ? "hidden" : ""} flex flex-col h-app`} style={screenSize < 3 ? {width: '275px'} : {width: '350px'}}>
-            <ProfileCard uid={recipientId}/>
-            <AttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
+            <LazyProfileCard uid={recipientId}/>
+            <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
         </div>
         {showProfPicAndAttachments ? <div className={`${screenSize >= 2 ? "hidden" : "h-app overflow-auto"}`} style={{minWidth: 'calc(100vw - 260px)'}}>
             <button onClick={toggleShowProfPicAndAttachments} className="bg-transparent border-none p-5 cursor-pointer"><i className="fas fa-arrow-left text-2xl"></i></button>
-            <ProfileCard uid={recipientId}/>
-            <AttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
+            <LazyProfileCard uid={recipientId}/>
+            <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
         </div> : null}
     </>)
 }

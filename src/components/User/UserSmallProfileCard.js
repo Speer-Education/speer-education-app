@@ -6,7 +6,8 @@ const UserSmallProfileCard = ({ userDetails, uid }) => {
     const { user } = useAuth();
     const { name , major, school, highlight1, highlight2 } = userDetails || {};
     return <div className="p-3 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6">
-        <div className="flex flex-row space-x-2 items-center">
+        {!userDetails?.name ? <p>Loading...</p>:
+        <><div className="flex flex-row space-x-2 items-center">
             <ProfilePicture uid={uid} alt="user" className="w-28 h-28 rounded-full border-white border-8 border-solid shadow-lg"/>
             <div className="space-y-1 ">
                 <h3 className="font-medium">{name}</h3>
@@ -29,8 +30,8 @@ const UserSmallProfileCard = ({ userDetails, uid }) => {
                 <UserHighlight highlight={highlight1}/>
                 <UserHighlight highlight={highlight2}/>
             </div>
-        </div>
-
+        </div></>
+        }
     </div>
 }
 
