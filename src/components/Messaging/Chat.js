@@ -275,7 +275,7 @@ function Chat({screenSize}) {
 
             //Go through the files here and upload them to storage, keep track of the id. The room should be messageFiles/roomId/
             const fileMessagesStorageDetails = await Promise.all(fileMessages.map(async (file, index) => {
-                const storagePath = `roomFiles/${roomId}/${`${roomId}_${fileSendDate.toISOString()}`}_${index}`;
+                const storagePath = `roomFiles/${roomId}/${`${fileSendDate.toISOString()}`}_${file.name}`;
                 const result = await storage.ref(storagePath).put(file);
                 return { path: storagePath, ref: await result.ref.getDownloadURL() };
             }))
