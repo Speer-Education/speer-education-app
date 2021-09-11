@@ -8,9 +8,6 @@ const UserMenu = () => {
     return <div className="relative" >
         <div className="flex flex-col px-3 cursor-pointer" onClick={() => history.push('/app/profile')}>
             <img className="w-6 h-6 lg:w-10 lg:h-10 overflow-hidden shadow-xl object-cover rounded-full" src={user.photoURL} alt="avatar" />
-            <button className="border-none bg-transparent cursor-pointer">
-                <span className="lg:text-base text-xs underline text-speer-blue">Me</span>
-            </button>
         </div>
     </div>
 }
