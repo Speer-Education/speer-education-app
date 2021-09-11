@@ -235,8 +235,8 @@ function Chat({screenSize}) {
                 //Check whether the file is an image
                 const isImage = (/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i).test(fileMessages[i].name);
 
-                //If image is less than 1MB but bigger than 0.5MB, we compress it down to 0.5MB.
-                if (isImage && fileMessages[i].size > 500000 && fileMessages[i].size <= 1000000){
+                //If image is less than 5MB but bigger than 0.5MB, we compress it down to 0.5MB.
+                if (isImage && fileMessages[i].size > 500000 && fileMessages[i].size <= 5000000){
                     const compressedFile = await imageCompression(fileMessages[i], {maxSizeMB: 0.49});
                     fileMessages[i] = compressedFile;
                 }
@@ -448,7 +448,7 @@ function Chat({screenSize}) {
                     isErrorMessage={true}
                 /> 
                 <ChatMessage 
-                    message={"We have imposed a maximum file size of 1MB for Images, and 5MB for PDFs and other files."}
+                    message={"We have imposed a maximum file size of 5MB for files."}
                     isCurrentUser={true}
                     isErrorMessage={true}
                 /></> : null}
