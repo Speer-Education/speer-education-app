@@ -14,6 +14,7 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }) {
     //TODO: Limit to how many contacts we can display.
     useEffect(() => {
         if(!user || !profileId) return;
+        setFollowersLoaded(false)
         let ref = db.collection('relationships').where('followedId','==', profileId);
         return ref.onSnapshot(async snapshot => {
             let list = await Promise.all(snapshot.docs.map(async doc => {
@@ -27,9 +28,9 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }) {
             setFollowers(list);
             setFollowersLoaded(true)
         })
-    }, [profileId, user])
+    }, [profileId, user?.uid])
 
-    if(followers.length === 0) {
+    if(!followersLoaded || followers.length === 0) {
         return (
             <div className="flex-1 m-2 shadow-lg rounded-md bg-white h-full p-3 grid place-items-center">
                 {/* TOOD: Add No Recent Chats Icon */}
