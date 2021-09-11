@@ -1,6 +1,6 @@
 import { Button, IconButton } from "@material-ui/core";
 import { EditOutlined, ExitToAppOutlined, MessageOutlined } from "@material-ui/icons";
-import { useRef, useState } from "react";
+import { lazy, useRef, useState } from "react";
 import { functions, storage } from "../../config/firebase";
 import history from "../../hooks/history";
 import { useAuth } from "../../hooks/useAuth";
@@ -8,7 +8,8 @@ import { getMessageUserRoom } from "../../utils/chats";
 import BannerPicture from "../User/BannerPicture";
 import ProfilePicture from "../User/ProfilePicture";
 import UserHighlight from "../User/UserHighlight";
-import EditDetailsDialog from "./EditDetailsDialog";
+
+const LazyEditDetailsDialog = lazy(() => import("./EditDetailsDialog"));
 
 const UserProfilePicture = ({ profileId, isUser }) => {
     const profileUpload = useRef();
@@ -131,6 +132,6 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
                 </div>
             </div>
         </div>
-        <EditDetailsDialog open={openEditDetails} onClose={() => setOpenEditDetails(false)} />
+        <LazyEditDetailsDialog open={openEditDetails} onClose={() => setOpenEditDetails(false)} />
     </>
 }

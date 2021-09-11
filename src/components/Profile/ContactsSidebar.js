@@ -8,6 +8,7 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }) {
 
     const [followers, setFollowers] = useState([]);
     const { user } = useAuth();
+    const [followersLoaded, setFollowersLoaded] = useState(false);
 
     //Get list of all contacts from firestore
     //TODO: Limit to how many contacts we can display.
@@ -24,15 +25,18 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }) {
                 return {id: userData.id, ...userData.data()}
             }));
             setFollowers(list);
+            setFollowersLoaded(true)
         })
     }, [profileId, user])
 
-    if(followers.length === 0) return (
-        <div className="flex-1 m-2 shadow-lg rounded-md bg-white h-full p-3 grid place-items-center">
-            {/* TOOD: Add No Recent Chats Icon */}
-            <h2 className="text-gray-500">No Contacts</h2>
-        </div>
-    )
+    if(followers.length === 0) {
+        return (
+            <div className="flex-1 m-2 shadow-lg rounded-md bg-white h-full p-3 grid place-items-center">
+                {/* TOOD: Add No Recent Chats Icon */}
+                <h2 className="text-gray-500">{followersLoaded? "No Contacts": "Loading Contacts..."}</h2>
+            </div>
+        ) 
+    }
 
     return (
         <div className="flex flex-col flex-1 p-3 m-2 shadow-lg rounded-md bg-white overflow-y-auto">

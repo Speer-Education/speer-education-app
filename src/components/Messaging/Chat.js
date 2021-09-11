@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy } from 'react';
 import { Avatar, IconButton } from '@material-ui/core';
 import { AttachFile, Send } from '@material-ui/icons';
 import { useParams, Link } from 'react-router-dom';
@@ -9,11 +9,12 @@ import badWordsList from '../../config/badWords.json';
 import ChatMessage from './ChatMessage';
 import Loader from '../Loader/Loader';
 import { InView } from 'react-intersection-observer';
-import ProfileCard from './ProfileCard';
-import AttachmentsCard from './AttachmentsCard';
 import TextareaAutosize from 'react-textarea-autosize';
 import imageCompression from 'browser-image-compression';
 import SendMessageLoader from '../Loader/SendMessageLoader';
+
+const LazyProfileCard = lazy(() => import('./ProfileCard'));
+const LazyAttachmentsCard = lazy(() => import('./AttachmentsCard'));
 
 let messageArray = []
 let listeners = []    // list of listeners
@@ -240,16 +241,6 @@ function Chat({screenSize}) {
                     const compressedFile = await imageCompression(fileMessages[i], {maxSizeMB: 0.49});
                     fileMessages[i] = compressedFile;
                 }
-
-                //For images, limit is 0.5MB, for other files (like PDFS), limit is 5MB
-                if ((isImage && fileMessages[i].size > 500000) || fileMessages[i].size > 5000000) {
-                    //Since the file is too big, we empty fileMessages, set off the alert to the user, and stop the uploading.
-                    setFileMessages([]);
-                    setFileSizeWarning(true);
-                    setSendLoading(false);
-                    scrollToBottom();
-                    return;
-                } 
             }
 
             //Creating roomNameObject object
@@ -373,7 +364,7 @@ function Chat({screenSize}) {
         setNewMessageFlag(false);
     },[newMessageFlag])
 
-    const handleFileUpload = (e) => {
+    const handleFileAdd = (e) => {
         let files = e.target.files;
         files = [...files]; //Turning FileList into an array
 
@@ -383,6 +374,22 @@ function Chat({screenSize}) {
 
             //Then cut the files array to only the first 3.
             files.splice(3);
+        }
+
+        //GO through the files to ensure they are all the suitable size.
+        for (let i=0; i < files.length; i++){
+
+            //Limit is 5MB
+            if (files[i].size > 5000000) {
+                //Since the file is too big, we empty fileMessages, set off the alert to the user, and stop the uploading.
+                setFileMessages([]);
+                setFileSizeWarning(true);
+                setSendLoading(false);
+                scrollToBottom();
+
+                //TODO: add a sound to notify user
+                return;
+            } 
         }
 
         //Set the file message.
@@ -457,7 +464,7 @@ function Chat({screenSize}) {
             <div className="flex min-h-16 items-center bg-white rounded-lg shadow-lg">
                 <form className="flex flex-1 m-2 leading-4 resize-none space-x-1 items-center" onKeyPress={handleKeyPress}>
                     <div className="flex flex-1 flex-col items-center">
-                        <input accept="*" multiple id="icon-button-file" type="file" hidden onChange={handleFileUpload} />
+                        <input accept="*" multiple id="icon-button-file" type="file" hidden onChange={handleFileAdd} />
                         <label htmlFor="icon-button-file">
                             <IconButton className="w-min" component="span">
                                 <AttachFile />
@@ -473,13 +480,13 @@ function Chat({screenSize}) {
             </div>
         </div >}
         <div className={`${screenSize < 2 ? "hidden" : ""} flex flex-col h-app`} style={screenSize < 3 ? {width: '275px'} : {width: '350px'}}>
-            <ProfileCard uid={recipientId}/>
-            <AttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
+            <LazyProfileCard uid={recipientId}/>
+            <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
         </div>
         {showProfPicAndAttachments ? <div className={`${screenSize >= 2 ? "hidden" : "h-app overflow-auto"}`} style={{minWidth: 'calc(100vw - 260px)'}}>
             <button onClick={toggleShowProfPicAndAttachments} className="bg-transparent border-none p-5 cursor-pointer"><i className="fas fa-arrow-left text-2xl"></i></button>
-            <ProfileCard uid={recipientId}/>
-            <AttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
+            <LazyProfileCard uid={recipientId}/>
+            <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
         </div> : null}
     </>)
 }

@@ -12,6 +12,7 @@ const Mentors = () => {
 
     const { user, userDetails } = useAuth();
     const [mentors, setMentors] = useState([]);
+    const [mentorsLoaded, setMentorsLoaded] = useState(false);
 
     useEffect(() => {
         //Get all the mentors and set in mentors
@@ -20,6 +21,7 @@ const Mentors = () => {
                 return { id: doc.id, ...doc.data()}
             })
             setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id !== user?.uid))
+            setMentorsLoaded(true)
         })
     },[user?.uid])
 
@@ -35,9 +37,13 @@ const Mentors = () => {
                         return (<MentorCard {...props} key={props.id} />)
                         })}
                 </div>
-                {mentors.length === 0 && <div className="grid place-items-center h-full">
+                {!mentorsLoaded ? <div className="grid place-items-center h-full">
+                        <h1 className="text-gray-500 lg:px-10">Loading Mentors...</h1>
+                </div>: null}
+                {mentors.length === 0 && mentorsLoaded && <div className="grid place-items-center h-full">
                         <h1 className="text-gray-500 lg:px-10">You've Connected with All Our Mentors!</h1>
                 </div>}
+                <br></br>
             </div>
             <div className="hidden lg:flex flex-col lg:w-96">
                 <div className="fixed lg:w-96">
