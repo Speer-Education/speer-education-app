@@ -7,6 +7,7 @@ import { useAuth } from '../../hooks/useAuth';
 import ProfilePicture from '../User/ProfilePicture';
 import Spinner from '../Loader/Spinner';
 import history from '../../hooks/history';
+import { Button } from '@material-ui/core';
 function Sidebar({screenSize}) {
 
     const { user, userDetails } = useAuth();
@@ -85,11 +86,17 @@ function Sidebar({screenSize}) {
                     <input type="text" placeholder="Search by name" value={search} onChange={(e) => setSearch(e.target.value)}/>
                 </div>
             </div>
-            <div className="flex flex-col overflow-y-auto">
+            <div className="flex flex-col overflow-y-auto flex-1">
                 {rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase())).map(room => {
                     return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} isMentor={room.isMentor} roomPic={room.pic} read={(room.data.lastMessage.read || {})[user?.uid] !== false}/>
                 })}
-                {rooms.length === 0 && !loading && <h3 className="text-gray-500">You have no chat rooms yet!</h3>}
+                {rooms.length === 0 && !loading && 
+                <div className="h-full grid place-items-center">
+                    <div className="space-y-3">
+                        <h3 className="text-gray-500">No Contacts yet</h3>
+                        <Button variant="outlined" color="primary" onClick={() => history.push('/app/mentors')}>Find a mentor</Button>
+                    </div>
+                </div>}
                 {loading&& <div className="grid place-items-center w-full h-14">
                     <div className="space-x-6">
                         <Spinner /> Loading Chats

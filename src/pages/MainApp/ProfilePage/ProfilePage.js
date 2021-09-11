@@ -13,6 +13,7 @@ import EducationCard from '../../../components/Profile/EducationCard';
 import SocialsCard from '../../../components/Profile/SocialsCard';
 import ProfilePostStream from '../../../components/Profile/ProfilePostStream';
 import { EditOutlined } from '@material-ui/icons';
+import PostComposerCard from '../../../components/Dashboard/PostComposerCard';
 
 const LazyEditBiographyDialog = lazy(() => import('../../../components/Profile/EditBiographyDialog'));
 
@@ -79,6 +80,10 @@ function ProfilePage({ isUser=false }) {
                                 <p className="text-gray-600">{bio}</p>
                             </div>
                             <LazyEditBiographyDialog open={openEditBio} onClose={() => setOpenEditBio(false)}/>
+                            {isUser ? <>
+                                <p className="font-semibold text-lg">Create a Post</p>
+                                <PostComposerCard />
+                            </>: null}
                             <ProfilePostStream uid={profileId || user?.uid} isUser={isUser} name={name}/>
                         </div>
                     </div>
