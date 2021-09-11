@@ -8,7 +8,7 @@ import { useAuth } from '../../hooks/useAuth';
  * @param {string} uid 
  * @returns 
  */
-export default function ProfilePicture({ uid, thumb = false, className, ...params }) {
+export default function ProfilePicture({ uid, thumb = false, className, isRoom, ...params }) {
     const [url, setUrl] = useState(false);
     const { user } = useAuth();
 
@@ -16,14 +16,23 @@ export default function ProfilePicture({ uid, thumb = false, className, ...param
     useEffect(() => {
         if(!user || !uid) return;
         setUrl("");
-        storage.ref(`/profilepics/${thumb?"thumb-":""}${uid}.png`)
+
+        if (isRoom){
+            storage.ref(`/roompics/${thumb?"thumb-":""}${uid}.png`)
             .getDownloadURL()
             .then(setUrl)
             .catch(e => {
-                if(e.code != 'storage/object-not-found') {
+                if(e.code !== 'storage/object-not-found') {
                     console.error(e);
                 }
-            }); 
+            });
+        } else {
+            storage.ref(`/profilepics/${thumb?"thumb-":""}${uid}.png`)
+            .getDownloadURL()
+            .then(setUrl)
+            .catch(console.error);
+        }
+
     }, [uid, user]);
 
     return <img

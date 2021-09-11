@@ -229,35 +229,14 @@ function Chat({screenSize}) {
             setSendLoading(true);
             console.log("1", sendLoading);
 
-            //Creating read object
-            const read = {}
-            roomDoc.users.forEach((id) => read[id] = false)
-            read[user.uid] = true
-
-            //Creating roomNameObject
-            const roomNameObject = {};
-            //If more than 2 users, it's a group, just use roomName for all
-            if (roomDoc.users.length > 2){
-                roomDoc.users.forEach((id) => roomNameObject[id] = roomName)
-            } else {
-                //Since only 2 users, we put both the id's and the our users' name
-                roomDoc.users.forEach((id) => roomNameObject[id] = userDetails.name) 
-                roomNameObject[user.uid] = roomName //We don't want our id to be our own name, we set it to the current roomName 
-            }
-
-            //TODO: Add a state here for fileSendLoading...
-
-            //Record current Timestamp.
-            const fileSendDate = new Date();
-
             //GO through the files to ensure they are all the suitable size.
             for (let i=0; i < fileMessages.length; i++){
 
                 //Check whether the file is an image
                 const isImage = (/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i).test(fileMessages[i].name);
 
-                //If image is less than 1MB but bigger than 0.5MB, we compress it down to 0.5MB.
-                if (isImage && fileMessages[i].size > 500000 && fileMessages[i].size <= 1000000){
+                //If image is less than 5MB but bigger than 0.5MB, we compress it down to 0.5MB.
+                if (isImage && fileMessages[i].size > 500000 && fileMessages[i].size <= 5000000){
                     const compressedFile = await imageCompression(fileMessages[i], {maxSizeMB: 0.49});
                     fileMessages[i] = compressedFile;
                 }
@@ -272,6 +251,12 @@ function Chat({screenSize}) {
                     return;
                 } 
             }
+
+            //Creating roomNameObject object
+            const {read, roomNameObject} = createReadAndRoomName(roomDoc)
+
+            //Record current Timestamp.
+            const fileSendDate = new Date();
 
             //Go through the files here and upload them to storage, keep track of the id. The room should be messageFiles/roomId/
             const fileMessagesStorageDetails = await Promise.all(fileMessages.map(async (file, index) => {
@@ -321,21 +306,8 @@ function Chat({screenSize}) {
             setSendLoading(true);
             console.log("2", sendLoading);
 
-            //Creating read object
-            const read = {}
-            roomDoc.users.forEach((id) => read[id] = false)
-            read[user.uid] = true
-
-            //Creating roomNameObject
-            const roomNameObject = {};
-            //If more than 2 users, it's a group, just use roomName for all
-            if (roomDoc.users.length > 2){
-                roomDoc.users.forEach((id) => roomNameObject[id] = roomName)
-            } else {
-                //Since only 2 users, we put both the id's and the our users' name
-                roomDoc.users.forEach((id) => roomNameObject[id] = userDetails.name) 
-                roomNameObject[user.uid] = roomName //We don't want our id to be our own name, we set it to the current roomName 
-            }
+            //Creating roomNameObject object
+            const {read, roomNameObject} = createReadAndRoomName(roomDoc)
 
             db.collection('rooms').doc(roomId).collection('messages').add({
                 messageType: "text",
@@ -367,6 +339,33 @@ function Chat({screenSize}) {
             recipientId: recipientId
         }
 
+    }
+
+    const createReadAndRoomName = (roomDoc) => {
+
+            //Creating read object
+            const read = {}
+            roomDoc.users.forEach((id) => read[id] = false) //Set all as false
+            read[user.uid] = true //then set our current user to true (since we are sending we obv have read it)
+
+            //Creating roomNameObject object
+            const roomNameObject = {};
+
+            //If more than 2 users, it's a group
+            if (roomDoc.users.length > 2){
+
+                //For roomNameObject, just use roomName for all
+                roomDoc.users.forEach((id) => roomNameObject[id] = roomName)
+
+            } else {
+                //Since only 2 users, we put both the id's and the our users' name
+                roomDoc.users.forEach((id) => roomNameObject[id] = userDetails.name) 
+                //We don't want our id to be our own name, we set it to the current roomName (the other user's name)
+                roomNameObject[user.uid] = roomName 
+            }
+
+
+        return {read: read, roomNameObject: roomNameObject}
     }
 
     useEffect(() => {
@@ -449,7 +448,7 @@ function Chat({screenSize}) {
                     isErrorMessage={true}
                 /> 
                 <ChatMessage 
-                    message={"We have imposed a maximum file size of 1MB for Images, and 5MB for PDFs and other files."}
+                    message={"We have imposed a maximum file size of 5MB for files."}
                     isCurrentUser={true}
                     isErrorMessage={true}
                 /></> : null}

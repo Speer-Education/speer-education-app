@@ -4,9 +4,7 @@
 .dashboard{
     display: flex;
     flex-direction: row;
-    min-height: 100% !important;
     justify-content: center;
-    height: 100%;
     overflow-y: auto;
     @apply bg-gray-100 
 }
@@ -29,9 +27,7 @@
 .dashboard{
     display: flex;
     flex-direction: row;
-    min-height: 100% !important;
     justify-content: center;
-    height: 100%;
     overflow-y: auto;
     @apply bg-gray-100 
 }
