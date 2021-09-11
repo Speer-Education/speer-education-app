@@ -4,6 +4,7 @@ import { db } from '../../config/firebase';
 import { getSnapshot } from '../../hooks/firestore';
 import { useAuth } from '../../hooks/useAuth';
 import PostCard from '../Dashboard/PostCard';
+import PostLoader from '../Dashboard/PostLoader';
 
 let postsArray = []
 let listeners = []    // list of listeners
@@ -122,6 +123,7 @@ const ProfilePostStream = ({uid, isUser, name}) => {
             </p>}
             <div className="space-y-2">
                 {streamPosts.map(post => <PostCard key={post.id} post={post}/>)}
+                {loading && <PostLoader/>}
                 <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
             </div>
         </>
