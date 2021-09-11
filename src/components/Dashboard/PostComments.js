@@ -8,6 +8,7 @@ import ProfilePicture from "../User/ProfilePicture";
 import { getSnapshot } from '../../hooks/firestore';
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { Send } from "@material-ui/icons";
 
 let commentsArray = []
 let listeners = []    // list of listeners
@@ -131,17 +132,23 @@ export function PostComments({ post }) {
         setUserComment("");
     }
 
-    return (<div className="py-4 px-6 m-2 bg-white rounded-lg shadow-lg space-y-3">
-        <TextField 
-            label="Comment" 
-            value={userComment} 
-            onChange={e => setUserComment(e.target.value)} 
-            variant="outlined" 
-            size="small" 
-            multiline
-            fullWidth
-            margin="normal"/>
-        <Button variant="contained" onClick={handleSubmitCommment} color="primary">Comment</Button>
+    return (<div className="border-t border-0 border-solid border-gray-200 space-y-3">
+        <div className="flex flex-row ">
+            <TextField 
+                label="Comment" 
+                value={userComment} 
+                onChange={e => setUserComment(e.target.value)} 
+                variant="outlined" 
+                size="small" 
+                multiline
+                fullWidth
+                margin="normal"/>
+            <div className="flex-1 grid place-items-center">
+                <IconButton onClick={handleSubmitCommment} >
+                    <Send className="text-speer-blue"/>
+                </IconButton>
+            </div>
+        </div>
         {comments.map(({ comment, author, id, commentedOn}) => (
             <div className="w-full flex flex-row space-x-2 flex-1 items-top" key={id}>
                 <ProfilePicture uid={author?.uid} thumb className="w-10 h-10 rounded-full mt-1 cursor-pointer" onClick={() => history.push(`/app/profile/${author?.uid}`)}/>
@@ -157,6 +164,6 @@ export function PostComments({ post }) {
                 </IconButton>}
             </div>
         ))}
-        {!loadedAllPosts && <a className="underline text-blue-700 block" onClick={getMoreComments}>Load More</a>}
+        {!loadedAllPosts && comments.length != 0 && <a className="underline text-blue-700 block" onClick={getMoreComments}>Load More</a>}
     </div>)
 }

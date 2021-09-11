@@ -27,7 +27,11 @@ const MentorCard = ({ id, name, school, major, bio, highlight1, highlight2 }) =>
                 senderId: user?.uid,
                 messageType: "text",
                 recipientIds: [ id ],
-                senderUsername: userDetails.name
+                senderUsername: userDetails.name,
+                read: {
+                    [user?.uid]: true,
+                    [id]: false
+                }
             })
             history.push(`/app/messages/${targetRoomId}`)
         } catch (e) {
