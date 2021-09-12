@@ -15,7 +15,7 @@ function SidebarChat({ id, roomName, isMentor, roomPic, read }) {
     //Fetches the latest message for display
     useEffect(() => {
         if (id) {
-            db.collection('rooms').doc(id).onSnapshot(doc => {
+            return db.collection('rooms').doc(id).onSnapshot(doc => {
                 setMessages(doc.data().lastMessage)
             })
         }

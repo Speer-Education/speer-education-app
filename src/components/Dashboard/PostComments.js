@@ -160,8 +160,8 @@ export function PostComments({ post }) {
                     </div>
                     <h4 className="text-gray-600 text-normal font-normal">{comment}</h4>
                 </div>
-                {(author?.uid == uid) && <IconButton>
-                    <DeleteIcon className="text-red-500" onClick={() => db.collection(`posts/${post.id}/comments`).doc(id).delete()}/>
+                {(author?.uid == uid) && <IconButton  onClick={() => db.collection(`posts/${post.id}/comments`).doc(id).delete()}>
+                    <DeleteIcon className="text-red-500"/>
                 </IconButton>}
             </div>
         ))}

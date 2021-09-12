@@ -92,9 +92,9 @@ function Sidebar({screenSize}) {
                 })}
                 {rooms.length === 0 && !loading && 
                 <div className="h-full grid place-items-center">
-                    <div className="space-y-3">
+                    <div className="space-y-3 grid place-items-center">
                         <h3 className="text-gray-500">No Contacts yet</h3>
-                        <Button variant="outlined" color="primary" onClick={() => history.push('/app/mentors')}>Find a mentor</Button>
+                        <Button variant="contained" color="primary" onClick={() => history.push('/app/mentors')}>Find a mentor</Button>
                     </div>
                 </div>}
                 {loading&& <div className="grid place-items-center w-full h-14">
