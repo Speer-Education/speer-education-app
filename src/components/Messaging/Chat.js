@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, lazy } from 'react';
 import { Avatar, IconButton } from '@material-ui/core';
-import { AttachFile, Send } from '@material-ui/icons';
+import { AttachFile, EnhancedEncryptionSharp, Send } from '@material-ui/icons';
 import { useParams, Link } from 'react-router-dom';
 import Filter from 'bad-words';
 import { firebase, db, storage } from '../../config/firebase';
@@ -44,6 +44,7 @@ function Chat({screenSize}) {
     const [doneInitialScroll, setDoneInitialScroll] = useState(false);
     const [fileSizeWarning, setFileSizeWarning] = useState(false);
     const [tooManyFilesWarning, setTooManyFilesWarning] = useState(false);
+    const [roomDoesNotExistWarning, setRoomDoesNotExistWarning] = useState(false);
 
     const messagesEndRef = useRef(null);
     const filter = new Filter({ emptyList: true, list: badWordsList });
@@ -75,6 +76,9 @@ function Chat({screenSize}) {
             setLoading(true);
             //Get Room Name
             const unsub1 = db.collection('rooms').doc(roomId).onSnapshot(async (snapshot) => { //<-- Add an unsubscribe
+                //NO ERROR, ROOM EXISTS
+                setRoomDoesNotExistWarning(false);
+
                 const snapData = snapshot.data()
                 setRoomDoc(snapData)
                 //If there is a name (it means it is a group chat)
@@ -90,6 +94,11 @@ function Chat({screenSize}) {
                     setRecipientId(recipientId)
                 }
                 setLoading(false);
+            }, error => {
+                console.log("error", error);
+                setRoomDoesNotExistWarning(true);
+                setLoading(false);
+                return
             })
 
             return () => {
@@ -222,7 +231,10 @@ function Chat({screenSize}) {
 
     const sendMessage = async (e) => {
         e.preventDefault();
-        if (!user) return;
+
+        //We need to ensure that user exists, that room exists, and that it is not still loading. <-- We have to check for loading because
+        // roomDoesNotExist starts off as true, and we need to make sure it stays as true even after loading.
+        if (!user || roomDoesNotExistWarning || loading) return;
 
         //Check whether there are files and then send them. (Don't need to worry about below, if the user adds files and adds a message, it will send the files as one message then
         //the text message as the next message. If not, it just sends the files (or vice versa if there are no files))
@@ -435,7 +447,8 @@ function Chat({screenSize}) {
             </button>
             <div className="py-8 px-2 md:p-8 overflow-auto flex-1 flex flex-col w-full bg-white rounded-lg shadow-lg">
                 <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
-                {loading && <div className="w-full grid place-items-center"><Loader />,</div>}
+                {loading && <div className="w-full grid place-items-center"><Loader /></div>}
+                {roomDoesNotExistWarning && <div className="w-full h-full grid place-items-center text-center"><h1 className="text-red-600">ROOM DOES NOT EXIST, OR YOUR DON'T HAVE ACCESS</h1></div>}
                 {messages.map(({ messageType, files, message, date, id, senderId, senderUsername }) => (
                     messageType === "file" ? <ChatMessage
                         key={id}
@@ -482,13 +495,13 @@ function Chat({screenSize}) {
             </div>
         </div >}
         <div className={`${screenSize < 2 ? "hidden" : ""} flex flex-col h-app`} style={screenSize < 3 ? {width: '275px'} : {width: '350px'}}>
-            <LazyProfileCard uid={recipientId}/>
-            <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
+            <LazyProfileCard uid={recipientId} roomExists={!roomDoesNotExistWarning}/>
+            <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments} roomExists={!roomDoesNotExistWarning}/>
         </div>
         {showProfPicAndAttachments ? <div className={`${screenSize >= 2 ? "hidden" : "h-app overflow-auto"}`} style={{minWidth: 'calc(100vw - 260px)'}}>
             <button onClick={toggleShowProfPicAndAttachments} className="bg-transparent border-none p-5 cursor-pointer"><i className="fas fa-arrow-left text-2xl"></i></button>
-            <LazyProfileCard uid={recipientId}/>
-            <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments}/>
+            <LazyProfileCard uid={recipientId} roomExists={!roomDoesNotExistWarning}/>
+            <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments} roomExists={!roomDoesNotExistWarning}/>
         </div> : null}
     </>)
 }
