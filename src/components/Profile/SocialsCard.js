@@ -18,9 +18,9 @@ const SocialsCard = ({socials, isUser}) => {
             <div className=" flex flex-row space-between">
                 <p className="font-semibold text-lg">Socials</p> 
                 <div className="absolute top-0 right-0 m-1 text-white rounded-full bg-gray-100 transform scale-75">
-                    <IconButton onClick={e => setOpenEditSocials(true)}>
+                    {isUser && <IconButton onClick={e => setOpenEditSocials(true)}>
                         <EditOutlined />
-                    </IconButton>
+                    </IconButton>}
                 </div>
             </div>
             {socials?.github && <SocialLink link={socials?.github} icon={<GitHub/>} />}
