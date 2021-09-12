@@ -56,7 +56,7 @@ function Chat({screenSize}) {
         }
     }, [screenSize])
 
-    //TO get the room name and messages
+    //TO get the messages
     useEffect(() => {
         if (!user) return;
 
@@ -71,6 +71,7 @@ function Chat({screenSize}) {
         return () => detachListeners();
     }, [roomId, user]);
 
+    //To get the roomName and info
     useEffect(() => {
         if (roomId && user) {
             setLoading(true);
@@ -430,7 +431,7 @@ function Chat({screenSize}) {
             <button onClick={screenSize >= 2 ? null : toggleShowProfPicAndAttachments} className="border-none"> {/* This toggles on and off the prof pic and attachment sections */}
                 <div className={`px-5 py-2 flex flex-row items-center bg-white ${screenSize >= 2 ? null : "hover:bg-gray-200"} rounded-lg shadow-lg`}>
                     {screenSize < 3 ? <Link to={`/app/messages`} className="mr-5"> <i className="fas fa-arrow-left"></i></Link> : null}
-                    {recipientId ?
+                    {loading? "Loading...": recipientId ?
                         <Link to={`/app/profile/${recipientId}`} title="Visit Mentor Profile" className="flex flex-row items-center">
                             <Avatar src={roomPic} />
                             <div className="pl-5 mb-1 font-medium">
