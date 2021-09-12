@@ -433,7 +433,7 @@ function Chat({screenSize}) {
                     {screenSize >= 3 ? <Link to={`/app/messages`} className="ml-auto"><i className="far fa-times-circle text-red-500 text-2xl"></i></Link> : null}
                 </div>
             </button>
-            <div className="p-8 overflow-auto flex-1 flex flex-col w-full bg-white rounded-lg shadow-lg">
+            <div className="py-8 px-2 md:p-8 overflow-auto flex-1 flex flex-col w-full bg-white rounded-lg shadow-lg">
                 <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
                 {loading && <div className="w-full grid place-items-center"><Loader />,</div>}
                 {messages.map(({ messageType, files, message, date, id, senderId, senderUsername }) => (

@@ -24,7 +24,7 @@ function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentU
     if (hasFiles) {
         return (<div className="my-1">
             {!isCurrentUser && <span className="text-sm text-gray-500">{username}</span>}
-            <p className={`p-2 rounded-lg bg-gray-100 mozilla-fit-content ${isCurrentUser && "bg-blue-200 ml-auto"}`} style={{width: "fit-content", maxWidth: "32ch"}}>
+            <p className={`p-2 rounded-lg bg-gray-100 mozilla-fit-content ${isCurrentUser && "bg-blue-200 ml-auto"}`} style={{width: "fit-content", maxWidth: "27ch"}}>
                 <span className="chat__name">{username}</span>
                 {files.map(({downloadUrl, filename},index) => {
                     return (
