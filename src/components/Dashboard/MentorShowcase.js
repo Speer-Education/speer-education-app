@@ -46,7 +46,7 @@ export default function MentorShowcase() {
             {/* Randomly generates 3 mentors in random order*/}
             <div className="overflow-hidden">
                 {mentors.map(({ id, name, major }) => { 
-                    return (<div className="flex flex-row py-2 hover:bg-gray-100" key={id}>
+                    return (<div className="flex flex-row py-1 hover:bg-gray-100 items-center rounded-xl" key={id}>
                     <Link className="flex flex-row flex-1" to={`/app/profile/${id}`}>
                         <ProfilePicture className="w-10 h-10 rounded-full" thumb uid={id}/>
                         <div className="ml-2">
