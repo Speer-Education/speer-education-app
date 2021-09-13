@@ -48,7 +48,7 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }) {
                     <ProfilePicture className="w-10 h-10 rounded-full" uid={id}/>
                     <div className="ml-2">
                         <h3 className="font-medium">{name}</h3>
-                        <p className="text-gray-500">{major}</p>
+                        <p className="text-gray-500 text-sm">{major}</p>
                     </div>
                 </Link>
             </div>)})}

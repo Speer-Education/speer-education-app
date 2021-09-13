@@ -13,6 +13,8 @@ import {
 } from 'react-instantsearch-dom';
 import ProfilePicture from '../User/ProfilePicture';
 import { SearchOutlined } from '@material-ui/icons';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
+import { useRef } from 'react';
 
 const userSearchClient = {
   ...searchClient,
@@ -40,9 +42,9 @@ const Hit = ({ hit }) => <div className="flex flex-row space-x-2 hover:bg-blue-5
     setSearchQuery("")
   }}>
     <ProfilePicture className="h-10 w-10 rounded-full" uid={hit.objectID} thumb/>
-    <div className="flex-col space-y-1">
-      <h3>{hit.name}</h3>
-      <p>{hit.major}</p>
+    <div className="flex-col">
+      <h3 className="font-semibold">{hit.name}</h3>
+      <p className="text-gray-500 text-sm">{hit.major}</p>
     </div>
   </div>;
 
@@ -73,8 +75,11 @@ const SearchBox = ({ currentRefinement, refine }) => {
 const CustomHits = connectHits(Hits);
 const CustomSearchBox = connectSearchBox(SearchBox);
 const SearchBar = () => {
+  const searchRef = useRef();
+  useOnClickOutside(searchRef, () => setSearchQuery("")); 
+
   return <InstantSearch indexName="speer_users" searchClient={userSearchClient} >
-    <div className="relative">
+    <div className="relative" ref={searchRef}>
       <CustomSearchBox/>
       <Configure hitsPerPage={6} />
       <CustomHits hitComponent={Hit} />
