@@ -119,7 +119,7 @@ const PostStream = () => {
     }
 
     return (
-        <div className="space-y-2">
+        <div className="space-y-2 pb-3">
             {streamPosts.map(post => <PostCard key={post.id} post={post}/>)}
             {loading && <PostLoader/>}
             <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
