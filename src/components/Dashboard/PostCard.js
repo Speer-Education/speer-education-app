@@ -131,10 +131,10 @@ const PostCard = ({ post }) => {
                     <IconButton aria-label="delete" className="float-right" onClick={handleDeletePost}>
                         <DeleteIcon className="text-red-600" />
                     </IconButton>
-                    {!isEdit? <IconButton aria-label="delete" className="float-right">
-                        <EditOutlined className="text-blue-600" onClick={() => setIsEdit(true)}/>
-                    </IconButton> : <IconButton aria-label="delete" className="float-right">
-                        <Cancel className="text-blue-600" onClick={() => setIsEdit(false)}/>
+                    {!isEdit? <IconButton aria-label="delete" className="float-right" onClick={() => setIsEdit(true)}>
+                        <EditOutlined className="text-blue-600"/>
+                    </IconButton> : <IconButton aria-label="delete" className="float-right" onClick={() => setIsEdit(false)}>
+                        <Cancel className="text-blue-600"/>
                     </IconButton>}
                 </div>}
             </div>
