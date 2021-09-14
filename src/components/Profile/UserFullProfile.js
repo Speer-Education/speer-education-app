@@ -38,7 +38,7 @@ const UserProfilePicture = ({ profileId, isUser }) => {
 
     return (
         <div className="relative">
-            <ProfilePicture className="w-24 h-24 md:w-32 md:h-32 rounded-full border-white border-8 border-solid shadow-lg transform -translate-y-16 mx-1" uid={profileId} />
+            <ProfilePicture className="w-24 h-24 md:w-32 md:h-32 rounded-full border-white border-8 border-solid shadow-lg transform -translate-y-16 mx-1" uid={profileId} forceRefresh/>
             <input ref={profileUpload} type="file" name="file" accept="image/*" onChange={({ target }) => handleUploadProfilePic(target.files[0])} hidden />
             {isUser && <div className="absolute top-0 right-0 text-white transform -translate-y-16 rounded-full bg-gray-800 scale-75">
                 <IconButton onClick={e => profileUpload.current.click()}>
@@ -55,14 +55,25 @@ const UserBannerPicture = ({ profileId, isUser }) => {
 
     const handleUploadBannerPic = async (file) => {
         if (!isUser) return;
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        let base64image = await new Promise((resolve, reject) => {
+            reader.addEventListener("load", function () {
+                resolve(reader.result);
+            }, false);
+        });
+        console.log('uploading banner picture')
         try {
-            //Upload file to Firebase Storage
-            console.log('uploading banner')
-            const uploadTask = await storage.ref(`banners/${user.uid}.png`).put(file);
+            const storageRef = await functions.httpsCallable('updateBannerPicture')({
+                image: base64image,
+            });
+            console.log('uploaded, reload to see changes')
+            //reload to see changes
             window.location.reload()
         } catch (e) {
             console.error(e)
         }
+
     }
 
     return (
@@ -99,7 +110,7 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
         <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white">
             <UserBannerPicture profileId={profileId} isUser={isUser} />
             <div className="flex flex-col md:flex-row p-3 w-full items-start">
-                <UserProfilePicture profileId={profileId} isUser={isUser} />
+                <UserProfilePicture profileId={profileId} isUser={isUser}/>
                 <div className="flex flex-col space-y-1 w-full relative transform -mb-16 md:mb-0 -translate-y-16 md:translate-y-0">
                     <div className="flex flex-row justify-between items-center">
                         <h1 className="text-2xl text-gray-800">{name}</h1>

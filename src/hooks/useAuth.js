@@ -31,12 +31,12 @@ export const useAuth = () => {
 
 //Use variable as userDetails might be immediately needed before react even renders
 let latestUserDetails = {}
+let appInstance = Date.now();
 
 const useAuthProvider = () => {
     const [user, setUser] = useState(null); 
     const [userDetails, setUserDetails] = useState(null);
     const [lastCommitted, setLastCommitted] = useLocalStorage("lastCommited", 0);  //The last committed state of our user claims document, decides if token needs to update if outdated
-
     /**
      * Sign in user with email and password login
      * @param {*} params Email and Password  
@@ -170,5 +170,6 @@ const useAuthProvider = () => {
         signOut,
         initGoogleSignIn,
         initFacebookSignIn,
+        appInstance
     };
 };

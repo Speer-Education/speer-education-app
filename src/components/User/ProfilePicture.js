@@ -8,14 +8,14 @@ import { useAuth } from '../../hooks/useAuth';
  * @param {string} uid 
  * @returns 
  */
-export default function ProfilePicture({ uid, thumb = false, className, isRoom, ...params }) {
+export default function ProfilePicture({ uid, thumb = false, className, isRoom, forceRefresh = false, ...params }) {
     const [url, setUrl] = useState(false);
-    const { user } = useAuth();
+    const { user, appInstance } = useAuth();
 
     //Fetches the URL for the user's profile picture
     useEffect(() => {
         if(!user || !uid) return;
-        setUrl(`https://storage.googleapis.com/speer-education-dev.appspot.com/users/${uid}/${thumb?'thumb-':''}profilePicture.png`);
+        setUrl(`https://storage.googleapis.com/speer-education-dev.appspot.com/users/${uid}/${thumb?'thumb-':''}profilePicture.png?${(forceRefresh || uid == user?.uid)?appInstance:''}`);
 
         if (isRoom){
             storage.ref(`/roompics/${uid}/${thumb?"thumb-":""}roomPicture.png`)

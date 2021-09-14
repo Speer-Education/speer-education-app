@@ -8,14 +8,14 @@ import { useAuth } from '../../hooks/useAuth';
  * @param {string} uid 
  * @returns 
  */
-export default function BannerPicture({ uid, ...params }) {
+export default function BannerPicture({ uid, forceRefresh, ...params }) {
     const [url, setUrl] = useState(false);
-    const { user } = useAuth();
+    const { user, appInstance } = useAuth();
 
     //Fetches the URL for the user's profile picture
     useEffect(() => {
         if(!user || !uid) return;
-        setUrl(`https://storage.googleapis.com/speer-education-dev.appspot.com/users/${uid}/bannerPicture.png`);
+        setUrl(`https://storage.googleapis.com/speer-education-dev.appspot.com/users/${uid}/bannerPicture.png?${(forceRefresh || uid == user?.uid)?appInstance:''}`);
     }, [uid, user]);
 
     return <img
