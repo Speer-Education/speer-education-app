@@ -339,7 +339,7 @@ function Chat({screenSize}) {
 
         return {
             roomName: userData?.name, //<-- asynchrously fetch user id's
-            roomPic: await storage.ref(`/users/${recipientId}/thumb-profilePicture.png`)?.getDownloadURL(),
+            roomPic: `https://storage.googleapis.com/speer-education-dev.appspot.com/users/${recipientId}/thumb-profilePicture.png`,
             isMentor: userData?.isMtr,
             recipientId: recipientId
         }

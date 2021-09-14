@@ -68,7 +68,7 @@ function Sidebar({screenSize}) {
         const userData = (await db.doc(`users/${recipientId}`).get()).data()
 
         return {
-            roomPic: await storage.ref(`/users/${recipientId}/thumb-profilePicture.png`)?.getDownloadURL(),
+            roomPic: `https://storage.googleapis.com/speer-education-dev.appspot.com/users/${recipientId}/thumb-profilePicture.png`,
             isMentor: userData?.isMtr,
         }
         // return "ERROR: NO ROOM NAME FOUND"

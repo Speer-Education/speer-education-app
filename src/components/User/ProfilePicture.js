@@ -15,7 +15,7 @@ export default function ProfilePicture({ uid, thumb = false, className, isRoom, 
     //Fetches the URL for the user's profile picture
     useEffect(() => {
         if(!user || !uid) return;
-        setUrl("");
+        setUrl(`https://storage.googleapis.com/speer-education-dev.appspot.com/users/${uid}/${thumb?'thumb-':''}profilePicture.png`);
 
         if (isRoom){
             storage.ref(`/roompics/${uid}/${thumb?"thumb-":""}roomPicture.png`)
@@ -26,11 +26,6 @@ export default function ProfilePicture({ uid, thumb = false, className, isRoom, 
                     console.error(e);
                 }
             });
-        } else {
-            storage.ref(`/users/${uid}/${thumb?"thumb-":""}profilePicture.png`)
-            .getDownloadURL()
-            .then(setUrl)
-            .catch(console.error);
         }
 
     }, [uid, user]);

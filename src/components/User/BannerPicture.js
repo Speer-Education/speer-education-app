@@ -15,13 +15,7 @@ export default function BannerPicture({ uid, ...params }) {
     //Fetches the URL for the user's profile picture
     useEffect(() => {
         if(!user || !uid) return;
-        setUrl(false);
-        storage.ref(`/users/${uid}/bannerPicture.png`).getDownloadURL().then(setUrl)
-            .catch(e => {
-                if(e.code != 'storage/object-not-found') {
-                    console.error(e);
-                }
-            });
+        setUrl(`https://storage.googleapis.com/speer-education-dev.appspot.com/users/${uid}/bannerPicture.png`);
     }, [uid, user]);
 
     return <img
