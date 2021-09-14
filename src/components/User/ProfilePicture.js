@@ -18,7 +18,7 @@ export default function ProfilePicture({ uid, thumb = false, className, isRoom, 
         setUrl("");
 
         if (isRoom){
-            storage.ref(`/roompics/${thumb?"thumb-":""}${uid}.png`)
+            storage.ref(`/roompics/${uid}/${thumb?"thumb-":""}roomPicture.png`)
             .getDownloadURL()
             .then(setUrl)
             .catch(e => {
@@ -27,7 +27,7 @@ export default function ProfilePicture({ uid, thumb = false, className, isRoom, 
                 }
             });
         } else {
-            storage.ref(`/profilepics/${thumb?"thumb-":""}${uid}.png`)
+            storage.ref(`/users/${uid}/${thumb?"thumb-":""}profilePicture.png`)
             .getDownloadURL()
             .then(setUrl)
             .catch(console.error);

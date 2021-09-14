@@ -339,7 +339,7 @@ function Chat({screenSize}) {
 
         return {
             roomName: userData?.name, //<-- asynchrously fetch user id's
-            roomPic: await storage.ref(`/profilepics/thumb-${recipientId}.png`)?.getDownloadURL(),
+            roomPic: await storage.ref(`/users/${recipientId}/thumb-profilePicture.png`)?.getDownloadURL(),
             isMentor: userData?.isMtr,
             recipientId: recipientId
         }

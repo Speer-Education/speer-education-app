@@ -18,7 +18,7 @@ const MentorProfile = () => {
         setLoading(true)
         return db.doc(`mentors/${mentorId}`).onSnapshot(async snap => {
             setMentor(snap.data());
-            setProfPic(await storage.ref(`/profilepics/${mentorId}.png`)?.getDownloadURL());
+            setProfPic(await storage.ref(`/${mentorId}.png`)?.getDownloadURL());
             setLoading(false)
         })
     }, [mentorId]);

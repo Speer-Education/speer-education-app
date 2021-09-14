@@ -68,7 +68,7 @@ function Sidebar({screenSize}) {
         const userData = (await db.doc(`users/${recipientId}`).get()).data()
 
         return {
-            roomPic: await storage.ref(`/profilepics/thumb-${recipientId}.png`)?.getDownloadURL(),
+            roomPic: await storage.ref(`/users/${recipientId}/thumb-profilePicture.png`)?.getDownloadURL(),
             isMentor: userData?.isMtr,
         }
         // return "ERROR: NO ROOM NAME FOUND"
