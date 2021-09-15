@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, createContext } from "react";
-import { auth, db, firebase } from "../config/firebase";
+import { auth, db, firebase, rtdb } from "../config/firebase";
 import history from './history';
 import { useLocalStorage } from "./useHooks";
 
@@ -146,6 +146,26 @@ const useAuthProvider = () => {
                     setUserDetails(latestUserDetails)
                     console.log('User Document Updated')
                 });
+            var userStatusDatabaseRef = rtdb.ref('/status/' + user.uid);
+
+            var isOfflineForDatabase = {
+                state: 'offline',
+                last_changed: firebase.database.ServerValue.TIMESTAMP,
+            };
+
+            var isOnlineForDatabase = {
+                state: 'online',
+                last_changed: firebase.database.ServerValue.TIMESTAMP,
+            };
+            firebase.database().ref('.info/connected').on('value', function(snapshot) {
+                // If we're not currently connected, don't do anything.
+                if (snapshot.val() == false) return;
+
+                userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
+                    userStatusDatabaseRef.set(isOnlineForDatabase);
+                });
+            });
+
             return () => unsubscribe();
         }
     }, [user]);
