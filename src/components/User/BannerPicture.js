@@ -11,6 +11,7 @@ import { useAuth } from '../../hooks/useAuth';
 export default function BannerPicture({ uid, forceRefresh, ...params }) {
     const [url, setUrl] = useState(false);
     const { user, appInstance } = useAuth();
+    const imageRef = useAuth();
 
     //Fetches the URL for the user's profile picture
     useEffect(() => {
@@ -18,9 +19,16 @@ export default function BannerPicture({ uid, forceRefresh, ...params }) {
         setUrl(`https://storage.googleapis.com/speer-education-dev.appspot.com/users/${uid}/bannerPicture.png?${(forceRefresh || uid == user?.uid)?appInstance:''}`);
     }, [uid, user]);
 
-    return <img
-        src={url || '/banner_placeholder.png'}
-        alt="banner"
-        {...params}
-    />
+    return <>
+        <img
+            ref={imageRef}
+            src={url}
+            alt="banner"
+            onError={(e) => { 
+                console.log(imageRef.current.src)
+                if (imageRef.current.src != '/banner_placeholder.png') imageRef.current.src = '/banner_placeholder.png';
+            }}
+            {...params}
+        />
+    </>
 }

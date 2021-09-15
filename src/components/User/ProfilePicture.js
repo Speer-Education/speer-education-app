@@ -11,6 +11,7 @@ import { useAuth } from '../../hooks/useAuth';
 export default function ProfilePicture({ uid, thumb = false, className, isRoom, forceRefresh = false, ...params }) {
     const [url, setUrl] = useState(false);
     const { user, appInstance } = useAuth();
+    const imageRef = useAuth();
 
     //Fetches the URL for the user's profile picture
     useEffect(() => {
@@ -31,8 +32,14 @@ export default function ProfilePicture({ uid, thumb = false, className, isRoom, 
     }, [uid, user]);
 
     return <img
-        src={url || '/user_placeholder.png'}
+        src={url}
         className={`${className} bg-white object-cover`}
+        alt="Profile Picture"
+        ref={imageRef}
+        onError={(e) => { 
+            console.log(imageRef.current.src)
+            if (imageRef.current.src != '/user_placeholder.png') imageRef.current.src = '/user_placeholder.png';
+        }}
         {...params}
     />
 }
