@@ -74,7 +74,6 @@ const ProfilePostStream = ({uid, isUser, name}) => {
         end = snapshots.docs[snapshots.docs.length - 1]
         // create listener using startAt snapshot (starting boundary)   
         const query = end?ref.orderBy('_createdOn', 'desc').endAt(end):ref.orderBy('_createdOn', 'desc')
-        console.log('4');
         let listener = query.onSnapshot(handleUpdatedPosts)
         // add listener to list
         listeners.push(listener)

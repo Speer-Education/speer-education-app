@@ -73,9 +73,8 @@ const PostStream = () => {
         // save startAt snapshot
         end = snapshots.docs[snapshots.docs.length - 1]
         // create listener using startAt snapshot (starting boundary)    
-        let listener = ref.orderBy('_createdOn', 'desc')
-            .endAt(end)
-            .onSnapshot(handleUpdatedPosts)
+        const query = end?ref.orderBy('_createdOn', 'desc').endAt(end):ref.orderBy('_createdOn', 'desc')
+        let listener = query.onSnapshot(handleUpdatedPosts)
         // add listener to list
         listeners.push(listener)
     }
@@ -120,6 +119,9 @@ const PostStream = () => {
 
     return (
         <div className="space-y-2 pb-3">
+            {streamPosts.length === 0 && <p className="font-semibold text-gray-600 text-lg text-center w-full">
+                Wtf I can't find any posts.
+            </p>}
             {streamPosts.map(post => <PostCard key={post.id} post={post}/>)}
             {loading && <PostLoader/>}
             <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
