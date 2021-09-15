@@ -32,7 +32,7 @@ export default function ProfilePicture({ uid, thumb = false, className, isRoom, 
 
     return <img
         src={url || '/user_placeholder.png'}
-        className={`${className} bg-white`}
+        className={`${className} bg-white object-cover`}
         {...params}
     />
 }
