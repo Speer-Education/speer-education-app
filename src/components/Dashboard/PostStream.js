@@ -120,7 +120,7 @@ const PostStream = () => {
     return (
         <div className="space-y-2 pb-3">
             {streamPosts.length === 0 && <p className="font-semibold text-gray-600 text-lg text-center w-full">
-                Wtf I can't find any posts.
+                Uhoh. I can't find any posts yet. <span className="text-gray-400 text-xs">or i might be a bug </span>
             </p>}
             {streamPosts.map(post => <PostCard key={post.id} post={post}/>)}
             {loading && <PostLoader/>}
