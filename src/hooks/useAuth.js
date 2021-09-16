@@ -149,11 +149,13 @@ const useAuthProvider = () => {
             var userStatusDatabaseRef = rtdb.ref('/status/' + user.uid);
 
             var isOfflineForDatabase = {
+                version: process.env.REACT_APP_VERSION,
                 state: 'offline',
                 last_changed: firebase.database.ServerValue.TIMESTAMP,
             };
 
             var isOnlineForDatabase = {
+                version: process.env.REACT_APP_VERSION,
                 state: 'online',
                 last_changed: firebase.database.ServerValue.TIMESTAMP,
             };
