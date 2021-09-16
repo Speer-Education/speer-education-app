@@ -33,9 +33,9 @@ const NavBarLink = ({ IconComponent, title, href }) => {
  */
 const AppNavbar = () => {
   return (
-    <div className="fixed bottom-0 lg:sticky lg:top-0 w-full h-14 lg:p-4 lg:h-24 bg-white z-10 shadow-md flex flex-row items-center justify-center">
-      <div className="w-full lg:w-auto flex flex-row max-w-4xl justify-evenly items-center space-x-3">
-        <img className="h-20 hidden lg:block cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => history.push('/app')} />
+    <div className="fixed bottom-0 lg:sticky lg:top-0 w-full h-14 lg:p-4 lg:h-24 bg-white z-10 shadow-md flex flex-row items-center justify-between">
+      <img className="h-20 hidden lg:block cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => history.push('/app')} />
+      <div className="w-full lg:w-auto flex flex-row max-w-4xl justify-center items-center space-x-3">
         <SearchBar />
         <div className="flex flex-row h-full flex-1 lg:flex-none">
           <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/app" />
@@ -50,6 +50,8 @@ const AppNavbar = () => {
         </div> */}
         <UserMenu />
       </div>
+      {/* Transparent image spcaer to center the stuff in the middle */}
+      <img className="h-20 hidden lg:block opacity-0 cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => history.push('/app')} />
     </div>
   );
 };
