@@ -17,7 +17,7 @@ const LazyAdminApp = lazy(() => import("./container/AdminApp/AdminApp"))
 
 function App() {
 
-  const { user } = useAuth();
+  const { user, userDetails } = useAuth();
 
   useEffect(() => {
     hotjar.initialize(2565266, 6);
@@ -42,7 +42,7 @@ function App() {
               <Route exact path={"/login"} component={LazyLogin} />
               {user !== false ? <>
                 <Route path="/app" component={LazyMainApp} /> {/* In the future, we make it so it only renders if user is logged in */}
-                <Route path="/admin-app" component={LazyAdminApp} /> {/* Only render if user is logged in as admin*/}
+                {userDetails?.isAdm && <Route path="/admin" component={LazyAdminApp} />} {/* Only render if user is logged in as admin*/}
                 <Route exact path={"/onboarding"} component={LazyOnboarding} /> {/* Onboarding form to get the neccesary details before starting */}
               </> : null}
               {user === false && <Route path="/">
