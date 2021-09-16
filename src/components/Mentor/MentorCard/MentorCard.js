@@ -28,6 +28,10 @@ const MentorCard = ({ id, name, school, major, bio, highlight1, highlight2 }) =>
                 messageType: "text",
                 recipientIds: [ id ],
                 senderUsername: userDetails.name,
+                roomName: {
+                    [user.uid]: name,
+                    [id]: userDetails.name
+                },
                 read: {
                     [user?.uid]: true,
                     [id]: false
