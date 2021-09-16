@@ -143,22 +143,26 @@ const PostCard = ({ post }) => {
             </div>
             {postCollapsed && <span className="-mt-2 text-sm cursor-pointer text-blue-600" onClick={() => setPostCollapsed(false)}>See More</span>}
             <div className="flex flex-row">
-                <PostAction 
-                    activeColours="bg-red-100 hover:bg-red-200 text-red-500"
-                    colours="bg-white hover:bg-red-100 text-gray-500"
-                    icon_colour="text-red-500"
-                    IconComponent={Favorite} 
-                    onClick={handleUserLikePost} 
-                    label={"Like" + (likeCount? ("\t" + likeCount):"")} 
+                <div className=" border-0 border-t border-solid border-gray-400 py-2">
+                    <PostAction 
+                        activeColours="bg-red-100 hover:bg-red-200 text-red-500"
+                        colours="bg-white hover:bg-red-100 text-gray-500"
+                        icon_colour="text-red-500"
+                        IconComponent={Favorite} 
+                        onClick={handleUserLikePost} 
+                        label={"Like" + (likeCount? ("\t" + likeCount):"")} 
                     active={userLiked}/>
-                <PostAction 
-                    activeColours="bg-green-100 hover:bg-green-200 text-green-500"
-                    colours="bg-white hover:bg-green-100 text-gray-500"
-                    icon_colour="text-green-500"
-                    IconComponent={MessageIcon} 
-                    onClick={() => setShowComments(!showComments)}
-                    label={"Comment" + (commentCount? ("\t" + commentCount):"")} 
-                    active={showComments}/>
+                </div>
+                <div className=" border-0 border-t border-solid border-gray-400 py-2">
+                    <PostAction 
+                        activeColours="bg-green-100 hover:bg-green-200 text-green-500"
+                        colours="bg-white hover:bg-green-100 text-gray-500"
+                        icon_colour="text-green-500"
+                        IconComponent={MessageIcon} 
+                        onClick={() => setShowComments(!showComments)}
+                        label={"Comment" + (commentCount? ("\t" + commentCount):"")} 
+                        active={showComments}/>
+                </div>
                     {isEdit ? <Button 
                         className="float-right"
                         disabled={saving || (editedPostContent.length === 0) || body === editedPostContent} 

@@ -176,7 +176,7 @@ const MDEditor = React.forwardRef(({ docId, className, readOnly, onChange, defau
   }
 
   return <>
-    <div className="min-h-32">
+    <div>
       <Editor
         theme={light}
         className={`${className}`}
