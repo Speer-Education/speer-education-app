@@ -44,7 +44,7 @@ const Hit = ({ hit }) => <div className="flex flex-row space-x-2 hover:bg-blue-5
   </div>;
 
 const Hits = ({ hits }) => (
-  <div className="hidden lg:flex absolute flex-col mt-2 border border-black shadow-xl bg-white rounded-xl overflow-hidden min-w-[400px] max-h-[60vh] overflow-y-auto scrollbar-hide">
+  <div className="hidden lg:flex absolute flex-col mt-2 shadow-xl bg-white rounded-xl overflow-hidden min-w-[400px] max-h-[60vh] overflow-y-auto scrollbar-hide">
     {hits.map(hit => (
       <Hit hit={hit} key={hit.objectID}/>
     ))}

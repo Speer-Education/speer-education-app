@@ -49,7 +49,7 @@ const MentorCard = ({ id, name, school, major, bio, highlight1, highlight2 }) =>
             <ProfilePicture uid={id} alt="mentor" className="w-28 h-28 transform rounded-full -mt-16 border-white border-8 border-solid shadow-lg" style={{aspectRatio: '1'}} onClick={() => history.push(`/app/profile/${id}`)}/>
             <div className="mt-2 space-y-2 h-full flex flex-col w-full">
                 <div className="space-y-1 text-center transform" onClick={() => history.push(`/app/profile/${id}`)}>
-                    <h3 className="font-medium">{name}</h3>
+                    <h3 className="font-semibold text-xl">{name}</h3>
                     <p className="text-md text-gray-600">Mentor @ {school}</p>
                 </div>
                 <div className="space-y-1 text-center flex-1 transform" onClick={() => history.push(`/app/profile/${id}`)}>
@@ -66,7 +66,7 @@ const MentorCard = ({ id, name, school, major, bio, highlight1, highlight2 }) =>
                 </div>
                 <div className="flex flex-row w-full">
                     <input 
-                        className="shadow-lg rounded-xl px-2 py-3 border-0 flex-1 focus:border-0" 
+                        className="shadow-lg rounded-xl px-2 py-3 border-0 flex-1 focus:border-0 text-sm" 
                         placeholder="Break the ice. Say Hi 👋" 
                         disabled={sendingMessage}
                         value={message} 

@@ -13,7 +13,7 @@ const ActiveChatRow = ({ photoUid, username, message, date, isUnread, roomId}) =
         <div className="flex flex-row hover:bg-gray-100 cursor-pointer rounded-xl px-3 py-1 ">
             <ProfilePicture uid={photoUid} thumb className="w-10 h-10 rounded-full" />
             <div className="flex-1 ml-2 max-w-full">
-                <h3 className="font-medium">{username}</h3>
+                <h3 className="font-semibold text-lg">{username}</h3>
                 <div className="w-full flex flex-row text-gray-500 text-sm">
                     <p className="overflow-hidden overflow-ellipsis whitespace-nowrap flex-1">{message}</p>
                     {date && <ReactTimeago className="text-gray-400" date={date.toMillis()} />}
@@ -56,7 +56,7 @@ export default function OpenChats() {
                     <Button variant="contained" color="primary" onClick={() => history.push('/app/mentors')}>Find a mentor</Button>
                 </div>
             </div> : <>
-                <p className="p-3">Recent Chats</p>
+                <p className="pt-3 pl-3">Recent Chats</p>
                 <div className="overflow-hidden">
                     {chatrooms.map(({ senderUsername, senderId, recipientIds, message, roomId, date, roomName, read }) => {
                     
