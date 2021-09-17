@@ -9,7 +9,7 @@ const UserCard = ({ uid, userDetails }) => {
     const { user } = useAuth();
     const [userState, setUserState] = useState({});
     const { name, email, country, major, hsGradYear, isMtr } = userDetails;
-    const { state, last_changed, version } = userState;
+    const { state, last_changed, version } = userState || {};
     useEffect(() => {
         if(!user) return;
         //Get user status
@@ -25,6 +25,9 @@ const UserCard = ({ uid, userDetails }) => {
                 <h2 className="text-lg">{name}</h2>
                 <p className="text-gray-500">User {state} since <ReactTimeago date={last_changed} /></p>
                 <p className="text-gray-500">Site Version: {version}</p>
+            </div>
+            <div className="flex-1">
+                <p className="text-gray-500"><span className="text-gray-700 font-semibold">User is </span>{isMtr?'Mentor': 'User'}</p>
             </div>
             <div>
                 {!isMtr && <Button variant="outlined" onClick={() => {
