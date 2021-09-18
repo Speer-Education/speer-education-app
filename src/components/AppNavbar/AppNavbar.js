@@ -5,6 +5,7 @@ import MessageTwoToneIcon from '@material-ui/icons/MessageTwoTone';
 import { Link } from 'react-router-dom';
 import history from '../../hooks/history';
 import SearchBar from './SearchBar';
+import { subscribe, isSupported } from 'on-screen-keyboard-detector';
 
 
 /**
@@ -32,6 +33,24 @@ const NavBarLink = ({ IconComponent, title, href }) => {
  * @returns 
  */
 const AppNavbar = () => {
+
+  if (isSupported()) {
+    const unsubscribe = subscribe(visibility => {
+      if (visibility === "hidden") {
+        // ...
+      }
+      else { // visibility === "visible"
+        return (
+          <div></div>
+        )
+      }
+    });
+    
+    // After calling unsubscribe() the callback will no longer be invoked.
+     unsubscribe();
+  }
+
+
   return (
     <div className="fixed bottom-0 lg:sticky lg:top-0 w-full h-14 lg:p-4 lg:h-24 bg-white z-10 shadow-md flex flex-row items-center justify-between">
       <img className="h-20 hidden lg:block cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => history.push('/app')} />
