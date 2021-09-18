@@ -17,7 +17,7 @@ import SearchBar from './SearchBar';
  */
 const NavBarLink = ({ IconComponent, title, href }) => {
   return <Link to={href} className="text-gray-800 no-underline flex-1 lg:flex-none">
-    <div className="grid place-items-center h-full lg:px-5 hover:bg-gray-100   cursor-pointer rounded-lg">
+    <div className="grid place-items-center h-full lg:px-5 hover:bg-gray-100 transition-colors cursor-pointer rounded-lg">
       <div className="flex-1 flex flex-col items-center">
         <IconComponent className="w-4 h-4 lg:h-8 lg:w-8" style={{ color: (href === history.location.pathname) ? '#F58A07' : '#084887' }} />
         <p className="text-xs text-center lg:text-base">{title}</p>
