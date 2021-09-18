@@ -36,11 +36,6 @@ export default function Navbar() {
                         </a>
                     </li>
                     <li className="nav-item">
-                        <a href ="#team" className="nav-links" onClick={closeMobileMenu}>
-                            TEAM
-                        </a>
-                    </li>
-                    <li className="nav-item">
                         <a href ="#universities" className="nav-links" onClick={closeMobileMenu}>
                             UNIVERSITIES
                         </a>

@@ -2,10 +2,12 @@ import { UserMenu } from './UserMenu/UserMenu'
 import HomeTwoToneIcon from '@material-ui/icons/HomeTwoTone';
 import PeopleTwoToneIcon from '@material-ui/icons/PeopleTwoTone';
 import MessageTwoToneIcon from '@material-ui/icons/MessageTwoTone';
+import SearchIcon from '@material-ui/icons/Search';
 import { Link } from 'react-router-dom';
 import history from '../../hooks/history';
 import SearchBar from './SearchBar';
-
+import SearchBarModal from './SearchBarModal';
+import React, {useState} from 'react';
 
 /**
  * Component for the link in the navbar
@@ -15,11 +17,11 @@ import SearchBar from './SearchBar';
  * @param {string} href
  * @returns 
  */
-const NavBarLink = ({ IconComponent, title, href }) => {
-  return <Link to={href} className="text-gray-800 no-underline flex-1 lg:flex-none">
+const NavBarLink = ({ IconComponent, title, href, largeHidden, ...props }) => {
+  return <Link to={href} className={`text-gray-800 no-underline flex-1 lg:flex-none ${largeHidden? "lg:hidden": ""}`}>
     <div className="grid place-items-center h-full lg:px-5 hover:bg-gray-100   cursor-pointer rounded-lg">
       <div className="flex-1 flex flex-col items-center">
-        <IconComponent className="w-4 h-4 lg:h-8 lg:w-8" style={{ color: (href === history.location.pathname) ? '#F58A07' : '#084887' }} />
+        <IconComponent className="w-4 h-4 lg:h-8 lg:w-8" style={{ color: (href === history.location.pathname) ? '#F58A07' : '#084887' }} {...props}/>
         <p className="text-xs text-center lg:text-base">{title}</p>
       </div>
     </div>
@@ -32,12 +34,17 @@ const NavBarLink = ({ IconComponent, title, href }) => {
  * @returns 
  */
 const AppNavbar = () => {
+
+  const [modal, setModal] = useState(false);
+
   return (
     <div className="fixed bottom-0 lg:sticky lg:top-0 w-full h-14 lg:p-4 lg:h-24 bg-white z-10 shadow-md flex flex-row items-center justify-between">
       <img className="h-20 hidden lg:block cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => history.push('/app')} />
       <div className="w-full lg:w-auto flex flex-row max-w-4xl justify-center items-center space-x-3">
         <SearchBar />
         <div className="flex flex-row h-full flex-1 lg:flex-none">
+          <NavBarLink IconComponent={SearchIcon} title="Search" onClick={() => setModal(true)} largeHidden/> {/* TODO: Make this pop up a modal when it is clicked.*/}
+          <SearchBarModal open={modal} setOpen={setModal}/>
           <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/app" />
           <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/app/mentors" />
           <NavBarLink IconComponent={MessageTwoToneIcon} title="Contacts" href="/app/messages" />
