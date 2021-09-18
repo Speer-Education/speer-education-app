@@ -176,7 +176,7 @@ const MDEditor = React.forwardRef(({ docId, className, readOnly, onChange, defau
   }
 
   return <>
-    <div>
+    <div style={{wordBreak: "break-word" }}>
       <Editor
         theme={light}
         className={`${className}`}
