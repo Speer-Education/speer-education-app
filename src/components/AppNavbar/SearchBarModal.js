@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Input } from '@material-ui/core';
+import SearchBar from './SearchBar';
 
 function getModalStyle() {
     const top = 50;
@@ -37,7 +38,7 @@ function SearchBarModal({open, setOpen}) {
                 onClose={() => setOpen(false)}
             >
                 <div style={modalStyle} className={classes.paper}>
-                    A modal
+                    <SearchBar isModal={open}/>
                 </div>
             </Modal>
         </>
