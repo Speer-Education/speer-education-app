@@ -7,7 +7,6 @@ import { IconButton } from '@material-ui/core';
 import './MentorShowcase.css';
 import { useAuth } from '../../hooks/useAuth';
 import history from '../../hooks/history';
-import { getMessageUserRoom } from '../../utils/chats';
 import MentorCardModal from '../Modal/MentorCardModal';
 
 export default function MentorShowcase() {
@@ -27,14 +26,6 @@ export default function MentorShowcase() {
             setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id != user?.uid))
         })
     }, [user?.uid])
-
-
-    const connectWithMentor = async (mentorId) => {
-        setCreatingRoom(true);
-
-        const targetRoomId = await getMessageUserRoom(mentorId, user.uid)
-        history.push(`/app/messages/${targetRoomId}`)
-    }
 
     if(mentors.length === 0) return (
         <div className="flex-1 mentorShowcase h-full p-3 grid place-items-center">
@@ -67,7 +58,6 @@ export default function MentorShowcase() {
                 </div>)})}
             </div>
             <div className="mt-auto"><Link to="/app/mentors" className="text-blue-700 underline text-xs">See all Mentors</Link></div>
-            {console.log(mentorSelected)}
             <MentorCardModal open={mentorModalOpen} setOpen={setMentorModalOpen} mentorSelected={mentorSelected}/>
         </div>
     )

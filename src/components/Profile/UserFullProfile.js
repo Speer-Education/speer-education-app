@@ -1,10 +1,11 @@
 import { Button, IconButton } from "@material-ui/core";
 import { EditOutlined, ExitToAppOutlined, MessageOutlined } from "@material-ui/icons";
 import { lazy, useRef, useState } from "react";
-import { functions, storage } from "../../config/firebase";
+import { functions, storage, db } from "../../config/firebase";
 import history from "../../hooks/history";
 import { useAuth } from "../../hooks/useAuth";
 import { getMessageUserRoom } from "../../utils/chats";
+import MentorCardModal from "../Modal/MentorCardModal";
 import BannerPicture from "../User/BannerPicture";
 import ProfilePicture from "../User/ProfilePicture";
 import UserHighlight from "../User/UserHighlight";
@@ -93,16 +94,27 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
 
     const { user, signOut } = useAuth();
     const { name, major, school, country, highlight1, highlight2 } = userDetails || {};
+    const [mentorModalOpen, setMentorModalOpen] = useState(false);
     const [openEditDetails, setOpenEditDetails] = useState(false);
 
     const connectWithPerson = async () => {
         if (!user?.uid || !profileId) return;
-        try {
-            const targetRoomId = await getMessageUserRoom(profileId, user.uid)
-            history.push(`/app/messages/${targetRoomId}`)
-        } catch (e) {
-            console.error(e)
+
+        const snap = await db.doc(`relationships/${profileId}_${user.uid}`).get()
+
+        //Relationsip has not been made, room does not exist yet, open the modal.
+        if(!snap.exists) {
+            setMentorModalOpen(true)
+        //Room exists, just push to the roomId
+        } else {
+            try {
+                const targetRoomId = snap.data()?.roomId
+                history.push(`/app/messages/${targetRoomId}`)
+            } catch (e) {
+                console.error(e)
+            }
         }
+
     }
 
 
@@ -144,5 +156,6 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
             </div>
         </div>
         <LazyEditDetailsDialog open={openEditDetails} onClose={() => setOpenEditDetails(false)} />
+        <MentorCardModal open={mentorModalOpen} setOpen={setMentorModalOpen} mentorSelected={{id: profileId, ...userDetails}}/>
     </>
 }
