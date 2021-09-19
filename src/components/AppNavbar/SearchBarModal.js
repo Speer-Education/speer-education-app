@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Input } from '@material-ui/core';
 import SearchBar from './SearchBar';
-import { Link } from 'react-router-dom';
 
 function getModalStyle() {
     const top = 50;
@@ -24,6 +23,7 @@ function getModalStyle() {
       border: '1px solid #f58a07',
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
+      zIndex: 0,
     },
   }));
 
@@ -39,8 +39,7 @@ function SearchBarModal({open, setOpen}) {
                 onClose={() => setOpen(false)}
             >
                 <div style={modalStyle} className={classes.paper}>
-                    <SearchBar isModal={open}/>
-                    <Link to="/app/messages">aaa</Link>
+                  <SearchBar isModal={open}/>
                 </div>
             </Modal>
         </>
