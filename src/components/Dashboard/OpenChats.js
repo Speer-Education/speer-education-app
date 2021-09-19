@@ -12,11 +12,11 @@ const ActiveChatRow = ({ photoUid, username, message, date, isUnread, roomId}) =
     <Link to={`/app/messages/${roomId}`} key={roomId}>
         <div className="flex flex-row transition-colors hover:bg-gray-100 cursor-pointer rounded-xl px-3 py-1 ">
             <ProfilePicture uid={photoUid} thumb className="w-10 h-10 rounded-full" />
-            <div className="flex-1 ml-2 max-w-full">
+            <div className="flex-1 ml-2">
                 <h3 className="font-semibold text-lg">{username}</h3>
-                <div className="w-full flex flex-row text-gray-500 text-sm">
-                    <p className="overflow-hidden overflow-ellipsis whitespace-nowrap flex-1">{message}</p>
-                    {date && <ReactTimeago className="text-gray-400" date={date.toMillis()} />}
+                <div className="w-full flex flex-row text-gray-500 text-sm justify-between">
+                    <p className="overflow-hidden overflow-ellipsis whitespace-nowrap flex-1 max-w-[20ch] pr-2">{message}</p>
+                    {date && <ReactTimeago className="text-gray-400 " date={date.toMillis()} />}
                 </div>
             </div>
         </div>
