@@ -8,11 +8,14 @@ import './MentorShowcase.css';
 import { useAuth } from '../../hooks/useAuth';
 import history from '../../hooks/history';
 import { getMessageUserRoom } from '../../utils/chats';
+import MentorCardModal from '../Modal/MentorCardModal';
 
 export default function MentorShowcase() {
 
     const [mentors, setMentors] = useState([]);
     const [creatingRoom, setCreatingRoom] = useState(false);
+    const [mentorSelected, setMentorSelected] = useState();
+    const [mentorModalOpen, setMentorModalOpen] = useState(false);
     const { user } = useAuth();
     
     //Loads the mentors in mentor collection
@@ -45,22 +48,27 @@ export default function MentorShowcase() {
             <p>New Mentors To Find</p>
             {/* Randomly generates 3 mentors in random order*/}
             <div className="overflow-hidden">
-                {mentors.map(({ id, name, major }) => { 
+                {mentors.map(({ id, ...props }) => { 
                     return (<div className="flex flex-row py-1 transition-colors hover:bg-gray-100 items-center rounded-xl" key={id}>
                     <Link className="flex flex-row flex-1" to={`/app/profile/${id}`}>
                         <ProfilePicture className="w-10 h-10 rounded-full" thumb uid={id}/>
                         <div className="ml-2">
-                            <h3 className="font-semibold text-lg">{name}</h3>
-                            <p className="text-gray-500 text-sm">{major}</p>
+                            <h3 className="font-semibold text-lg">{props.name}</h3>
+                            <p className="text-gray-500 text-sm">{props.major}</p>
                         </div>
                     </Link>
                     {creatingRoom? "Loading..." : 
-                    <IconButton onClick={() => connectWithMentor(id)} color="primary">
+                    <IconButton onClick={() => {
+                        setMentorModalOpen(true);
+                        setMentorSelected({id: id, ...props});
+                    }} color="primary">
                         <PersonAddTwoToneIcon/>
                     </IconButton>}
                 </div>)})}
             </div>
             <div className="mt-auto"><Link to="/app/mentors" className="text-blue-700 underline text-xs">See all Mentors</Link></div>
+            {console.log(mentorSelected)}
+            <MentorCardModal open={mentorModalOpen} setOpen={setMentorModalOpen} mentorSelected={mentorSelected}/>
         </div>
     )
 }
