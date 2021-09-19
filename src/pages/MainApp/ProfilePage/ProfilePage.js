@@ -87,7 +87,7 @@ function ProfilePage({ isUser=false }) {
                             <ProfilePostStream uid={profileId || user?.uid} isUser={isUser} name={name}/>
                         </div>
                     </div>
-                    <div className=" hidden md:flex flex-col h-app w-sidebar pl-3">
+                    <div className=" hidden md:flex flex-col h-app w-sidebar pl-3 mr-6">
                         <div className="fixed flex flex-col cc_cursor h-app">
                             <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMentor} />
                             <SocialsCard socials={socials} isUser={isUser}/>
