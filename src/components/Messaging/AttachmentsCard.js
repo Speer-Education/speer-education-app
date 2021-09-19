@@ -1,6 +1,7 @@
 import { lazy, useState } from "react";
 import { FolderOpenOutlined } from "@material-ui/icons";
 import AttachmentItem from "./AttachmentItem";
+import bytesToSize from "../../utils/bytesToSize";
 
 const LazyAttachmentsDialog = lazy(() => import('./AttachmentsDialog'))
 
@@ -16,7 +17,7 @@ const AttachmentsCard = ({ roomId, attachments = []}) => {
             </div> 
             <div className="flex flex-col">
                 {attachments.length === 0? <p className="text-gray-500 text-center py-5">No Shared Files And Links</p> : null}
-                {attachments.sort(({uploadedOn: x},{uploadedOn: y}) => y-x).map(({ attachmentType, url, title, image, downloadUrl, filename, filetype, uploadedOn }) => {
+                {attachments.sort(({uploadedOn: x},{uploadedOn: y}) => y-x).map(({ attachmentType, url, title, image, downloadUrl, filename, fileType, fileSize, uploadedOn }) => {
                     return (attachmentType === 'url') ?  <AttachmentItem 
                             image={image}
                             IconComponent={FolderOpenOutlined}
@@ -25,9 +26,10 @@ const AttachmentsCard = ({ roomId, attachments = []}) => {
                             key={`${uploadedOn} and  ${url}`}
                             onClick={() => window.open(url, "_blank")}
                         /> : <AttachmentItem 
+                            image={fileType == 'image' && downloadUrl}
                             IconComponent={FolderOpenOutlined}
                             title={filename}
-                            date={uploadedOn.toDate().toISOString()}
+                            subtitle={bytesToSize(fileSize)}
                             key={`${uploadedOn} and  ${downloadUrl}`}
                             onClick={() => window.open(downloadUrl, "_blank")}
                         />

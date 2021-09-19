@@ -26,9 +26,10 @@ function ChatMessage({ hasFiles, files, message, username, timestamp, isCurrentU
             {!isCurrentUser && <span className="text-sm text-gray-500">{username}</span>}
             <p className={`p-2 rounded-lg bg-gray-100 mozilla-fit-content ${isCurrentUser && "bg-blue-200 ml-auto"}`} style={{width: "fit-content", maxWidth: "27ch"}}>
                 <span className="chat__name">{username}</span>
-                {files.map(({downloadUrl, filename},index) => {
+                {files.map(({downloadUrl, filename, fileType},index) => {
                     return (
                         <AttachmentItem 
+                            image={fileType === "image" ? downloadUrl : null}
                             hoverClass={isCurrentUser&&"hover:bg-blue-300 hover:bg-opacity-50"}
                             IconComponent={FolderOpenOutlined}
                             title={filename}

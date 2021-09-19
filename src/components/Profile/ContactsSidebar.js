@@ -43,7 +43,7 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }) {
         <div className="flex flex-col flex-1 p-3 m-2 shadow-lg rounded-md bg-white overflow-y-auto">
             <p>{isUser?"Your":`${userDetails.name}'s` || ""} Contacts</p>
             {followers.map(({ id, name, school, major, bio }) => { 
-                return (<div className="flex flex-row py-2 " key={id}>
+                return (<div className="flex flex-row py-2 transition-colors hover:bg-gray-100" key={id}>
                 <Link className="flex flex-row flex-1" to={`/app/profile/${id}`}>
                     <ProfilePicture className="w-10 h-10 rounded-full" uid={id}/>
                     <div className="ml-2">
