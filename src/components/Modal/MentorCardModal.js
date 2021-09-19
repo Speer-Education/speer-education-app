@@ -26,6 +26,7 @@ function getModalStyle() {
       padding: theme.spacing(2, 4, 3),
       display: "flex",
       justifyContent: "center",
+      borderRadius: "25px",
     },
   }));
 
