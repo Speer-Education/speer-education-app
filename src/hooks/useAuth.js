@@ -118,20 +118,23 @@ const useAuthProvider = () => {
     
     //Attaches user claims documents to listen for changes in user permissions, if yes update token to ensure no permission errors
     useEffect(() => {
-        if (user?.uid) {
-            return db.doc(`user_claims/${user.uid}`).onSnapshot(async (snap) => {
-                const data = snap.data();
-                
-                if(!data?._lastCommitted) return;
+        console.log("attaching user_claims document")
+        if (!user) return;
+        return db.doc(`user_claims/${user.uid}`).onSnapshot(async (snap) => {
+            const data = snap.data();
+            
+            if(!data?._lastCommitted) return;
 
-                if (lastCommitted && !(data?._lastCommitted || {}).isEqual(lastCommitted)) {
-                    setUserDetails({ ...await getUserTokenResult(true), ...latestUserDetails })
-                    console.log("Refreshing token");
-                }
-                console.log('User Claims Updated', data);
-                setLastCommitted(data?._lastCommitted);
-            });
-        }
+            if (lastCommitted && !(data?._lastCommitted || {}).isEqual(lastCommitted)) {
+                setUserDetails({ ...await getUserTokenResult(true), ...latestUserDetails })
+                console.log("Refreshing token");
+            }
+            console.log('User Claims Updated', data);
+            setLastCommitted(data?._lastCommitted);
+        },
+        error => {
+            console.log(error)
+        });
     }, [user?.uid]); //Only reattach if user uid is updated :(
 
     //Attaches the user document to listen for changes in the document
@@ -188,10 +191,10 @@ const useAuthProvider = () => {
     return {
         user,
         userDetails,
+        getUserTokenResult,
+        appInstance,
         signInWithEmailAndPassword,
         signOut,
-        initGoogleSignIn,
-        initFacebookSignIn,
-        appInstance
+        initGoogleSignIn
     };
 };

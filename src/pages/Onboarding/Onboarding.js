@@ -10,6 +10,7 @@ import { GitHub, LanguageOutlined } from '@material-ui/icons';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import { InputAreaField, InputField, InputSelect } from '../../components/Forms/Inputs';
 import { Transition } from "@headlessui/react";
+import { useAuth } from '../../hooks/useAuth';
 
 
 const FormRow = ({ children }) => (
@@ -18,7 +19,7 @@ const FormRow = ({ children }) => (
 
 
 export default function UserDetails() {
-    // const { user } = useAuth();
+    const { getUserTokenResult } = useAuth();
 
     const [pageNumber, setPageNumber] = useState(1);
 
@@ -70,7 +71,8 @@ export default function UserDetails() {
             throw new Error ("Onboarding function failed too many times")
         }
 
-        await functions.httpsCallable('onBoarding')({ form: form })
+        await functions
+            .httpsCallable('onBoarding')({ form: form })
             .catch((error) => {
                 callOnboarding(numTries +1, form)
             })
@@ -86,7 +88,7 @@ export default function UserDetails() {
         console.log("Is valid form", isValidForm);
         // Only submit if the entered a name
         if (isValidForm === true) {
-            console.log("Submission sucessful")
+            console.log("Valid Form")
         } else {
             // Trigger some sort of UI to tell the user they need to fill up all the inputs
             console.log("Submission unsuccessful, please fill up all the inputs")
@@ -95,13 +97,14 @@ export default function UserDetails() {
         const submitForm = form;
         submitForm.country = form.country.label;
         submitForm.hsGradYear = form.hsGradYear.label;
-        //TODO: remove these once the highlight functionality is implemented so we can add them to user document no problem
-        //TODO: maybe scope function to "us-central1" so we wont have CORS issue
-        
-        await callOnboarding(0, submitForm)
-            .catch(e => console.log(e))
-
-        setUpdatingClaims(true);
+        try {
+            await callOnboarding(0, submitForm)
+            getUserTokenResult(true)
+            setUpdatingClaims(true);
+        } catch (e) {
+            console.log(e)
+            setSubmitting(false);
+        }
     }
 
     //Updates state whenever the user change fields in the form
