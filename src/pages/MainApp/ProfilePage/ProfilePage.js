@@ -25,7 +25,7 @@ function ProfilePage({ isUser=false }) {
     const [loading, setLoading] = useState(true);
     const [openEditBio, setOpenEditBio] = useState(false);
     
-    const { name, bio, socials } = userDetails || {};
+    const { name, bio, socials, isMtr } = userDetails || {};
 
     //If profileId is userId, then redirect to profile page
     useEffect(() => {
@@ -69,7 +69,7 @@ function ProfilePage({ isUser=false }) {
                     <div className="flex flex-row justify-center flex-1 w-full p-3 md:p-0">
                         <div className="flex flex-col h-full p-3 space-y-4 flex-1" style={{ maxWidth: "1024px" }}>
                             <p className="font-semibold text-lg">{isUser?"Your":name +"'s"} Profile</p>
-                            <UserFullProfile profileId={profileId || user?.uid} isUser={isUser} isMentor={isMentor} userDetails={userDetails}/>
+                            <UserFullProfile profileId={profileId || user?.uid} isUser={isUser} isMentor={isMtr} userDetails={userDetails}/>
                             <div className="relative rounded-xl shadow-lg w-full overflow-hidden bg-white py-5 px-8 space-y-2">
                                 <p className="font-semibold text-lg">About Me</p>
                                 <div className="absolute top-0 right-0 m-1 text-white rounded-full bg-gray-100 transform scale-75">
@@ -89,7 +89,7 @@ function ProfilePage({ isUser=false }) {
                     </div>
                     <div className=" hidden md:flex flex-col h-app w-sidebar pl-3 mr-6">
                         <div className="fixed flex flex-col cc_cursor h-app">
-                            <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMentor} />
+                            <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMtr} />
                             <SocialsCard socials={socials} isUser={isUser}/>
                         </div>
                     </div>
