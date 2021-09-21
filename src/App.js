@@ -9,6 +9,7 @@ import AppLoader from './components/Loader/AppLoader';
 import { hotjar } from 'react-hotjar';
 import FallbackPage from './pages/Fallback/FallbackPage';
 import {ErrorBoundary} from 'react-error-boundary';
+import NotFoundPage from './pages/Fallback/NotFoundPage';
 
 const LazyLogin = lazy(() => import("./pages/Login/Login"))
 const LazyOnboarding = lazy(() => import("./pages/Onboarding/Onboarding"))
@@ -44,6 +45,7 @@ function App() {
                 <Route path="/app" component={LazyMainApp} /> {/* In the future, we make it so it only renders if user is logged in */}
                 {userDetails?.isAdm && <Route path="/admin" component={LazyAdminApp} />} {/* Only render if user is logged in as admin*/}
                 <Route exact path={"/onboarding"} component={LazyOnboarding} /> {/* Onboarding form to get the neccesary details before starting */}
+                <Route component={NotFoundPage}/>
               </> : null}
               {user === false && <Route path="/">
                 <Redirect to="/" />
