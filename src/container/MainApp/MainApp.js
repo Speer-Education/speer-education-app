@@ -4,6 +4,7 @@ import CircleLoader from '../../components/Loader/CircleLoader';
 import './MainApp.css';
 
 import AppNavbar from '../../components/AppNavbar/AppNavbar';
+import { NoMatch } from '../../pages/Fallback/NoMatch';
 const LazyMessages = lazy(() => import('../../pages/MainApp/Messaging/Messaging'))
 const LazyMentorsPage = lazy(() => import('../../pages/MainApp/Mentors/Mentors'))
 const LazyMentorProfile = lazy(() => import('../../pages/MainApp/MentorProfile/MentorProfile'))
@@ -43,6 +44,7 @@ export default function MainApp() {
                     <Route path={`${path}/messages`}> {/* Fixed routing bug to do with "exact" */}
                         <LazyMessages />
                     </Route>
+                    <NoMatch/>
                 </Switch>
             </Suspense>
         </>
