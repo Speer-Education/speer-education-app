@@ -2,17 +2,17 @@ import { useState, useEffect, useRef } from 'react';
 import { MDEditor } from '../Blog/Editor/mdeditor';
 import { db, firebase } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import MessageIcon from '@material-ui/icons/Message';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MessageIcon from '@mui/icons-material/Message';
 import TimeAgo from 'react-timeago';
 import './PostCard.css';
 import { useAuth } from '../../hooks/useAuth';
-import { EditOutlined, Favorite, Cancel } from '@material-ui/icons';
+import { EditOutlined, Favorite, Cancel } from '@mui/icons-material';
 import { PostComments } from './PostComments';
 import history from '../../hooks/history';
 import useRefDimensions from '../../hooks/useRefDimensions';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import PostLoader from './PostLoader';
 
 /**
@@ -128,12 +128,24 @@ const PostCard = ({ post }) => {
                     </div>
                 </div>
                 {(user?.uid === author) && <div>
-                    <IconButton aria-label="delete" className="float-right" onClick={handleDeletePost}>
+                    <IconButton
+                        aria-label="delete"
+                        className="float-right"
+                        onClick={handleDeletePost}
+                        size="large">
                         <DeleteIcon className="text-red-600" />
                     </IconButton>
-                    {!isEdit? <IconButton aria-label="delete" className="float-right" onClick={() => setIsEdit(true)}>
+                    {!isEdit? <IconButton
+                        aria-label="delete"
+                        className="float-right"
+                        onClick={() => setIsEdit(true)}
+                        size="large">
                         <EditOutlined className="text-blue-600"/>
-                    </IconButton> : <IconButton aria-label="delete" className="float-right" onClick={() => setIsEdit(false)}>
+                    </IconButton> : <IconButton
+                        aria-label="delete"
+                        className="float-right"
+                        onClick={() => setIsEdit(false)}
+                        size="large">
                         <Cancel className="text-blue-600"/>
                     </IconButton>}
                 </div>}
@@ -171,7 +183,7 @@ const PostCard = ({ post }) => {
                         onClick={createNewPost}>Save</Button> : null}
             </div>
             {showComments && <PostComments post={post} />}
-        </div>
+        </div>;
 
 }
 

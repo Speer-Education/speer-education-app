@@ -2,7 +2,7 @@ import React from 'react';
 import './ChatMessage.css';
 import TimeAgo from 'react-timeago';
 import AttachmentItem from './AttachmentItem';
-import { FolderOpenOutlined } from '@material-ui/icons';
+import { FolderOpenOutlined } from '@mui/icons-material';
 
 /**
  * Returns the chat message bubble for the user

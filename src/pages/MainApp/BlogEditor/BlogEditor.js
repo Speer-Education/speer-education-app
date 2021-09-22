@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { MDEditor } from '../../../components/Blog/Editor/mdeditor';
 import { useParams } from "react-router-dom";
 import { useDocListener, updateDoc } from '../../../hooks/firestore';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import {Helmet} from "react-helmet";
 
 export default function BlogPage() {

@@ -1,6 +1,6 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
+import { makeStyles } from '@mui/material/styles'
+import Modal from '@mui/material/Modal';
 import MentorCard from '../Mentor/MentorCard/MentorCard';
 
 

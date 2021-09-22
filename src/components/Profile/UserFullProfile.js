@@ -1,5 +1,5 @@
-import { Button, IconButton } from "@material-ui/core";
-import { EditOutlined, ExitToAppOutlined, MessageOutlined } from "@material-ui/icons";
+import { Button, IconButton } from "@mui/material";
+import { EditOutlined, ExitToAppOutlined, MessageOutlined } from "@mui/icons-material";
 import { lazy, useRef, useState } from "react";
 import { functions, storage, db } from "../../config/firebase";
 import history from "../../hooks/history";
@@ -42,12 +42,12 @@ const UserProfilePicture = ({ profileId, isUser }) => {
             <ProfilePicture className="w-24 h-24 md:w-32 md:h-32 rounded-full border-white border-8 border-solid shadow-lg transform -translate-y-16 mx-1" uid={profileId} forceRefresh/>
             <input ref={profileUpload} type="file" name="file" accept="image/*" onChange={({ target }) => handleUploadProfilePic(target.files[0])} hidden />
             {isUser && <div className="absolute top-0 right-0 text-white transform -translate-y-16 rounded-full bg-gray-800 scale-75">
-                <IconButton onClick={e => profileUpload.current.click()}>
+                <IconButton onClick={e => profileUpload.current.click()} size="large">
                     <EditOutlined className="text-white" />
                 </IconButton>
             </div>}
         </div>
-    )
+    );
 }
 
 const UserBannerPicture = ({ profileId, isUser }) => {
@@ -82,12 +82,12 @@ const UserBannerPicture = ({ profileId, isUser }) => {
             <BannerPicture className="w-full h-32 rounded-xl shadow-md object-cover" uid={profileId} />
             <input ref={bannerUpload} type="file" name="file" accept="image/png" onChange={({ target }) => handleUploadBannerPic(target.files[0])} hidden />
             {isUser && <div className="absolute top-0 right-0 m-1 text-white rounded-full bg-gray-100 transform scale-75">
-                <IconButton onClick={e => bannerUpload.current.click()}>
+                <IconButton onClick={e => bannerUpload.current.click()} size="large">
                     <EditOutlined />
                 </IconButton>
             </div>}
         </div>
-    )
+    );
 }
 
 export default function UserFullProfile({ profileId, isMentor, isUser, userDetails }) {
@@ -128,21 +128,21 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
                         <h1 className="text-2xl text-gray-800">{name}</h1>
                         {/* Show Edit Profile if is User, else show Message User */}
                         {isUser ? <div className="flex flex-row space-y-1">
-                            <IconButton onClick={() => signOut()}>
+                            <IconButton onClick={() => signOut()} size="large">
                                 <ExitToAppOutlined className="text-red-600" />
                             </IconButton>
                             <div className="hidden md:inline">
                                 <Button variant="contained" color="primary" onClick={e => setOpenEditDetails(true)}>Edit Your Profile</Button>
                             </div>
                             <div className="md:hidden">
-                                <IconButton onClick={e => setOpenEditDetails(true)}><EditOutlined /></IconButton>
+                                <IconButton onClick={e => setOpenEditDetails(true)} size="large"><EditOutlined /></IconButton>
                             </div>
                         </div> : <>
                             <div className="hidden md:inline">
                                 <Button variant="contained" color="primary" startIcon={<MessageOutlined />} onClick={() => connectWithPerson()}>Message</Button>
                             </div>
                             <div className="md:hidden">
-                                <IconButton onClick={() => connectWithPerson()}><MessageOutlined /></IconButton>
+                                <IconButton onClick={() => connectWithPerson()} size="large"><MessageOutlined /></IconButton>
                             </div>
                         </>}
                     </div>
@@ -157,5 +157,5 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
         </div>
         <LazyEditDetailsDialog open={openEditDetails} onClose={() => setOpenEditDetails(false)} />
         <MentorCardModal open={mentorModalOpen} setOpen={setMentorModalOpen} mentorSelected={{id: profileId, ...userDetails}}/>
-    </>
+    </>;
 }

@@ -1,6 +1,6 @@
 import './MentorCard.css'
 import ProfilePicture from '../../User/ProfilePicture';
-import SendIcon from '@material-ui/icons/Send';
+import SendIcon from '@mui/icons-material/Send';
 import { db, firebase } from '../../../config/firebase';
 import { useAuth } from '../../../hooks/useAuth';
 import { useState } from 'react';

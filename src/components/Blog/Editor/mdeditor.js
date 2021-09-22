@@ -214,7 +214,7 @@ const MDEditor = React.forwardRef(({ docId, className, readOnly, onChange, defau
         {...props}
       />
     </div>
-  </>
+  </>;
 })
 
 export { MDEditor }

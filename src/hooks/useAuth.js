@@ -126,7 +126,7 @@ const useAuthProvider = () => {
             if(!data?._lastCommitted) return;
 
             if (lastCommitted && !(data?._lastCommitted || {}).isEqual(lastCommitted)) {
-                setUserDetails({ ...await getUserTokenResult(true), ...latestUserDetails })
+                setUserDetails({ ...(await getUserTokenResult(true)), ...latestUserDetails })
                 console.log("Refreshing token");
             }
             console.log('User Claims Updated', data);
@@ -145,7 +145,7 @@ const useAuthProvider = () => {
                 .collection("users")
                 .doc(user.uid)
                 .onSnapshot(async (doc) => {
-                    latestUserDetails = { ...await getUserTokenResult(), ...doc.data() }
+                    latestUserDetails = { ...(await getUserTokenResult()), ...doc.data() }
                     setUserDetails(latestUserDetails)
                     console.log('User Document Updated')
                 });

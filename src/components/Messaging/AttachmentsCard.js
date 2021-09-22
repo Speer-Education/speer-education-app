@@ -1,5 +1,5 @@
 import { lazy, useState } from "react";
-import { FolderOpenOutlined } from "@material-ui/icons";
+import { FolderOpenOutlined } from "@mui/icons-material";
 import AttachmentItem from "./AttachmentItem";
 import bytesToSize from "../../utils/bytesToSize";
 

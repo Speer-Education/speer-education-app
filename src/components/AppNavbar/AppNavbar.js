@@ -1,7 +1,7 @@
 import { UserMenu } from './UserMenu/UserMenu'
-import HomeTwoToneIcon from '@material-ui/icons/HomeTwoTone';
-import PeopleTwoToneIcon from '@material-ui/icons/PeopleTwoTone';
-import MessageTwoToneIcon from '@material-ui/icons/MessageTwoTone';
+import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
+import PeopleTwoToneIcon from '@mui/icons-material/PeopleTwoTone';
+import MessageTwoToneIcon from '@mui/icons-material/MessageTwoTone';
 import { Link } from 'react-router-dom';
 import history from '../../hooks/history';
 import SearchBar from './SearchBar';

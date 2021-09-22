@@ -1,4 +1,4 @@
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField } from "@mui/material";
 import { useState, useEffect, Fragment } from "react"
 import TimeAgo from "react-timeago";
 import { db, firebase } from "../../config/firebase"
@@ -6,9 +6,9 @@ import history from "../../hooks/history";
 import { useAuth } from "../../hooks/useAuth";
 import ProfilePicture from "../User/ProfilePicture";
 import { getSnapshot } from '../../hooks/firestore';
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
-import { Send } from "@material-ui/icons";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Send } from "@mui/icons-material";
 import { Transition } from "@headlessui/react";
 
 let commentsArray = []
@@ -133,59 +133,63 @@ export function PostComments({ post }) {
         setUserComment("");
     }
 
-    return (<div className="border-t border-0 border-solid border-gray-200 space-y-3">
-        <div className="flex flex-row ">
-            <TextField 
-                label="Comment" 
-                value={userComment} 
-                onChange={e => setUserComment(e.target.value)} 
-                variant="outlined" 
-                size="small" 
-                multiline
-                fullWidth
-                margin="normal"/>
-            <div className="flex-1 grid place-items-center">
-                <IconButton onClick={handleSubmitCommment} >
-                    <Send className="text-speer-blue"/>
-                </IconButton>
+    return (
+        <div className="border-t border-0 border-solid border-gray-200 space-y-3">
+            <div className="flex flex-row ">
+                <TextField 
+                    label="Comment" 
+                    value={userComment} 
+                    onChange={e => setUserComment(e.target.value)} 
+                    variant="outlined" 
+                    size="small" 
+                    multiline
+                    fullWidth
+                    margin="normal"/>
+                <div className="flex-1 grid place-items-center">
+                    <IconButton onClick={handleSubmitCommment} size="large">
+                        <Send className="text-speer-blue"/>
+                    </IconButton>
+                </div>
             </div>
+            {comments.map(({ comment, author, id, commentedOn}) => (
+                <div className="w-full flex flex-row space-x-2 flex-1 items-top" key={id}>
+                    <ProfilePicture uid={author?.uid} thumb className="w-10 h-10 rounded-full mt-1 cursor-pointer" onClick={() => history.push(`/app/profile/${author?.uid}`)}/>
+                    <div className="flex flex-col flex-1">
+                        <div className="flex flex-row space-x-2 items-baseline">
+                            <h4 className="font-semibold cursor-pointer" onClick={() => history.push(`/app/profile/${author?.uid}`)}>{author?.name}</h4>
+                            {commentedOn && <TimeAgo className="text-gray-400 text-sm" date={commentedOn.toMillis()}/>}
+                        </div>
+                        <h4 className="text-gray-600 text-normal font-normal">{comment}</h4>
+                    </div>
+                    {(author?.uid == uid) && <IconButton
+                        onClick={() => db.collection(`posts/${post.id}/comments`).doc(id).delete()}
+                        size="large">
+                        <DeleteIcon className="text-red-500"/>
+                    </IconButton>}
+                </div>
+            ))}
+            
+            <Transition
+                as={Fragment}
+                show={loading}
+                enter="transform transition duration-[400ms]"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="transform duration-200 transition ease-in-out"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+            >
+                <div className="w-full flex flex-row space-x-2 flex-1 items-top animate-pulse">
+                    <div className="rounded-full bg-gray-300 w-10 h-10 mt-1"></div>
+                    <div className="flex flex-col flex-1 space-y-2">
+                        <div className="flex flex-row space-x-2 items-baseline">
+                            <div className="h-4 bg-gray-300 rounded w-3/12"></div>
+                        </div>
+                        <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+                    </div>
+                </div>
+            </Transition>
+            {!loadedAllPosts && comments.length != 0 && <a className="underline text-blue-700 block" onClick={getMoreComments}>Load More</a>}
         </div>
-        {comments.map(({ comment, author, id, commentedOn}) => (
-            <div className="w-full flex flex-row space-x-2 flex-1 items-top" key={id}>
-                <ProfilePicture uid={author?.uid} thumb className="w-10 h-10 rounded-full mt-1 cursor-pointer" onClick={() => history.push(`/app/profile/${author?.uid}`)}/>
-                <div className="flex flex-col flex-1">
-                    <div className="flex flex-row space-x-2 items-baseline">
-                        <h4 className="font-semibold cursor-pointer" onClick={() => history.push(`/app/profile/${author?.uid}`)}>{author?.name}</h4>
-                        {commentedOn && <TimeAgo className="text-gray-400 text-sm" date={commentedOn.toMillis()}/>}
-                    </div>
-                    <h4 className="text-gray-600 text-normal font-normal">{comment}</h4>
-                </div>
-                {(author?.uid == uid) && <IconButton  onClick={() => db.collection(`posts/${post.id}/comments`).doc(id).delete()}>
-                    <DeleteIcon className="text-red-500"/>
-                </IconButton>}
-            </div>
-        ))}
-        
-        <Transition
-            as={Fragment}
-            show={loading}
-            enter="transform transition duration-[400ms]"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="transform duration-200 transition ease-in-out"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-        >
-            <div className="w-full flex flex-row space-x-2 flex-1 items-top animate-pulse">
-                <div className="rounded-full bg-gray-300 w-10 h-10 mt-1"></div>
-                <div className="flex flex-col flex-1 space-y-2">
-                    <div className="flex flex-row space-x-2 items-baseline">
-                        <div className="h-4 bg-gray-300 rounded w-3/12"></div>
-                    </div>
-                    <div className="h-4 bg-gray-300 rounded w-5/6"></div>
-                </div>
-            </div>
-        </Transition>
-        {!loadedAllPosts && comments.length != 0 && <a className="underline text-blue-700 block" onClick={getMoreComments}>Load More</a>}
-    </div>)
+    );
 }

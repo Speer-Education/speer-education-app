@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react';
-import { FolderOpenOutlined } from '@material-ui/icons';
+import { FolderOpenOutlined } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import { db } from '../../config/firebase';
 import DialogBase from '../Dialog/DialogBase';

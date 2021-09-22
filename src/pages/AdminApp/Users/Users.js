@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ReactTimeago from 'react-timeago';
 import ProfilePicture from '../../../components/User/ProfilePicture';

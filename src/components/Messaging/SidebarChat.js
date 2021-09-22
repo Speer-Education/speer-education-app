@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import "./SidebarChat.css";
-import { Avatar } from "@material-ui/core";
+import { Avatar } from "@mui/material";
 import { Link, useRouteMatch } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import history from '../../hooks/history';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 function SidebarChat({ id, roomName, isMentor, roomPic, read }) {
     const { user } = useAuth();

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './Sidebar.css';
-import { SearchOutlined } from '@material-ui/icons';
+import { SearchOutlined } from '@mui/icons-material';
 import SidebarChat from './SidebarChat';
 import { db, storage } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import ProfilePicture from '../User/ProfilePicture';
 import Spinner from '../Loader/Spinner';
 import history from '../../hooks/history';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 function Sidebar({screenSize}) {
 
     const { user, userDetails } = useAuth();

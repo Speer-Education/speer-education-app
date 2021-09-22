@@ -4,7 +4,7 @@ import { db } from '../../../config/firebase';
 import Select from 'react-select';
 import { gradeOptions, majorOptions, countryOptions } from '../../Onboarding/OnboardingConfig';
 import { useAuth } from '../../../hooks/useAuth';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import {Helmet} from "react-helmet";
 
 export default function EditProfile() {

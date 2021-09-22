@@ -1,5 +1,5 @@
-import { IconButton } from '@material-ui/core';
-import { EditOutlined, GitHub, LanguageOutlined, YouTube } from '@material-ui/icons';
+import { IconButton } from '@mui/material';
+import { EditOutlined, GitHub, LanguageOutlined, YouTube } from '@mui/icons-material';
 import React, { useState } from 'react';
 import EditSocialsDialog from './EditSocialsDialog';
 
@@ -12,13 +12,13 @@ const SocialLink = ({ link, icon }) => (
 const SocialsCard = ({socials, isUser}) => {
     const [openEditSocials, setOpenEditSocials] = useState(false);
 
-    return (<>
+    return <>
         <EditSocialsDialog open={openEditSocials} onClose={() => setOpenEditSocials(false)}/>
         {(isUser || socials) && <div className="relative flex flex-col p-3 m-2 shadow-lg rounded-md bg-white space-y-2">
             <div className=" flex flex-row space-between">
                 <p className="font-semibold text-lg">Socials</p> 
                 <div className="absolute top-0 right-0 m-1 text-white rounded-full bg-gray-100 transform scale-75">
-                    {isUser && <IconButton onClick={e => setOpenEditSocials(true)}>
+                    {isUser && <IconButton onClick={e => setOpenEditSocials(true)} size="large">
                         <EditOutlined />
                     </IconButton>}
                 </div>
@@ -28,7 +28,7 @@ const SocialsCard = ({socials, isUser}) => {
             {socials?.youtube && <SocialLink link={socials?.youtube} icon={<YouTube/>} />}
             {(socials?.github === "" && socials?.personal === "" && socials?.youtube === "") && <h3 className="text-gray-500">No Social Links Added</h3>}
         </div>}
-    </>);
+    </>;
 }
 
 export default SocialsCard;

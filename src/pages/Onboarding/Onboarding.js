@@ -2,19 +2,22 @@ import { useState, useMemo } from 'react';
 import './Onboarding.css';
 import { gradeOptions, countryOptions } from './OnboardingConfig';
 import { functions } from '../../config/firebase';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { Helmet } from "react-helmet";
 import Spinner from '../../components/Loader/Spinner';
 import Picker from 'emoji-picker-react';
-import { GitHub, LanguageOutlined } from '@material-ui/icons';
-import YouTubeIcon from '@material-ui/icons/YouTube';
+import { GitHub, LanguageOutlined } from '@mui/icons-material';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import YouTubeIcon from '@mui/icons-material/YouTube';
 import { InputAreaField, InputField, InputSelect } from '../../components/Forms/Inputs';
 import { Transition } from "@headlessui/react";
 import { useAuth } from '../../hooks/useAuth';
+import history from '../../hooks/history';
 
 
 const FormRow = ({ children }) => (
-    <div class="flex flex-wrap -mx-3 mb-6">{children}</div>
+    <div className="flex flex-wrap -mx-3 mb-6">{children}</div>
 )
 
 
@@ -50,6 +53,7 @@ export default function UserDetails() {
     const [submitting, setSubmitting] = useState(false);
     const [showPicker1, setShowPicker1] = useState(false);
     const [showPicker2, setShowPicker2] = useState(false);
+    const [showError, setShowError] = useState(false);
 
 
     // To check if all fields are filled up
@@ -98,11 +102,20 @@ export default function UserDetails() {
         submitForm.country = form.country.label;
         submitForm.hsGradYear = form.hsGradYear.label;
         try {
-            await callOnboarding(0, submitForm)
+            // await callOnboarding(0, submitForm)
             getUserTokenResult(true)
             setUpdatingClaims(true);
+            //Create a timeout to forcefully update the claims again
+            setTimeout(() => {
+                setShowError(true)
+                setSubmitting(false);
+                setUpdatingClaims(false);
+                getUserTokenResult(true)
+                // history.push("/app")
+            },10*1000)
         } catch (e) {
             console.log(e)
+            setShowError(true)
             setSubmitting(false);
         }
     }
@@ -218,7 +231,7 @@ export default function UserDetails() {
                                         <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{form.highlight1.emoji || "Pick an emoji"}</Button>
                                     </div>
                                     {showPicker1 ? <Picker onEmojiClick={handleHighlight1Emoji} pickerStyle={{ zIndex:1,position:"absolute",left: "130px" }} /> : null}
-                                    <InputField required type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Where you work, study etc..." id="highlight1" name="highlight1" value={form.highlight1.description} onChange={(e) => setForm({...form, highlight1: {emoji: form.highlight1.emoji, description: e.target.value}})}/>
+                                    <InputField required type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="eg. Marketing Lead @ Amce Inc" id="highlight1" name="highlight1" value={form.highlight1.description} onChange={(e) => setForm({...form, highlight1: {emoji: form.highlight1.emoji, description: e.target.value}})}/>
                                 </FormRow>
                                 <FormRow>
                                     {/* TODO: Change this to the emoji selecter */}
@@ -226,7 +239,7 @@ export default function UserDetails() {
                                         <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{form.highlight2.emoji || "Pick an emoji"}</Button>
                                     </div>
                                     {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} pickerStyle={{ zIndex:1,position:"absolute",left: "130px" }} /> : null}
-                                    <InputField required type="text" className="md:w-3/4 mb-2 md:mb-0" autoWidth placeholder="Where you work, study etc..." id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
+                                    <InputField required type="text" className="md:w-3/4 mb-2 md:mb-0" autoWidth placeholder="eg. CEO @ Amce Labs" id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
                                 </FormRow>
                             </Transition>
                             <Transition
@@ -265,9 +278,19 @@ export default function UserDetails() {
                     </div>
                     <div className="absolute bottom-5 right-5">
                         {/* Only render the back button if not on first section*/}
-                        {pageNumber !== 1? <Button onClick={() => setPageNumber(pageNumber-1)} style={{backgroundColor: "#597398", color: 'white', marginRight : "5px"}}>Back</Button> : null}
+                        {pageNumber !== 1 && <Button 
+                            disabled={submitting}
+                            onClick={() => setPageNumber(pageNumber-1)} 
+                            variant="contained"
+                            color="primary">Back
+                        </Button>}
                         {/* Only render the next button if not on last section */}
-                        {pageNumber !== 4? <Button onClick={() => setPageNumber(pageNumber+1)} style={{backgroundColor: "#F08E17", color: 'white'}}>Next</Button> : <Button
+                        {pageNumber !== 4? <Button 
+                            onClick={() => setPageNumber(pageNumber+1)} 
+                            variant="contained"
+                            color="secondary">
+                            Next
+                        </Button> : <Button
                             type="submit"
                             onClick={handleFormSubmit}
                             disabled={!isValidForm || submitting}
@@ -277,15 +300,26 @@ export default function UserDetails() {
                         </Button>}
                     </div>
                 </div>
-            </div> : <div className="grid place-items-center w-screen h-screen">
+            </div> : <>
+            {<Snackbar open={true} autoHideDuration={3000}>
+                <Alert severity="success" sx={{ width: '100%' }}>
+                    Your Profile is now completed!
+                </Alert>
+            </Snackbar>}
+            <div className="grid place-items-center w-screen h-screen">
                 <div className="flex flex-col items-center space-y-2">
                     <img className="object-contain w-24 p-4" src="/rocket-logo@3x.png" alt="speer rocket logo"/>
                     <h2>Setting Up Your Account...</h2>
-                    <p>Please Wait</p>
+                    <p>This might take a while</p>
                     <div className="animate-pulse h-2 rounded-md w-52 bg-gray-400"></div>
                 </div>
-            </div>}
-
+            </div>
+            </>}
+            <Snackbar open={showError} onClose={() => setShowError(false)} autoHideDuration={3000}>
+                <Alert severity="error" onClose={() => setShowError(false)} sx={{ width: '100%' }}>
+                    An Error Occuured
+                </Alert>
+            </Snackbar>
         </div>
     )
 }

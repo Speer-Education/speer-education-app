@@ -4,7 +4,7 @@ import ProfilePicture from '../User/ProfilePicture';
 import { Link } from 'react-router-dom';
 import ReactTimeago from 'react-timeago';
 import { db } from '../../config/firebase';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import history from '../../hooks/history';
 
 

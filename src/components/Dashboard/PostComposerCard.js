@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { MDEditor } from '../Blog/Editor/mdeditor';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField } from '@mui/material';
 import './PostComposerCard.css'
 import { db, firebase } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import ProfilePicture from '../User/ProfilePicture';
-import { Image, YouTube } from '@material-ui/icons';
+import { Image, YouTube } from '@mui/icons-material';
 import { Dialog } from '@headlessui/react';
 import DialogBase from '../Dialog/DialogBase';
 

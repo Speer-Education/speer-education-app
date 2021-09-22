@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, lazy } from 'react';
-import { Avatar, IconButton } from '@material-ui/core';
-import { AttachFile, EnhancedEncryptionSharp, Send } from '@material-ui/icons';
+import { Avatar, IconButton } from '@mui/material';
+import { AttachFile, EnhancedEncryptionSharp, Send } from '@mui/icons-material';
 import { useParams, Link } from 'react-router-dom';
 import Filter from 'bad-words';
 import { firebase, db, storage } from '../../config/firebase';
@@ -248,7 +248,7 @@ function Chat({screenSize}) {
             for (let i=0; i < fileMessages.length; i++){
 
                 //Check whether the file is an image
-                const isImage = (/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i).test(fileMessages[i].name);
+                const isImage = ((((((((((((((((((((((((((((((((((((((((/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i)))))))))))))))))))))))))))))))))))))))).test(fileMessages[i].name);
 
                 //If image is less than 5MB but bigger than 0.5MB, we compress it down to 0.5MB.
                 if (isImage && fileMessages[i].size > 500000 && fileMessages[i].size <= 5000000){
@@ -274,7 +274,7 @@ function Chat({screenSize}) {
 
                 let fileName = fileMessages[index].name;
 
-                const isImage = (/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i).test(fileName);
+                const isImage = ((((((((((((((((((((((((((((((((((((((((/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i)))))))))))))))))))))))))))))))))))))))).test(fileName);
 
                 return {
                     filename: fileName,
@@ -426,7 +426,7 @@ function Chat({screenSize}) {
         messagesEndRef.current?.scrollIntoView({behavior: "smooth"})
       }
     // console.log(messages)
-    return (<>
+    return <>
         {showProfPicAndAttachments ? null : <div className="flex flex-1 flex-col overflow-hidden space-y-2 p-2 max-h-full w-full h-app">
             <button onClick={screenSize >= 2 ? null : toggleShowProfPicAndAttachments} className="border-none"> {/* This toggles on and off the prof pic and attachment sections */}
                 <div className={`px-5 py-2 flex flex-row items-center bg-white ${screenSize >= 2 ? null : "hover:bg-gray-200"} rounded-lg shadow-lg`}>
@@ -482,14 +482,19 @@ function Chat({screenSize}) {
                     <div className="flex flex-1 flex-col items-center">
                         <input accept="*" multiple id="icon-button-file" type="file" hidden onChange={handleFileAdd} />
                         <label htmlFor="icon-button-file">
-                            <IconButton className="w-min" component="span">
+                            <IconButton className="w-min" component="span" size="large">
                                 <AttachFile />
                             </IconButton>
                         </label>
                         {fileMessages.length > 0 ? <span className="text-sm text-gray-500">{fileMessages.length} files</span> : null}
                     </div>
                     <TextareaAutosize className="w-full h-full rounded-xl p-2 border-none outline-none resize-none overflow-hidden" value={input} placeholder="Write A Message" onChange={(e) => setInput(e.target.value)} maxRows="10" minRows="2"/>
-                    <IconButton className="w-12" type="submit" onClick={sendMessage} disabled={sendLoading}>
+                    <IconButton
+                        className="w-12"
+                        type="submit"
+                        onClick={sendMessage}
+                        disabled={sendLoading}
+                        size="large">
                         {sendLoading ? <SendMessageLoader/> : <Send />}
                     </IconButton>
                 </form>
@@ -504,7 +509,7 @@ function Chat({screenSize}) {
             <LazyProfileCard uid={recipientId} roomExists={!roomDoesNotExistWarning}/>
             <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments} roomExists={!roomDoesNotExistWarning}/>
         </div> : null}
-    </>)
+    </>;
 }
 
 export default Chat

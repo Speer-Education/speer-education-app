@@ -7,7 +7,7 @@ import {
   Configure
 } from 'react-instantsearch-dom';
 import ProfilePicture from '../User/ProfilePicture';
-import { SearchOutlined } from '@material-ui/icons';
+import { SearchOutlined } from '@mui/icons-material';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import { useRef } from 'react';
 

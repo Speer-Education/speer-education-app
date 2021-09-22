@@ -4,12 +4,12 @@ import './index.css';
 import App from './App';
 import { AuthProvider } from "./hooks/useAuth";
 import reportWebVitals from './reportWebVitals';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider, StyledEngineProvider, adaptV4Theme } from '@mui/material/styles';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 
-const theme = createMuiTheme({
+const theme = createTheme(adaptV4Theme({
   palette: {
     primary: {
       main: '#084887',
@@ -18,7 +18,7 @@ const theme = createMuiTheme({
       main: '#F58A07',
     },
   },
-});
+}));
 
 Sentry.init({
   dsn: "https://0ea940615ee84c89a07bb2e2cc91dbfe@o992434.ingest.sentry.io/5949937",
@@ -32,11 +32,13 @@ Sentry.init({
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </ThemeProvider>
+    </StyledEngineProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
