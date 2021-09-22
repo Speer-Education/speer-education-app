@@ -74,9 +74,9 @@ const MentorCard = ({ id, name, school, major, bio, highlight1, highlight2 }) =>
                     <button 
                         type="button"
                         disabled={sendingMessage}
-                        className="shadow-lg rounded-xl p-2 bg-yellow-500 border-0 ml-2 cursor-pointer" 
+                        className="shadow-lg rounded-xl py-2 px-3 bg-yellow-500 border-0 ml-2 cursor-pointer"  
                         onClick={connectWithMentor}>
-                        {!sendingMessage?<SendIcon className="w-8 h-8 text-white"/>: <Spinner className="w-6 h-6 text-white"/>}
+                        {!sendingMessage?<SendIcon className="text-xl text-white"/>: <Spinner className="w-6 h-6 text-white"/>}
                     </button>
                 </div>
             </div>
