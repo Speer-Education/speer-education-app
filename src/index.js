@@ -8,6 +8,7 @@ import { createTheme, ThemeProvider, StyledEngineProvider, adaptV4Theme } from '
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import history from './hooks/history';
 
 const theme = createTheme(adaptV4Theme({
   palette: {
@@ -22,7 +23,9 @@ const theme = createTheme(adaptV4Theme({
 
 Sentry.init({
   dsn: "https://0ea940615ee84c89a07bb2e2cc91dbfe@o992434.ingest.sentry.io/5949937",
-  integrations: [new Integrations.BrowserTracing()],
+  integrations: [new Integrations.BrowserTracing({
+    routingInstrumentation: Sentry.reactRouterV5Instrumentation(history),
+  })],
 
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.

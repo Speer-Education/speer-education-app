@@ -13,7 +13,7 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import { InputAreaField, InputField, InputSelect } from '../../components/Forms/Inputs';
 import { Transition } from "@headlessui/react";
 import { useAuth } from '../../hooks/useAuth';
-import history from '../../hooks/history';
+import * as Sentry from "@sentry/react";
 
 
 const FormRow = ({ children }) => (
@@ -107,6 +107,7 @@ export default function UserDetails() {
             console.log('[UI] Show Setting Up Account Screen')
             //Create a timeout to forcefully update the claims again
             setTimeout(() => {
+                Sentry.captureMessage("onBoarding timeout, updating token was not successful");
                 console.log('onBoarding timeout, updating token was not successful')
                 setShowError(true)
                 setSubmitting(false);
@@ -115,6 +116,7 @@ export default function UserDetails() {
                 // history.push("/app")
             },10*1000)
         } catch (e) {
+            Sentry.captureException(e);
             console.error('onBoarding submission error occured',e)
             setShowError(true)
             setSubmitting(false);
