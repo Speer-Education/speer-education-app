@@ -85,13 +85,16 @@ const useAuthProvider = () => {
      */
     const getUserTokenResult = async (refresh) => {
         if (!user) return;
+        console.log('fetching new user token')
         let { claims } = await user.getIdTokenResult(refresh);
         
+        console.log('current pathname', history.location.pathname)
         //If user hasn't completed setup, redirect to onboarding page
         if (!claims.finishSetup && !history.location.pathname.startsWith('/onboarding')) {
-            console.log(history.location.pathname)
+            console.log('Redirecting to onboarding')
             history.push('/onboarding');
         } else if(history.location.pathname.startsWith('/onboarding') || history.location.pathname.startsWith('/login')) { //If user completed setup but is on onboarding page, redirect to app
+            console.log('Redirecting to dashboard')
             history.push('/app');
         }
         return claims
