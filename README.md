@@ -6,6 +6,12 @@
 
 ⚛️ We're also using [React](http://reactjs.com/) and TailwindCSS for our app 
 
+## For Windows
+Create a file called `.npmrc` in the project folder and paste the following else you won't be able to build
+```
+script-shell = "C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+```
+
 ## Branch Rules ⛔⛔
 
 1. For new features, make sure to code them in a new branch to avoid major conficts
