@@ -102,7 +102,7 @@ export default function UserDetails() {
         submitForm.country = form.country.label;
         submitForm.hsGradYear = form.hsGradYear.label;
         try {
-            // await callOnboarding(0, submitForm)
+            await callOnboarding(0, submitForm)
             getUserTokenResult(true)
             setUpdatingClaims(true);
             //Create a timeout to forcefully update the claims again
