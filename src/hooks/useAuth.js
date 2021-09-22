@@ -88,7 +88,7 @@ const useAuthProvider = () => {
         let { claims } = await user.getIdTokenResult(refresh);
         
         //If user hasn't completed setup, redirect to onboarding page
-        if (!claims.finishSetup) {
+        if (!claims.finishSetup && !history.location.pathname.startsWith('/onboarding')) {
             console.log(history.location.pathname)
             history.push('/onboarding');
         } else if(history.location.pathname.startsWith('/onboarding') || history.location.pathname.startsWith('/login')) { //If user completed setup but is on onboarding page, redirect to app

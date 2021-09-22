@@ -74,7 +74,7 @@ export default function UserDetails() {
         if (numTries > 9){
             throw new Error ("Onboarding function failed too many times")
         }
-
+        console.log('Attemping to call onboarding: ',numTries)
         await functions
             .httpsCallable('onBoarding')({ form: form })
             .catch((error) => {
@@ -88,8 +88,6 @@ export default function UserDetails() {
         e.preventDefault();
         setSubmitting(true);
 
-        console.log("Form:", form);
-        console.log("Is valid form", isValidForm);
         // Only submit if the entered a name
         if (isValidForm === true) {
             console.log("Valid Form")
@@ -103,10 +101,13 @@ export default function UserDetails() {
         submitForm.hsGradYear = form.hsGradYear.label;
         try {
             await callOnboarding(0, submitForm)
+            console.log('onBoarding setup was successful, attempting to get finishSetup token')
             getUserTokenResult(true)
             setUpdatingClaims(true);
+            console.log('[UI] Show Setting Up Account Screen')
             //Create a timeout to forcefully update the claims again
             setTimeout(() => {
+                console.log('onBoarding timeout, updating token was not successful')
                 setShowError(true)
                 setSubmitting(false);
                 setUpdatingClaims(false);
@@ -114,9 +115,10 @@ export default function UserDetails() {
                 // history.push("/app")
             },10*1000)
         } catch (e) {
-            console.log(e)
+            console.error('onBoarding submission error occured',e)
             setShowError(true)
             setSubmitting(false);
+            setUpdatingClaims(false);
         }
     }
 
