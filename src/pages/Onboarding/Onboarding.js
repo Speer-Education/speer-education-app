@@ -160,7 +160,8 @@ export default function UserDetails() {
             {!updatingClaims ? <div className="flex flex-col md:flex-row  bg-white rounded-3xl onboardingForm shadow-xl">
                 <div className="flex-1 pr-2 py-3 onboardingForm__welcomeContainer">
                     <img className="object-contain" src="/full-transparent-logo.png" alt="speer logo"/>
-                    <h1 className="text-3xl md:text-5xl pl-10 w-72 pb-3 md:pb-0">We're so <span style={{color: "#F08E17"}}>excited</span> for you to join us!</h1>
+                    <h1 className="text-3xl md:text-5xl font-bold -mt-8 pl-10 w-72 pb-3 md:pb-0">We're so <span style={{color: "#F08E17"}}>excited</span> for you to join us!</h1>
+                    <p className=" pl-10 mt-3 text-gray-500">You can change these details later!</p>
                 </div>
                 <div className="flex-1 text-left p-12 relative">
                     <div className="flex flex-col">
@@ -220,10 +221,21 @@ export default function UserDetails() {
                                 leaveTo="translate-x-96 opacity-0 -translate-y-24 absolute"
                             >
                                 <FormRow>
-                                    <InputAreaField required style={{ resize: "none"}} rows="3" maxLength="300" type="text" label="Short Biography (Max of 300 characters)" id="bio" name="bio" placeholder="Tell us something about yourself........" value={form.bio} onChange={handleFormInput} />
+                                    <InputAreaField 
+                                        required 
+                                        className="resize-none"
+                                        rows="3" 
+                                        maxLength="300" 
+                                        type="text" 
+                                        id="bio" 
+                                        name="bio"
+                                        label="Your Biography" 
+                                        placeholder="Tell us something about yourself........" 
+                                        value={form.bio} 
+                                        onChange={handleFormInput} />
                                 </FormRow>
                                 <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
-                                    Give us the two things you are most proud of <span className="text-red-600">*</span>
+                                    Show the world what you're proud of <span className="text-red-600">*</span>
                                 </p>                            
                                 <FormRow>
                                     {/* TODO: Change this to the emoji selecter */}
@@ -276,7 +288,7 @@ export default function UserDetails() {
                         </div>
                         {pageNumber === 4? !isValidForm && <p className="mb-5 text-red-600">Please go back and fill all fields. Not all fields are filled.</p> : null}
                     </div>
-                    <div className="absolute bottom-5 right-5">
+                    <div className="absolute bottom-5 right-5 space-x-2">
                         {/* Only render the back button if not on first section*/}
                         {pageNumber !== 1 && <Button 
                             disabled={submitting}
@@ -295,6 +307,7 @@ export default function UserDetails() {
                             onClick={handleFormSubmit}
                             disabled={!isValidForm || submitting}
                             variant="outlined"
+                            color="secondary"
                         >
                             {submitting ? <Spinner /> : "Submit"}
                         </Button>}

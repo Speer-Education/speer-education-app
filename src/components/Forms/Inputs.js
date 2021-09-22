@@ -31,12 +31,39 @@ const InputAreaField = ({ className, label, id, required = false, ...props }) =>
     </div>
 }
 
+const selectStyle = {
+    option: (provided, state) => ({
+      ...provided,
+    }),
+    control: (provided, { isFocused }) => ({
+        ...provided,
+        width: "100%",
+        backgroundColor: 'rgb(229, 231, 235)',
+        border: isFocused?'1px solid rgb(107, 114, 128)':0,
+        borderColor: isFocused?'rgb(107, 114, 128)':'rgb(229, 231, 235)',
+        outline: "none",
+        borderRadius: "4px"
+    }),
+    valueContainer: (provided, state) => ({
+        ...provided,
+        color: 'rgb(55, 65, 81)',
+        padding: "8px 16px",
+        fontSize: "14px",
+        appearance: "none",
+        display:"block",
+    }),
+    indicatorsContainer: (provided, state) => ({
+        ...provided,
+    }),
+  }
+  
+
 const InputSelect = ({ className, label, id, required = false, ...props }) => {
     return <div className={`w-full px-3 ${className}`}>
         <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>
-        <Select className="user-details__custom-select" id={id} {...props} />
+        <Select className="user-details__custom-select" styles={selectStyle} id={id} {...props} />
     </div>
 }
 
