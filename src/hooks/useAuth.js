@@ -91,10 +91,10 @@ const useAuthProvider = () => {
         console.log('current pathname', history.location.pathname)
         //If user hasn't completed setup, redirect to onboarding page
         if (!claims.finishSetup && !history.location.pathname.startsWith('/onboarding')) {
-            console.log('Redirecting to onboarding')
+            console.log('Not Finished Setup, Redirecting to onboarding')
             history.push('/onboarding');
-        } else if(history.location.pathname.startsWith('/onboarding') || history.location.pathname.startsWith('/login')) { //If user completed setup but is on onboarding page, redirect to app
-            console.log('Redirecting to dashboard')
+        } else if(claims.finishSetup && (history.location.pathname.startsWith('/onboarding') || history.location.pathname.startsWith('/login'))) { //If user completed setup but is on onboarding page, redirect to app
+            console.log('Finished Setup, Redirecting to dashboard')
             history.push('/app');
         }
         return claims
