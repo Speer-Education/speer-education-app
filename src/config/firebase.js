@@ -50,7 +50,9 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 // functions.useEmulator("localhost", 5001);
 
 //Enable persistence for firestore so it saves in browser
-// db.enablePersistence()
+db.settings({ cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED });
+
+db.enablePersistence()
 
 export { firebase, auth, db, now, storage, rtdb, functions, analytics };
 
