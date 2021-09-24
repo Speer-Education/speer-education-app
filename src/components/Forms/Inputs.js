@@ -55,6 +55,7 @@ const selectStyle = {
     indicatorsContainer: (provided, state) => ({
         ...provided,
     }),
+    menuPortal: base => ({ ...base, zIndex: 9999 })
   }
   
 

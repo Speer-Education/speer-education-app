@@ -117,7 +117,6 @@ const EditDetailsDialog = ({open, onClose}) => {
                         label="Country of Residence" 
                         id="country" 
                         name="country" 
-                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                         menuPortalTarget={document.body}
                         options={countryOptions} 
                         value={country} 
