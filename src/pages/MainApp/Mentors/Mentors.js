@@ -20,7 +20,7 @@ const Mentors = () => {
             const allMentors = snap.docs.map( doc => {
                 return { id: doc.id, ...doc.data()}
             })
-            setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id !== user?.uid))
+            setMentors(allMentors.filter(({connectedMentees, id}) => !(connectedMentees || []).includes(user?.uid) && id !== user?.uid))
             setMentorsLoaded(true)
         })
     },[user?.uid])
