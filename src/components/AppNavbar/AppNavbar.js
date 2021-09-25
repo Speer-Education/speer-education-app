@@ -2,6 +2,7 @@ import { UserMenu } from './UserMenu/UserMenu'
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import PeopleTwoToneIcon from '@mui/icons-material/PeopleTwoTone';
 import MessageTwoToneIcon from '@mui/icons-material/MessageTwoTone';
+import Badge from '@mui/material/Badge';
 import { Link } from 'react-router-dom';
 import history from '../../hooks/history';
 import SearchBar from './SearchBar';
@@ -46,7 +47,9 @@ const NavBarLink = ({ IconComponent, title, href, isContactIcon }) => {
   return <Link to={href} className="text-gray-800 no-underline flex-1 lg:flex-none">
     <div className="grid place-items-center h-full lg:px-5 hover:bg-gray-100 transition-colors cursor-pointer rounded-lg">
       <div className="flex-1 flex flex-col items-center">
-        <IconComponent className="text-2xl" style={{ color: (href === history.location.pathname) ? '#F58A07' : (isContactIcon && numUnread !== 0 ? "red": '#084887') }} />
+        {isContactIcon && numUnread !== 0 ? <Badge badgeContent={numUnread} color="error">
+          <IconComponent className="text-2xl" style={{ color: (href === history.location.pathname) ? '#F58A07' : '#084887'}} />
+        </Badge>: <IconComponent className="text-2xl" style={{ color: (href === history.location.pathname) ? '#F58A07' : '#084887'}} />}
         <p className="text-xs text-center lg:text-base">{title}</p>
       </div>
     </div>
