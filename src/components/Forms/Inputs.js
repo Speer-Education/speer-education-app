@@ -13,7 +13,7 @@ const InputField = forwardRef(({ className, label, id, required = false, onChang
         {label && <label className="block titlecase tracking-wide text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>}
-        <input ref={ref} className={`appearance-none block w-full ${empty && required ? "bg-red-100" : "bg-gray-200"} text-gray-700 border-0 focus:border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-gray-300 focus:border-gray-500`}
+        <input ref={ref} className={`appearance-none block w-full ${empty && required ? "bg-red-100" : "bg-gray-200"} text-gray-700 placeholder-gray-400 border-0 focus:border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-gray-300 focus:border-gray-500`}
             id={id}
             onChange={handleInputChange}
             {...props} />
