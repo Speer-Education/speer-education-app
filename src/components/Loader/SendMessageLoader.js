@@ -3,6 +3,6 @@ import './SendMessageLoader.css';
 
 export default function SendMessageLoader() {
     return (
-        <div class="loader-3"><span></span></div>
+        <div className="loader-3"><span></span></div>
     )
 }

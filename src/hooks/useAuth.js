@@ -188,7 +188,10 @@ const useAuthProvider = () => {
      * @returns null
      */
     const signOut = () => {
-        return auth.signOut().then(() => setUser(false));
+        return auth.signOut().then(() => {
+            setUser(false);
+            history.push('/login');
+        });
     };
 
     return {
