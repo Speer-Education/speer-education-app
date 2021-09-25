@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import Select from 'react-select';
 
-const InputField = ({ className, label, id, required = false, onChange, autoWidth, ...props }) => {
+const InputField = forwardRef(({ className, label, id, required = false, onChange, autoWidth, ...props }, ref) => {
     const [empty, setEmpty] = useState(false);
 
     const handleInputChange = e => {
@@ -13,12 +13,12 @@ const InputField = ({ className, label, id, required = false, onChange, autoWidt
         {label && <label className="block titlecase tracking-wide text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>}
-        <input className={`appearance-none block w-full ${empty && required ? "bg-red-100" : "bg-gray-200"} text-gray-700 border-0 focus:border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-gray-300 focus:border-gray-500`}
+        <input ref={ref} className={`appearance-none block w-full ${empty && required ? "bg-red-100" : "bg-gray-200"} text-gray-700 border-0 focus:border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-gray-300 focus:border-gray-500`}
             id={id}
             onChange={handleInputChange}
             {...props} />
     </div>
-}
+})
 
 const InputAreaField = ({ className, label, id, required = false, ...props }) => {
     return <div className={`w-full px-3 ${className}`}>

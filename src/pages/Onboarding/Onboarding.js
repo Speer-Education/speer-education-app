@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, Fragment } from 'react';
 import './Onboarding.css';
 import { gradeOptions, countryOptions } from './OnboardingConfig';
 import { functions } from '../../config/firebase';
@@ -12,6 +12,10 @@ import Alert from '@mui/material/Alert';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import { InputAreaField, InputField, InputSelect } from '../../components/Forms/Inputs';
 import { Transition } from "@headlessui/react";
+import DateAdapter from '@mui/lab/AdapterLuxon';
+import TextField from '@mui/material/TextField';
+import MobileDatePicker from '@mui/lab/MobileDatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useAuth } from '../../hooks/useAuth';
 import * as Sentry from "@sentry/react";
 
@@ -54,6 +58,7 @@ export default function UserDetails() {
     const [showPicker1, setShowPicker1] = useState(false);
     const [showPicker2, setShowPicker2] = useState(false);
     const [showError, setShowError] = useState(false);
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
 
     // To check if all fields are filled up
@@ -186,8 +191,39 @@ export default function UserDetails() {
                                 </FormRow>
                                 <FormRow>
                                     {/* Date Of Birth */}
-                                    <InputField required type="date" className="md:w-1/2 mb-6 md:mb-0" label="Your Date of Birth" id="dateofbirth" name="dateOfBirth" value={form.dateOfBirth} onChange={handleFormInput} />
-                                    {/* Insert Country They Live In (Use a country list)*/}
+                                    <Fragment>
+                                        <LocalizationProvider dateAdapter={DateAdapter}>
+                                            <MobileDatePicker
+                                                disableFuture
+                                                open={showDatePicker}
+                                                onClose={() => setShowDatePicker(false)}
+                                                inputFormat="MM/dd/yyyy"
+                                                id="dateofbirth" 
+                                                name="dateOfBirth" 
+                                                value={form.dateOfBirth}    
+                                                onChange={val => setForm({ ...form, dateOfBirth: val.toLocaleString() })}
+                                                renderInput={({
+                                                    ref,
+                                                    inputProps,
+                                                    disabled,
+                                                    onChange,
+                                                    value,
+                                                }) => <div className="md:w-1/2 mb-6 md:mb-0 flex flex-row items-baseline" >
+                                                        <InputField 
+                                                            required 
+                                                            ref={ref}
+                                                            value={value}
+                                                            label="Your Date of Birth"
+                                                            placeholder="mm/dd/yyyy"
+                                                            onChange={onChange}
+                                                            disabled={disabled} 
+                                                            {...inputProps}
+                                                            onClick={() => setShowDatePicker(true)} />
+                                                    </div>
+                                                }
+                                            />
+                                        </LocalizationProvider>
+                                    </Fragment>
                                 </FormRow>
                                 <FormRow>
                                     <InputSelect required className="md:w-1/2 mb-6 md:mb-0" label="Country of Residence" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
