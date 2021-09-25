@@ -5,7 +5,8 @@ import MessageTwoToneIcon from '@mui/icons-material/MessageTwoTone';
 import { Link } from 'react-router-dom';
 import history from '../../hooks/history';
 import SearchBar from './SearchBar';
-
+import { useAuth } from '../../hooks/useAuth';
+import React, { useEffect, useState } from 'react';
 
 /**
  * Component for the link in the navbar
@@ -15,11 +16,37 @@ import SearchBar from './SearchBar';
  * @param {string} href
  * @returns 
  */
-const NavBarLink = ({ IconComponent, title, href }) => {
+const NavBarLink = ({ IconComponent, title, href, isContactIcon }) => {
+
+  const { userDetails } = useAuth();
+  const [numUnread, setNumUnread] = useState(0);
+
+  useEffect(() => {
+
+    if (isContactIcon){
+      let counter = 0;
+
+      console.log(userDetails)
+
+      for (const room in userDetails?.activeRooms){
+
+        if (userDetails?.activeRooms[room].read[userDetails.user_id] === false){
+          counter++;
+        }
+        // if (room.read[userDetails.user_id] === false){
+        //   counter++;
+        // }
+      }
+  
+      setNumUnread(counter);
+    }
+
+  }, [userDetails?.activeRooms])
+
   return <Link to={href} className="text-gray-800 no-underline flex-1 lg:flex-none">
     <div className="grid place-items-center h-full lg:px-5 hover:bg-gray-100 transition-colors cursor-pointer rounded-lg">
       <div className="flex-1 flex flex-col items-center">
-        <IconComponent className="text-2xl" style={{ color: (href === history.location.pathname) ? '#F58A07' : '#084887' }} />
+        <IconComponent className="text-2xl" style={{ color: (href === history.location.pathname) ? '#F58A07' : (isContactIcon && numUnread !== 0 ? "red": '#084887') }} />
         <p className="text-xs text-center lg:text-base">{title}</p>
       </div>
     </div>
@@ -40,7 +67,7 @@ const AppNavbar = () => {
         <div className="flex flex-row h-full flex-1 lg:flex-none">
           <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/app" />
           <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/app/mentors" />
-          <NavBarLink IconComponent={MessageTwoToneIcon} title="Contacts" href="/app/messages" />
+          <NavBarLink IconComponent={MessageTwoToneIcon} isContactIcon title="Contacts" href="/app/messages" />
           {/* <NavBarLink IconComponent={NotificationsTwoToneIcon} title="Notifications"/> */}
         </div>
         {/* <div className="hidden lg:block" >
