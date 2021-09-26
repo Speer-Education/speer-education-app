@@ -71,8 +71,6 @@ export default function EditProfile() {
         setSubmitting(true);
 
         if (isValidForm === true && user) {
-            console.log("updated user info:", updatedUserInfo)
-            console.log("submission is valid")
             await db.doc(`users/${user.uid}`).update(updatedUserInfo); 
         } else {
             console.log("submission is invalid")

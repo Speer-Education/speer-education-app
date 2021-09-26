@@ -79,7 +79,6 @@ export default function UserDetails() {
         if (numTries > 9){
             throw new Error ("Onboarding function failed too many times")
         }
-        console.log('Attemping to call onboarding: ',numTries)
         await functions
             .httpsCallable('onBoarding')({ form: form })
             .catch((error) => {

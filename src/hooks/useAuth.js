@@ -47,7 +47,6 @@ const useAuthProvider = () => {
             .catch((error) => {
                 return { error };
             });
-        console.log("sign in successful");
     };
 
     /**
@@ -63,7 +62,6 @@ const useAuthProvider = () => {
             .catch((error) => {
                 return { error };
             });
-        console.log("sign in successful");
     };
 
     /**
@@ -75,7 +73,6 @@ const useAuthProvider = () => {
             .catch((error) => {
                 return { error };
             });
-        console.log("sign in successful");
     };
 
     /**
@@ -85,16 +82,12 @@ const useAuthProvider = () => {
      */
     const getUserTokenResult = async (refresh) => {
         if (!user) return;
-        console.log('fetching new user token')
         let { claims } = await user.getIdTokenResult(refresh);
         
-        console.log('current pathname', history.location.pathname)
         //If user hasn't completed setup, redirect to onboarding page
         if (!claims.finishSetup && !history.location.pathname.startsWith('/onboarding')) {
-            console.log('Not Finished Setup, Redirecting to onboarding')
             history.push('/onboarding');
         } else if(claims.finishSetup && (history.location.pathname.startsWith('/onboarding') || history.location.pathname.startsWith('/login'))) { //If user completed setup but is on onboarding page, redirect to app
-            console.log('Finished Setup, Redirecting to dashboard')
             history.push('/app');
         }
         return claims
@@ -107,7 +100,6 @@ const useAuthProvider = () => {
     const handleAuthStateChanged = (user) => {
         if (user) {
             setUser(user);
-            console.log("sign in successful");
         } else {
             setUser(false);
         }
@@ -121,7 +113,6 @@ const useAuthProvider = () => {
     
     //Attaches user claims documents to listen for changes in user permissions, if yes update token to ensure no permission errors
     useEffect(() => {
-        console.log("attaching user_claims document")
         if (!user) return;
         return db.doc(`user_claims/${user.uid}`).onSnapshot(async (snap) => {
             const data = snap.data();
@@ -130,9 +121,7 @@ const useAuthProvider = () => {
 
             if (lastCommitted && !(data?._lastCommitted || {}).isEqual(lastCommitted)) {
                 setUserDetails({ ...(await getUserTokenResult(true)), ...latestUserDetails })
-                console.log("Refreshing token");
             }
-            console.log('User Claims Updated', data);
             setLastCommitted(data?._lastCommitted);
         },
         error => {
@@ -150,7 +139,6 @@ const useAuthProvider = () => {
                 .onSnapshot(async (doc) => {
                     latestUserDetails = { ...(await getUserTokenResult()), ...doc.data() }
                     setUserDetails(latestUserDetails)
-                    console.log('User Document Updated')
                 });
             var userStatusDatabaseRef = rtdb.ref('/status/' + user.uid);
 
