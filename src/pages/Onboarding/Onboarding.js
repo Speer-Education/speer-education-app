@@ -197,7 +197,7 @@ export default function UserDetails() {
                                                 disableFuture
                                                 open={showDatePicker}
                                                 onClose={() => setShowDatePicker(false)}
-                                                inputFormat="MM/dd/yyyy"
+                                                inputFormat="dd/MM/yyyy"
                                                 id="dateofbirth" 
                                                 name="dateOfBirth" 
                                                 value={form.dateOfBirth}    
@@ -214,7 +214,7 @@ export default function UserDetails() {
                                                             ref={ref}
                                                             value={value}
                                                             label="Your Date of Birth"
-                                                            placeholder="mm/dd/yyyy"
+                                                            placeholder="dd/MM/yyyy"
                                                             onChange={onChange}
                                                             disabled={disabled} 
                                                             {...inputProps}
