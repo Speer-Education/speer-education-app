@@ -214,7 +214,7 @@ export default function UserDetails() {
                                                             ref={ref}
                                                             value={value}
                                                             label="Your Date of Birth"
-                                                            placeholder="dd/MM/yyyy"
+                                                            placeholder="dd/mm/yyyy"
                                                             onChange={onChange}
                                                             disabled={disabled} 
                                                             {...inputProps}
