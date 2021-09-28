@@ -7,7 +7,6 @@ import AppNavbar from '../../components/AppNavbar/AppNavbar';
 import { NoMatch } from '../../pages/Fallback/NoMatch';
 const LazyMessages = lazy(() => import('../../pages/MainApp/Messaging/Messaging'))
 const LazyMentorsPage = lazy(() => import('../../pages/MainApp/Mentors/Mentors'))
-const LazyMentorProfile = lazy(() => import('../../pages/MainApp/MentorProfile/MentorProfile'))
 const LazyProfilePage = lazy(() => import('../../pages/MainApp/ProfilePage/ProfilePage'))
 const LazyDashboard = lazy(() => import('../../pages/MainApp/Dashboard/Dashboard'))
 
@@ -27,10 +26,6 @@ export default function MainApp() {
                     {/* Mentor Page */}
                     <Route exact path={`${path}/mentors`}>
                         <LazyMentorsPage />
-                    </Route>
-                    {/* Mentor Profile Page */}
-                    <Route path={`${path}/mentors/:mentorId`}>
-                        <LazyMentorProfile />
                     </Route>
                     {/* Profile Page */}
                     <Route path={`${path}/profile/:profileId`}>

@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import DialogBase from '../Dialog/DialogBase';
 import { InputField } from '../Forms/Inputs';
 import Spinner from '../Loader/Spinner'
+import { logEvent } from "../../utils/analytics";
 
 const EditSocialsDialog = ({open, onClose}) => {
 
@@ -30,6 +31,7 @@ const EditSocialsDialog = ({open, onClose}) => {
 
     const handleSaveDetails = () => {
       if(!user) return;
+      logEvent('updated_socials')
       setSaving(true)
       const submittingForm = JSON.parse(JSON.stringify(form));
       db.doc(`users/${user.uid}`).update({

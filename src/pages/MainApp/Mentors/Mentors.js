@@ -7,6 +7,7 @@ import {Helmet} from "react-helmet";
 import StatsCard from '../../../components/Dashboard/StatsCard';
 import UserSmallProfileCard from '../../../components/User/UserSmallProfileCard';
 import { useAuth } from '../../../hooks/useAuth';
+import { logEvent } from '../../../utils/analytics';
 
 const Mentors = () => {
 
@@ -14,13 +15,21 @@ const Mentors = () => {
     const [mentors, setMentors] = useState([]);
     const [mentorsLoaded, setMentorsLoaded] = useState(false);
 
+
     useEffect(() => {
         //Get all the mentors and set in mentors
         return db.collection('mentors').orderBy('_addedDate','desc').onSnapshot(snap => {
             const allMentors = snap.docs.map( doc => {
                 return { id: doc.id, ...doc.data()}
             })
-            setMentors(allMentors.filter(({connectedMentees, id}) => !(connectedMentees || []).includes(user?.uid) && id !== user?.uid))
+
+            const currentMentors = allMentors.filter(({connectedMentees, id}) => !(connectedMentees || []).includes(user?.uid) && id !== user?.uid)
+
+            setMentors(currentMentors)
+            logEvent('Loaded Mentors',{
+                mentorsLoaded: currentMentors.length,
+                mentorsList: currentMentors.map(({name}) => name)
+            })
             setMentorsLoaded(true)
         })
     },[user?.uid])

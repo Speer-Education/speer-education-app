@@ -14,6 +14,7 @@ import history from '../../hooks/history';
 import useRefDimensions from '../../hooks/useRefDimensions';
 import { Button } from '@mui/material';
 import PostLoader from './PostLoader';
+import { logEvent } from '../../utils/analytics';
 
 /**
  * Creates the post card for this post
@@ -88,6 +89,10 @@ const PostCard = ({ post }) => {
             _createdOn: firebase.firestore.FieldValue.serverTimestamp()
         })
         if(userLiked) await db.doc(`posts/${id}/likes/${user.uid}`).delete()
+        logEvent(userLiked? 'unlike_post' : 'like_post', {
+            postId: id,
+            postAuthor: author
+        })
     }
 
     const handleDeletePost = () => {

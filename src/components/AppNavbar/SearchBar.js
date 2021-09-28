@@ -10,6 +10,7 @@ import ProfilePicture from '../User/ProfilePicture';
 import { SearchOutlined } from '@mui/icons-material';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import { useRef } from 'react';
+import { logEvent } from '../../utils/analytics';
 
 const userSearchClient = {
   ...searchClient,
@@ -34,6 +35,9 @@ let setSearchQuery = null;
 
 const Hit = ({ hit }) => <div className="flex flex-row space-x-2 hover:bg-blue-500 hover:bg-opacity-10 px-4 py-2 cursor-pointer" onClick={() => {
     history.push(`/app/profile/${hit.objectID}`)
+    logEvent("clicked_on_search", {
+      targetUser: hit.objectID,
+    });
     setSearchQuery("")
   }}>
     <ProfilePicture className="h-10 w-10 rounded-full" uid={hit.objectID} thumb/>
