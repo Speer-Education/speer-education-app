@@ -27,8 +27,6 @@ const NavBarLink = ({ IconComponent, title, href, isContactIcon }) => {
     if (isContactIcon){
       let counter = 0;
 
-      console.log(userDetails)
-
       for (const room in userDetails?.activeRooms){
 
         if (userDetails?.activeRooms[room].read[userDetails.user_id] === false){

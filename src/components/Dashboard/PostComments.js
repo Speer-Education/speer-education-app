@@ -85,14 +85,11 @@ export function PostComments({ post }) {
     }
 
     async function getMoreComments() {
-        console.log('getting more comments')
-
         // query reference for the messages we want
         let ref = db.collection(`posts/${post.id}/comments`)
 
         setLoading(true)
         if (!end) {
-            console.log('no more posts');
             setLoadedAllPosts(true);
             setLoading(false)
             return;
@@ -106,7 +103,6 @@ export function PostComments({ post }) {
         end = snapshots.docs[snapshots.docs.length - 1]
         // create another listener using new boundaries     
         if (!end) {
-            console.log('no more posts');
             setLoadedAllPosts(true);
             setLoading(false)
             return;

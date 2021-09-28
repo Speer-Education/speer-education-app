@@ -80,14 +80,11 @@ const PostStream = () => {
     }
 
     async function getMoreMessages() {
-        console.log('getting more messages')
-
         // query reference for the messages we want
         let ref = db.collection('posts')
 
         setLoading(true)
         if (!end) {
-            console.log('no more posts');
             setLoadedAllPosts(true);
             setLoading(false)
             return;
@@ -101,7 +98,6 @@ const PostStream = () => {
         end = snapshots.docs[snapshots.docs.length - 1]
         // create another listener using new boundaries     
         if (!end) {
-            console.log('no more posts');
             setLoadedAllPosts(true);
             setLoading(false)
             return;

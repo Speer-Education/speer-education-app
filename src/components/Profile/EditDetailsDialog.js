@@ -62,7 +62,6 @@ const EditDetailsDialog = ({open, onClose}) => {
       setSaving(true)
       const submittingForm = JSON.parse(JSON.stringify(form));
       submittingForm.country = submittingForm.country.label;
-      console.log('Submitting Update Request to db')
       db.doc(`users/${user.uid}`).update({
         ...submittingForm,
         _updatedOn: firebase.firestore.Timestamp.now()

@@ -80,11 +80,9 @@ const ProfilePostStream = ({uid, isUser, name}) => {
     }
 
     async function getMoreMessages() {
-        console.log('getting more messages')
 
         setLoading(true)
         if (!end) {
-            console.log('no more posts');
             setLoadedAllPosts(true);
             setLoading(false)
             return;
@@ -99,7 +97,6 @@ const ProfilePostStream = ({uid, isUser, name}) => {
         end = snapshots.docs[snapshots.docs.length - 1]
         // create another listener using new boundaries     
         if (!end) {
-            console.log('no more posts');
             setLoadedAllPosts(true);
             setLoading(false)
             return;

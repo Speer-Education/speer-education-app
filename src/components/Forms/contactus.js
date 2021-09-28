@@ -28,14 +28,12 @@ export const ContactUsForm = ({ mainClassName }) => {
   });
 
   const submitStayInTouch = async (data) => {
-    console.log(data);
 
     setLoading(true);
 
     //Add proper form validation next
     emailjs.send('service_28lmjk8', 'template_4gjnunu', data, 'user_S25sGxPzB9WUatre16GNf')
       .then((result) => {
-        console.log(result.text);
         setEmailSent(true);
         setForm({
           name: "",
@@ -45,7 +43,6 @@ export const ContactUsForm = ({ mainClassName }) => {
         })
         setLoading(false);
       }, (error) => {
-        console.log(error.text);
         setLoading(false);
       });
 

@@ -30,7 +30,6 @@ const EditBiographyDialog = ({open, onClose}) => {
       if(!user) return;
       setSaving(true)
       const submittingForm = JSON.parse(JSON.stringify(form));
-      console.log('Submitting Update Request to db')
       db.doc(`users/${user.uid}`).update({
         ...submittingForm,
         _updatedOn: firebase.firestore.Timestamp.now()

@@ -24,12 +24,10 @@ const UserProfilePicture = ({ profileId, isUser }) => {
                 resolve(reader.result);
             }, false);
         });
-        console.log('uploading profile picture')
         try {
             const storageRef = await functions.httpsCallable('updateProfilePicture')({
                 image: base64image,
             });
-            console.log('uploaded, reload to see changes')
             //reload to see changes
             window.location.reload()
         } catch (e) {
@@ -63,12 +61,10 @@ const UserBannerPicture = ({ profileId, isUser }) => {
                 resolve(reader.result);
             }, false);
         });
-        console.log('uploading banner picture')
         try {
             const storageRef = await functions.httpsCallable('updateBannerPicture')({
                 image: base64image,
             });
-            console.log('uploaded, reload to see changes')
             //reload to see changes
             window.location.reload()
         } catch (e) {

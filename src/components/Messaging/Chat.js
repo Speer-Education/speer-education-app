@@ -196,11 +196,9 @@ function Chat({screenSize}) {
     }
 
     async function getMoreMessages() {
-        console.log('getting more messages')
         let ref = db.collection('rooms').doc(roomId).collection('messages')
         setLoading(true)
         if (!start) {
-            console.log('no more posts');
             setLoadedAllMessages(true);
             setLoading(false)
             return;
@@ -214,7 +212,6 @@ function Chat({screenSize}) {
         start = snapshots.docs[snapshots.docs.length - 1]
         // create another listener using new boundaries     
         if (!end) {
-            console.log('no more posts');
             setLoadedAllMessages(true);
             setLoading(false)
             return;
@@ -242,7 +239,6 @@ function Chat({screenSize}) {
         if (fileMessages.length > 0) {
 
             setSendLoading(true);
-            console.log("1", sendLoading);
 
             //GO through the files to ensure they are all the suitable size.
             for (let i=0; i < fileMessages.length; i++){
@@ -309,7 +305,6 @@ function Chat({screenSize}) {
         if (input !== "") {
 
             setSendLoading(true);
-            console.log("2", sendLoading);
 
             //Creating roomNameObject object
             const {read, roomNameObject} = createReadAndRoomName(roomDoc)

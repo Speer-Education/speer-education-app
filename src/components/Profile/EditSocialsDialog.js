@@ -32,7 +32,6 @@ const EditSocialsDialog = ({open, onClose}) => {
       if(!user) return;
       setSaving(true)
       const submittingForm = JSON.parse(JSON.stringify(form));
-      console.log('Submitting Update Request to db')
       db.doc(`users/${user.uid}`).update({
         socials: submittingForm,
         _updatedOn: firebase.firestore.Timestamp.now()
