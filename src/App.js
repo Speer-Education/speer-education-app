@@ -6,10 +6,10 @@ import { Router, Switch, Route, Redirect } from "react-router-dom";
 import history from './hooks/history';
 import ServiceWorkerWrapper from './components/ServiceWorker/ServiceWorkerWrapper';
 import AppLoader from './components/Loader/AppLoader';
-import { hotjar } from 'react-hotjar';
 import FallbackPage from './pages/Fallback/FallbackPage';
 import {ErrorBoundary} from 'react-error-boundary';
 import NotFoundPage from './pages/Fallback/NotFoundPage';
+import { logEvent } from './utils/analytics';
 
 const LazyLogin = lazy(() => import("./pages/Login/Login"))
 const LazyOnboarding = lazy(() => import("./pages/Onboarding/Onboarding"))
@@ -21,13 +21,10 @@ function App() {
   const { user, userDetails } = useAuth();
 
   useEffect(() => {
-    hotjar.initialize(2565266, 6);
-  });
-
-  useEffect(() => {
-    if(!user) return;
-    hotjar.identify('USER_ID', { userProperty: user.uid });
-  }, [user]);
+    logEvent('app_start', {
+      app_version: process.env.REACT_APP_VERSION
+    });
+  },[]);
 
   const errorHandler= (error,errorInfo) => {
     console.log('logging error:', error, errorInfo)

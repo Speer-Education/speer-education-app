@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, createContext } from "react";
 import { auth, db, firebase, rtdb } from "../config/firebase";
+import { logEvent, setUserProperties } from "../utils/analytics";
 import history from './history';
 import { useLocalStorage } from "./useHooks";
 
@@ -138,6 +139,10 @@ const useAuthProvider = () => {
                 .doc(user.uid)
                 .onSnapshot(async (doc) => {
                     latestUserDetails = { ...(await getUserTokenResult()), ...doc.data() }
+
+                    //For analytics
+                    setUserProperties(user.uid, latestUserDetails);
+
                     setUserDetails(latestUserDetails)
                 });
             var userStatusDatabaseRef = rtdb.ref('/status/' + user.uid);
@@ -178,6 +183,7 @@ const useAuthProvider = () => {
     const signOut = () => {
         return auth.signOut().then(() => {
             setUser(false);
+            logEvent('logout');
             history.push('/login');
         });
     };

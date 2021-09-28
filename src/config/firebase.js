@@ -5,6 +5,7 @@ import "firebase/database";
 import "firebase/storage";
 import "firebase/functions";
 import "firebase/analytics";
+import { isDevelopment } from "../utils/environment";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAx-OEKEZF6LgX5wv03qRilbGTWIJvL4kw",
@@ -37,8 +38,9 @@ const functions = firebase.functions();
 
 let analytics = {};
 
-if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+if (isDevelopment()) {
   // dev code
+  // analytics = firebase.analytics();
 } else {
   // production code
   analytics = firebase.analytics();
