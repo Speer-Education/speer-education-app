@@ -184,7 +184,7 @@ const useAuthProvider = () => {
         return auth.signOut().then(() => {
             setUser(false);
             logEvent('logout');
-            history.push('www.speeredu.com');
+            window.location.replace('https://speeredu.com')
         });
     };
 
