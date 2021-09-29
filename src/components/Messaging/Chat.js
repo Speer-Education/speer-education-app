@@ -425,9 +425,9 @@ function Chat({screenSize}) {
         {showProfPicAndAttachments ? null : <div className="flex flex-1 flex-col overflow-hidden space-y-2 p-2 max-h-full w-full h-app">
             <button onClick={screenSize >= 2 ? null : toggleShowProfPicAndAttachments} className="border-none"> {/* This toggles on and off the prof pic and attachment sections */}
                 <div className={`px-5 py-2 flex flex-row items-center bg-white ${screenSize >= 2 ? null : "hover:bg-gray-200"} rounded-lg shadow-lg`}>
-                    {screenSize < 3 ? <Link to={`/app/messages`} className="mr-5"> <i className="fas fa-arrow-left"></i></Link> : null}
+                    {screenSize < 3 ? <Link to={`/messages`} className="mr-5"> <i className="fas fa-arrow-left"></i></Link> : null}
                     {loading? "Loading...": recipientId ?
-                        <Link to={`/app/profile/${recipientId}`} title="Visit Mentor Profile" className="flex flex-row items-center">
+                        <Link to={`/profile/${recipientId}`} title="Visit Mentor Profile" className="flex flex-row items-center">
                             <Avatar src={roomPic} />
                             <div className="pl-5 mb-1 font-medium">
                                 <h3>{roomName} {isMentor ? <i className="fas fa-user-check"></i> : null}</h3>
@@ -438,7 +438,7 @@ function Chat({screenSize}) {
                                 <h3>{roomName}</h3>
                             </div>
                         </>}
-                    {screenSize >= 3 ? <Link to={`/app/messages`} className="ml-auto"><i className="far fa-times-circle text-red-500 text-2xl"></i></Link> : null}
+                    {screenSize >= 3 ? <Link to={`/messages`} className="ml-auto"><i className="far fa-times-circle text-red-500 text-2xl"></i></Link> : null}
                 </div>
             </button>
             <div className="py-8 px-2 md:p-8 overflow-auto flex-1 flex flex-col w-full bg-white rounded-lg shadow-lg">

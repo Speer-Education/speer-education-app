@@ -16,7 +16,7 @@ function NotFoundPage() {
                     <div className="space-y-2 text-speer-yellow font-extrabold">
                         <h1><span className="text-speer-blue">Error</span> 404</h1>
                         <h1>PAGE NOT FOUND</h1>
-                        <Link to="/app">
+                        <Link to="/">
                             <Button className="w-full " variant="outlined" style={{marginTop: "1rem", border: "2px solid #084887", padding: "2rem"}}>
                                 <h2 className="text-gray-600">Click here to return to the <span className="text-speer-yellow">dashboard!</span></h2>
                             </Button>

@@ -24,7 +24,7 @@ export default function StatsCard() {
                     <p>Open Chats</p>
                 </div>
             </div>
-            <div className="mt-auto"><Link to="/app/profile" className="text-blue-700 underline text-xs">Go To Your Profile</Link></div>
+            <div className="mt-auto"><Link to="/profile" className="text-blue-700 underline text-xs">Go To Your Profile</Link></div>
         </div>
     )
 }

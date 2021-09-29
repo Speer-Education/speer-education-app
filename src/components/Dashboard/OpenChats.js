@@ -9,7 +9,7 @@ import history from '../../hooks/history';
 
 
 const ActiveChatRow = ({ photoUid, username, message, date, isUnread, roomId}) => (
-    <Link to={`/app/messages/${roomId}`} key={roomId}>
+    <Link to={`/messages/${roomId}`} key={roomId}>
         <div className="flex flex-row transition-colors hover:bg-gray-100 cursor-pointer rounded-xl px-3 py-1 ">
             <ProfilePicture uid={photoUid} thumb className="w-10 h-10 rounded-full" />
             <div className="flex-1 ml-2">
@@ -53,7 +53,7 @@ export default function OpenChats() {
                 {/* TOOD: Add No Recent Chats Icon */}
                 <div className="space-y-2 grid place-items-center">
                     <h2 className="text-gray-500">No Recent Chats</h2>
-                    <Button variant="contained" color="primary" onClick={() => history.push('/app/mentors')}>Find a mentor</Button>
+                    <Button variant="contained" color="primary" onClick={() => history.push('/mentors')}>Find a mentor</Button>
                 </div>
             </div> : <>
                 <p className="pt-3 pl-3">Recent Chats</p>
@@ -86,7 +86,7 @@ export default function OpenChats() {
                 })}
                 </div>
             </>}
-            <div className="mt-auto p-3"><Link to="/app/messages" className="text-blue-700 underline text-xs">See all Chats</Link></div>
+            <div className="mt-auto p-3"><Link to="/messages" className="text-blue-700 underline text-xs">See all Chats</Link></div>
         </div>
     )
 }

@@ -21,27 +21,27 @@ export default function MainApp() {
             <Suspense fallback={<div className="grid place-items-center w-screen h-app bg-gray-100"> <CircleLoader /> </div>}>
                 <Switch>
                     {/* Main Page */}
-                    <Route exact path={`${path}`}>
+                    <Route exact path={`/`}>
                         <LazyDashboard />
                     </Route>
                     {/* Mentor Page */}
-                    <Route exact path={`${path}/mentors`}>
+                    <Route exact path={`/mentors`}>
                         <LazyMentorsPage />
                     </Route>
                     {/* Mentor Profile Page */}
-                    <Route path={`${path}/mentors/:mentorId`}>
+                    <Route path={`/mentors/:mentorId`}>
                         <LazyMentorProfile />
                     </Route>
                     {/* Profile Page */}
-                    <Route path={`${path}/profile/:profileId`}>
+                    <Route path={`/profile/:profileId`}>
                         <LazyProfilePage />
                     </Route>
                     {/* Profile Page */}
-                    <Route exact path={`${path}/profile/`}>
+                    <Route exact path={`/profile`}>
                         <LazyProfilePage isUser={true}/>
                     </Route>
                     {/* Chat Page */}
-                    <Route path={`${path}/messages`}> {/* Fixed routing bug to do with "exact" */}
+                    <Route path={`/messages`}> {/* Fixed routing bug to do with "exact" */}
                         <LazyMessages />
                     </Route>
                     <NoMatch/>

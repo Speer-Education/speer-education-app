@@ -46,8 +46,8 @@ function Sidebar({screenSize}) {
                     }
                 }
             })).then(res => {
-                if(res.length > 0 && history.location.pathname === '/app/messages' && screenSize >= 1) {
-                    history.push(`/app/messages/${res[0].id}`);
+                if(res.length > 0 && history.location.pathname === '/messages' && screenSize >= 1) {
+                    history.push(`/messages/${res[0].id}`);
                 }
                 setLoading(false)
                 setRooms(res)
@@ -94,7 +94,7 @@ function Sidebar({screenSize}) {
                 <div className="h-full grid place-items-center">
                     <div className="space-y-3 grid place-items-center">
                         <h3 className="text-gray-500">No Contacts yet</h3>
-                        <Button variant="contained" color="primary" onClick={() => history.push('/app/mentors')}>Find a mentor</Button>
+                        <Button variant="contained" color="primary" onClick={() => history.push('/mentors')}>Find a mentor</Button>
                     </div>
                 </div>}
                 {loading&& <div className="grid place-items-center w-full h-14">

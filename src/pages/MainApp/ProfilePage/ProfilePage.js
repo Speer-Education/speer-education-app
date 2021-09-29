@@ -30,7 +30,7 @@ function ProfilePage({ isUser=false }) {
     //If profileId is userId, then redirect to profile page
     useEffect(() => {
         if (profileId === user?.uid) {
-            history.push('/app/profile');
+            history.push('/profile');
         }
     }, [profileId, user])
 

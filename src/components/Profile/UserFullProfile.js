@@ -105,7 +105,7 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
         } else {
             try {
                 const targetRoomId = snap.data()?.roomId
-                history.push(`/app/messages/${targetRoomId}`)
+                history.push(`/messages/${targetRoomId}`)
             } catch (e) {
                 console.error(e)
             }

@@ -120,7 +120,7 @@ const PostCard = ({ post }) => {
         <PostLoader/> :
         <div className={`py-4 px-6 bg-white rounded-xl shadow-lg overflow-hidden space-y-2 transition ${isEdit ? "border-solid border-2 border-blue-500" : null}`}>
             <div className="post-author_container w-full">
-                <div className="flex flex-row flex-1 items-center cursor-pointer" onClick={e => history.push(`/app/profile/${author}`)}>
+                <div className="flex flex-row flex-1 items-center cursor-pointer" onClick={e => history.push(`/profile/${author}`)}>
                     <ProfilePicture uid={author} className="shadow-md bg-blue-400 overflow-hidden h-12 w-12 rounded-full" />
                     <div className="flex-1 space-y-2 py-1 ml-2">
                         <div className="text-xl font-medium">{authorProfile?.name}</div>

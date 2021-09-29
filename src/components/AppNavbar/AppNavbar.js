@@ -62,13 +62,13 @@ const NavBarLink = ({ IconComponent, title, href, isContactIcon }) => {
 const AppNavbar = () => {
   return (
     <div className="fixed bottom-0 lg:sticky lg:top-0 w-full h-14 lg:p-4 lg:h-24 bg-white z-10 shadow-md flex flex-row items-center justify-between">
-      <img className="h-20 hidden lg:block cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => history.push('/app')} />
+      <img className="h-20 hidden lg:block cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => history.push('/')} />
       <div className="w-full lg:w-auto flex flex-row max-w-4xl justify-center items-center space-x-3">
         <SearchBar />
         <div className="flex flex-row h-full flex-1 lg:flex-none">
-          <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/app" />
-          <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/app/mentors" />
-          <NavBarLink IconComponent={MessageTwoToneIcon} isContactIcon title="Contacts" href="/app/messages" />
+          <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/" />
+          <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/mentors" />
+          <NavBarLink IconComponent={MessageTwoToneIcon} isContactIcon title="Contacts" href="/messages" />
           {/* <NavBarLink IconComponent={NotificationsTwoToneIcon} title="Notifications"/> */}
         </div>
         {/* <div className="hidden lg:block" >
@@ -79,7 +79,7 @@ const AppNavbar = () => {
         <UserMenu />
       </div>
       {/* Transparent image spcaer to center the stuff in the middle */}
-      <img className="h-20 hidden lg:block opacity-0 cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => history.push('/app')} />
+      <img className="h-20 hidden lg:block opacity-0 cursor-pointer" src="/full-transparent-logo.png" alt="logo" />
     </div>
   );
 };

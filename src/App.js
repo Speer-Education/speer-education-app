@@ -36,19 +36,16 @@ function App() {
         <div className="app bg-gray-100 min-h-screen">
           <Suspense fallback={<AppLoader/>}>
             {user !== false? <Switch>
-              <Route exact path="/" component={Home} />
               <Route exact path={"/login"} component={LazyLogin} />
-              <Route path="/app" component={LazyMainApp} /> {/* In the future, we make it so it only renders if user is logged in */}
-                {userDetails?.isAdm && <Route path="/admin" component={LazyAdminApp} />} {/* Only render if user is logged in as admin*/}
-                <Route exact path={"/onboarding"} component={LazyOnboarding} /> {/* Onboarding form to get the neccesary details before starting */}
-                <Route path="*" component={NotFoundPage}/>
+              <Route exact path={"/onboarding"} component={LazyOnboarding} /> {/* Onboarding form to get the neccesary details before starting */}
+              <Route path="/admin" component={LazyAdminApp} /> {/* Only render if user is logged in as admin*/}
+              <Route path="/" component={LazyMainApp} /> {/* In the future, we make it so it only renders if user is logged in */}
+              {/* <Route path="*" component={NotFoundPage}/> */}
             </Switch>:<Switch>
-              <Route exact path="/" component={Home} />
               <Route exact path={"/login"} component={LazyLogin} />
-              <Route path="/app" component={LazyMainApp} /> {/* In the future, we make it so it only renders if user is logged in */}
             </Switch>}
             {user === false && <Route path="/">
-                <Redirect to="/" />
+                <Redirect to="/login" />
               </Route>}
           </Suspense>
           <ServiceWorkerWrapper/>

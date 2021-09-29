@@ -42,7 +42,7 @@ export default function MentorShowcase() {
                 {mentors.map(({ id, ...props }) => { 
                     return (
                         <div className="flex flex-row py-1 transition-colors hover:bg-gray-100 items-center rounded-xl" key={id}>
-                        <Link className="flex flex-row flex-1" to={`/app/profile/${id}`}>
+                        <Link className="flex flex-row flex-1" to={`/profile/${id}`}>
                             <ProfilePicture className="w-10 h-10 rounded-full" thumb uid={id}/>
                             <div className="ml-2">
                                 <h3 className="font-semibold text-lg">{props.name}</h3>
@@ -62,7 +62,7 @@ export default function MentorShowcase() {
                     </div>
                     );})}
             </div>
-            <div className="mt-auto"><Link to="/app/mentors" className="text-blue-700 underline text-xs">See all Mentors</Link></div>
+            <div className="mt-auto"><Link to="/mentors" className="text-blue-700 underline text-xs">See all Mentors</Link></div>
             <MentorCardModal open={mentorModalOpen} setOpen={setMentorModalOpen} mentorSelected={mentorSelected}/>
         </div>
     );

@@ -48,7 +48,7 @@ function Messaging() {
                         <Sidebar screenSize={screenSize}/>
                         <StatsCard />
                     </div>
-                    : <Route exact path={`/app/messages`}>
+                    : <Route exact path={`/messages`}>
                         <div className="flex flex-col h-full ml-auto mr-auto h-app" style={{ width: `98%` }}>
                             <Sidebar screenSize={screenSize}/>
                         </div>

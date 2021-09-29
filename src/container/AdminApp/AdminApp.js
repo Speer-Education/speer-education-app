@@ -1,28 +1,30 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import AppNavbar from '../../components/AppNavbar/AppNavbar';
 import { useAuth } from '../../hooks/useAuth';
 import Users from '../../pages/AdminApp/Users/Users';
 
 export default function AdminApp() {
-    let { path } = useRouteMatch();
+
+    const { userDetails } = useAuth();
 
     return (
         <div>
             <AppNavbar/>
-            <Switch>
+            {/* Only exist if user is admin */}
+            {userDetails?.isAdm && <Switch>
                 {/* Main Page */}
-                <Route exact path ={`${path}`}>
+                <Route exact path ={`/admin`}>
                     <h1>Admin Page</h1>
-                    <a href ={`${path}/users`}>Users</a>
+                    <a href ={`/admin/users`}>Users</a>
                 </Route>
                 {/* User Manage Page */}
-                <Route exact path={`${path}/users`} component={Users} />
+                <Route exact path={`/admin/users`} component={Users} />
                 {/* Blog Management Page */}
-                <Route exact path={`${path}/blog-manager`}>
+                <Route exact path={`/admin/blog-manager`}>
                     <h1>Manage Blog</h1>
                 </Route>
-            </Switch>
+            </Switch>}
         </div>
     )
 }

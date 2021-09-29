@@ -34,7 +34,7 @@ const MentorProfile = () => {
             .catch((error) => {
                 console.error(error)
             })
-        history.push(`/app/messages/${targetRoomId}`)
+        history.push(`/messages/${targetRoomId}`)
     }
 
     return (

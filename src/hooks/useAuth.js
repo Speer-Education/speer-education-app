@@ -89,7 +89,7 @@ const useAuthProvider = () => {
         if (!claims.finishSetup && !history.location.pathname.startsWith('/onboarding')) {
             history.push('/onboarding');
         } else if(claims.finishSetup && (history.location.pathname.startsWith('/onboarding') || history.location.pathname.startsWith('/login'))) { //If user completed setup but is on onboarding page, redirect to app
-            history.push('/app');
+            history.push('/');
         }
         return claims
     };

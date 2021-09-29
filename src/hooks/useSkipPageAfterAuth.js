@@ -6,7 +6,7 @@ export const useSkipPageAfterAuth = () => {
     const auth = useAuth();
     useEffect(() => {
         if (auth.user) {
-            history.push(`/app`);
+            history.push(`/`);
         }
     }, [auth]);
 };
