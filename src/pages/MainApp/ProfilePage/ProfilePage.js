@@ -14,6 +14,7 @@ import SocialsCard from '../../../components/Profile/SocialsCard';
 import ProfilePostStream from '../../../components/Profile/ProfilePostStream';
 import { EditOutlined } from '@mui/icons-material';
 import PostComposerCard from '../../../components/Dashboard/PostComposerCard';
+import NotFoundPage from '../../Fallback/NotFoundPage';
 
 const LazyEditBiographyDialog = lazy(() => import('../../../components/Profile/EditBiographyDialog'));
 
@@ -24,6 +25,7 @@ function ProfilePage({ isUser=false }) {
     const [isMentor, setIsMentor] = useState(false);
     const [loading, setLoading] = useState(true);
     const [openEditBio, setOpenEditBio] = useState(false);
+    const [profileFound, setProfileFound] = useState(true);
     
     const { name, bio, socials, isMtr } = userDetails || {};
 
@@ -42,10 +44,21 @@ function ProfilePage({ isUser=false }) {
     }, [isUser, currentUserDetails]);
     
     useEffect(() => {
-        if(isUser) return;
+        if(isUser) {
+            //Set profile found as true again, in case we are coming from a prof. not found page
+            setProfileFound(true);
+            return;
+        };
         return db.doc(`users/${profileId}`).onSnapshot(async snap => {
             setUserDetails(snap.data());
-            if (snap.data().isMtr){
+
+            //THis means that profile does not exist
+            if (!snap.data()){
+                setProfileFound(false);
+                return
+            }
+
+            if (snap.data()?.isMtr){
                 setIsMentor(true)
             }
             setLoading(false);
@@ -53,7 +66,7 @@ function ProfilePage({ isUser=false }) {
     }, [isUser, profileId]);
 
     return (
-        <div className="profilePage h-app">
+        !profileFound ? <NotFoundPage/> : <div className="profilePage h-app">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>{isUser?"Your":name || ""} Profile | Speer Education</title>
