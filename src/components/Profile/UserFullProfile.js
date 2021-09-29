@@ -9,6 +9,7 @@ import MentorCardModal from "../Modal/MentorCardModal";
 import BannerPicture from "../User/BannerPicture";
 import ProfilePicture from "../User/ProfilePicture";
 import UserHighlight from "../User/UserHighlight";
+import { logEvent } from "../../utils/analytics";
 
 const LazyEditDetailsDialog = lazy(() => import("./EditDetailsDialog"));
 
@@ -17,6 +18,7 @@ const UserProfilePicture = ({ profileId, isUser }) => {
 
     const handleUploadProfilePic = async (file) => {
         if (!isUser) return;
+        logEvent('update_profile_picture')
         let reader = new FileReader();
         reader.readAsDataURL(file);
         let base64image = await new Promise((resolve, reject) => {
@@ -54,6 +56,7 @@ const UserBannerPicture = ({ profileId, isUser }) => {
 
     const handleUploadBannerPic = async (file) => {
         if (!isUser) return;
+        logEvent('update_banner_picture')
         let reader = new FileReader();
         reader.readAsDataURL(file);
         let base64image = await new Promise((resolve, reject) => {
@@ -104,6 +107,7 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
         //Room exists, just push to the roomId
         } else {
             try {
+                logEvent('message_user', { targetUser: profileId })
                 const targetRoomId = snap.data()?.roomId
                 history.push(`/messages/${targetRoomId}`)
             } catch (e) {

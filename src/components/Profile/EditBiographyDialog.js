@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import DialogBase from '../Dialog/DialogBase';
 import { InputAreaField } from '../Forms/Inputs';
 import Spinner from '../Loader/Spinner'
+import { logEvent } from "../../utils/analytics";
 
 const EditBiographyDialog = ({open, onClose}) => {
 
@@ -26,8 +27,9 @@ const EditBiographyDialog = ({open, onClose}) => {
         setForm({ ...form, [name]: value })
     }
 
-    const handleSaveDetails = () => {
+    const handleSaveBio = () => {
       if(!user) return;
+      logEvent('updated_biography')
       setSaving(true)
       const submittingForm = JSON.parse(JSON.stringify(form));
       db.doc(`users/${user.uid}`).update({
@@ -66,7 +68,7 @@ const EditBiographyDialog = ({open, onClose}) => {
                   <button
                     type="button"
                     className="ml-2 inline-flex justify-center px-4 py-2 float-right text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={handleSaveDetails}
+                    onClick={handleSaveBio}
                   >
                     {saving?<Spinner/>:"Save"}
                   </button>

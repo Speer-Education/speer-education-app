@@ -7,6 +7,7 @@ import { useState } from 'react';
 import history from '../../../hooks/history';
 import Spinner from '../../Loader/Spinner';
 import { getMessageUserRoom } from '../../../utils/chats';
+import { logEvent } from '../../../utils/analytics';
 
 const MentorCard = ({ id, name, school, major, bio, highlight1, highlight2 }) => {
     const [message, setMessage] = useState("");
@@ -36,6 +37,11 @@ const MentorCard = ({ id, name, school, major, bio, highlight1, highlight2 }) =>
                     [user?.uid]: true,
                     [id]: false
                 }
+            })
+            logEvent('connected_mentor', {
+                mentorId: id,
+                createdRoom: targetRoomId,
+                sentMessage: message || "Hi 👋"
             })
             history.push(`/messages/${targetRoomId}`)
         } catch (e) {

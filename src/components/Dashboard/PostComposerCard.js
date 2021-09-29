@@ -8,6 +8,7 @@ import ProfilePicture from '../User/ProfilePicture';
 import { Image, YouTube } from '@mui/icons-material';
 import { Dialog } from '@headlessui/react';
 import DialogBase from '../Dialog/DialogBase';
+import { logEvent } from '../../utils/analytics';
 
 
 const AddImageButton = ({fileCallback}) => (<>
@@ -96,6 +97,7 @@ const PostComposerCard = () => {
             _createdOn: firebase.firestore.Timestamp.now(),
         })
         setSaving(false)
+        logEvent('post_created')
         setPostContent("") //reset editor content
     }
     

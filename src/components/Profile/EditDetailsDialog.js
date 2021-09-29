@@ -8,7 +8,7 @@ import DialogBase from '../Dialog/DialogBase';
 import { InputField, InputSelect } from '../Forms/Inputs';
 import Picker from 'emoji-picker-react';
 import Spinner from '../Loader/Spinner';
-
+import { logEvent } from "../../utils/analytics";
 
 
 const FormRow = ({ children }) => (
@@ -59,6 +59,7 @@ const EditDetailsDialog = ({open, onClose}) => {
 
     const handleSaveDetails = () => {
       if(!user) return;
+      logEvent('updated_details')
       setSaving(true)
       const submittingForm = JSON.parse(JSON.stringify(form));
       submittingForm.country = submittingForm.country.label;

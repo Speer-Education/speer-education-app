@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Send } from "@mui/icons-material";
 import { Transition } from "@headlessui/react";
+import { logEvent } from "../../utils/analytics";
 
 let commentsArray = []
 let listeners = []    // list of listeners
@@ -125,6 +126,10 @@ export function PostComments({ post }) {
             author: { name, major, school, uid },
             parentPost: post.id,
             commentedOn: firebase.firestore.Timestamp.now()
+        })
+        logEvent('posted_comment', {
+            parentPost: post.id,
+            commentLength: userComment.length
         })
         setUserComment("");
     }

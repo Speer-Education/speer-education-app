@@ -12,6 +12,7 @@ import { InView } from 'react-intersection-observer';
 import TextareaAutosize from 'react-textarea-autosize';
 import imageCompression from 'browser-image-compression';
 import SendMessageLoader from '../Loader/SendMessageLoader';
+import { logEvent } from '../../utils/analytics';
 
 const LazyProfileCard = lazy(() => import('./ProfileCard'));
 const LazyAttachmentsCard = lazy(() => import('./AttachmentsCard'));
@@ -83,6 +84,12 @@ function Chat({screenSize}) {
                 const snapData = snapshot.data()
                 setRoomDoc(snapData)
                 //If there is a name (it means it is a group chat)
+                
+                logEvent('loaded_room',{
+                    roomId: roomId,
+                    ...snapData
+                })
+
                 if (snapData?.name) {
                     setRoomName(snapData.name)
                     setRoomPic(snapData.picture || "")
@@ -296,6 +303,10 @@ function Chat({screenSize}) {
                     setSendLoading(false)
                     scrollToBottom()
                 } 
+                logEvent("send_file_message", {
+                    files: attachments.length,
+                    roomId: roomId,
+                });
             })
             
             setFileMessages([]); //Reset the files at the end
@@ -321,6 +332,10 @@ function Chat({screenSize}) {
             }).then(() => {
                 setSendLoading(false);
                 scrollToBottom();
+                logEvent("send_message", {
+                    roomId: roomId,
+                    messageLength: input.length,
+                });
             })
             
             setInput(""); /* Reset the input at the end */

@@ -9,7 +9,7 @@ import { isDevelopment } from "../utils/environment";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAx-OEKEZF6LgX5wv03qRilbGTWIJvL4kw",
-  authDomain: "speer-education-dev.firebaseapp.com",
+  authDomain: 'auth.speeredu.com',
   databaseURL: "https://speer-education-dev-default-rtdb.firebaseio.com",
   projectId: "speer-education-dev",
   storageBucket: "speer-education-dev.appspot.com",
