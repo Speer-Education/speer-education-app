@@ -7,6 +7,7 @@ import StatsCard from '../../../components/Dashboard/StatsCard';
 import { Helmet } from "react-helmet";
 import './Dashboard.css';
 import YoutubeEmbed from "../../../components/Dashboard/Video";
+import { SlideTransition } from "../../../components/SlideTransition/SlideTransition";
 
 function Dashboard() {
     return (

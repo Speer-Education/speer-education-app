@@ -9,8 +9,11 @@ import {
 import ProfilePicture from '../User/ProfilePicture';
 import { SearchOutlined } from '@mui/icons-material';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
-import { useRef } from 'react';
+import { forwardRef, useRef } from 'react';
 import { logEvent } from '../../utils/analytics';
+import { Collapse } from '@mui/material';
+import { TransitionGroup } from "react-transition-group";
+
 
 const userSearchClient = {
   ...searchClient,
@@ -33,7 +36,7 @@ const userSearchClient = {
 
 let setSearchQuery = null;
 
-const Hit = ({ hit }) => <div className="flex flex-row space-x-2 hover:bg-blue-500 hover:bg-opacity-10 px-4 py-2 cursor-pointer" onClick={() => {
+const Hit = forwardRef(({ hit }, ref) => <div ref={ref} className="flex flex-row space-x-2 hover:bg-blue-500 hover:bg-opacity-10 px-4 py-2 cursor-pointer" onClick={() => {
     history.push(`/profile/${hit.objectID}`)
     logEvent("clicked_on_search", {
       targetUser: hit.objectID,
@@ -45,13 +48,17 @@ const Hit = ({ hit }) => <div className="flex flex-row space-x-2 hover:bg-blue-5
       <h3 className="font-semibold">{hit.name}</h3>
       <p className="text-gray-500 text-sm">{hit.major}</p>
     </div>
-  </div>;
+  </div>);
 
 const Hits = ({ hits }) => (
   <div className="hidden lg:flex absolute flex-col mt-2 shadow-xl bg-white rounded-xl overflow-hidden min-w-[400px] max-h-[60vh] overflow-y-auto scrollbar-hide">
-    {hits.map(hit => (
-      <Hit hit={hit} key={hit.objectID}/>
-    ))}
+    <TransitionGroup>
+      {hits.map(hit => (
+        <Collapse in key={hit.objectID}>
+          <Hit hit={hit}/>
+        </Collapse>
+      ))}
+    </TransitionGroup>
   </div>
 );
 

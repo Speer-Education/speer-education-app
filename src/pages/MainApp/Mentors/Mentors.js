@@ -8,6 +8,9 @@ import StatsCard from '../../../components/Dashboard/StatsCard';
 import UserSmallProfileCard from '../../../components/User/UserSmallProfileCard';
 import { useAuth } from '../../../hooks/useAuth';
 import { logEvent } from '../../../utils/analytics';
+import { TransitionGroup } from "react-transition-group";
+import SlideTransition from '../../../components/SlideTransition/SlideTransition';
+import { Grow } from '@mui/material';
 
 const Mentors = () => {
 
@@ -34,18 +37,22 @@ const Mentors = () => {
         })
     },[user?.uid])
 
-    return (
+    return (<SlideTransition in timeout={50}>
         <div className="mentors h-app">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Mentors | Speer Education</title>
             </Helmet>
             <div className="pt-10 p-3 2xl:p-10">   
-                <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 grid-flow-row justify-start  gap-4 -mt-12 flex-1">
-                    {mentors.map((props) => {
-                        return (<MentorCard {...props} key={props.id} />)
-                        })}
-                </div>
+                <TransitionGroup>
+                    <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 grid-flow-row justify-start  gap-4 -mt-12 flex-1">
+                        {mentors.map((props) => 
+                            <Grow in timeout={50} key={props.id}>
+                                <MentorCard {...props} />
+                            </Grow>
+                        )}
+                    </div>
+                </TransitionGroup>
                 {!mentorsLoaded ? <div className="grid place-items-center h-full min-w-[50vw]">
                         <h1 className="text-gray-500 lg:px-10">Loading Mentors...</h1>
                 </div>: null}
@@ -61,7 +68,7 @@ const Mentors = () => {
                 </div>
             </div>
         </div>
-    );
+    </SlideTransition>);
 }
 
 export default Mentors;

@@ -8,6 +8,7 @@ import history from '../../hooks/history';
 import SearchBar from './SearchBar';
 import { useAuth } from '../../hooks/useAuth';
 import React, { useEffect, useState } from 'react';
+import SlideTransition from '../SlideTransition/SlideTransition';
 
 /**
  * Component for the link in the navbar
@@ -60,7 +61,7 @@ const NavBarLink = ({ IconComponent, title, href, isContactIcon }) => {
  * @returns 
  */
 const AppNavbar = () => {
-  return (
+  return (<SlideTransition in timeout={50}>
     <div className="fixed bottom-0 lg:sticky lg:top-0 w-full h-14 lg:p-4 lg:h-24 bg-white z-10 shadow-md flex flex-row items-center justify-between">
       <img className="h-20 hidden lg:block cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => history.push('/')} />
       <div className="w-full lg:w-auto flex flex-row max-w-4xl justify-center items-center space-x-3">
@@ -81,7 +82,7 @@ const AppNavbar = () => {
       {/* Transparent image spcaer to center the stuff in the middle */}
       <img className="h-20 hidden lg:block opacity-0 cursor-pointer" src="/full-transparent-logo.png" alt="logo" />
     </div>
-  );
+  </SlideTransition>);
 };
 
 export default AppNavbar;
