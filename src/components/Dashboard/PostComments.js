@@ -1,5 +1,5 @@
-import { Button, TextField } from "@mui/material";
-import { useState, useEffect, Fragment } from "react"
+import { Button, Collapse, TextField } from "@mui/material";
+import { useState, useEffect, Fragment, forwardRef } from "react"
 import TimeAgo from "react-timeago";
 import { db, firebase } from "../../config/firebase"
 import history from "../../hooks/history";
@@ -11,6 +11,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Send } from "@mui/icons-material";
 import { Transition } from "@headlessui/react";
 import { logEvent } from "../../utils/analytics";
+import { TransitionGroup } from 'react-transition-group';
+import { set } from "react-hook-form";
 
 let commentsArray = []
 let listeners = []    // list of listeners
@@ -19,7 +21,7 @@ let end = null        // end position of listener
 
 const DOCUMENTS_PER_PAGE = 5;
 
-export function PostComments({ post }) {
+export const PostComments = forwardRef(({ post }, ref) => {
     const [comments, setComments] = useState([]);
     const [userComment, setUserComment] = useState("");
     const [loading, setLoading] = useState(true);
@@ -36,6 +38,7 @@ export function PostComments({ post }) {
         listeners = [];
         start = null;
         end = null;
+        setComments([]);
         getComments();
 
         return () => detachListeners();
@@ -135,7 +138,7 @@ export function PostComments({ post }) {
     }
 
     return (
-        <div className="border-t border-0 border-solid border-gray-200 space-y-3">
+        <div className="border-t border-0 border-solid border-gray-200 space-y-3" ref={ref}>
             <div className="flex flex-row ">
                 <TextField 
                     label="Comment" 
@@ -152,24 +155,27 @@ export function PostComments({ post }) {
                     </IconButton>
                 </div>
             </div>
+            <TransitionGroup>
             {comments.map(({ comment, author, id, commentedOn}) => (
-                <div className="w-full flex flex-row space-x-2 flex-1 items-top" key={id}>
-                    <ProfilePicture uid={author?.uid} thumb className="w-10 h-10 rounded-full mt-1 cursor-pointer" onClick={() => history.push(`/profile/${author?.uid}`)}/>
-                    <div className="flex flex-col flex-1">
-                        <div className="flex flex-row space-x-2 items-baseline">
-                            <h4 className="font-semibold cursor-pointer" onClick={() => history.push(`/profile/${author?.uid}`)}>{author?.name}</h4>
-                            {commentedOn && <TimeAgo className="text-gray-400 text-sm" date={commentedOn.toMillis()}/>}
+                <Collapse key={id}>
+                    <div className="w-full flex flex-row space-x-2 flex-1 items-top">
+                        <ProfilePicture uid={author?.uid} thumb className="w-10 h-10 rounded-full mt-1 cursor-pointer" onClick={() => history.push(`/profile/${author?.uid}`)}/>
+                        <div className="flex flex-col flex-1">
+                            <div className="flex flex-row space-x-2 items-baseline">
+                                <h4 className="font-semibold cursor-pointer" onClick={() => history.push(`/profile/${author?.uid}`)}>{author?.name}</h4>
+                                {commentedOn && <TimeAgo className="text-gray-400 text-sm" date={commentedOn.toMillis()}/>}
+                            </div>
+                            <h4 className="text-gray-600 text-normal font-normal">{comment}</h4>
                         </div>
-                        <h4 className="text-gray-600 text-normal font-normal">{comment}</h4>
+                        {(author?.uid == uid) && <IconButton
+                            onClick={() => db.collection(`posts/${post.id}/comments`).doc(id).delete()}
+                            size="large">
+                            <DeleteIcon className="text-red-500"/>
+                        </IconButton>}
                     </div>
-                    {(author?.uid == uid) && <IconButton
-                        onClick={() => db.collection(`posts/${post.id}/comments`).doc(id).delete()}
-                        size="large">
-                        <DeleteIcon className="text-red-500"/>
-                    </IconButton>}
-                </div>
+                </Collapse>
             ))}
-            
+            </TransitionGroup>
             <Transition
                 as={Fragment}
                 show={loading}
@@ -193,4 +199,4 @@ export function PostComments({ post }) {
             {!loadedAllPosts && comments.length != 0 && <a className="underline text-blue-700 block" onClick={getMoreComments}>Load More</a>}
         </div>
     );
-}
+})

@@ -12,10 +12,11 @@ import { EditOutlined, Favorite, Cancel } from '@mui/icons-material';
 import { PostComments } from './PostComments';
 import history from '../../hooks/history';
 import useRefDimensions from '../../hooks/useRefDimensions';
-import { Button } from '@mui/material';
+import { Button, Collapse } from '@mui/material';
 import PostLoader from './PostLoader';
 import { logEvent } from '../../utils/analytics';
 import SlideTransition from '../SlideTransition/SlideTransition';
+import { TransitionGroup } from 'react-transition-group';
 
 /**
  * Creates the post card for this post
@@ -191,7 +192,11 @@ const PostCard = ({ post }) => {
                             color="primary" 
                             onClick={createNewPost}>Save</Button> : null}
                 </div>
-                {showComments && <PostComments post={post} />}
+                <TransitionGroup>
+                    {showComments && <Collapse in={showComments}>
+                        <PostComments post={post} />
+                    </Collapse>}
+                </TransitionGroup>
             </div>
         </SlideTransition>
 }
