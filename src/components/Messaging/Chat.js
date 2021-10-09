@@ -37,6 +37,7 @@ function Chat({screenSize}) {
     const [isMentor, setIsMentor] = useState();
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [messageLoading, setMessageLoading] = useState(true);
     const [sendLoading, setSendLoading] = useState(false);
     const [loadedAllMessages, setLoadedAllMessages] = useState(false);
     const [fileMessages, setFileMessages] = useState([]);
@@ -167,7 +168,7 @@ function Chat({screenSize}) {
             return x.toDate() - y.toDate()
         })
         setMessages(messageArray)
-        setLoading(false)
+        setMessageLoading(false)
     }
 
     async function getMessages() {
@@ -204,10 +205,10 @@ function Chat({screenSize}) {
 
     async function getMoreMessages() {
         let ref = db.collection('rooms').doc(roomId).collection('messages')
-        setLoading(true)
+        setMessageLoading(true)
         if (!start) {
             setLoadedAllMessages(true);
-            setLoading(false)
+            setMessageLoading(false)
             return;
         }
         // single query to get new startAt snapshot
@@ -220,7 +221,7 @@ function Chat({screenSize}) {
         // create another listener using new boundaries     
         if (!end) {
             setLoadedAllMessages(true);
-            setLoading(false)
+            setMessageLoading(false)
             return;
         }
         let listener = ref.orderBy('date', 'asc')
@@ -458,7 +459,7 @@ function Chat({screenSize}) {
             </button>
             <div className="py-8 px-2 md:p-8 overflow-auto flex-1 flex flex-col w-full bg-white rounded-lg shadow-lg">
                 <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
-                {loading && <div className="w-full grid place-items-center"><Loader /></div>}
+                {messageLoading && <div className="w-full grid place-items-center"><Loader /></div>}
                 {roomDoesNotExistWarning && <div className="w-full h-full grid place-items-center text-center"><h1 className="text-red-600">ROOM DOES NOT EXIST, OR YOUR DON'T HAVE ACCESS</h1></div>}
                 {messages.map(({ messageType, files, message, date, id, senderId, senderUsername }) => (
                     messageType === "file" ? <ChatMessage
