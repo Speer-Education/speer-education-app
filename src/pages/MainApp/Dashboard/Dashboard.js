@@ -6,7 +6,7 @@ import OpenChats from '../../../components/Dashboard/OpenChats';
 import StatsCard from '../../../components/Dashboard/StatsCard';
 import { Helmet } from "react-helmet";
 import './Dashboard.css';
-import YoutubeEmbed from "../../../components/Dashboard/Video";
+import BlogShowcase from "../../../components/Dashboard/BlogShowcase";
 
 function Dashboard() {
     return (
@@ -37,7 +37,7 @@ function Dashboard() {
                 {/* right side bar */}
                 <div className="dashboard_sidebar h-app fixed">
                     <OpenChats/>
-                    <YoutubeEmbed/>
+                    <BlogShowcase/>
                 </div>
             </div>
         </div>

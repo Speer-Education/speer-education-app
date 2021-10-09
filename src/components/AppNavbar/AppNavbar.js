@@ -2,6 +2,7 @@ import { UserMenu } from './UserMenu/UserMenu'
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import PeopleTwoToneIcon from '@mui/icons-material/PeopleTwoTone';
 import MessageTwoToneIcon from '@mui/icons-material/MessageTwoTone';
+import LibraryBooksTwoToneIcon from '@mui/icons-material/LibraryBooksTwoTone';
 import Badge from '@mui/material/Badge';
 import { Link } from 'react-router-dom';
 import history from '../../hooks/history';
@@ -46,8 +47,8 @@ const NavBarLink = ({ IconComponent, title, href, isContactIcon }) => {
     <div className="grid place-items-center h-full lg:px-5 hover:bg-gray-100 transition-colors cursor-pointer rounded-lg">
       <div className="flex-1 flex flex-col items-center">
         {isContactIcon && numUnread !== 0 ? <Badge badgeContent={numUnread} color="error">
-          <IconComponent className="text-2xl" style={{ color: (href === history.location.pathname) ? '#F58A07' : '#084887'}} />
-        </Badge>: <IconComponent className="text-2xl" style={{ color: (href === history.location.pathname) ? '#F58A07' : '#084887'}} />}
+          <IconComponent className="text-2xl" style={{ color: href !== '/' && history.location.pathname.includes(href) ? '#F58A07' : '#084887'}} />
+        </Badge>: <IconComponent className="text-2xl" style={{ color: href !== '/' && history.location.pathname.includes(href) ? '#F58A07' : '#084887'}} />}
         <p className="text-xs text-center lg:text-base">{title}</p>
       </div>
     </div>
@@ -69,6 +70,7 @@ const AppNavbar = () => {
           <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/" />
           <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/mentors" />
           <NavBarLink IconComponent={MessageTwoToneIcon} isContactIcon title="Contacts" href="/messages" />
+          <NavBarLink IconComponent={LibraryBooksTwoToneIcon} title="Blogs" href="/blogs" />
           {/* <NavBarLink IconComponent={NotificationsTwoToneIcon} title="Notifications"/> */}
         </div>
         {/* <div className="hidden lg:block" >
