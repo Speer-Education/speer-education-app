@@ -9,6 +9,7 @@ import { Image, YouTube } from '@mui/icons-material';
 import { Dialog } from '@headlessui/react';
 import DialogBase from '../Dialog/DialogBase';
 import { logEvent } from '../../utils/analytics';
+import SlideTransition from '../SlideTransition/SlideTransition';
 
 
 const AddImageButton = ({fileCallback}) => (<>
@@ -103,27 +104,29 @@ const PostComposerCard = () => {
     
 
     return (
-        <div className="post-composer">
-            <div className="flex-1 flex flex-row">
-                <ProfilePicture uid={user?.uid} className="w-12 h-12 rounded-full"/>
-                <div className="pl-5 flex-1">
-                {!saving && <MDEditor ref={editor} docId={docId} onChange={val => setPostContent(val())}/>}
+        <SlideTransition in timeout={50}>
+            <div className="post-composer">
+                <div className="flex-1 flex flex-row">
+                    <ProfilePicture uid={user?.uid} className="w-12 h-12 rounded-full"/>
+                    <div className="pl-5 flex-1">
+                    {!saving && <MDEditor ref={editor} docId={docId} onChange={val => setPostContent(val())}/>}
+                    </div>
+                </div>
+                <div className="flex flex-row w-full justify-between">
+                    {!editor.current?.readonly &&<div className="flex flex-row ">
+                        <AddImageButton fileCallback={editor.current?.handleExternalImageUpload}/>
+                        <AddYoutubeButton urlCallback={editor.current?.handleAddYoutubeVideo}/>
+                    </div>}
+                    
+                    <Button 
+                        className="float-right"
+                        disabled={saving || (postContent.length === 0)} 
+                        variant="contained" 
+                        color="primary" 
+                        onClick={createNewPost}>Post</Button>
                 </div>
             </div>
-            <div className="flex flex-row w-full justify-between">
-                {!editor.current?.readonly &&<div className="flex flex-row ">
-                    <AddImageButton fileCallback={editor.current?.handleExternalImageUpload}/>
-                    <AddYoutubeButton urlCallback={editor.current?.handleAddYoutubeVideo}/>
-                </div>}
-                
-                <Button 
-                    className="float-right"
-                    disabled={saving || (postContent.length === 0)} 
-                    variant="contained" 
-                    color="primary" 
-                    onClick={createNewPost}>Post</Button>
-            </div>
-        </div>
+        </SlideTransition>
     );
 }
 

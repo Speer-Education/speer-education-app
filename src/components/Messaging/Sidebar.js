@@ -7,7 +7,9 @@ import { useAuth } from '../../hooks/useAuth';
 import ProfilePicture from '../User/ProfilePicture';
 import Spinner from '../Loader/Spinner';
 import history from '../../hooks/history';
-import { Button } from '@mui/material';
+import { Button, Collapse } from '@mui/material';
+import { TransitionGroup } from "react-transition-group";
+
 function Sidebar({screenSize}) {
 
     const { user, userDetails } = useAuth();
@@ -87,9 +89,13 @@ function Sidebar({screenSize}) {
                 </div>
             </div>
             <div className="flex flex-col overflow-y-auto flex-1">
-                {rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase())).map(room => {
-                    return <SidebarChat key={room?.id} id={room?.id} roomName={room.name} isMentor={room.isMentor} roomPic={room.pic} read={(room.data.lastMessage.read || {})[user?.uid] !== false}/>
-                })}
+                <TransitionGroup>
+                    {rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase())).map(room => {
+                        return <Collapse>
+                            <SidebarChat key={room?.id} id={room?.id} roomName={room.name} isMentor={room.isMentor} roomPic={room.pic} read={(room.data.lastMessage.read || {})[user?.uid] !== false}/>
+                        </Collapse>
+                    })}
+                </TransitionGroup>
                 {rooms.length === 0 && !loading && 
                 <div className="h-full grid place-items-center">
                     <div className="space-y-3 grid place-items-center">

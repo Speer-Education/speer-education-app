@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import "./SidebarChat.css";
 import { Avatar } from "@mui/material";
 import { Link, useRouteMatch } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { useAuth } from '../../hooks/useAuth';
 import history from '../../hooks/history';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
-function SidebarChat({ id, roomName, isMentor, roomPic, read }) {
+const SidebarChat = forwardRef(({ id, roomName, isMentor, roomPic, read }, ref) =>{
     const { user } = useAuth();
     const [messages, setMessages] = useState('');
     let { url } = useRouteMatch();
@@ -23,7 +23,7 @@ function SidebarChat({ id, roomName, isMentor, roomPic, read }) {
 
     return (
         <Link to={`${url}/${id}`}>
-            <div className={`flex items-center p-3 pr-5 ${(`${url}/${id}` === history.location.pathname)?'bg-gray-100':''} transition-colors hover:bg-gray-100`}>
+            <div ref={ref} className={`flex items-center p-3 pr-5 ${(`${url}/${id}` === history.location.pathname)?'bg-gray-100':''} transition-colors hover:bg-gray-100`}>
                 <Avatar src={roomPic}/> {/* Add src={*room_pic*} in the Avatar tag. Room pic defaults to the other user's prof pic if there are
                 only 2 users, and  the group pic if it is a group chat. <-- Implement this to come from Sidebar and be passed down as a prop */}
                 <div className="sidebarChat__info">
@@ -34,6 +34,6 @@ function SidebarChat({ id, roomName, isMentor, roomPic, read }) {
             </div>
         </Link>
     )
-}
+})
 
 export default SidebarChat

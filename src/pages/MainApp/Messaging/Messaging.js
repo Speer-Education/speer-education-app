@@ -6,6 +6,7 @@ import './Messaging.css';
 import { Helmet } from "react-helmet";
 import { useMediaQuery } from 'react-responsive'
 import StatsCard from '../../../components/Dashboard/StatsCard';
+import SlideTransition from '../../../components/SlideTransition/SlideTransition';
 //Might make this a container since it now does routing as well.
 
 // Should eventually make this responsive, mobile version will not show the sidebar and messaging section 
@@ -42,21 +43,23 @@ function Messaging() {
                 <meta charSet="utf-8" />
                 <title>Messaging | Speer Education</title>
             </Helmet>
-            <div className="flex flex-row h-full max-h-full w-screen">
-                {screenSize >= 1 ?
-                    <div className="flex flex-col h-full h-app" style={{ width: `${leftSideSize}` }}>
-                        <Sidebar screenSize={screenSize}/>
-                        <StatsCard />
-                    </div>
-                    : <Route exact path={`/messages`}>
-                        <div className="flex flex-col h-full ml-auto mr-auto h-app" style={{ width: `98%` }}>
+            <SlideTransition in timeout={50}>
+                <div className="flex flex-row h-full max-h-full w-screen">
+                    {screenSize >= 1 ?
+                        <div className="flex flex-col h-full h-app" style={{ width: `${leftSideSize}` }}>
                             <Sidebar screenSize={screenSize}/>
+                            <StatsCard />
                         </div>
-                    </Route>}
-                <Route exact path={`${path}/:roomId`}>
-                    <Chat screenSize={screenSize} />
-                </Route>
-            </div>
+                        : <Route exact path={`/messages`}>
+                            <div className="flex flex-col h-full ml-auto mr-auto h-app" style={{ width: `98%` }}>
+                                <Sidebar screenSize={screenSize}/>
+                            </div>
+                        </Route>}
+                    <Route exact path={`${path}/:roomId`}>
+                        <Chat screenSize={screenSize} />
+                    </Route>
+                </div>
+            </SlideTransition>
         </div>
     )
 }
