@@ -35,6 +35,11 @@ const UserCard = ({ uid, userDetails }) => {
                         .doc(uid)
                         .update({ isMtr: true})
                 }}>Make Mentor</Button>}
+                {isMtr && <Button variant="outlined" style={{borderColor: "red"}} onClick={() => {
+                    db.collection('user_claims')
+                        .doc(uid)
+                        .update({ isMtr: false})
+                }}>REMOVE Mentor</Button>}
             </div>
         </div>
     )
