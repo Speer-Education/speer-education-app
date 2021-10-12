@@ -71,7 +71,6 @@ const AppNavbar = () => {
           <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/" />
           <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/mentors" />
           <NavBarLink IconComponent={MessageTwoToneIcon} isContactIcon title="Contacts" href="/messages" />
-          <NavBarLink IconComponent={LibraryBooksTwoToneIcon} title="Blogs" href="/blogs" />
           {/* <NavBarLink IconComponent={NotificationsTwoToneIcon} title="Notifications"/> */}
         </div>
         {/* <div className="hidden lg:block" >
