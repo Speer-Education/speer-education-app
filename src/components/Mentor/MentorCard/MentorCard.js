@@ -13,7 +13,6 @@ const MentorCard = forwardRef(({ id, name, school, major, bio, highlight1, highl
     const [message, setMessage] = useState("");
     const { user, userDetails } = useAuth();
     const [sendingMessage, setSendingMessage] = useState(false);
-    console.log(isMtr)
 
     const connectWithMentor = async () => {
         /* Send Mentor ID to backend for checking and room creation */
