@@ -9,7 +9,7 @@ import { useAuth } from '../../hooks/useAuth';
  * @returns 
  */
 export default function ProfilePicture({ uid, thumb = false, className, isRoom, forceRefresh = false, ...params }) {
-    const [url, setUrl] = useState(false);
+    const [url, setUrl] = useState("");
     const { user, appInstance } = useAuth();
     const imageRef = useRef();
 
@@ -34,7 +34,7 @@ export default function ProfilePicture({ uid, thumb = false, className, isRoom, 
     return <img
         src={url}
         className={`${className} bg-white object-cover`}
-        alt="Profile Picture"
+        alt="User"
         ref={imageRef}
         onError={(e) => { 
             if (imageRef.current.src != '/user_placeholder.png') imageRef.current.src = '/user_placeholder.png';
