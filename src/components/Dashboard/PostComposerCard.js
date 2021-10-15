@@ -107,7 +107,7 @@ const PostComposerCard = () => {
         <SlideTransition in timeout={50}>
             <div className="post-composer">
                 <div className="flex-1 flex flex-row">
-                    <ProfilePicture uid={user?.uid} className="w-12 h-12 rounded-full"/>
+                    {user?.uid && <ProfilePicture uid={user?.uid} className="w-12 h-12 rounded-full"/>}
                     <div className="pl-5 flex-1">
                     {!saving && <MDEditor ref={editor} docId={docId} onChange={val => setPostContent(val())}/>}
                     </div>

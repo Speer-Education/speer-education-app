@@ -1,7 +1,7 @@
 import Editor from 'rich-markdown-editor';
 import styles from './mdeditor.css'
 import { storage } from '../../../config/firebase';
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 const colors = {
   almostBlack: "#878787",
@@ -134,15 +134,18 @@ const YoutubeEmbed = ({ attrs }) => {
   );
 }
 
-const MDEditor = React.forwardRef(({ docId, className, readOnly, onChange, defaultValue, ...props }, ref) => {
+const MDEditor = React.forwardRef(({ docId, className, readOnly, onChange = () => {}, defaultValue, ...props }, ref) => {
   const [intReadOnly, setIntReadOnly] = useState(false);
   const [editorNewValue, setEditorNewValue] = useState("");
   const [currentValue, setCurrentValue] = useState("");
+  const editorRef = useRef();
 
   useImperativeHandle(ref, () => ({
     handleExternalImageUpload,
     handleAddYoutubeVideo,
-    readOnly: intReadOnly
+    readOnly: intReadOnly,
+    ...editorRef.current
+    
   }),[intReadOnly, currentValue, setEditorNewValue, setIntReadOnly])
 
   useEffect(() => setIntReadOnly(readOnly), [readOnly])
@@ -178,6 +181,7 @@ const MDEditor = React.forwardRef(({ docId, className, readOnly, onChange, defau
   return <>
     <div style={{wordBreak: "break-word" }}>
       <Editor
+        ref={editorRef}
         theme={light}
         className={`${className}`}
         defaultValue={defaultValue}
