@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route } from "react-router-dom";
 import AppNavbar from '../../components/AppNavbar/AppNavbar';
 import { useAuth } from '../../hooks/useAuth';
+import BlogEditor from '../../pages/AdminApp/Users/Blogs/Editor/BlogEditor';
 import Users from '../../pages/AdminApp/Users/Users';
 
 export default function AdminApp() {
@@ -24,6 +25,7 @@ export default function AdminApp() {
                 <Route exact path={`/admin/blog-manager`}>
                     <h1>Manage Blog</h1>
                 </Route>
+                <Route exact path={`/admin/blog/:slug`} component={BlogEditor} />
             </Switch>}
         </div>
     )
