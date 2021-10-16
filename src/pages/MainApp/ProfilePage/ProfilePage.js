@@ -74,7 +74,7 @@ function ProfilePage({ isUser=false }) {
             </Helmet>
             <div className="w-screen h-full flex flex-row">
                 <div className="hidden xl:flex flex-col h-full h-app w-sidebar">
-                    <div className="fixed flex flex-col cc_cursor h-app">
+                    <div className="fixed flex flex-col cc_cursor h-app w-sidebar">
                         <ContactsSidebar profileId={profileId || user?.uid} userDetails={userDetails} isUser={isUser}/>
                         <StatsCard />
                     </div>
