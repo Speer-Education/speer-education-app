@@ -1,6 +1,7 @@
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { db } from '../../config/firebase';
-import { MDEditor } from './Editor/mdeditor.js';
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 const BlogContent = forwardRef(({ content: { id: slug } }, ref) => {
     const [content, setContent] = useState({});
@@ -16,16 +17,9 @@ const BlogContent = forwardRef(({ content: { id: slug } }, ref) => {
             setLoading(false)
         })
     }, [slug])
-    console.log(body)
     return (<div ref={ref}>
         {!loading && <article className="prose">
-            {<MDEditor 
-                ref={editorRef}
-                key={slug}
-                defaultValue={body}
-                readOnly={true}
-                onChange={val => console.log(val())} 
-                />}
+            <ReactMarkdown remarkPlugins={[remarkGfm]} >{body}</ReactMarkdown>
         </article>}
     </div>
     );

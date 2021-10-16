@@ -46,23 +46,23 @@ export default function BlogShowcase() {
           <div className="flex flex-row space-x-2 cursor-pointer" key={blog.id} onClick={e => handleShowBlog(blog)}>
             <div className="flex flex-col text-sm">
               <b>{blog.title}</b>
-              <p className="overflow-hidden overflow-ellipsis whitespace-nowrap flex-1 max-w-[40ch] pr-2">{blog.description}</p>
+              <p className="overflow-hidden overflow-ellipsis whitespace-nowrap flex-1 max-w-[30ch] pr-2">{blog.description}</p>
             </div>
           </div>
         )}
         <DialogBase open={blogOpen} onClose={() => setBlogOpen(false)}>
         <div className="space-y-2 inline-block w-full max-w-2xl p-4 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg max-h-screen overflow-y-auto">
-                <div className="mt-2 h-full space-y-2 py-2">
+                <div className="mt-2 h-full space-y-2 py-2 max-h-[70vh] overflow-y-auto">
                   <BlogContent content={activeBlog}/>
                 </div>
                 <div className="mt-4 pt-2">
-                  <button
+                  {/* <button
                     type="button"
                     className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                     onClick={() => setBlogOpen(false)}
                   >
                     <OpenInNewTwoToneIcon className="text-base mr-2"/> Open Page
-                  </button>
+                  </button> */}
                   <button
                     type="button"
                     className="inline-flex justify-center px-4 py-2 float-right text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
