@@ -9,6 +9,7 @@ import './Dashboard.css';
 import BlogShowcase from "../../../components/Dashboard/BlogShowcase";
 import { useLocalStorage } from '../../../hooks/useHooks';
 import NewUserDialog from '../../../components/Dashboard/NewUserDialog';
+import { logEvent } from '../../../utils/analytics';
 
 function Dashboard() {
     const [showNewUserDialog, setShowNewUserDialog] = useLocalStorage('showNewUserDialog',true);
@@ -19,7 +20,10 @@ function Dashboard() {
                 <meta charSet="utf-8" />
                 <title>Dashboard | Speer Education</title>
             </Helmet>
-            <NewUserDialog open={showNewUserDialog} onClose={() => setShowNewUserDialog(false)}/>
+            <NewUserDialog open={showNewUserDialog} onClose={() => {
+                setShowNewUserDialog(false)
+                logEvent('Read Welcome Dialog')
+            }}/>
             <div className="dashboard_sidebar">
                 {/* left side bar */}
                 <div className="dashboard_sidebar h-app fixed hidden xl:visible">
