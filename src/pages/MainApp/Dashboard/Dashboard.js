@@ -7,14 +7,19 @@ import StatsCard from '../../../components/Dashboard/StatsCard';
 import { Helmet } from "react-helmet";
 import './Dashboard.css';
 import BlogShowcase from "../../../components/Dashboard/BlogShowcase";
+import { useLocalStorage } from '../../../hooks/useHooks';
+import NewUserDialog from '../../../components/Dashboard/NewUserDialog';
 
 function Dashboard() {
+    const [showNewUserDialog, setShowNewUserDialog] = useLocalStorage('showNewUserDialog',true);
+
     return (
         <div className="dashboard h-app">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Dashboard | Speer Education</title>
             </Helmet>
+            <NewUserDialog open={showNewUserDialog} onClose={() => setShowNewUserDialog(false)}/>
             <div className="dashboard_sidebar">
                 {/* left side bar */}
                 <div className="dashboard_sidebar h-app fixed hidden xl:visible">
