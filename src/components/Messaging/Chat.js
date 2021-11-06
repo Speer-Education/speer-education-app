@@ -3,7 +3,7 @@ import { Avatar, IconButton } from '@mui/material';
 import { AttachFile, EnhancedEncryptionSharp, Send } from '@mui/icons-material';
 import { useParams, Link } from 'react-router-dom';
 import Filter from 'bad-words';
-import { firebase, db, storage } from '../../config/firebase';
+import { firebase, db, storage, functions } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import badWordsList from '../../config/badWords.json';
 import ChatMessage from './ChatMessage';
@@ -290,13 +290,15 @@ function Chat({screenSize}) {
                 }
             })
 
+            const recipientIds =  roomDoc.users.filter(mod => mod !== user.uid)
+
             db.collection('rooms').doc(roomId).collection('messages').add({
                 messageType: "file",
                 files: attachments,
                 date: firebase.firestore.FieldValue.serverTimestamp(),
                 senderId: user.uid,
                 senderUsername: userDetails.name,
-                recipientIds: roomDoc.users.filter(mod => mod !== user.uid),
+                recipientIds: recipientIds,
                 roomName: roomNameObject,
                 read: read,
             }).then(() => {
@@ -308,6 +310,14 @@ function Chat({screenSize}) {
                     files: attachments.length,
                     roomId: roomId,
                 });
+
+                if (input === ""){
+                    // If there is no text imput, then we can go ahead and call the sendEmailNotification function
+                    functions.httpsCallable('sendEmailNotification')({ recipientIds: recipientIds})
+                    .catch((error) => {
+                        console.error(error)
+                    })
+                }
             })
             
             setFileMessages([]); //Reset the files at the end
@@ -321,13 +331,15 @@ function Chat({screenSize}) {
             //Creating roomNameObject object
             const {read, roomNameObject} = createReadAndRoomName(roomDoc)
 
+            const recipientIds =  roomDoc.users.filter(mod => mod !== user.uid)
+
             db.collection('rooms').doc(roomId).collection('messages').add({
                 messageType: "text",
                 message: input,
                 date: firebase.firestore.FieldValue.serverTimestamp(),
                 senderId: user.uid,
                 senderUsername: userDetails.name,
-                recipientIds: roomDoc.users.filter(mod => mod !== user.uid),
+                recipientIds: recipientIds,
                 roomName: roomNameObject,
                 read: read,
             }).then(() => {
@@ -337,6 +349,11 @@ function Chat({screenSize}) {
                     roomId: roomId,
                     messageLength: input.length,
                 });
+                // Call the sendEmailNotification backend function
+                functions.httpsCallable('sendEmailNotification')({ recipientIds: recipientIds})
+                .catch((error) => {
+                    console.error(error)
+                })
             })
             
             setInput(""); /* Reset the input at the end */
