@@ -6,7 +6,6 @@ import PersonAddTwoToneIcon from '@mui/icons-material/PersonAddTwoTone';
 import { IconButton } from '@mui/material';
 import './MentorShowcase.css';
 import { useAuth } from '../../hooks/useAuth';
-import history from '../../hooks/history';
 import MentorCardModal from '../Modal/MentorCardModal';
 
 export default function MentorShowcase() {
@@ -18,7 +17,7 @@ export default function MentorShowcase() {
     const { user } = useAuth();
     
     //Loads the mentors in mentor collection
-    useEffect(async () => {
+    useEffect(() => {
         return db.collection('mentors').orderBy('_updatedOn','desc').onSnapshot(snap => {
             const allMentors = snap.docs.map( doc => {
                 return { id: doc.id, ...doc.data()}

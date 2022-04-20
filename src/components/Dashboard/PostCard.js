@@ -10,13 +10,13 @@ import './PostCard.css';
 import { useAuth } from '../../hooks/useAuth';
 import { EditOutlined, Favorite, Cancel } from '@mui/icons-material';
 import { PostComments } from './PostComments';
-import history from '../../hooks/history';
 import useRefDimensions from '../../hooks/useRefDimensions';
 import { Button, Collapse } from '@mui/material';
 import PostLoader from './PostLoader';
 import { logEvent } from '../../utils/analytics';
 import SlideTransition from '../SlideTransition/SlideTransition';
 import { TransitionGroup } from 'react-transition-group';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Creates the post card for this post
@@ -36,7 +36,7 @@ const PostCard = ({ post }) => {
     const [saving, setSaving] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [editedPostContent, setEditedPostContent] = useState(body);
-
+    const navigate = useNavigate();
     const divRef = useRef()
     const dimensions = useRefDimensions(divRef)
 
@@ -66,7 +66,7 @@ const PostCard = ({ post }) => {
 
     //Attach listener on the author
     //TODO: should have author details in post
-    useEffect(async () => {
+    useEffect(() => {
         setLoading(true); //BLock view of anything if author is loading
         if (!post) return;
         return db.doc(`users/${author}`).onSnapshot(snap => {
@@ -75,7 +75,7 @@ const PostCard = ({ post }) => {
         })
     }, [post?.id]);
 
-    useEffect(async () => {
+    useEffect(() => {
         if (!user?.uid) return;
         return db.doc(`posts/${id}/likes/${user.uid}`).onSnapshot(snap => {
             const { liked } = snap.data() || {};
@@ -130,7 +130,7 @@ const PostCard = ({ post }) => {
         <SlideTransition in timeout={150}>
             <div className={`py-4 px-6 bg-white rounded-xl shadow-lg overflow-hidden space-y-2 transition ${isEdit ? "border-solid border-2 border-blue-500" : null}`}>
                 <div className="post-author_container w-full">
-                    <div className="flex flex-row flex-1 items-center cursor-pointer" onClick={e => history.push(`/profile/${author}`)}>
+                    <div className="flex flex-row flex-1 items-center cursor-pointer" onClick={e => navigate(`/profile/${author}`)}>
                         <ProfilePicture uid={author} className="shadow-md bg-blue-400 overflow-hidden h-12 w-12 rounded-full" />
                         <div className="flex-1 space-y-2 py-1 ml-2">
                             <div className="text-xl font-medium">{authorProfile?.name}</div>
@@ -161,7 +161,7 @@ const PostCard = ({ post }) => {
                     </div>}
                 </div>
                 <div ref={divRef} className="overflow-hidden" style={{'maxHeight':postCollapsed?'500px':''}}>
-                    <MDEditor defaultValue={body} readOnly={!isEdit} onChange={val => setEditedPostContent(val())}/>
+                    {/* <MDEditor defaultValue={body} readOnly={!isEdit} onChange={val => setEditedPostContent(val())}/> */}
                 </div>
                 {postCollapsed && <span className="-mt-2 text-sm cursor-pointer text-blue-600" onClick={() => setPostCollapsed(false)}>See More</span>}
                 <div className="flex flex-row">

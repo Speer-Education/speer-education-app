@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext, createContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { auth, db, firebase, rtdb } from "../config/firebase";
 import { logEvent, setUserProperties } from "../utils/analytics";
-import history from './history';
 import { useLocalStorage } from "./useHooks";
 
 const authContext = createContext({ user: {} });
@@ -38,6 +38,9 @@ const useAuthProvider = () => {
     const [user, setUser] = useState(null); 
     const [userDetails, setUserDetails] = useState(null);
     const [lastCommitted, setLastCommitted] = useLocalStorage("lastCommited", 0);  //The last committed state of our user claims document, decides if token needs to update if outdated
+    const navigate = useNavigate();
+    const location = useLocation();
+    
     /**
      * Sign in user with email and password login
      * @param {*} params Email and Password  
@@ -86,11 +89,11 @@ const useAuthProvider = () => {
         let { claims } = await user.getIdTokenResult(refresh);
         
         //If user hasn't completed setup, redirect to onboarding page
-        if (!claims.finishSetup && !history.location.pathname.startsWith('/onboarding')) {
-            history.push('/onboarding');
-        } else if(claims.finishSetup && (history.location.pathname.startsWith('/onboarding') || history.location.pathname.startsWith('/login'))) { //If user completed setup but is on onboarding page, redirect to app
-            history.push('/');
-            if(history.location.pathname.startsWith('/onboarding')) logEvent('Completed Onboarding');
+        if (!claims.finishSetup && !location.pathname.startsWith('/onboarding')) {
+            navigate('/onboarding');
+        } else if(claims.finishSetup && (location.pathname.startsWith('/onboarding') || location.pathname.startsWith('/login'))) { //If user completed setup but is on onboarding page, redirect to app
+            navigate('/');
+            if(location.pathname.startsWith('/onboarding')) logEvent('Completed Onboarding');
         }
         return claims
     };

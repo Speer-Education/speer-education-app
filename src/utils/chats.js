@@ -1,5 +1,4 @@
 import { functions } from "../config/firebase";
-// import history from "../hooks/history";
 import { getRoomId } from "./relationships"
 
 const getMessageUserRoom = async (receiver, sender) => {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, lazy } from 'react';
 import { db } from '../../../config/firebase';
-import { useParams } from 'react-router-dom';
-import history from '../../../hooks/history';
+import { useNavigate, useParams } from 'react-router-dom';
 import {Helmet} from "react-helmet";
 import './ProfilePage.css'
 import { useAuth } from '../../../hooks/useAuth';
@@ -20,6 +19,7 @@ import SlideTransition from '../../../components/SlideTransition/SlideTransition
 const LazyEditBiographyDialog = lazy(() => import('../../../components/Profile/EditBiographyDialog'));
 
 function ProfilePage({ isUser=false }) {
+    const navigate = useNavigate();
     const { profileId } = useParams();
     const { user, userDetails: currentUserDetails } = useAuth();
     const [userDetails, setUserDetails] = useState({});
@@ -33,7 +33,7 @@ function ProfilePage({ isUser=false }) {
     //If profileId is userId, then redirect to profile page
     useEffect(() => {
         if (profileId === user?.uid) {
-            history.push('/profile');
+            navigate('/profile');
         }
     }, [profileId, user])
 

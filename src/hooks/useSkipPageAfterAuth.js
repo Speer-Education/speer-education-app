@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import history from './history';
 
 export const useSkipPageAfterAuth = () => {
     const auth = useAuth();
+    const navigate = useNavigate();
     useEffect(() => {
         if (auth.user) {
-            history.push(`/`);
+            navigate(`/`);
         }
     }, [auth]);
 };

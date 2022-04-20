@@ -1,4 +1,3 @@
-import history from '../../hooks/history';
 import searchClient from '../../config/algolia';
 import {
   InstantSearch,
@@ -13,6 +12,7 @@ import { forwardRef, useRef } from 'react';
 import { logEvent } from '../../utils/analytics';
 import { Collapse } from '@mui/material';
 import { TransitionGroup } from "react-transition-group";
+import { useNavigate } from 'react-router-dom';
 
 
 const userSearchClient = {
@@ -36,8 +36,10 @@ const userSearchClient = {
 
 let setSearchQuery = null;
 
-const Hit = forwardRef(({ hit }, ref) => <div ref={ref} className="flex flex-row space-x-2 hover:bg-blue-500 hover:bg-opacity-10 px-4 py-2 cursor-pointer" onClick={() => {
-    history.push(`/profile/${hit.objectID}`)
+const Hit = forwardRef(({ hit }, ref) => {
+  const navigate = useNavigate();
+  return <div ref={ref} className="flex flex-row space-x-2 hover:bg-blue-500 hover:bg-opacity-10 px-4 py-2 cursor-pointer" onClick={() => {
+    navigate(`/profile/${hit.objectID}`)
     logEvent("clicked_on_search", {
       targetUser: hit.objectID,
     });
@@ -48,7 +50,8 @@ const Hit = forwardRef(({ hit }, ref) => <div ref={ref} className="flex flex-row
       <h3 className="font-semibold">{hit.name}</h3>
       <p className="text-gray-500 text-sm">{hit.major}</p>
     </div>
-  </div>);
+  </div>
+});
 
 const Hits = ({ hits }) => (
   <div className="hidden lg:flex absolute flex-col mt-2 shadow-xl bg-white rounded-xl overflow-hidden min-w-[400px] max-h-[60vh] overflow-y-auto scrollbar-hide">

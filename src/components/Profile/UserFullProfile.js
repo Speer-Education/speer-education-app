@@ -1,15 +1,14 @@
 import { Button, IconButton } from "@mui/material";
 import { EditOutlined, ExitToAppOutlined, MessageOutlined } from "@mui/icons-material";
 import { lazy, useRef, useState } from "react";
-import { functions, storage, db } from "../../config/firebase";
-import history from "../../hooks/history";
+import { functions, db } from "../../config/firebase";
 import { useAuth } from "../../hooks/useAuth";
-import { getMessageUserRoom } from "../../utils/chats";
 import MentorCardModal from "../Modal/MentorCardModal";
 import BannerPicture from "../User/BannerPicture";
 import ProfilePicture from "../User/ProfilePicture";
 import UserHighlight from "../User/UserHighlight";
 import { logEvent } from "../../utils/analytics";
+import { useNavigate } from "react-router-dom";
 
 const LazyEditDetailsDialog = lazy(() => import("./EditDetailsDialog"));
 
@@ -90,7 +89,7 @@ const UserBannerPicture = ({ profileId, isUser }) => {
 }
 
 export default function UserFullProfile({ profileId, isMentor, isUser, userDetails }) {
-
+    const navigate = useNavigate();
     const { user, signOut } = useAuth();
     const { name, major, school, country, highlight1, highlight2 } = userDetails || {};
     const [mentorModalOpen, setMentorModalOpen] = useState(false);
@@ -109,7 +108,7 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
             try {
                 logEvent('message_user', { targetUser: profileId })
                 const targetRoomId = snap.data()?.roomId
-                history.push(`/messages/${targetRoomId}`)
+                navigate(`/messages/${targetRoomId}`)
             } catch (e) {
                 console.error(e)
             }

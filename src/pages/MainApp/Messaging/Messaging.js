@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../../../components/Messaging/Sidebar';
 import Chat from '../../../components/Messaging/Chat';
-import { Route, useRouteMatch } from "react-router-dom";
+import { Route, Routes, useMatch } from "react-router-dom";
 import './Messaging.css';
 import { Helmet } from "react-helmet";
 import { useMediaQuery } from 'react-responsive'
@@ -13,8 +13,6 @@ import SlideTransition from '../../../components/SlideTransition/SlideTransition
 //at the same time. When the person is clicked it shows the messaging section only, with an arrow to leave back to menu.
 function Messaging() {
 
-    let { path } = useRouteMatch();
-
     const [screenSize, setScreenSize] = useState(3);
     const [leftSideSize, setLeftSideSize] = useState('350px');
 
@@ -22,6 +20,7 @@ function Messaging() {
     const isScreenLarge = useMediaQuery({ query: '(max-width: 1024px)' })
     const isScreenMedium = useMediaQuery({ query: '(max-width: 767px)' })
 
+    const isSidebarOnly = useMatch('/messages')
     useEffect(() => {
         if (isScreenMedium) {
             setScreenSize(0)
@@ -36,7 +35,7 @@ function Messaging() {
             setLeftSideSize('350px')
         }
     }, [isScreenXtraLarge, isScreenLarge, isScreenMedium])
-
+    console.log(screenSize)
     return (
         <div className="messaging h-app">
             <Helmet>
@@ -50,14 +49,12 @@ function Messaging() {
                             <Sidebar screenSize={screenSize}/>
                             <StatsCard />
                         </div>
-                        : <Route exact path={`/messages`}>
-                            <div className="flex flex-col h-full ml-auto mr-auto h-app" style={{ width: `98%` }}>
-                                <Sidebar screenSize={screenSize}/>
-                            </div>
-                        </Route>}
-                    <Route exact path={`${path}/:roomId`}>
-                        <Chat screenSize={screenSize} />
-                    </Route>
+                        : (isSidebarOnly && <div className="flex flex-col h-full ml-auto mr-auto h-app" style={{ width: `98%` }}>
+                            <Sidebar screenSize={screenSize}/>
+                        </div>)}
+                    <Routes>
+                        <Route path={`/:roomId`} element={<Chat screenSize={screenSize} />}/>
+                    </Routes>
                 </div>
             </SlideTransition>
         </div>

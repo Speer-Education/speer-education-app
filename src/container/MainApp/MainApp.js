@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { Routes, Route, useMatch } from "react-router-dom";
 import CircleLoader from '../../components/Loader/CircleLoader';
 import './MainApp.css';
 
@@ -16,29 +16,15 @@ export default function MainApp() {
         <>
             <AppNavbar />
             <Suspense fallback={<div className="grid place-items-center w-screen h-app bg-gray-100"> <CircleLoader /> </div>}>
-                <Switch>
-                    {/* Main Page */}
-                    <Route exact path={`/`}>
-                        <LazyDashboard />
-                    </Route>
-                    {/* Mentor Page */}
-                    <Route exact path={`/mentors`}>
-                        <LazyMentorsPage />
-                    </Route>
-                    {/* Profile Page */}
-                    <Route path={`/profile/:profileId`}>
-                        <LazyProfilePage />
-                    </Route>
-                    {/* Profile Page */}
-                    <Route exact path={`/profile`}>
-                        <LazyProfilePage isUser={true}/>
-                    </Route>
-                    {/* Chat Page */}
-                    <Route path={`/messages`}> {/* Fixed routing bug to do with "exact" */}
-                        <LazyMessages />
-                    </Route>
-                    <NoMatch/>
-                </Switch>
+                <Routes>
+                    <Route path="/" element={<LazyDashboard />} />
+                    <Route path="/mentors" element={<LazyMentorsPage />} />
+                    <Route path="/profile/:profileId" element={<LazyProfilePage />} />
+                    <Route path="/profile" element={<LazyProfilePage isUser={true} />} />
+                    <Route path="/messages/*" element={<LazyMessages />} />
+                    <Route path="*" element={<NoMatch/>}/>
+                    {/* Refactored and Migrated Code */}
+                </Routes>
             </Suspense>
         </>
     )

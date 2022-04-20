@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import ProfilePicture from '../User/ProfilePicture';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ReactTimeago from 'react-timeago';
 import { db } from '../../config/firebase';
 import { Button } from '@mui/material';
-import history from '../../hooks/history';
 
 
 const ActiveChatRow = ({ photoUid, username, message, date, isUnread, roomId}) => (
@@ -26,7 +25,8 @@ const ActiveChatRow = ({ photoUid, username, message, date, isUnread, roomId}) =
 export default function OpenChats() {
 
     const { user, userDetails } = useAuth();
-
+    
+    const navigate = useNavigate();
     const [chatrooms, setChatrooms] = useState();
 
     //Sorts the activeChats in the user document
@@ -53,7 +53,7 @@ export default function OpenChats() {
                 {/* TOOD: Add No Recent Chats Icon */}
                 <div className="space-y-2 grid place-items-center">
                     <h2 className="text-gray-500">No Recent Chats</h2>
-                    <Button variant="contained" color="primary" onClick={() => history.push('/mentors')}>Find a mentor</Button>
+                    <Button variant="contained" color="primary" onClick={() => navigate('/mentors')}>Find a mentor</Button>
                 </div>
             </div> : <>
                 <p className="pt-3 pl-3">Recent Chats</p>

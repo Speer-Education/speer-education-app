@@ -108,15 +108,15 @@ const PostComposerCard = () => {
             <div className="post-composer">
                 <div className="flex-1 flex flex-row">
                     {user?.uid && <ProfilePicture uid={user?.uid} className="w-12 h-12 rounded-full"/>}
-                    <div className="pl-5 flex-1">
-                    {!saving && <MDEditor ref={editor} docId={docId} onChange={val => setPostContent(val())}/>}
-                    </div>
+                    {/* <div className="pl-5 flex-1"> */}
+                    {!saving && <MDEditor ref={editor} docId={docId} onChange={val => setPostContent(val)}/>}
+                    {/* </div> */}
                 </div>
                 <div className="flex flex-row w-full justify-between">
-                    {!editor.current?.readonly &&<div className="flex flex-row ">
+                    {/* {!editor.current?.readonly &&<div className="flex flex-row ">
                         <AddImageButton fileCallback={editor.current?.handleExternalImageUpload}/>
                         <AddYoutubeButton urlCallback={editor.current?.handleAddYoutubeVideo}/>
-                    </div>}
+                    </div>} */}
                     
                     <Button 
                         className="float-right"

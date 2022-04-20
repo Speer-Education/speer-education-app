@@ -4,8 +4,7 @@ import PeopleTwoToneIcon from '@mui/icons-material/PeopleTwoTone';
 import MessageTwoToneIcon from '@mui/icons-material/MessageTwoTone';
 import LibraryBooksTwoToneIcon from '@mui/icons-material/LibraryBooksTwoTone';
 import Badge from '@mui/material/Badge';
-import { Link } from 'react-router-dom';
-import history from '../../hooks/history';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import { useAuth } from '../../hooks/useAuth';
 import React, { useEffect, useState } from 'react';
@@ -20,7 +19,7 @@ import SlideTransition from '../SlideTransition/SlideTransition';
  * @returns 
  */
 const NavBarLink = ({ IconComponent, title, href, isContactIcon }) => {
-
+  const location = useLocation();
   const { userDetails } = useAuth();
   const [numUnread, setNumUnread] = useState(0);
 
@@ -48,8 +47,8 @@ const NavBarLink = ({ IconComponent, title, href, isContactIcon }) => {
     <div className="grid place-items-center h-full lg:px-5 hover:bg-gray-100 transition-colors cursor-pointer rounded-lg">
       <div className="flex-1 flex flex-col items-center">
         {isContactIcon && numUnread !== 0 ? <Badge badgeContent={numUnread} color="error">
-          <IconComponent className="text-2xl" style={{ color: href !== '/' && history.location.pathname.includes(href) ? '#F58A07' : '#084887'}} />
-        </Badge>: <IconComponent className="text-2xl" style={{ color: href !== '/' && history.location.pathname.includes(href) ? '#F58A07' : '#084887'}} />}
+          <IconComponent className="text-2xl" style={{ color: href !== '/' && location.pathname.includes(href) ? '#F58A07' : '#084887'}} />
+        </Badge>: <IconComponent className="text-2xl" style={{ color: href !== '/' && location.pathname.includes(href) ? '#F58A07' : '#084887'}} />}
         <p className="text-xs text-center lg:text-base">{title}</p>
       </div>
     </div>
@@ -62,9 +61,10 @@ const NavBarLink = ({ IconComponent, title, href, isContactIcon }) => {
  * @returns 
  */
 const AppNavbar = () => {
+  const navigate = useNavigate();
   return (<SlideTransition in timeout={50}>
     <div className="fixed bottom-0 lg:sticky lg:top-0 w-full h-14 lg:p-4 lg:h-24 bg-white z-10 shadow-md flex flex-row items-center justify-between">
-      <img className="h-20 hidden lg:block cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => history.push('/')} />
+      <img className="h-20 hidden lg:block cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => navigate('/')} />
       <div className="w-full lg:w-auto flex flex-row max-w-4xl justify-center items-center space-x-3">
         <SearchBar />
         <div className="flex flex-row h-full flex-1 lg:flex-none">

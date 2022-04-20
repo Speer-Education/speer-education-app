@@ -1,7 +1,7 @@
-import { Redirect, withRouter } from "react-router"
+import { Navigate, withRouter } from "react-router"
 
 const NoMatch = (props) => {
-    return <Redirect to={{state: {noMatch: true}}} />
+    return <Navigate to={{state: {noMatch: true}}} />
 }
 
 // const ProviderHOC = (NotFoundRoute) => {

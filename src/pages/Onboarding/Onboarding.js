@@ -117,7 +117,7 @@ export default function UserDetails() {
                 setSubmitting(false);
                 setUpdatingClaims(false);
                 getUserTokenResult(true)
-                // history.push("/")
+                // navigate("/")
             },10*1000)
         } catch (e) {
             Sentry.captureException(e);

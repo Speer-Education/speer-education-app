@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import AppNavbar from '../../components/AppNavbar/AppNavbar';
 import { useAuth } from '../../hooks/useAuth';
 import BlogEditor from '../../pages/AdminApp/Users/Blogs/Editor/BlogEditor';
@@ -13,20 +13,15 @@ export default function AdminApp() {
         <div>
             <AppNavbar/>
             {/* Only exist if user is admin */}
-            {userDetails?.isAdm && <Switch>
-                {/* Main Page */}
-                <Route exact path ={`/admin`}>
+            {userDetails?.isAdm && <Routes>
+                <Route path="/" element={<>
                     <h1>Admin Page</h1>
-                    <a href ={`/admin/users`}>Users</a>
-                </Route>
-                {/* User Manage Page */}
-                <Route exact path={`/admin/users`} component={Users} />
-                {/* Blog Management Page */}
-                <Route exact path={`/admin/blog-manager`}>
-                    <h1>Manage Blog</h1>
-                </Route>
-                <Route exact path={`/admin/blog/:slug`} component={BlogEditor} />
-            </Switch>}
+                    <a href ={`/users`}>Users</a>
+                </>}/>
+                <Route path={`/users`} element={<Users/>} />
+                <Route path={`/blog-manager`} element={<h1>Manage Blog</h1>} />
+                <Route path={`/blog/:slug`} element={<BlogEditor/>} />
+            </Routes>}
         </div>
     )
 }

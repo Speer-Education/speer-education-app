@@ -2,7 +2,6 @@ import { Button, Collapse, TextField } from "@mui/material";
 import { useState, useEffect, Fragment, forwardRef } from "react"
 import TimeAgo from "react-timeago";
 import { db, firebase } from "../../config/firebase"
-import history from "../../hooks/history";
 import { useAuth } from "../../hooks/useAuth";
 import ProfilePicture from "../User/ProfilePicture";
 import { getSnapshot } from '../../hooks/firestore';
@@ -13,6 +12,7 @@ import { Transition } from "@headlessui/react";
 import { logEvent } from "../../utils/analytics";
 import { TransitionGroup } from 'react-transition-group';
 import { set } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 let commentsArray = []
 let listeners = []    // list of listeners
@@ -29,6 +29,7 @@ export const PostComments = forwardRef(({ post }, ref) => {
     const { userDetails, user } = useAuth();
     const { name, major, school } = userDetails || {};
     const { uid } = user || {};
+    const navigate = useNavigate();
 
     useEffect(() => {
         if(!post?.id) return;
@@ -159,10 +160,10 @@ export const PostComments = forwardRef(({ post }, ref) => {
             {comments.map(({ comment, author, id, commentedOn}) => (
                 <Collapse key={id}>
                     <div className="w-full flex flex-row space-x-2 flex-1 items-top">
-                        <ProfilePicture uid={author?.uid} thumb className="w-10 h-10 rounded-full mt-1 cursor-pointer" onClick={() => history.push(`/profile/${author?.uid}`)}/>
+                        <ProfilePicture uid={author?.uid} thumb className="w-10 h-10 rounded-full mt-1 cursor-pointer" onClick={() => navigate(`/profile/${author?.uid}`)}/>
                         <div className="flex flex-col flex-1">
                             <div className="flex flex-row space-x-2 items-baseline">
-                                <h4 className="font-semibold cursor-pointer" onClick={() => history.push(`/profile/${author?.uid}`)}>{author?.name}</h4>
+                                <h4 className="font-semibold cursor-pointer" onClick={() => navigate(`/profile/${author?.uid}`)}>{author?.name}</h4>
                                 {commentedOn && <TimeAgo className="text-gray-400 text-sm" date={commentedOn.toMillis()}/>}
                             </div>
                             <h4 className="text-gray-600 text-normal font-normal">{comment}</h4>
