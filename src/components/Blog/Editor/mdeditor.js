@@ -105,6 +105,14 @@ import 'react-quill/dist/quill.bubble.css';
 
 // export { MDEditor }
 
-export const MDEditor = forwardRef(({ docId, className, readOnly, onChange = () => {}, defaultValue, ...props }, ref) => {
-  return <ReactQuill theme="bubble" defaultValue={defaultValue} onChange={onChange}/>
+export const MDEditor = forwardRef(({ docId, className, readOnly = false, onChange = () => {}, defaultValue, ...props }, editor) => {
+
+  return <ReactQuill 
+    ref={editor}
+    theme="bubble" 
+    defaultValue={defaultValue} 
+    onChange={onChange} 
+    className="w-full prose lg:prose-xl"
+    readOnly={readOnly}
+    placeholder="Write down a post~"/>
 })

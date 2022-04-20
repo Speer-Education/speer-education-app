@@ -89,19 +89,35 @@ const PostComposerCard = () => {
 
     //Save the post the user created
     const createNewPost = async () => {
-        if(!user) return;
-        if(!docId) return;
-        setSaving(true) //set saving to true to show loading
-        await db.doc('posts/' + docId).set({
-            author: user.uid,
-            body: postContent,
-            _createdOn: firebase.firestore.Timestamp.now(),
-        })
-        setSaving(false)
-        logEvent('post_created')
-        setPostContent("") //reset editor content
+        console.log(postContent)
+        // if(!user) return;
+        // if(!docId) return;
+        // setSaving(true) //set saving to true to show loading
+        // await db.doc('posts/' + docId).set({
+        //     author: user.uid,
+        //     body: postContent,
+        //     _createdOn: firebase.firestore.Timestamp.now(),
+        // })
+        // setSaving(false)
+        // logEvent('post_created')
+        // setPostContent("") //reset editor content
     }
     
+    /*
+    type UserPostData = {
+        author: string,
+        content: {
+            delta: object,
+            html: string
+        },
+        views: number,
+        commentCount: number,
+        likeCount: number,
+        organization: string | null,
+        _updatedOn: Timestamp,
+        _createdOn: Timestamp,
+    }
+    */
 
     return (
         <SlideTransition in timeout={50}>
@@ -109,7 +125,7 @@ const PostComposerCard = () => {
                 <div className="flex-1 flex flex-row">
                     {user?.uid && <ProfilePicture uid={user?.uid} className="w-12 h-12 rounded-full"/>}
                     {/* <div className="pl-5 flex-1"> */}
-                    {!saving && <MDEditor ref={editor} docId={docId} onChange={val => setPostContent(val)}/>}
+                    {!saving && <MDEditor ref={editor} docId={docId} onChange={(content, delta, source, editor) => setPostContent(editor.getContents())}/>}
                     {/* </div> */}
                 </div>
                 <div className="flex flex-row w-full justify-between">
