@@ -1,10 +1,14 @@
-import { useState, useEffect, useContext, createContext } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth, db, firebase, rtdb } from "../config/firebase";
 import { UserClaims, UserDetails } from "../types/User";
 import { logEvent, setUserProperties } from "../utils/analytics";
 import { useLocalStorage } from "./useHooks";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { ParsedToken, signOut } from "firebase/auth"
 
+
+//@ts-ignore //TODO: FIX THIS
 const authContext = createContext<ReturnType<typeof useAuthProvider>>(null);
 const { Provider } = authContext;
 
@@ -38,8 +42,9 @@ let latestUserDetails: UserDetailsToken | null = null;
 let appInstance = Date.now();
 
 const useAuthProvider = () => {
-    const [user, setUser] = useState<firebase.User | null>(null); 
-    const [userDetails, setUserDetails] = useState<UserDetailsToken>(null);
+    //@ts-ignore
+    const [user, authing, authError] = useAuthState(auth); 
+    const [userDetails, setUserDetails] = useState<UserDetailsToken>();
     const [lastCommitted, setLastCommitted] = useLocalStorage("lastCommited", 0);  //The last committed state of our user claims document, decides if token needs to update if outdated
     const navigate = useNavigate();
     const location = useLocation();
@@ -98,27 +103,9 @@ const useAuthProvider = () => {
             navigate('/');
             if(location.pathname.startsWith('/onboarding')) logEvent('Completed Onboarding');
         }
-        return claims
+        return claims as ParsedToken & UserClaims;
     };
 
-    /**
-     * Handles when onAuthStateChanged is called, and sets user into User State
-     * @param {firebase.auth.User} user 
-     */
-    const handleAuthStateChanged = (user) => {
-        if (user) {
-            setUser(user);
-        } else {
-            setUser(null);
-        }
-    };
-
-    //Attaches the onAuthStateChanged to listen for changes in authentication eg: login, signout etc.
-    useEffect(() => {
-        const unsub = auth.onAuthStateChanged(handleAuthStateChanged);
-        return () => unsub();
-        }, []);
-    
     //Attaches user claims documents to listen for changes in user permissions, if yes update token to ensure no permission errors
     useEffect(() => {
         if (!user) return;
@@ -128,7 +115,8 @@ const useAuthProvider = () => {
             if(!data?._lastCommitted) return;
 
             if (lastCommitted && !(data?._lastCommitted || {}).isEqual(lastCommitted)) {
-                setUserDetails({ ...(await getUserTokenResult(true)), ...latestUserDetails })
+                const claims = await getUserTokenResult(true);
+                if(claims) setUserDetails({ ...claims, ...(latestUserDetails!) || {} })
             }
             setLastCommitted(data?._lastCommitted);
         },
@@ -187,9 +175,8 @@ const useAuthProvider = () => {
      * Signs out the current user
      * @returns null
      */
-    const signOut = () => {
-        return auth.signOut().then(() => {
-            setUser(null);
+    const signOutUser = () => {
+        return signOut(auth).then(() => {
             logEvent('logout');
             window.location.replace('https://speeredu.com')
         });
@@ -201,7 +188,8 @@ const useAuthProvider = () => {
         getUserTokenResult,
         appInstance,
         signInWithEmailAndPassword,
-        signOut,
-        initGoogleSignIn
+        signOut: signOutUser,
+        initGoogleSignIn,
+        authing
     };
 };

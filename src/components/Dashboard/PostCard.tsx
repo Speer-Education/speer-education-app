@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MDEditor } from '../Blog/Editor/mdeditor';
 import { db, firebase } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
@@ -40,8 +40,8 @@ const PostCard = ({ post }: { post: PostDocument }) => {
     const [isEdit, setIsEdit] = useState(false);
     const [editedPostContent, setEditedPostContent] = useState<TypeDelta>(delta);
     const navigate = useNavigate();
-    const divRef = useRef()
-    const dimensions = useRefDimensions(divRef)
+    const divRef = useRef<HTMLDivElement>(null);
+    const dimensions = useRefDimensions(divRef);
 
     // useEffect(() => {
     //     if(dimensions.height > 500 && !oversizedPost){
@@ -56,11 +56,11 @@ const PostCard = ({ post }: { post: PostDocument }) => {
         //TODO: This function is definetly broken now
         const imageRegex = /!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/g;
         const images = html.match(imageRegex);
-        const numImages = images?.length;
+        const numImages = images?.length || 0;
 
         const newLineRegex = /[\r\n]/g;
-        const newLine = html.match(newLineRegex);
-        const numNewLine = newLine?.length;
+        const newLine = html.match(newLineRegex || 0);
+        const numNewLine = newLine?.length || 0;
 
         if((html.length > 1000 || numImages > 2 || numNewLine >= 10) && !oversizedPost){
             setPostCollapsed(true);

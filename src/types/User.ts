@@ -1,4 +1,4 @@
-import { firebase } from '../config/firebase';
+import { Timestamp } from 'firebase/firestore';
 import {InternalDoc} from './DocConverter';
 export type UserDetails = {
     bio: string;
@@ -31,7 +31,7 @@ export type UserDetails = {
 }
 
 export type ActiveRoom = {
-    date: firebase.firestore.Timestamp;
+    date: Timestamp;
     files: any[],
     message: string,
     messageId: string,
@@ -60,7 +60,7 @@ export type UserClaims = {
     finishSetup: boolean;
     isAdm: boolean;
     isMtr: boolean;
-    _lastCommitted: firebase.firestore.Timestamp;
+    _lastCommitted: Timestamp;
 }
 export type UserDetailsDocument = UserDetails & InternalDoc
 export type MentorDetailsDocument = MentorDetails & InternalDoc;

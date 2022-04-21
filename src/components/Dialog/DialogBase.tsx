@@ -1,4 +1,4 @@
-import { Dialog } from '@mui/material'
+import React, { Dialog } from '@mui/material'
 import { Fragment, PropsWithChildren } from 'react'
 
 /**

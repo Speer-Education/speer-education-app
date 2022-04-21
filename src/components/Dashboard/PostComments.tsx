@@ -1,5 +1,5 @@
 import { Button, Collapse, TextField } from "@mui/material";
-import { useState, useEffect, Fragment, forwardRef, ForwardRefExoticComponent } from "react"
+import React, { useState, useEffect, Fragment, forwardRef, ForwardRefExoticComponent } from "react"
 import TimeAgo from "react-timeago";
 import { db, firebase } from "../../config/firebase"
 import { useAuth } from "../../hooks/useAuth";
@@ -14,6 +14,8 @@ import { TransitionGroup } from 'react-transition-group';
 import { set } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {UserPostData, PostDocument, PostCommentDocument} from '../../types/Posts';
+import { collection } from "firebase/firestore";
+import usePaginateCollection from "../../hooks/usePaginateCollection";
 
 let commentsArray = []
 let listeners = []    // list of listeners
@@ -23,106 +25,108 @@ let end = null        // end position of listener
 const DOCUMENTS_PER_PAGE = 5;
 
 export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>(({ post }, ref) => {
-    const [comments, setComments] = useState<PostCommentDocument[]>([]);
+    const [comments, loadMore, loading, finished] = usePaginateCollection(collection(db, 'posts', post.id, 'comments'), {
+        orderKey: 'commentedOn',
+        direction: 'desc',
+        pageLimit: DOCUMENTS_PER_PAGE
+    })
     const [userComment, setUserComment] = useState<string>("");
-    const [loading, setLoading] = useState(true);
-    const [loadedAllPosts, setLoadedAllPosts] = useState(false);
     const { userDetails, user } = useAuth();
     const { name, major, school } = userDetails || {};
     const { uid } = user || {};
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if(!post?.id) return;
+    // useEffect(() => {
+    //     if(!post?.id) return;
 
-        //Clear all variables before reloading page.
-        commentsArray = [];
-        listeners = [];
-        start = null;
-        end = null;
-        setComments([]);
-        getComments();
+    //     //Clear all variables before reloading page.
+    //     commentsArray = [];
+    //     listeners = [];
+    //     start = null;
+    //     end = null;
+    //     setComments([]);
+    //     getComments();
 
-        return () => detachListeners();
-    }, [post?.id])
+    //     return () => detachListeners();
+    // }, [post?.id])
  
-    function handleUpdatedComments(snapshot) {
-        // append new messages to message array
-        snapshot.forEach((message) => {
-            // filter out any duplicates (from modify/delete events)         
-            commentsArray = commentsArray.filter(x => x.id !== message.id)
-            commentsArray.push({ id: message.id, ...message.data() })
-        })
+    // function handleUpdatedComments(snapshot) {
+    //     // append new messages to message array
+    //     snapshot.forEach((message) => {
+    //         // filter out any duplicates (from modify/delete events)         
+    //         commentsArray = commentsArray.filter(x => x.id !== message.id)
+    //         commentsArray.push({ id: message.id, ...message.data() })
+    //     })
 
-        // remove post from local array if deleted
-        snapshot.docChanges().forEach(change => {
-            if (change.type === 'removed') {
-                const message = change.doc
-                //Remove post from our array if it is here
-                commentsArray = commentsArray.filter(x => x.id !== message.id)
-            }
-        });
+    //     // remove post from local array if deleted
+    //     snapshot.docChanges().forEach(change => {
+    //         if (change.type === 'removed') {
+    //             const message = change.doc
+    //             //Remove post from our array if it is here
+    //             commentsArray = commentsArray.filter(x => x.id !== message.id)
+    //         }
+    //     });
 
-        //Sort array because it is unsorted
-        commentsArray.sort(({ commentedOn: x }, { commentedOn: y }) => {
-            return y.toDate() - x.toDate()
-        })
+    //     //Sort array because it is unsorted
+    //     commentsArray.sort(({ commentedOn: x }, { commentedOn: y }) => {
+    //         return y.toDate() - x.toDate()
+    //     })
 
-        setComments(commentsArray)
-        setLoading(false)
-    }
+    //     setComments(commentsArray)
+    //     setLoading(false)
+    // }
 
-    async function getComments() {
-        // query reference for the messages we want
-        let ref = db.collection(`posts/${post.id}/comments`)
+    // async function getComments() {
+    //     // query reference for the messages we want
+    //     let ref = db.collection(`posts/${post.id}/comments`)
 
-        // single query to get startAt snapshot
-        let snapshots = await getSnapshot(ref.orderBy('commentedOn', 'desc')
-            .limit(DOCUMENTS_PER_PAGE))
-        // save startAt snapshot
-        end = snapshots.docs[snapshots.docs.length - 1]
-        // create listener using startAt snapshot (starting boundary)    
-        let listener = (end?
-            ref.orderBy('commentedOn', 'desc').endAt(end):
-            ref.orderBy('commentedOn', 'desc'))
-            .onSnapshot(handleUpdatedComments)
-        // add listener to list
-        listeners.push(listener)
-    }
+    //     // single query to get startAt snapshot
+    //     let snapshots = await getSnapshot(ref.orderBy('commentedOn', 'desc')
+    //         .limit(DOCUMENTS_PER_PAGE))
+    //     // save startAt snapshot
+    //     end = snapshots.docs[snapshots.docs.length - 1]
+    //     // create listener using startAt snapshot (starting boundary)    
+    //     let listener = (end?
+    //         ref.orderBy('commentedOn', 'desc').endAt(end):
+    //         ref.orderBy('commentedOn', 'desc'))
+    //         .onSnapshot(handleUpdatedComments)
+    //     // add listener to list
+    //     listeners.push(listener)
+    // }
 
-    async function getMoreComments() {
-        // query reference for the messages we want
-        let ref = db.collection(`posts/${post.id}/comments`)
+    // async function getMoreComments() {
+    //     // query reference for the messages we want
+    //     let ref = db.collection(`posts/${post.id}/comments`)
 
-        setLoading(true)
-        if (!end) {
-            setLoadedAllPosts(true);
-            setLoading(false)
-            return;
-        }
-        // single query to get new startAt snapshot
-        let snapshots = await getSnapshot(ref.orderBy('commentedOn', 'desc')
-            .startAfter(end)
-            .limit(DOCUMENTS_PER_PAGE))
-        // previous starting boundary becomes new ending boundary
-        start = end
-        end = snapshots.docs[snapshots.docs.length - 1]
-        // create another listener using new boundaries     
-        if (!end) {
-            setLoadedAllPosts(true);
-            setLoading(false)
-            return;
-        }
-        let listener = ref.orderBy('commentedOn', 'desc')
-            .endAt(end).startAfter(start)
-            .onSnapshot(handleUpdatedComments)
-        listeners.push(listener)
-    }
+    //     setLoading(true)
+    //     if (!end) {
+    //         setLoadedAllPosts(true);
+    //         setLoading(false)
+    //         return;
+    //     }
+    //     // single query to get new startAt snapshot
+    //     let snapshots = await getSnapshot(ref.orderBy('commentedOn', 'desc')
+    //         .startAfter(end)
+    //         .limit(DOCUMENTS_PER_PAGE))
+    //     // previous starting boundary becomes new ending boundary
+    //     start = end
+    //     end = snapshots.docs[snapshots.docs.length - 1]
+    //     // create another listener using new boundaries     
+    //     if (!end) {
+    //         setLoadedAllPosts(true);
+    //         setLoading(false)
+    //         return;
+    //     }
+    //     let listener = ref.orderBy('commentedOn', 'desc')
+    //         .endAt(end).startAfter(start)
+    //         .onSnapshot(handleUpdatedComments)
+    //     listeners.push(listener)
+    // }
 
-    // call to detach all listeners
-    function detachListeners() {
-        listeners.forEach(listener => listener())
-    }
+    // // call to detach all listeners
+    // function detachListeners() {
+    //     listeners.forEach(listener => listener())
+    // }
 
     const handleSubmitCommment = async () => {
         if(userComment.length === 0) return;
@@ -198,7 +202,7 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
                     </div>
                 </div>
             </Transition>
-            {!loadedAllPosts && comments.length != 0 && <a className="underline text-blue-700 block" onClick={getMoreComments}>Load More</a>}
+            {!finished && comments.length != 0 && <a className="underline text-blue-700 block" onClick={loadMore}>Load More</a>}
         </div>
     );
 })

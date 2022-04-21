@@ -52,14 +52,14 @@ function App() {
       <div className="app bg-gray-100 min-h-screen">
         <Suspense fallback={<AppLoader/>}>
           <Routes>
-            {user !== false? <>
+            {user !== null? <>
               <Route path="/*" element={<LazyMainApp />}/>
               <Route path={"/login"} element={<LazyLogin />}/>
               <Route path="/onboarding" element={<LazyOnboarding />}/>
               <Route path="/admin/*" element={<LazyAdminApp />}/>
               {/* <Route path="*" component={NotFoundPage}/> */}
             </>: <Route path={"/login"} element={<LazyLogin />}/>}
-            {user === false && <Route path="/" element={<Navigate to="/login" />}/>}
+            {user === null && <Route path="/" element={<Navigate to="/login" />}/>}
           </Routes>
         </Suspense>
         <ServiceWorkerWrapper/>

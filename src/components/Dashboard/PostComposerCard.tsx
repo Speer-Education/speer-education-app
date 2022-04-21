@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { MDEditor } from '../Blog/Editor/mdeditor';
 import { Button, TextField } from '@mui/material';
 import './PostComposerCard.css'
@@ -14,7 +14,7 @@ import { Delta as TypeDelta } from 'quill';
 import ReactQuill from 'react-quill';
 
 const AddImageButton = ({fileCallback}) => (<>
-    <input id="uwu" type="file" name="file" accept="image/*" onChange={({ target }) => fileCallback(target.files[0])} hidden />
+    <input id="uwu" type="file" name="file" accept="image/*" onChange={({ target }) => target.files && fileCallback(target.files[0])} hidden />
     <label htmlFor="uwu" className="w-min flex flex-row items-center h-6 px-2 py-4 cursor-pointer mt-4 rounded-full text-green-500">
       <Image />
     </label >
@@ -80,7 +80,7 @@ const PostComposerCard = () => {
     const [postContent, setPostContent] = useState<TypeDelta>();
     const [saving, setSaving] = useState<boolean>(false);
     const { user } = useAuth();
-    const editor = useRef<ReactQuill>()
+    const editor = useRef<ReactQuill>(null)
     const [docId, setDocId] = useState(db.collection('posts').doc().id);
 
     useEffect(() => {

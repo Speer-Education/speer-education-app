@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import './MentorShowcase.css';
@@ -7,7 +7,9 @@ import { Link } from 'react-router-dom';
 export default function StatsCard() {
 
     const { userDetails } = useAuth();
-    
+    const rooms = useMemo(() => {
+        return Object.keys(userDetails?.activeRooms || {}).length;
+    },[userDetails?.activeRooms])
     return (
         <div className="flex flex-col mentorShowcase">
             <div className="flex flex-row justify-between pb-1">
@@ -20,7 +22,7 @@ export default function StatsCard() {
                     <p>Connection to Mentory</p>
                 </div>
                 <div className="flex-1 px-3">
-                    <p className="font-medium text-4xl">{(userDetails?.rooms || []).length}</p>
+                    <p className="font-medium text-4xl">{rooms}</p>
                     <p>Open Chats</p>
                 </div>
             </div>

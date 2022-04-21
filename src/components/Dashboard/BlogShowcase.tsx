@@ -1,33 +1,23 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { db } from '../../config/firebase';
+import { db, docConverter } from '../../config/firebase';
 import { Link } from 'react-router-dom';
 import DialogBase from '../Dialog/DialogBase';
 import BlogContent from '../Blog/BlogContent';
 import OpenInNewTwoToneIcon from '@mui/icons-material/OpenInNewTwoTone';
 import {PlatformBlogDocument} from '../../types/PlatformBlogs';
-
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { collection, query, orderBy, limit } from 'firebase/firestore';
 export default function BlogShowcase() {
-  
-  const [blogData, setBlogData] = useState([]);
+  const [blogData = [], loading, error] = useCollectionData<PlatformBlogDocument>(query(collection(db, 'blogs').withConverter(docConverter),orderBy('postedOn', 'desc')));
   const [blogOpen, setBlogOpen] = useState(false);
   const [activeBlog, setActiveBlog] = useState<PlatformBlogDocument>();
-  useEffect(() => {
-    //read video data from firebase
-    return db.collection('blogs').orderBy('postedOn','desc').onSnapshot(snap => {
-      let data = snap.docs.map(docSnap => {
-        return {
-          id: docSnap.id,
-          ...docSnap.data()
-        }
-      })
-      setBlogData(data);
-    });
-  }, []);
 
   const handleShowBlog = (blog) => {
     setActiveBlog(blog);
     setBlogOpen(true);
   }
+
+  //TODO: Add loading
 
   return (
     <>
@@ -54,7 +44,7 @@ export default function BlogShowcase() {
         <DialogBase open={blogOpen} onClose={() => setBlogOpen(false)}>
         <div className="space-y-2 inline-block w-full max-w-2xl p-4 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg max-h-screen overflow-y-auto">
                 <div className="mt-2 h-full space-y-2 py-2 max-h-[70vh] overflow-y-auto">
-                  <BlogContent content={activeBlog}/>
+                  {activeBlog && <BlogContent content={activeBlog}/>}
                 </div>
                 <div className="mt-4 pt-2">
                   {/* <button

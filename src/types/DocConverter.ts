@@ -1,5 +1,6 @@
-import { firebase } from '../config/firebase';
+import { DocumentReference } from "firebase/firestore";
+
 export type InternalDoc = {
     id: string,
-    ref: firebase.firestore.DocumentReference,
+    ref: DocumentReference,
 }

@@ -1,10 +1,10 @@
-import { firebase } from '../config/firebase';
+import { Timestamp } from 'firebase/firestore';
 import {InternalDoc} from './DocConverter';
 export type PlatformBlog = {
     authorUid: string,
     body: string,
     description: string,
-    postedOn: firebase.firestore.Timestamp,
+    postedOn: Timestamp,
     title: string,
     views: number,
 }

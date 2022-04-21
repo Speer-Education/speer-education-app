@@ -1,12 +1,12 @@
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/database";
-import "firebase/storage";
-import "firebase/functions";
-import "firebase/analytics";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import "firebase/compat/database";
+import "firebase/compat/storage";
+import "firebase/compat/functions";
+import "firebase/compat/analytics";
 import { isDevelopment } from "../utils/environment";
-
+import { DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyAx-OEKEZF6LgX5wv03qRilbGTWIJvL4kw",
   authDomain: 'auth.speeredu.com',
@@ -59,3 +59,25 @@ db.enablePersistence()
 export { firebase, auth, db, now, storage, rtdb, functions, analytics };
 
 console.log(app.name ? "Firebase Mode Activated!" : "Firebase not working :(");
+
+export const docConverter = {
+  toFirestore(doc: WithFieldValue<any>): DocumentData {
+      const { id, ref, ...docWithoutId } = doc;
+      return docWithoutId;
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions
+  ): {
+    id: string,
+    ref: DocumentReference,
+    [x: string]: any
+  } {
+    const data = snapshot.data(options);
+    return {
+      id: snapshot.id,
+      ref: snapshot.ref,
+      ...data,
+    };
+  },
+};

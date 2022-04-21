@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import React, { forwardRef, useState } from "react";
 import Select from 'react-select';
 
 const InputField = forwardRef<HTMLInputElement, ({
@@ -11,7 +11,7 @@ const InputField = forwardRef<HTMLInputElement, ({
     const [empty, setEmpty] = useState(false);
 
     const handleInputChange = e => {
-        onChange(e)
+        if(onChange) onChange(e)
         if (required) setEmpty(e.target.value.length === 0)
     }
 

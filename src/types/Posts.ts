@@ -1,4 +1,4 @@
-import {firebase} from '../config/firebase';
+import { Timestamp } from 'firebase/firestore';
 import { Delta } from 'quill';
 import {InternalDoc} from './DocConverter';
 export type UserPostData = {
@@ -11,8 +11,8 @@ export type UserPostData = {
     commentCount: number,
     likeCount: number,
     organization: string | null,
-    _updatedOn: firebase.firestore.Timestamp,
-    _createdOn: firebase.firestore.Timestamp,
+    _updatedOn: Timestamp,
+    _createdOn: Timestamp,
 }
 
 export type PostComments = {
@@ -23,7 +23,7 @@ export type PostComments = {
         name: string,
     },
     comment: string,
-    commentedOn: firebase.firestore.Timestamp,
+    commentedOn: Timestamp,
     parentPost: string,
 }
 

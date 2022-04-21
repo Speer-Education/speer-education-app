@@ -69,7 +69,7 @@ export default function OpenChats() {
                             username={(senderId === user?.uid) ? (roomName[user?.uid] || "Unread Message"):senderUsername} 
                             message={`${senderId === user?.uid ? "You: ":"" }${message}`} 
                             date={date} 
-                            isUnread={read?.[user.uid]}
+                            isUnread={read?.[user!.uid]}
                             roomId={roomId} />
                     }
                     
@@ -78,10 +78,10 @@ export default function OpenChats() {
                         return <ActiveChatRow 
                             key={roomId} 
                             photoUid={roomId} 
-                            username={roomName[user?.uid]} 
+                            username={roomName[user!.uid]} 
                             message={`${senderId === user?.uid ? "You: ":`${senderUsername}: ` }${message}`} 
                             date={date} 
-                            isUnread={read?.[user.uid]}
+                            isUnread={read?.[user!.uid]}
                             roomId={roomId} />
                     }
                 })}

@@ -1,3 +1,5 @@
+import React from 'react';
+
 const Spinner = ({className = ""} : {className?: string}) => {
     return <svg className={`animate-spin h-5 w-5 ${className}`} viewBox="0 0 24 24">
         <circle className="opacity-5" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
