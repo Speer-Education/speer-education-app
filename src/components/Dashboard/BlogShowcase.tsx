@@ -4,12 +4,13 @@ import { Link } from 'react-router-dom';
 import DialogBase from '../Dialog/DialogBase';
 import BlogContent from '../Blog/BlogContent';
 import OpenInNewTwoToneIcon from '@mui/icons-material/OpenInNewTwoTone';
+import {PlatformBlogDocument} from '../../types/PlatformBlogs';
 
 export default function BlogShowcase() {
   
   const [blogData, setBlogData] = useState([]);
   const [blogOpen, setBlogOpen] = useState(false);
-  const [activeBlog, setActiveBlog] = useState({});
+  const [activeBlog, setActiveBlog] = useState<PlatformBlogDocument>();
   useEffect(() => {
     //read video data from firebase
     return db.collection('blogs').orderBy('postedOn','desc').onSnapshot(snap => {

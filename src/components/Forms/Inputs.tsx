@@ -1,7 +1,13 @@
 import { forwardRef, useState } from "react";
 import Select from 'react-select';
 
-const InputField = forwardRef(({ className, label, id, required = false, onChange, autoWidth, ...props }, ref) => {
+const InputField = forwardRef<HTMLInputElement, ({
+    label: string,
+    required?: boolean,
+    autoWidth?: boolean,
+    type?: string,
+    name?: string
+} & React.HTMLAttributes<HTMLInputElement>)>(({ className, label, id, required = false, onChange, autoWidth, ...props }, ref) => {
     const [empty, setEmpty] = useState(false);
 
     const handleInputChange = e => {
@@ -20,7 +26,10 @@ const InputField = forwardRef(({ className, label, id, required = false, onChang
     </div>
 })
 
-const InputAreaField = ({ className, label, id, required = false, ...props }) => {
+const InputAreaField = ({ className, label, id, required = false, ...props }: ({
+   required?: boolean, 
+   label: string
+} & React.HTMLAttributes<HTMLTextAreaElement>)) => {
     return <div className={`w-full px-3 ${className}`}>
         {label && <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}

@@ -1,5 +1,5 @@
 import { Button, Collapse, TextField } from "@mui/material";
-import { useState, useEffect, Fragment, forwardRef } from "react"
+import { useState, useEffect, Fragment, forwardRef, ForwardRefExoticComponent } from "react"
 import TimeAgo from "react-timeago";
 import { db, firebase } from "../../config/firebase"
 import { useAuth } from "../../hooks/useAuth";
@@ -13,6 +13,7 @@ import { logEvent } from "../../utils/analytics";
 import { TransitionGroup } from 'react-transition-group';
 import { set } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import {UserPostData, PostDocument, PostCommentDocument} from '../../types/Posts';
 
 let commentsArray = []
 let listeners = []    // list of listeners
@@ -21,9 +22,9 @@ let end = null        // end position of listener
 
 const DOCUMENTS_PER_PAGE = 5;
 
-export const PostComments = forwardRef(({ post }, ref) => {
-    const [comments, setComments] = useState([]);
-    const [userComment, setUserComment] = useState("");
+export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>(({ post }, ref) => {
+    const [comments, setComments] = useState<PostCommentDocument[]>([]);
+    const [userComment, setUserComment] = useState<string>("");
     const [loading, setLoading] = useState(true);
     const [loadedAllPosts, setLoadedAllPosts] = useState(false);
     const { userDetails, user } = useAuth();

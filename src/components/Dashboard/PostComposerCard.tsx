@@ -10,7 +10,8 @@ import { Dialog } from '@headlessui/react';
 import DialogBase from '../Dialog/DialogBase';
 import { logEvent } from '../../utils/analytics';
 import SlideTransition from '../SlideTransition/SlideTransition';
-
+import { Delta as TypeDelta } from 'quill';
+import ReactQuill from 'react-quill';
 
 const AddImageButton = ({fileCallback}) => (<>
     <input id="uwu" type="file" name="file" accept="image/*" onChange={({ target }) => fileCallback(target.files[0])} hidden />
@@ -76,10 +77,10 @@ const AddYoutubeDialog =({ open, onClose, onUrl }) => {
  * @returns Component
  */
 const PostComposerCard = () => {
-    const [postContent, setPostContent] = useState("");
-    const [saving, setSaving] = useState(false);
+    const [postContent, setPostContent] = useState<TypeDelta>();
+    const [saving, setSaving] = useState<boolean>(false);
     const { user } = useAuth();
-    const editor = useRef()
+    const editor = useRef<ReactQuill>()
     const [docId, setDocId] = useState(db.collection('posts').doc().id);
 
     useEffect(() => {
@@ -103,21 +104,6 @@ const PostComposerCard = () => {
         // setPostContent("") //reset editor content
     }
     
-    /*
-    type UserPostData = {
-        author: string,
-        content: {
-            delta: object,
-            html: string
-        },
-        views: number,
-        commentCount: number,
-        likeCount: number,
-        organization: string | null,
-        _updatedOn: Timestamp,
-        _createdOn: Timestamp,
-    }
-    */
 
     return (
         <SlideTransition in timeout={50}>
@@ -136,7 +122,7 @@ const PostComposerCard = () => {
                     
                     <Button 
                         className="float-right"
-                        disabled={saving || (postContent.length === 0)} 
+                        disabled={saving} 
                         variant="contained" 
                         color="primary" 
                         onClick={createNewPost}>Post</Button>

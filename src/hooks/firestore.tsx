@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { firebase, db } from '../config/firebase.js';
+import { firebase, db } from '../config/firebase';
 
 const useDocListener = (path) => {
     const [doc, setDoc] = useState({});
@@ -28,7 +28,7 @@ const getNewDocId = (path) => db.collection(path).doc().id
 
 const deletePost = (path) => db.doc(path).delete();
 
-const getSnapshot = (ref) => new Promise((resolve, reject) => {
+const getSnapshot = (ref: firebase.firestore.CollectionReference | firebase.firestore.Query ) => new Promise<firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>>((resolve, reject) => {
     let unsubscribe = ref.onSnapshot((snapshot) => {
         unsubscribe();
         resolve(snapshot)

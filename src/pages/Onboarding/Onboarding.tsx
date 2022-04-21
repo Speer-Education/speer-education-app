@@ -1,4 +1,6 @@
-import { useState, useMemo, Fragment } from 'react';
+//@ts-nocheck
+
+import React, { useState, useMemo, Fragment } from 'react';
 import './Onboarding.css';
 import { gradeOptions, countryOptions } from './OnboardingConfig';
 import { functions } from '../../config/firebase';
@@ -33,9 +35,15 @@ export default function UserDetails() {
     // Hard coding default values for the select fields first
     const [form, setForm] = useState({
         name: "",
-        hsGradYear: "",
+        hsGradYear: {
+            value: "",
+            label: ""
+        },
         dateOfBirth: "",
-        country: "",
+        country: {
+            value: "",
+            label: ""
+        },
         school: "",
         major: "",
         bio: "",
@@ -197,7 +205,6 @@ export default function UserDetails() {
                                                 open={showDatePicker}
                                                 onClose={() => setShowDatePicker(false)}
                                                 inputFormat="dd/MM/yyyy"
-                                                id="dateofbirth" 
                                                 name="dateOfBirth" 
                                                 value={form.dateOfBirth}    
                                                 onChange={val => setForm({ ...form, dateOfBirth: val.toLocaleString() })}
@@ -263,8 +270,8 @@ export default function UserDetails() {
                                     <InputAreaField 
                                         required 
                                         className="resize-none"
-                                        rows="3" 
-                                        maxLength="300" 
+                                        rows={3}
+                                        maxLength={300} 
                                         type="text" 
                                         id="bio" 
                                         name="bio"

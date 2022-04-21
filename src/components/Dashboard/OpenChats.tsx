@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import ReactTimeago from 'react-timeago';
 import { db } from '../../config/firebase';
 import { Button } from '@mui/material';
+import {ActiveRoom} from '../../types/User';
 
 
 const ActiveChatRow = ({ photoUid, username, message, date, isUnread, roomId}) => (
@@ -27,7 +28,7 @@ export default function OpenChats() {
     const { user, userDetails } = useAuth();
     
     const navigate = useNavigate();
-    const [chatrooms, setChatrooms] = useState();
+    const [chatrooms, setChatrooms] = useState<ActiveRoom[]>();
 
     //Sorts the activeChats in the user document
     useEffect(() => {

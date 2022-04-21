@@ -9,6 +9,7 @@ import SearchBar from './SearchBar';
 import { useAuth } from '../../hooks/useAuth';
 import React, { useEffect, useState } from 'react';
 import SlideTransition from '../SlideTransition/SlideTransition';
+import { SvgIconComponent } from '@mui/icons-material';
 
 /**
  * Component for the link in the navbar
@@ -18,19 +19,24 @@ import SlideTransition from '../SlideTransition/SlideTransition';
  * @param {string} href
  * @returns 
  */
-const NavBarLink = ({ IconComponent, title, href, isContactIcon }) => {
+const NavBarLink = ({ IconComponent, title, href, isContactIcon } : {
+  IconComponent: SvgIconComponent,
+  title: string,
+  href: string,
+  isContactIcon?: boolean,
+}) => {
   const location = useLocation();
-  const { userDetails } = useAuth();
+  const { user, userDetails } = useAuth();
   const [numUnread, setNumUnread] = useState(0);
 
   useEffect(() => {
-
+    if(!user) return;
     if (isContactIcon){
       let counter = 0;
 
       for (const room in userDetails?.activeRooms){
 
-        if (userDetails?.activeRooms[room].read[userDetails.user_id] === false){
+        if (userDetails?.activeRooms[room].read[user.uid] === false){
           counter++;
         }
         // if (room.read[userDetails.user_id] === false){
@@ -41,7 +47,7 @@ const NavBarLink = ({ IconComponent, title, href, isContactIcon }) => {
       setNumUnread(counter);
     }
 
-  }, [userDetails?.activeRooms])
+  }, [userDetails?.activeRooms, user])
 
   return <Link to={href} className="text-gray-800 no-underline flex-1 lg:flex-none">
     <div className="grid place-items-center h-full lg:px-5 hover:bg-gray-100 transition-colors cursor-pointer rounded-lg">

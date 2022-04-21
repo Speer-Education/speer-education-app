@@ -1,5 +1,5 @@
 import { Dialog } from '@mui/material'
-import { Fragment } from 'react'
+import { Fragment, PropsWithChildren } from 'react'
 
 /**
  * DialogBase
@@ -10,7 +10,10 @@ import { Fragment } from 'react'
  * 
  * @returns {React.ReactElement}
  */
-export default function DialogBase({children, open, onClose}) {
+export default function DialogBase({children, open, onClose}: PropsWithChildren<{
+  open: boolean,
+  onClose: () => void
+}>) {
 
   return (
       <Dialog

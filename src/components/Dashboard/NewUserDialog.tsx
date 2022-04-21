@@ -1,7 +1,7 @@
 import React from 'react';
 import DialogBase from '../Dialog/DialogBase';
 
-const NewUserDialog = ({onClose, ...props}) => {
+const NewUserDialog = ({onClose, ...props}: { open: boolean, onClose: () => void }) => {
     return (
         <DialogBase onClose={onClose} {...props}>
             <div className="space-y-2 inline-block w-full max-w-2xl p-4 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg max-h-screen overflow-y-auto">

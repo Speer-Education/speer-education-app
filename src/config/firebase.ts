@@ -36,7 +36,7 @@ const now = firebase.firestore.Timestamp.now();
 const storage = firebase.storage();
 const functions = firebase.functions();
 
-let analytics = {};
+let analytics: firebase.analytics.Analytics | null = null;
 
 if (isDevelopment()) {
   // dev code

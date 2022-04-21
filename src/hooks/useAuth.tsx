@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext, createContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth, db, firebase, rtdb } from "../config/firebase";
+import { UserClaims, UserDetails } from "../types/User";
 import { logEvent, setUserProperties } from "../utils/analytics";
 import { useLocalStorage } from "./useHooks";
 
-const authContext = createContext({ user: {} });
+const authContext = createContext<ReturnType<typeof useAuthProvider>>(null);
 const { Provider } = authContext;
 
 /**
@@ -22,7 +23,7 @@ export function AuthProvider({ children }) {
  * @returns authContext
  */
 export const useAuth = () => {
-    return useContext(authContext);
+    return useContext<ReturnType<typeof useAuthProvider>>(authContext);
 };
 
 /**
@@ -30,13 +31,15 @@ export const useAuth = () => {
  * @returns { user, userDetails, signInWithEmailAndPassword, signOut, initGoogleSignIn, initFacebookSignIn }
  */
 
+type UserDetailsToken = UserDetails & UserClaims;
+
 //Use variable as userDetails might be immediately needed before react even renders
-let latestUserDetails = {}
+let latestUserDetails: UserDetailsToken | null = null;
 let appInstance = Date.now();
 
 const useAuthProvider = () => {
-    const [user, setUser] = useState(null); 
-    const [userDetails, setUserDetails] = useState(null);
+    const [user, setUser] = useState<firebase.User | null>(null); 
+    const [userDetails, setUserDetails] = useState<UserDetailsToken>(null);
     const [lastCommitted, setLastCommitted] = useLocalStorage("lastCommited", 0);  //The last committed state of our user claims document, decides if token needs to update if outdated
     const navigate = useNavigate();
     const location = useLocation();
@@ -84,7 +87,7 @@ const useAuthProvider = () => {
      * @param {boolean} refresh 
      * @returns userClaims
      */
-    const getUserTokenResult = async (refresh) => {
+    const getUserTokenResult = async (refresh: boolean = false) => {
         if (!user) return;
         let { claims } = await user.getIdTokenResult(refresh);
         
@@ -106,7 +109,7 @@ const useAuthProvider = () => {
         if (user) {
             setUser(user);
         } else {
-            setUser(false);
+            setUser(null);
         }
     };
 
@@ -142,7 +145,7 @@ const useAuthProvider = () => {
                 .collection("users")
                 .doc(user.uid)
                 .onSnapshot(async (doc) => {
-                    latestUserDetails = { ...(await getUserTokenResult()), ...doc.data() }
+                    latestUserDetails = { ...(await getUserTokenResult()), ...doc.data() } as UserDetailsToken
 
                     //For analytics
                     setUserProperties(user.uid, latestUserDetails);
@@ -186,7 +189,7 @@ const useAuthProvider = () => {
      */
     const signOut = () => {
         return auth.signOut().then(() => {
-            setUser(false);
+            setUser(null);
             logEvent('logout');
             window.location.replace('https://speeredu.com')
         });

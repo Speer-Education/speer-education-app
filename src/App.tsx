@@ -24,7 +24,9 @@ function App() {
   useEffect(() => {
     Sentry.init({
       dsn: "https://0ea940615ee84c89a07bb2e2cc91dbfe@o992434.ingest.sentry.io/5949937",
+      //@ts-ignore
       integrations: [new Integrations.BrowserTracing({
+        //@ts-ignore
         routingInstrumentation
       })],
     
@@ -57,10 +59,7 @@ function App() {
               <Route path="/admin/*" element={<LazyAdminApp />}/>
               {/* <Route path="*" component={NotFoundPage}/> */}
             </>: <Route path={"/login"} element={<LazyLogin />}/>}
-            {user === false &&
-            <Route path="/">
-              <Navigate to="/login" />
-            </Route>}
+            {user === false && <Route path="/" element={<Navigate to="/login" />}/>}
           </Routes>
         </Suspense>
         <ServiceWorkerWrapper/>

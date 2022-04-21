@@ -8,10 +8,16 @@ import { useAuth } from '../../hooks/useAuth';
  * @param {string} uid 
  * @returns 
  */
-export default function ProfilePicture({ uid, thumb = false, className, isRoom, forceRefresh = false, ...params }) {
+export default function ProfilePicture({ uid, thumb = false, className, isRoom = "", forceRefresh = false, ...params } : {
+    uid: string,
+    thumb?: boolean,
+    className?: string,
+    isRoom?: string,
+    forceRefresh?: boolean,
+} & React.HTMLAttributes<HTMLImageElement>) {
     const [url, setUrl] = useState("");
     const { user, appInstance } = useAuth();
-    const imageRef = useRef();
+    const imageRef = useRef<HTMLImageElement>();
 
     //Fetches the URL for the user's profile picture
     useEffect(() => {
@@ -37,7 +43,7 @@ export default function ProfilePicture({ uid, thumb = false, className, isRoom, 
         alt="User"
         ref={imageRef}
         onError={(e) => { 
-            if (imageRef.current.src != '/user_placeholder.png') imageRef.current.src = '/user_placeholder.png';
+            if (imageRef.current && imageRef.current.src != '/user_placeholder.png') imageRef.current.src = '/user_placeholder.png';
         }}
         {...params}
     />

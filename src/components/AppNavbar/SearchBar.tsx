@@ -1,3 +1,4 @@
+//@ts-nocheck
 import searchClient from '../../config/algolia';
 import {
   InstantSearch,
@@ -8,7 +9,7 @@ import {
 import ProfilePicture from '../User/ProfilePicture';
 import { SearchOutlined } from '@mui/icons-material';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
-import { forwardRef, useRef } from 'react';
+import { forwardRef, ForwardRefExoticComponent, useRef } from 'react';
 import { logEvent } from '../../utils/analytics';
 import { Collapse } from '@mui/material';
 import { TransitionGroup } from "react-transition-group";
@@ -36,7 +37,7 @@ const userSearchClient = {
 
 let setSearchQuery = null;
 
-const Hit = forwardRef(({ hit }, ref) => {
+const Hit: ForwardRefExoticComponent<any, any> = forwardRef(({ hit }, ref) => {
   const navigate = useNavigate();
   return <div ref={ref} className="flex flex-row space-x-2 hover:bg-blue-500 hover:bg-opacity-10 px-4 py-2 cursor-pointer" onClick={() => {
     navigate(`/profile/${hit.objectID}`)

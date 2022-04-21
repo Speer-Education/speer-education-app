@@ -17,25 +17,28 @@ import { logEvent } from '../../utils/analytics';
 import SlideTransition from '../SlideTransition/SlideTransition';
 import { TransitionGroup } from 'react-transition-group';
 import { useNavigate } from 'react-router-dom';
-
+import { UserDetails } from '../../types/User';
+import { PostDocument } from '../../types/Posts';
+import { Delta as TypeDelta } from 'quill';
 /**
  * Creates the post card for this post
  * @component
  * @param {*} param0 
  * @returns 
  */
-const PostCard = ({ post }) => {
+const PostCard = ({ post }: { post: PostDocument }) => {
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
-    const [authorProfile, setAuthorProfile] = useState({});
+    const [authorProfile, setAuthorProfile] = useState<UserDetails>();
     const [userLiked, setUserLiked] = useState(false);
     const [showComments, setShowComments] = useState(false);
     const [postCollapsed, setPostCollapsed] = useState(false);
     const [oversizedPost, setOversizedPost] = useState(false);
-    const { author, body, likeCount, commentCount, id, _createdOn } = post;
+    const { author, content, likeCount, commentCount, id, _createdOn } = post;
+    const { delta, html } = content;
     const [saving, setSaving] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const [editedPostContent, setEditedPostContent] = useState(body);
+    const [editedPostContent, setEditedPostContent] = useState<TypeDelta>(delta);
     const navigate = useNavigate();
     const divRef = useRef()
     const dimensions = useRefDimensions(divRef)
@@ -50,19 +53,20 @@ const PostCard = ({ post }) => {
 
     //Checks for length of body of post and colapses long posts
     useEffect(() => {
+        //TODO: This function is definetly broken now
         const imageRegex = /!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/g;
-        const images = body.match(imageRegex);
+        const images = html.match(imageRegex);
         const numImages = images?.length;
 
         const newLineRegex = /[\r\n]/g;
-        const newLine = body.match(newLineRegex);
+        const newLine = html.match(newLineRegex);
         const numNewLine = newLine?.length;
 
-        if((body.length > 1000 || numImages > 2 || numNewLine >= 10) && !oversizedPost){
+        if((html.length > 1000 || numImages > 2 || numNewLine >= 10) && !oversizedPost){
             setPostCollapsed(true);
             setOversizedPost(true);
         }
-    },[body])
+    },[html])
 
     //Attach listener on the author
     //TODO: should have author details in post
@@ -70,7 +74,7 @@ const PostCard = ({ post }) => {
         setLoading(true); //BLock view of anything if author is loading
         if (!post) return;
         return db.doc(`users/${author}`).onSnapshot(snap => {
-            setAuthorProfile(snap.data())
+            setAuthorProfile(snap.data() as UserDetails)
             setLoading(false)
         })
     }, [post?.id]);
@@ -105,7 +109,7 @@ const PostCard = ({ post }) => {
     const createNewPost = async () => {
         if(!user) return;
         if(!post.id) return;
-        if (body === editedPostContent) return;
+        if (delta === editedPostContent) return;
         setSaving(true) //set saving to true to show loading
         await db.doc('posts/' + post.id).update({
             body: editedPostContent,
@@ -187,7 +191,7 @@ const PostCard = ({ post }) => {
                     </div>
                         {isEdit ? <Button 
                             className="float-right"
-                            disabled={saving || (editedPostContent.length === 0) || body === editedPostContent} 
+                            // disabled={saving || (editedPostContent.length === 0) || body === editedPostContent} //TODO: fix this 
                             variant="contained" 
                             color="primary" 
                             onClick={createNewPost}>Save</Button> : null}

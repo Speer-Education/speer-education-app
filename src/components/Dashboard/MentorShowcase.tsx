@@ -7,12 +7,13 @@ import { IconButton } from '@mui/material';
 import './MentorShowcase.css';
 import { useAuth } from '../../hooks/useAuth';
 import MentorCardModal from '../Modal/MentorCardModal';
+import {UserDetails, MentorDetailsDocument} from '../../types/User';
 
 export default function MentorShowcase() {
 
-    const [mentors, setMentors] = useState([]);
+    const [mentors, setMentors] = useState<MentorDetailsDocument[]>([]);
     const [creatingRoom, setCreatingRoom] = useState(false);
-    const [mentorSelected, setMentorSelected] = useState();
+    const [mentorSelected, setMentorSelected] = useState<MentorDetailsDocument>();
     const [mentorModalOpen, setMentorModalOpen] = useState(false);
     const { user } = useAuth();
     
@@ -20,7 +21,7 @@ export default function MentorShowcase() {
     useEffect(() => {
         return db.collection('mentors').orderBy('_updatedOn','desc').onSnapshot(snap => {
             const allMentors = snap.docs.map( doc => {
-                return { id: doc.id, ...doc.data()}
+                return { id: doc.id, ...doc.data() as MentorDetailsDocument}
             })
             setMentors(allMentors.filter(({connectedMentees, id}) => !connectedMentees.includes(user?.uid) && id != user?.uid))
         })

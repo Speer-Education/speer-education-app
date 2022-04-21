@@ -2,7 +2,8 @@
 // import styles from './mdeditor.css'
 import { storage } from '../../../config/firebase';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
+import { Delta as TypeDelta, DeltaStatic, Sources } from "quill";
 import 'react-quill/dist/quill.bubble.css';
 
 // const YoutubeEmbed = ({ attrs }) => {
@@ -105,8 +106,20 @@ import 'react-quill/dist/quill.bubble.css';
 
 // export { MDEditor }
 
-export const MDEditor = forwardRef(({ docId, className, readOnly = false, onChange = () => {}, defaultValue, ...props }, editor) => {
-
+export const MDEditor = forwardRef<ReactQuill, {
+  docId: string,
+  className?: string,
+  readOnly?: boolean,
+  onChange: (value: string, delta: DeltaStatic, source: Sources, editor: ReactQuill.UnprivilegedEditor) => void,
+  defaultValue?: TypeDelta,
+}>(({ 
+  docId, 
+  className, 
+  readOnly = false, 
+  onChange = () => {}, 
+  defaultValue, 
+  ...props 
+}, editor) => {
   return <ReactQuill 
     ref={editor}
     theme="bubble" 
