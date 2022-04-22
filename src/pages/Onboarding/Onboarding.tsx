@@ -14,12 +14,14 @@ import Alert from '@mui/material/Alert';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import { InputAreaField, InputField, InputSelect } from '../../components/Forms/Inputs';
 import { Transition } from "@headlessui/react";
-import DateAdapter from '@mui/lab/AdapterLuxon';
 import TextField from '@mui/material/TextField';
-import MobileDatePicker from '@mui/lab/MobileDatePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useAuth } from '../../hooks/useAuth';
 import * as Sentry from "@sentry/react";
+import { Controller, useForm } from 'react-hook-form';
+import { Slide } from '@mui/material';
 
 
 const FormRow = ({ children }) => (
@@ -29,61 +31,47 @@ const FormRow = ({ children }) => (
 
 export default function UserDetails() {
     const { getUserTokenResult } = useAuth();
-
     const [pageNumber, setPageNumber] = useState(1);
-
-    // Hard coding default values for the select fields first
-    const [form, setForm] = useState({
-        name: "",
-        hsGradYear: {
-            value: "",
-            label: ""
-        },
-        dateOfBirth: "",
-        country: {
-            value: "",
-            label: ""
-        },
-        school: "",
-        major: "",
-        bio: "",
-        highlight1: {
-            emoji: "🚀",
-            description: ""
-        },
-        highlight2: {
-            emoji: "🗣",
-            description: ""
-        },
-        socials: {
-            github: "",
-            personal: "",
-            youtube: "",
+    const { register, control, handleSubmit, watch, setValue, formState: { isValid, isSubmitting } } = useForm({
+        mode: 'onChange',
+        defaultValues: {
+            name: "",
+            hsGradYear: {
+                value: "",
+                label: ""
+            },
+            dateOfBirth: "",
+            country: {
+                value: "",
+                label: ""
+            },
+            school: "",
+            major: "",
+            bio: "",
+            highlight1: {
+                emoji: "🚀",
+                description: ""
+            },
+            highlight2: {
+                emoji: "🗣",
+                description: ""
+            },
+            socials: {
+                github: "",
+                personal: "",
+                youtube: "",
+            }
         }
     });
+
     const [updatingClaims, setUpdatingClaims] = useState(false);
-    const [submitting, setSubmitting] = useState(false);
     const [showPicker1, setShowPicker1] = useState(false);
     const [showPicker2, setShowPicker2] = useState(false);
     const [showError, setShowError] = useState(false);
-    const [showDatePicker, setShowDatePicker] = useState(false);
-
-
-    // To check if all fields are filled up
-    const isValidForm = useMemo(() => {
-        return form.name !== undefined && form.name !== ""
-            && form.hsGradYear !== undefined && form.hsGradYear !== ""
-            && form.dateOfBirth !== undefined && form.dateOfBirth !== ""
-            && form.country !== undefined && form.country !== ""
-            && form.school !== undefined && form.school !== ""
-            && form.major !== undefined && form.major !== ""
-            && form.bio !== undefined && form.bio !== ""
-            && form.highlight1.emoji !== "" && form.highlight1.description !== ""
-            && form.highlight2.emoji !== "" && form.highlight2.description !== ""
-    }, [form])
+    const highlight1 = watch('highlight1')
+    const highlight2 = watch('highlight2')
 
     const callOnboarding = async (numTries, form) => {
-
         if (numTries > 9){
             throw new Error ("Onboarding function failed too many times")
         }
@@ -92,25 +80,20 @@ export default function UserDetails() {
             .catch((error) => {
                 callOnboarding(numTries +1, form)
             })
-
     }
 
     //To submit the form when the user hits submit (Yet to implement)
-    const handleFormSubmit = async (e) => {
-        e.preventDefault();
-        setSubmitting(true);
-
+    const onSubmit = async (data) => {
         // Only submit if the entered a name
         if (isValidForm === true) {
             console.log("Valid Form")
         } else {
             // Trigger some sort of UI to tell the user they need to fill up all the inputs
             console.log("Submission unsuccessful, please fill up all the inputs")
-            setSubmitting(false);
         }
-        const submitForm = form;
-        submitForm.country = form.country.label;
-        submitForm.hsGradYear = form.hsGradYear.label;
+        const submitForm = data;
+        submitForm.country = data.country.label;
+        submitForm.hsGradYear = data.hsGradYear.label;
         try {
             await callOnboarding(0, submitForm)
             console.log('onBoarding setup was successful, attempting to get finishSetup token')
@@ -122,7 +105,6 @@ export default function UserDetails() {
                 Sentry.captureMessage("onBoarding timeout, updating token was not successful");
                 console.log('onBoarding timeout, updating token was not successful')
                 setShowError(true)
-                setSubmitting(false);
                 setUpdatingClaims(false);
                 getUserTokenResult(true)
                 // navigate("/")
@@ -131,154 +113,138 @@ export default function UserDetails() {
             Sentry.captureException(e);
             console.error('onBoarding submission error occured',e)
             setShowError(true)
-            setSubmitting(false);
             setUpdatingClaims(false);
         }
     }
 
-    //Updates state whenever the user change fields in the form
-    const handleFormInput = (e) => {
-        const { value, name } = e.target;
-        setForm({ ...form, [name]: value });
-    };
-
-    // To handle select form inputs.
-    const handleCountrySelectFormInput = value => {
-        setForm({ ...form, country: value })
-    }
-
-    const handleHsGradYearSelectFormInput = value => {
-        setForm({ ...form, hsGradYear: value })
-    }
 
     const handleHighlight1Emoji = (event, emojiObject) => {
-        setForm({ ...form, highlight1: {
-            emoji: emojiObject.emoji,
-            description: form.highlight1.description
-        }})
+        setValue("highlight1.emoji", emojiObject.emoji)
         setShowPicker1(false)
     };
 
     const handleHighlight2Emoji = (event, emojiObject) => {
-        setForm({ ...form, highlight2: {
-            emoji: emojiObject.emoji,
-            description: form.highlight2.description
-        }})
-        setShowPicker2(false)
+        setValue("highlight2.emoji", emojiObject.emoji)
+        setShowPicker1(false)
     };
+
 
     return (
         <div className="bg-gray-100 md:h-screen overflow-x-hidden flex justify-center md:items-center">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Sign Up | Speer Education</title>
+                <title>Onboarding | Speer Education</title>
             </Helmet>
-            {!updatingClaims ? <div className="flex flex-col md:flex-row  bg-white rounded-3xl onboardingForm shadow-xl">
-                <div className="flex-1 pr-2 py-3 onboardingForm__welcomeContainer">
-                    <img className="object-contain" src="/full-transparent-logo.png" alt="speer logo"/>
-                    <h1 className="text-3xl md:text-5xl font-bold -mt-8 pl-10 w-72 pb-3 md:pb-0">We're so <span style={{color: "#F08E17"}}>excited</span> for you to join us!</h1>
+            {!updatingClaims ? <div className="flex flex-col md:flex-row  bg-white rounded-2xl onboardingForm shadow-xl">
+                <div className="flex-1 pr-2 py-3 space-y-2 onboardingForm__welcomeContainer">
+                    <img className="object-contain w-[70%]" src="/full-transparent-logo.png" alt="speer logo"/>
+                    <h1 className="text-3xl md:text-5xl font-black -mt-8 pl-10 w-72 pb-3 md:pb-0">We're so <span style={{color: "#F08E17"}}>excited</span> for you to join us!</h1>
                     <p className=" pl-10 mt-3 text-gray-500">You can change these details later!</p>
                 </div>
                 <div className="flex-1 text-left p-12 relative">
                     <div className="flex flex-col">
                         {/* Looks weird on Mobile*/}
-                        <div className="mt-2">
-                            <Transition
-                                show={pageNumber === 1}
-                                enter="transform transition ease-linear duration-200"
-                                enterFrom="-translate-x-96 opacity-0"
-                                enterTo="translate-x-0 opacity-100 absolute"
-                                leave="transform transition ease-linear duration-200"
-                                leaveFrom="translate-x-0 opacity-100"
-                                leaveTo="translate-x-96 opacity-0 -translate-y-24 absolute"
-                            >
+                        <Slide
+                            direction="left" 
+                            in={pageNumber === 1} 
+                            mountOnEnter 
+                            unmountOnExit
+                        >
+                            <div className="mt-2">
                                 <FormRow>
                                     {/* Name */}
-                                    <InputField required type="text" className="md:w-64 mb-6 md:mb-0" label="What is your full name" placeholder="John Doe" id="fullname" name="name" value={form.name} onChange={handleFormInput} />
+                                    <InputField {...register('name', {required: true})} required type="text" className="md:w-64 mb-6 md:mb-0" label="What is your full name" placeholder="John Doe"/>
                                 </FormRow>
                                 <FormRow>
                                     {/* Date Of Birth */}
-                                    <Fragment>
-                                        <LocalizationProvider dateAdapter={DateAdapter}>
-                                            <MobileDatePicker
+                                    <Controller
+                                        control={control}
+                                        name="dateOfBirth"
+                                        rules={{required: true}}
+                                        render={({onChange, onBlur, value}) => (
+                                            <DatePicker
                                                 disableFuture
-                                                open={showDatePicker}
-                                                onClose={() => setShowDatePicker(false)}
+                                                label="Your Date of Birth"
                                                 inputFormat="dd/MM/yyyy"
                                                 name="dateOfBirth" 
-                                                value={form.dateOfBirth}    
-                                                onChange={val => setForm({ ...form, dateOfBirth: val.toLocaleString() })}
-                                                renderInput={({
-                                                    ref,
-                                                    inputProps,
-                                                    disabled,
-                                                    onChange,
-                                                    value,
-                                                }) => <div className="md:w-1/2 mb-6 md:mb-0 flex flex-row items-baseline" >
+                                                value={value}    
+                                                onBlur={onBlur}
+                                                onChange={val => onChange(val.toLocaleString())}
+                                                renderInput={(params) => 
+                                                    <div className="md:w-1/2 mb-6 md:mb-0 flex flex-row items-baseline" >
                                                         <InputField 
-                                                            required 
-                                                            ref={ref}
-                                                            value={value}
-                                                            label="Your Date of Birth"
+                                                            required
                                                             placeholder="dd/mm/yyyy"
-                                                            onChange={onChange}
-                                                            disabled={disabled} 
-                                                            {...inputProps}
-                                                            onClick={() => setShowDatePicker(true)} />
+                                                            {...params} />
                                                     </div>
                                                 }
                                             />
-                                        </LocalizationProvider>
-                                    </Fragment>
+                                        )}
+                                    />
                                 </FormRow>
                                 <FormRow>
-                                    <InputSelect required className="md:w-1/2 mb-6 md:mb-0" label="Country of Residence" id="country" name="country" options={countryOptions} value={form.country} onChange={handleCountrySelectFormInput} />
+                                    <Controller
+                                        control={control}
+                                        name="country"
+                                        rules={{required: true}}
+                                        render={({onChange, onBlur, value}) => (
+                                            <InputSelect 
+                                                required 
+                                                className="md:w-1/2 mb-6 md:mb-0" 
+                                                bel="Country of Residence"
+                                                options={countryOptions}/>
+                                        )}/>
                                 </FormRow>
-                            </Transition>
-                            <Transition
-                                show={pageNumber === 2}
-                                enter="transform transition ease-linear duration-200"
-                                enterFrom="-translate-x-96 opacity-0"
-                                enterTo="translate-x-0 opacity-100 absolute"
-                                leave="transform transition ease-linear duration-200"
-                                leaveFrom="translate-x-0 opacity-100"
-                                leaveTo="translate-x-96 opacity-0 translate-y-24 absolute"
-                            >
+                            </div>
+                        </Slide>
+                        <Slide
+                            direction="left" 
+                            in={pageNumber === 2} 
+                            mountOnEnter 
+                            unmountOnExit
+                        >
+                            <div className="mt-2">
                                 <FormRow>
                                     {/* Their school Name: */}
-                                    <InputField required type="text" className="md:w-64 mb-6 md:mb-0" label="Name of Your School" id="school" name="school" placeholder="Harvard University" value={form.school} onChange={handleFormInput} />
+                                    <InputField {...register('school', {required: true})}  required type="text" className="md:w-64 mb-6 md:mb-0" label="Name of Your School" id="school" name="school" placeholder="Harvard University"/>
                                     {/* Grade */}
                                 </FormRow>
                                 <FormRow>
-                                    <InputSelect required className="md:w-full mb-6 md:mb-0" label="Year Of Graduation from High School" id="hsGradYear" name="hsGradYear" options={gradeOptions} value={form.hsGradYear} onChange={handleHsGradYearSelectFormInput} />
+                                    <Controller
+                                        control={control}
+                                        name="hsGradYear"
+                                        rules={{required: true}}
+                                        render={({onChange, onBlur, value}) => (
+                                            <InputSelect 
+                                                required 
+                                                className="md:w-full mb-6 md:mb-0" 
+                                                label="Year Of Graduation from High School" 
+                                                options={gradeOptions}/>
+                                        )}/>
                                 </FormRow>
                                     {/* What they plan to major in */}
                                 <FormRow>
-                                    <InputField required type="text" className="md:w-64 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major" value={form.major} onChange={handleFormInput} />
+                                    <InputField {...register('major', {required: true})}  required type="text" className="md:w-64 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major"/>
                                 </FormRow>
-                            </Transition>
-                            <Transition
-                                show={pageNumber === 3}
-                                enter="transform transition ease-linear duration-200"
-                                enterFrom="-translate-x-96 opacity-0"
-                                enterTo="translate-x-0 opacity-100 absolute"
-                                leave="transform transition ease-linear duration-200"
-                                leaveFrom="translate-x-0 opacity-100"
-                                leaveTo="translate-x-96 opacity-0 -translate-y-24 absolute"
-                            >
+                            </div>
+                        </Slide>
+                        <Slide
+                            direction="left" 
+                            in={pageNumber === 3} 
+                            mountOnEnter 
+                            unmountOnExit
+                        >
+                            <div className="mt-2">
                                 <FormRow>
                                     <InputAreaField 
+                                        {...register('bio', {required: true})}
                                         required 
                                         className="resize-none"
                                         rows={3}
                                         maxLength={300} 
                                         type="text" 
-                                        id="bio" 
-                                        name="bio"
                                         label="Your Biography" 
-                                        placeholder="Tell us something about yourself........" 
-                                        value={form.bio} 
-                                        onChange={handleFormInput} />
+                                        placeholder="Tell us something about yourself........" />
                                 </FormRow>
                                 <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
                                     Show the world what you're proud of <span className="text-red-600">*</span>
@@ -286,29 +252,28 @@ export default function UserDetails() {
                                 <FormRow>
                                     {/* TODO: Change this to the emoji selecter */}
                                     <div className="px-3">
-                                        <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{form.highlight1.emoji || "Pick an emoji"}</Button>
+                                        <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{highlight1.emoji || "Pick an emoji"}</Button>
                                     </div>
                                     {showPicker1 ? <Picker onEmojiClick={handleHighlight1Emoji} pickerStyle={{ zIndex:1,position:"absolute",left: "130px" }} /> : null}
-                                    <InputField required type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="eg. Marketing Lead @ Amce Inc" id="highlight1" name="highlight1" value={form.highlight1.description} onChange={(e) => setForm({...form, highlight1: {emoji: form.highlight1.emoji, description: e.target.value}})}/>
+                                    <InputField {...register('highlight1.description', {required: true})} required type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="eg. Marketing Lead @ Amce Inc" id="highlight1" name="highlight1"/>
                                 </FormRow>
                                 <FormRow>
                                     {/* TODO: Change this to the emoji selecter */}
                                     <div className="px-3">
-                                        <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{form.highlight2.emoji || "Pick an emoji"}</Button>
+                                        <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{highlight2.emoji || "Pick an emoji"}</Button>
                                     </div>
                                     {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} pickerStyle={{ zIndex:1,position:"absolute",left: "130px" }} /> : null}
-                                    <InputField required type="text" className="md:w-3/4 mb-2 md:mb-0" autoWidth placeholder="eg. CEO @ Amce Labs" id="highlight2" name="highlight2" value={form.highlight2.description} onChange={(e) => setForm({...form, highlight2: {emoji: form.highlight2.emoji, description: e.target.value}})} />
+                                    <InputField {...register('highlight2.description', {required: true})} required type="text" className="md:w-3/4 mb-2 md:mb-0" autoWidth placeholder="eg. CEO @ Amce Labs" id="highlight2" name="highlight2"/>
                                 </FormRow>
-                            </Transition>
-                            <Transition
-                                show={pageNumber === 4}
-                                enter="transform transition ease-linear duration-200"
-                                enterFrom="-translate-x-96 opacity-0"
-                                enterTo="translate-x-0 opacity-100 absolute"
-                                leave="transform transition ease-linear duration-200"
-                                leaveFrom="translate-x-0 opacity-100"
-                                leaveTo="translate-x-96 opacity-0 translate-y-24 absolute"
-                            >
+                            </div>
+                        </Slide>
+                        <Slide
+                            direction="left" 
+                            in={pageNumber === 4} 
+                            mountOnEnter 
+                            unmountOnExit
+                        >
+                            <div className="mt-2">
                                 <p className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}}>
                                     Link your socials (optional):
                                 </p>
@@ -316,28 +281,28 @@ export default function UserDetails() {
                                     <div className={`px-3`}>
                                         <GitHub style={{ fontSize: 42 }}></GitHub>
                                     </div>                                
-                                    <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Github Link" value={form.socials.github} onChange={(e) => setForm({...form, socials : {...form.socials, github : e.target.value}})} />   
+                                    <InputField {...register('socials.github')} type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Github Link" />   
                                 </FormRow>
                                 <FormRow >
                                     <div className={`px-3`}>
                                         <LanguageOutlined style={{ fontSize: 42 }}></LanguageOutlined>
                                     </div>                                
-                                    <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Personal Website Link" value={form.socials.personal} onChange={(e) => setForm({...form, socials : {...form.socials, personal : e.target.value}})} />   
+                                    <InputField {...register('socials.personal')} type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Personal Website Link"/>   
                                 </FormRow>
                                 <FormRow>
                                     <div className={`px-3`}>
                                         <YouTubeIcon style={{ fontSize: 42 }}></YouTubeIcon>
                                     </div>                                
-                                    <InputField type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Youtube Link" value={form.socials.youtube} onChange={(e) => setForm({...form, socials : {...form.socials, youtube : e.target.value}})} />   
+                                    <InputField {...register('socials.youtube')} type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Youtube Link"/>   
                                 </FormRow>
-                            </Transition>
-                        </div>
-                        {pageNumber === 4? !isValidForm && <p className="mb-5 text-red-600">Please go back and fill all fields. Not all fields are filled.</p> : null}
+                            </div>
+                        </Slide>
+                        {pageNumber === 4? !isValid && <p className="mb-5 text-red-600">Please go back and fill all fields. Not all fields are filled.</p> : null}
                     </div>
                     <div className="absolute bottom-5 right-5 space-x-2">
                         {/* Only render the back button if not on first section*/}
                         {pageNumber !== 1 && <Button 
-                            disabled={submitting}
+                            disabled={isSubmitting}
                             onClick={() => setPageNumber(pageNumber-1)} 
                             variant="contained"
                             color="primary">Back
@@ -350,12 +315,12 @@ export default function UserDetails() {
                             Next
                         </Button> : <Button
                             type="submit"
-                            onClick={handleFormSubmit}
-                            disabled={!isValidForm || submitting}
+                            onClick={handleSubmit(onSubmit)}
+                            disabled={!isValid || isSubmitting}
                             variant="outlined"
                             color="secondary"
                         >
-                            {submitting ? <Spinner /> : "Submit"}
+                            {isSubmitting ? <Spinner /> : "Submit"}
                         </Button>}
                     </div>
                 </div>

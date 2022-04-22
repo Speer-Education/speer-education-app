@@ -16,6 +16,7 @@ const LazyLogin = lazy(() => import("./pages/Login/Login"))
 const LazyOnboarding = lazy(() => import("./pages/Onboarding/Onboarding"))
 const LazyMainApp = lazy(() => import("./container/MainApp/MainApp"))
 const LazyAdminApp = lazy(() => import("./container/AdminApp/AdminApp"))
+const LazyVerify = lazy(() => import("./pages/Login/Verify"))
 
 function App() {
 
@@ -58,7 +59,10 @@ function App() {
               <Route path="/onboarding" element={<LazyOnboarding />}/>
               <Route path="/admin/*" element={<LazyAdminApp />}/>
               {/* <Route path="*" component={NotFoundPage}/> */}
-            </>: <Route path={"/login"} element={<LazyLogin />}/>}
+              <Route path={"/verify"} element={<LazyVerify />}/>
+            </>: <>
+              <Route path={"/login"} element={<LazyLogin />}/>
+            </>}
             {user === null && <Route path="/" element={<Navigate to="/login" />}/>}
           </Routes>
         </Suspense>

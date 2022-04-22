@@ -7,7 +7,9 @@ import { createTheme, ThemeProvider, StyledEngineProvider, adaptV4Theme } from '
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
-
+import {SnackbarProvider} from 'notistack';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 const theme = createTheme({
   palette: {
     primary: {
@@ -26,11 +28,15 @@ ReactDOM.createRoot(
 <React.StrictMode>
   <StyledEngineProvider injectFirst>
     <ThemeProvider theme={theme}>
-      <Router>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </Router>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <SnackbarProvider maxSnack={3}>
+          <Router>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </Router>
+        </SnackbarProvider>
+      </LocalizationProvider>
     </ThemeProvider>
   </StyledEngineProvider>
 </React.StrictMode>

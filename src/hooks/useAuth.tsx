@@ -96,7 +96,10 @@ const useAuthProvider = () => {
         let { claims } = await user.getIdTokenResult(refresh);
         
         //If user hasn't completed setup, redirect to onboarding page
-        if (!claims.finishSetup && !location.pathname.startsWith('/onboarding')) {
+        if (user && user != null && !user.emailVerified) {
+            navigate("/verify");
+        }
+        else if (!claims.finishSetup && !location.pathname.startsWith('/onboarding')) {
             navigate('/onboarding');
         } else if(claims.finishSetup && (location.pathname.startsWith('/onboarding') || location.pathname.startsWith('/login'))) { //If user completed setup but is on onboarding page, redirect to app
             navigate('/');

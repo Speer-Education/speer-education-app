@@ -4,13 +4,6 @@
     height: 420px;
 }
 
-.onboardingForm__welcomeContainer{
-    border-right: 1px solid #F08E17;
-}
-
-.onboardingForm__welcomeContainer > img{
-    width: 92%;
-}
 
 @media (max-width: 767px){
     .onboardingForm{
