@@ -9,7 +9,7 @@ import {
 import ProfilePicture from '../User/ProfilePicture';
 import { SearchOutlined } from '@mui/icons-material';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
-import { forwardRef, ForwardRefExoticComponent, useRef } from 'react';
+import React, { forwardRef, ForwardRefExoticComponent, useRef } from 'react';
 import { logEvent } from '../../utils/analytics';
 import { Collapse } from '@mui/material';
 import { TransitionGroup } from "react-transition-group";

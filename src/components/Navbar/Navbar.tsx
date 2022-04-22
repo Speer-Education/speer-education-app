@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState } from 'react';
 // import SpeerLogo from '../images/speer-logo.png'; <-- This file is not actually transparent, used the image from the 123 instead.
 import { Link } from 'react-router-dom';

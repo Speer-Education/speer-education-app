@@ -1,4 +1,9 @@
-export default function EducationCard({userDetails, isUser}){
+//@ts-nocheck
+export default function EducationCard({userDetails, isUser, isMentor}: {
+    userDetails: UserDetails,
+    isUser: boolean,
+    isMentor: boolean,
+}){
     const { name, major, school } = userDetails || {};
     return (
         <div className="flex flex-col p-3 m-2 shadow-lg rounded-md bg-white space-y-3">

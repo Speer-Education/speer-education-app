@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import "slick-carousel/slick/slick.css"; 

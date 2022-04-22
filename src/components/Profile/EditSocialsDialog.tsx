@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Dialog } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import { db, firebase } from '../../config/firebase';

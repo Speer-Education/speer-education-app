@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useState, useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { db } from "../../config/firebase"; 

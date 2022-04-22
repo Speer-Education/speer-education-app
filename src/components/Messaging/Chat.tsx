@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState, useEffect, useRef, lazy } from 'react';
 import { Avatar, IconButton } from '@mui/material';
 import { AttachFile, EnhancedEncryptionSharp, Send } from '@mui/icons-material';
@@ -13,6 +14,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import imageCompression from 'browser-image-compression';
 import SendMessageLoader from '../Loader/SendMessageLoader';
 import { logEvent } from '../../utils/analytics';
+import { MessageDocument, MessageRoomDocument } from '../../types/Messaging';
 
 const LazyProfileCard = lazy(() => import('./ProfileCard'));
 const LazyAttachmentsCard = lazy(() => import('./AttachmentsCard'));
@@ -30,12 +32,12 @@ function Chat({screenSize}) {
 
     const [input, setInput] = useState("");
     const { roomId } = useParams();
-    const [roomDoc, setRoomDoc] = useState({});
+    const [roomDoc, setRoomDoc] = useState<MessageRoomDocument>();
     const [roomName, setRoomName] = useState(""); //Will have to reach out again and figure out what its room name is.
     const [roomPic, setRoomPic] = useState("");
     const [recipientId, setRecipientId] = useState();
     const [isMentor, setIsMentor] = useState();
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState<MessageDocument[]>([]);
     const [loading, setLoading] = useState(true);
     const [messageLoading, setMessageLoading] = useState(true);
     const [sendLoading, setSendLoading] = useState(false);
@@ -81,8 +83,14 @@ function Chat({screenSize}) {
             const unsub1 = db.collection('rooms').doc(roomId).onSnapshot(async (snapshot) => { //<-- Add an unsubscribe
                 //NO ERROR, ROOM EXISTS
                 setRoomDoesNotExistWarning(false);
+                //TODO: fixable after firebase migration
+                //@ts-ignore
+                const snapData = {
+                    id: snapshot.id,
+                    ref: snapshot.ref,
+                    ...(snapshot.data())
+                } as MessageRoomDocument
 
-                const snapData = snapshot.data()
                 setRoomDoc(snapData)
                 //If there is a name (it means it is a group chat)
                 
@@ -141,6 +149,7 @@ function Chat({screenSize}) {
     }, [fileSizeWarning])
 
     function handleUpdatedMessages(snapshot) {
+        if(!user) return;
         // append new messages to message array
         snapshot.forEach((message) => {
             //Update the message's read field for the user to true

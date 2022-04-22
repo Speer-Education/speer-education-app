@@ -17,7 +17,7 @@ export default function ProfilePicture({ uid, thumb = false, className, isRoom =
 } & React.HTMLAttributes<HTMLImageElement>) {
     const [url, setUrl] = useState("");
     const { user, appInstance } = useAuth();
-    const imageRef = useRef<HTMLImageElement>();
+    const imageRef = useRef<HTMLImageElement>(null);
 
     //Fetches the URL for the user's profile picture
     useEffect(() => {

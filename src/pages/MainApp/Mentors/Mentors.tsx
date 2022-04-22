@@ -11,22 +11,24 @@ import { logEvent } from '../../../utils/analytics';
 import { TransitionGroup } from "react-transition-group";
 import SlideTransition from '../../../components/SlideTransition/SlideTransition';
 import { Grow } from '@mui/material';
+import { MentorDetailsDocument } from '../../../types/User';
 
 const Mentors = () => {
 
     const { user, userDetails } = useAuth();
-    const [mentors, setMentors] = useState([]);
+    const [mentors, setMentors] = useState<MentorDetailsDocument[]>([]);
     const [mentorsLoaded, setMentorsLoaded] = useState(false);
 
 
     useEffect(() => {
+        if(!user) return;
         //Get all the mentors and set in mentors
         return db.collection('mentors').orderBy('_addedDate','desc').onSnapshot(snap => {
             const allMentors = snap.docs.map( doc => {
-                return { id: doc.id, ...doc.data()}
+                return { id: doc.id, ...doc.data()} as MentorDetailsDocument
             })
 
-            const currentMentors = allMentors.filter(({connectedMentees, id}) => !(connectedMentees || []).includes(user?.uid) && id !== user?.uid)
+            const currentMentors = allMentors.filter(({connectedMentees, id}) => !(connectedMentees || []).includes(user.uid) && id !== user?.uid)
 
             setMentors(currentMentors)
             logEvent('Loaded Mentors',{
@@ -48,6 +50,7 @@ const Mentors = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 grid-flow-row justify-start  gap-4 -mt-12 flex-1">
                         {mentors.map((props) => 
                             <Grow in timeout={50} key={props.id}>
+                                {/* @ts-ignore */}
                                 <MentorCard {...props} />
                             </Grow>
                         )}
@@ -63,7 +66,7 @@ const Mentors = () => {
             </div>
             <div className="hidden lg:flex flex-col lg:w-96">
                 <div className="fixed lg:w-96">
-                    <UserSmallProfileCard uid={user?.uid} userDetails={userDetails}/>
+                    {user && userDetails && <UserSmallProfileCard uid={user.uid} userDetails={userDetails}/>}
                     <StatsCard/>
                 </div>
             </div>

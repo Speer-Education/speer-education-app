@@ -15,6 +15,7 @@ import { EditOutlined } from '@mui/icons-material';
 import PostComposerCard from '../../../components/Dashboard/PostComposerCard';
 import NotFoundPage from '../../Fallback/NotFoundPage';
 import SlideTransition from '../../../components/SlideTransition/SlideTransition';
+import { UserDetails } from '../../../types/User';
 
 const LazyEditBiographyDialog = lazy(() => import('../../../components/Profile/EditBiographyDialog'));
 
@@ -22,7 +23,7 @@ function ProfilePage({ isUser=false }) {
     const navigate = useNavigate();
     const { profileId } = useParams();
     const { user, userDetails: currentUserDetails } = useAuth();
-    const [userDetails, setUserDetails] = useState({});
+    const [userDetails, setUserDetails] = useState<UserDetails>();
     const [isMentor, setIsMentor] = useState(false);
     const [loading, setLoading] = useState(true);
     const [openEditBio, setOpenEditBio] = useState(false);
@@ -51,7 +52,7 @@ function ProfilePage({ isUser=false }) {
             return;
         };
         return db.doc(`users/${profileId}`).onSnapshot(async snap => {
-            setUserDetails(snap.data());
+            setUserDetails(snap.data() as UserDetails);
 
             //THis means that profile does not exist
             if (!snap.data()){
@@ -105,7 +106,7 @@ function ProfilePage({ isUser=false }) {
                     </SlideTransition>
                     <div className=" hidden md:flex flex-col h-app w-sidebar pl-3 mr-6">
                         <div className="fixed flex flex-col cc_cursor h-app">
-                            <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMtr} />
+                            <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMtr!} />
                             <SocialsCard socials={socials} isUser={isUser}/>
                         </div>
                     </div>

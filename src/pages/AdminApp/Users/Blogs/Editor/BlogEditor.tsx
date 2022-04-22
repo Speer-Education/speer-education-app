@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { db, firebase } from '../../../../../config/firebase';

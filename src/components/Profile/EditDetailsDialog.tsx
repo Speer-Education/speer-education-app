@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Dialog } from '@headlessui/react';
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';

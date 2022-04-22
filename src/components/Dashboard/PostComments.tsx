@@ -1,7 +1,7 @@
 import { Button, Collapse, TextField } from "@mui/material";
 import React, { useState, useEffect, Fragment, forwardRef, ForwardRefExoticComponent } from "react"
 import TimeAgo from "react-timeago";
-import { db, firebase } from "../../config/firebase"
+import { db, docConverter, firebase } from "../../config/firebase"
 import { useAuth } from "../../hooks/useAuth";
 import ProfilePicture from "../User/ProfilePicture";
 import { getSnapshot } from '../../hooks/firestore';
@@ -25,7 +25,7 @@ let end = null        // end position of listener
 const DOCUMENTS_PER_PAGE = 5;
 
 export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>(({ post }, ref) => {
-    const [comments, loadMore, loading, finished] = usePaginateCollection(collection(db, 'posts', post.id, 'comments'), {
+    const [comments, loadMore, loading, finished] = usePaginateCollection(collection(db, 'posts', post.id, 'comments').withConverter(docConverter), {
         orderKey: 'commentedOn',
         direction: 'desc',
         pageLimit: DOCUMENTS_PER_PAGE

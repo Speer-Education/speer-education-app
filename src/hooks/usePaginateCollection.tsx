@@ -12,10 +12,12 @@ import {
     startAfter,
     Unsubscribe,
     QueryConstraint,
+    startAt,
 } from 'firebase/firestore';
 import { useEffect, useRef, useState } from 'react';
+import { useIsFirestoreRefEqual } from '../utils/firestoreHelper';
 
-const usePaginateCollection = <DocType extends DocumentData = DocumentData>(ref: CollectionReference<DocType>, {
+const usePaginateCollection = <DocType extends DocumentData = DocumentData>(colRef: CollectionReference<DocType>, {
     orderKey,
     direction,
     pageLimit,
@@ -41,25 +43,39 @@ const usePaginateCollection = <DocType extends DocumentData = DocumentData>(ref:
         listeners: []
     })
 
-    useEffect(() => {
-        //Clear all variables before reloading page.
+    const reset = () => {
+        detachListeners();
+        setDocuments([]);
+        setFinished(false);
+        setLoading(true);
         page.current = {
             start: null,
             end: null,
             listeners: []
         }
-        setDocuments([]);
+    }
+
+    const ref = useIsFirestoreRefEqual<CollectionReference<DocType>>(colRef, reset)
+    useEffect(() => {
+        if(!ref.current) {
+            setDocuments([])
+            setLoading(false)
+            setFinished(true);
+        }
+        reset()
         getDocuments();
 
         return () => detachListeners();
-    }, [ref])
+    }, [ref.current])
+
+    const opposite = direction === 'asc' ? 'desc' : 'asc';
 
     function handleUpdatedComments(snapshot: QuerySnapshot<DocType>) {
         setDocuments((prevDoc) => {
             let newDocuments: DocType[] = prevDoc.slice();
             snapshot.forEach((doc) => {
                 // filter out any duplicates (from modify/delete events)         
-                newDocuments = documents.filter(x => x.id !== doc.id)
+                newDocuments = newDocuments.filter(x => x.id !== doc.id)
                 newDocuments.push(doc.data())
             })
 
@@ -84,20 +100,36 @@ const usePaginateCollection = <DocType extends DocumentData = DocumentData>(ref:
     }
 
     async function getDocuments() {
+        if(!ref.current) return;
         // single query to get startAt snapshot
-        let snapshots = await getDocs<DocType>(query(ref, ...queryConstraints, orderBy('commentedOn', 'desc'), limit(pageLimit)))
-        // save startAt snapshot
-        page.current.end = snapshots.docs[snapshots.docs.length - 1]
-        // create listener using startAt snapshot (starting boundary)    
-        let listener = onSnapshot(page.current.end ?
-            query(ref, orderBy('commentedOn', 'desc'), endAt(page.current.end)) :
-            query(ref, orderBy('commentedOn', 'desc'))
-            , handleUpdatedComments)
-        // add listener to list
-        page.current.listeners.push(listener)
+        let snapshots = await getDocs<DocType>(query(ref.current, ...queryConstraints, orderBy(orderKey, direction), limit(pageLimit)))
+
+        //if no docs found, collection empty and is finished
+        if (snapshots.empty) {
+            // create listener using startAt snapshot (starting boundary)    
+            let listener = onSnapshot(
+                query(ref.current, ...queryConstraints, orderBy(orderKey, opposite))
+                , handleUpdatedComments)
+            // add listener to list
+            page.current.listeners.push(listener)
+            setFinished(true);
+            return;
+        } else {
+            // save startAt snapshot
+            page.current.end = snapshots.docs[snapshots.docs.length - 1]
+
+            // create listener using startAt snapshot (starting boundary)    
+            let listener = onSnapshot(
+                query(ref.current, ...queryConstraints, orderBy(orderKey, opposite), startAt(page.current.end))
+                , handleUpdatedComments)
+            // add listener to list
+            page.current.listeners.push(listener)
+        }
+
     }
 
     async function loadMore() {
+        if(!ref.current || finished) return;
         setLoading(true)
         if (!page.current.end) {
             setFinished(true);
@@ -105,8 +137,9 @@ const usePaginateCollection = <DocType extends DocumentData = DocumentData>(ref:
             return;
         }
         // single query to get new startAt snapshot
-        let snapshots = await getDocs<DocType>(query(ref,
-            orderBy('commentedOn', 'desc'),
+        let snapshots = await getDocs<DocType>(query(ref.current,
+            ...queryConstraints,
+            orderBy(orderKey, direction),
             startAfter(page.current.end),
             limit(pageLimit)
         ))
@@ -114,15 +147,16 @@ const usePaginateCollection = <DocType extends DocumentData = DocumentData>(ref:
         page.current.start = page.current.end
         page.current.end = snapshots.docs[snapshots.docs.length - 1]
         // create another listener using new boundaries     
-        if (!page.current) {
+        if (!page.current.end) {
             setFinished(true);
             setLoading(false)
             return;
         }
-        let listener = onSnapshot(query(ref,
-            orderBy('commentedOn', 'desc'),
-            endAt(page.current),
-            startAfter(page.current))
+        let listener = onSnapshot(query(ref.current,
+            ...queryConstraints,
+            orderBy(orderKey, opposite),
+            endAt(page.current.start),
+            startAt(page.current.end))
             , handleUpdatedComments)
         page.current.listeners.push(listener)
     }

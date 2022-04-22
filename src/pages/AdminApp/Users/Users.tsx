@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ReactTimeago from 'react-timeago';

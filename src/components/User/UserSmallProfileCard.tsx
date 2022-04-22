@@ -1,14 +1,18 @@
 import { useAuth } from "../../hooks/useAuth"
+import { UserDetailsToken } from "../../types/User";
 import ProfilePicture from "./ProfilePicture";
 import UserHighlight from "./UserHighlight";
 
-const UserSmallProfileCard = ({ userDetails, uid }) => {
+const UserSmallProfileCard = ({ userDetails, uid }: {
+    userDetails: UserDetailsToken,
+    uid: string
+}) => {
     const { user } = useAuth();
     const { name , major, school, highlight1, highlight2 } = userDetails || {};
     return <div className="p-3 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6">
         {!userDetails?.name ? <p>Loading...</p>:
         <><div className="flex flex-row space-x-2 items-center">
-            <ProfilePicture uid={uid} alt="user" className="w-28 h-28 rounded-full border-white border-8 border-solid shadow-lg"/>
+            <ProfilePicture uid={uid} className="w-28 h-28 rounded-full border-white border-8 border-solid shadow-lg"/>
             <div className="space-y-1 ">
                 <h3 className="font-semibold text-xl">{name}</h3>
                 <p className="text-md text-gray-600">{major} @ {school}</p>

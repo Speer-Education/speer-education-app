@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Button, IconButton } from "@mui/material";
 import { EditOutlined, ExitToAppOutlined, MessageOutlined } from "@mui/icons-material";
 import { lazy, useRef, useState } from "react";

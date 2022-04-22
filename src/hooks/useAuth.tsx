@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth, db, firebase, rtdb } from "../config/firebase";
-import { UserClaims, UserDetails } from "../types/User";
+import { UserClaims, UserDetails, UserDetailsToken } from "../types/User";
 import { logEvent, setUserProperties } from "../utils/analytics";
 import { useLocalStorage } from "./useHooks";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -35,7 +35,6 @@ export const useAuth = () => {
  * @returns { user, userDetails, signInWithEmailAndPassword, signOut, initGoogleSignIn, initFacebookSignIn }
  */
 
-type UserDetailsToken = UserDetails & UserClaims;
 
 //Use variable as userDetails might be immediately needed before react even renders
 let latestUserDetails: UserDetailsToken | null = null;

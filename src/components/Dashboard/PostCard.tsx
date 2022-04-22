@@ -35,7 +35,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
     const [postCollapsed, setPostCollapsed] = useState(false);
     const [oversizedPost, setOversizedPost] = useState(false);
     const { author, content, likeCount, commentCount, id, _createdOn } = post;
-    const { delta, html } = content;
+    const { delta, html = "" } = content || {};
     const [saving, setSaving] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [editedPostContent, setEditedPostContent] = useState<TypeDelta>(delta);

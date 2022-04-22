@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from 'react';
 import './ChatMessage.css';
 import TimeAgo from 'react-timeago';

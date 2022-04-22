@@ -9,13 +9,14 @@ import Spinner from '../Loader/Spinner';
 import { Button, Collapse } from '@mui/material';
 import { TransitionGroup } from "react-transition-group";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { MessageRoomDocument } from '../../types/Messaging';
 
 function Sidebar({screenSize}) {
     const location = useLocation();
     const navigate = useNavigate();
     const { user, userDetails } = useAuth();
 
-    const [rooms, setRooms] = useState([]);
+    const [rooms, setRooms] = useState<MessageRoomDocument[]>([]);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true)
 
@@ -36,7 +37,7 @@ function Sidebar({screenSize}) {
                         data: docData,
                         name: docData.roomName[user?.uid], //Straight away can put name there if there is a name for the group (will be the case for when multiple people)
                         pic: docData.picture || "" //TODO: No picture property, will need to add this for group rooms.
-                    }
+                    } as Partial<MessageRoomDocument>
                 } else {
                     const { isMentor, roomPic } = await findRoomPicAndIsMentor(docData);
 
@@ -46,14 +47,14 @@ function Sidebar({screenSize}) {
                         name: docData.roomName[user?.uid],
                         isMentor: isMentor,
                         pic: roomPic,
-                    }
+                    } as Partial<MessageRoomDocument>
                 }
             })).then(res => {
                 if(res.length > 0 && location.pathname === '/messages' && screenSize >= 1) {
                     navigate(`/messages/${res[0].id}`);
                 }
                 setLoading(false)
-                setRooms(res)
+                setRooms(res as MessageRoomDocument[])
             })
             
         })
@@ -80,7 +81,7 @@ function Sidebar({screenSize}) {
     return (
         <div className="flex flex-col flex-1 rounded-md bg-white m-2 shadow-lg" style={{maxHeight: `${screenSize >= 1 ? "calc(100vh - 20rem)" : "100%"}`}}>
             <div className="flex justify-between items-center px-4 py-3">
-                <ProfilePicture uid={user?.uid} className="h-8 w-8 rounded-full"/>
+                <ProfilePicture uid={user!.uid} className="h-8 w-8 rounded-full"/>
                 <h1 className="sidebar__headerUsername">{userDetails?.name}</h1>
             </div>
             <div className="sidebar__searchContainer">
@@ -91,9 +92,10 @@ function Sidebar({screenSize}) {
             </div>
             <div className="flex flex-col overflow-y-auto flex-1">
                 <TransitionGroup>
-                    {rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase())).map(room => {
+                    {rooms.filter(room => room.name!.toLowerCase().includes(search.toLowerCase())).map(room => {
                         return <Collapse>
-                            <SidebarChat key={room?.id} id={room?.id} roomName={room.name} isMentor={room.isMentor} roomPic={room.pic} read={(room.data.lastMessage.read || {})[user?.uid] !== false}/>
+                        {/* @ts-ignore */}
+                            <SidebarChat key={room?.id} id={room!.id} roomName={room.name!} isMentor={room!.isMentor} roomPic={room!.pic} read={(room.data!.lastMessage.read || {})[user!.uid] !== false}/>
                         </Collapse>
                     })}
                 </TransitionGroup>

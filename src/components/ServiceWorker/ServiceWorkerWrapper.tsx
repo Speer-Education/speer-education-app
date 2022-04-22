@@ -4,7 +4,7 @@ import * as serviceWorker from '../../serviceWorkerRegistration';
 
 const ServiceWorkerWrapper = () => {
   const [showReload, setShowReload] = useState(false);
-  const [waitingWorker, setWaitingWorker] = useState(null);
+  const [waitingWorker, setWaitingWorker] = useState<ServiceWorker>();
 
   const onSWUpdate = (registration) => {
     setShowReload(true);
@@ -16,9 +16,11 @@ const ServiceWorkerWrapper = () => {
   }, []);
 
   const reloadPage = () => {
-    waitingWorker?.postMessage({ type: 'SKIP_WAITING' });
-    setShowReload(false);
-    window.location.reload();
+    if(waitingWorker) {
+      waitingWorker?.postMessage({ type: 'SKIP_WAITING' });
+      setShowReload(false);
+      window.location.reload();
+    }
   };
 
   return (

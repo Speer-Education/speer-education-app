@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
 import { useAuth } from '../../hooks/useAuth';
+import {Relation, UserDetails, UserDetailsDocument} from '../../types/User';
 
 export default function ContactsSidebar({ profileId, userDetails, isUser }) {
 
-    const [followers, setFollowers] = useState([]);
+    const [followers, setFollowers] = useState<UserDetailsDocument[]>([]);
     const { user } = useAuth();
     const [followersLoaded, setFollowersLoaded] = useState(false);
 
@@ -23,8 +24,8 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }) {
                 const userRef = db.collection('users').doc(followerId);
                 const userData = await userRef.get();
 
-                return {id: userData.id, ...userData.data()}
-            }));
+                return {id: userData.id, ...userData.data()} as Partial<UserDetailsDocument>
+            })) as UserDetailsDocument[];
             setFollowers(list);
             setFollowersLoaded(true)
         })

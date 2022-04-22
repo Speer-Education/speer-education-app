@@ -8,9 +8,9 @@ import { useAuth } from '../../hooks/useAuth';
  * @returns 
  */
 export default function BannerPicture({ uid, forceRefresh, ...params }) {
-    const [url, setUrl] = useState(false);
+    const [url, setUrl] = useState<string>();
     const { user, appInstance } = useAuth();
-    const imageRef = useRef();
+    const imageRef = useRef<HTMLImageElement>(null);
 
     //Fetches the URL for the user's profile picture
     useEffect(() => {
@@ -24,7 +24,7 @@ export default function BannerPicture({ uid, forceRefresh, ...params }) {
             src={url}
             alt="banner"
             onError={(e) => { 
-                if (imageRef.current.src != '/banner_placeholder.png') imageRef.current.src = '/banner_placeholder.png';
+                if (imageRef.current!.src != '/banner_placeholder.png') imageRef.current!.src = '/banner_placeholder.png';
             }}
             {...params}
         />

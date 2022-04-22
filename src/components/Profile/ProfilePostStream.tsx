@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useEffect, useState } from 'react';
 import InView from 'react-intersection-observer';
 import { db } from '../../config/firebase';

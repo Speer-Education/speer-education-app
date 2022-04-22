@@ -62,5 +62,14 @@ export type UserClaims = {
     isMtr: boolean;
     _lastCommitted: Timestamp;
 }
+
+export type Relation = {
+    createdAt: Timestamp;
+    followerId: string;
+    followedId: string;
+    isMtr: boolean;
+    roomId: string;
+}
+export type UserDetailsToken = UserDetails & UserClaims;
 export type UserDetailsDocument = UserDetails & InternalDoc
 export type MentorDetailsDocument = MentorDetails & InternalDoc;

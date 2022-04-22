@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { IconButton } from '@mui/material';
 import { EditOutlined, GitHub, LanguageOutlined, YouTube } from '@mui/icons-material';
 import React, { useState } from 'react';

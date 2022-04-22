@@ -5,16 +5,24 @@ import { Link, useLocation, useMatch, useNavigate } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import { Message, MessageRoom } from '../../types/Messaging';
 
-const SidebarChat = forwardRef(({ id, roomName, isMentor, roomPic, read }, ref) =>{
+const SidebarChat = forwardRef<HTMLDivElement, {
+    id: string,
+    roomName: string,
+    isMentor?: boolean,
+    roomPic: string,
+    read: boolean,
+}>(({ id, roomName, isMentor = false, roomPic, read }, ref) =>{
     const { user } = useAuth();
-    const [messages, setMessages] = useState('');
+    const [messages, setMessages] = useState<Message>();
     const location = useLocation();
     //Fetches the latest message for display
     useEffect(() => {
         if (id) {
             return db.collection('rooms').doc(id).onSnapshot(doc => {
-                setMessages(doc.data().lastMessage)
+                const roomDoc = doc.data() as MessageRoom
+                setMessages(roomDoc.lastMessage)
             })
         }
     }, [id])

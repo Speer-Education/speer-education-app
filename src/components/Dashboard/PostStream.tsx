@@ -9,11 +9,6 @@ import usePaginateCollection from '../../hooks/usePaginateCollection';
 import { PostDocument } from '../../types/Posts';
 import InView from 'react-intersection-observer';
 
-let postsArray = []
-let listeners = []    // list of listeners
-let start = null      // start position of listener
-let end = null        // end position of listener
-
 const DOCUMENTS_PER_PAGE = 3;
 
 /**
