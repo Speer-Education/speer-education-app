@@ -1,6 +1,4 @@
-//@ts-nocheck
-
-import React, { useState, useMemo, Fragment } from 'react';
+import { useState } from 'react';
 import './Onboarding.css';
 import { gradeOptions, countryOptions } from './OnboardingConfig';
 import { functions } from '../../config/firebase';
@@ -13,11 +11,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import { InputAreaField, InputField, InputSelect } from '../../components/Forms/Inputs';
-import { Transition } from "@headlessui/react";
-import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useAuth } from '../../hooks/useAuth';
 import * as Sentry from "@sentry/react";
 import { Controller, useForm } from 'react-hook-form';
@@ -28,19 +22,46 @@ const FormRow = ({ children }) => (
     <div className="flex flex-wrap -mx-3 mb-6">{children}</div>
 )
 
+type FormValues = {
+    name: string,
+    hsGradYear: {
+        value: string
+        label: string
+    },
+    dateOfBirth: Date
+    country: {
+        value: string
+        label: string
+    },
+    school: string
+    major: string
+    bio: string
+    highlight1: {
+        emoji: string,
+        description: string
+    },
+    highlight2: {
+        emoji: string,
+        description: string
+    },
+    socials: {
+        github: string
+        personal: string
+        youtube: string
+    }
+}
 
 export default function UserDetails() {
     const { getUserTokenResult } = useAuth();
     const [pageNumber, setPageNumber] = useState(1);
-    const { register, control, handleSubmit, watch, setValue, formState: { isValid, isSubmitting } } = useForm({
-        mode: 'onChange',
+    const { register, control, handleSubmit, watch, setValue, formState: { isValid, isSubmitting } } = useForm<FormValues>({
+        mode: 'all',
         defaultValues: {
             name: "",
             hsGradYear: {
                 value: "",
                 label: ""
             },
-            dateOfBirth: "",
             country: {
                 value: "",
                 label: ""
@@ -63,14 +84,15 @@ export default function UserDetails() {
             }
         }
     });
-
+    const [showDatePicker, setShowDatePicker] = useState(false);
     const [updatingClaims, setUpdatingClaims] = useState(false);
     const [showPicker1, setShowPicker1] = useState(false);
     const [showPicker2, setShowPicker2] = useState(false);
     const [showError, setShowError] = useState(false);
     const highlight1 = watch('highlight1')
     const highlight2 = watch('highlight2')
-
+    const form = watch()
+    console.log(form)
     const callOnboarding = async (numTries, form) => {
         if (numTries > 9){
             throw new Error ("Onboarding function failed too many times")
@@ -83,17 +105,20 @@ export default function UserDetails() {
     }
 
     //To submit the form when the user hits submit (Yet to implement)
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: FormValues) => {
         // Only submit if the entered a name
-        if (isValidForm === true) {
+        if (isValid === true) {
             console.log("Valid Form")
         } else {
             // Trigger some sort of UI to tell the user they need to fill up all the inputs
             console.log("Submission unsuccessful, please fill up all the inputs")
         }
-        const submitForm = data;
-        submitForm.country = data.country.label;
-        submitForm.hsGradYear = data.hsGradYear.label;
+        const submitForm = {
+            ...data,
+            country: data.country.label,
+            hsGradYear: data.hsGradYear.label,
+            dateOfBirth: data.dateOfBirth.toLocaleString()
+        };
         try {
             await callOnboarding(0, submitForm)
             console.log('onBoarding setup was successful, attempting to get finishSetup token')
@@ -125,7 +150,7 @@ export default function UserDetails() {
 
     const handleHighlight2Emoji = (event, emojiObject) => {
         setValue("highlight2.emoji", emojiObject.emoji)
-        setShowPicker1(false)
+        setShowPicker2(false)
     };
 
 
@@ -157,42 +182,58 @@ export default function UserDetails() {
                                 </FormRow>
                                 <FormRow>
                                     {/* Date Of Birth */}
-                                    <Controller
-                                        control={control}
-                                        name="dateOfBirth"
-                                        rules={{required: true}}
-                                        render={({onChange, onBlur, value}) => (
-                                            <DatePicker
-                                                disableFuture
-                                                label="Your Date of Birth"
-                                                inputFormat="dd/MM/yyyy"
-                                                name="dateOfBirth" 
-                                                value={value}    
-                                                onBlur={onBlur}
-                                                onChange={val => onChange(val.toLocaleString())}
-                                                renderInput={(params) => 
-                                                    <div className="md:w-1/2 mb-6 md:mb-0 flex flex-row items-baseline" >
+                                    <div className="md:w-1/2 mb-6 md:mb-0 flex flex-row items-baseline" >
+                                        <Controller
+                                            control={control}
+                                            name="dateOfBirth"
+                                            rules={{required: true}}
+                                            render={({ field: { onChange, onBlur, value, ref }}) => (
+                                                <DatePicker
+                                                    disableFuture
+                                                    open={showDatePicker}
+                                                    onClose={() => setShowDatePicker(false)}
+                                                    label="Your Date of Birth"
+                                                    inputFormat="dd/MM/yyyy"
+                                                    value={value}    
+                                                    onChange={onChange}
+                                                    renderInput={({ 
+                                                        ref,
+                                                        inputProps,
+                                                        disabled,
+                                                        onChange,
+                                                        value
+                                                    }) => 
                                                         <InputField 
                                                             required
+                                                             //@ts-ignore
+                                                            ref={ref}
+                                                            value={value}
+                                                            label="Your Date of Birth"
+                                                            disabled={disabled}
                                                             placeholder="dd/mm/yyyy"
-                                                            {...params} />
-                                                    </div>
-                                                }
-                                            />
-                                        )}
-                                    />
+                                                            onChange={onChange}
+                                                            //@ts-ignore
+                                                            onClick={(e) => setShowDatePicker(true)}
+                                                            {...inputProps} />
+                                                    }
+                                                />
+                                            )}
+                                        />
+                                    </div>
                                 </FormRow>
                                 <FormRow>
                                     <Controller
                                         control={control}
                                         name="country"
                                         rules={{required: true}}
-                                        render={({onChange, onBlur, value}) => (
+                                        render={({field: {onChange, value}}) => (
                                             <InputSelect 
                                                 required 
                                                 className="md:w-1/2 mb-6 md:mb-0" 
                                                 bel="Country of Residence"
-                                                options={countryOptions}/>
+                                                options={countryOptions}
+                                                value={value}
+                                                onChange={onChange}/>
                                         )}/>
                                 </FormRow>
                             </div>
@@ -214,12 +255,14 @@ export default function UserDetails() {
                                         control={control}
                                         name="hsGradYear"
                                         rules={{required: true}}
-                                        render={({onChange, onBlur, value}) => (
+                                        render={({ field: { onChange, value }}) => (
                                             <InputSelect 
                                                 required 
                                                 className="md:w-full mb-6 md:mb-0" 
                                                 label="Year Of Graduation from High School" 
-                                                options={gradeOptions}/>
+                                                options={gradeOptions}
+                                                value={value}
+                                                onChange={onChange}/>
                                         )}/>
                                 </FormRow>
                                     {/* What they plan to major in */}
@@ -240,6 +283,7 @@ export default function UserDetails() {
                                         {...register('bio', {required: true})}
                                         required 
                                         className="resize-none"
+                                        //@ts-ignore
                                         rows={3}
                                         maxLength={300} 
                                         type="text" 
@@ -254,16 +298,34 @@ export default function UserDetails() {
                                     <div className="px-3">
                                         <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{highlight1.emoji || "Pick an emoji"}</Button>
                                     </div>
-                                    {showPicker1 ? <Picker onEmojiClick={handleHighlight1Emoji} pickerStyle={{ zIndex:1,position:"absolute",left: "130px" }} /> : null}
-                                    <InputField {...register('highlight1.description', {required: true})} required type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="eg. Marketing Lead @ Amce Inc" id="highlight1" name="highlight1"/>
+                                    {showPicker1 ? <Picker 
+                                        onEmojiClick={handleHighlight1Emoji} 
+                                        pickerStyle={{ zIndex:"1",position:"absolute",left: "130px" }} /> : null}
+                                    <InputField 
+                                        {...register('highlight1.description', {required: true})} 
+                                        required 
+                                        type="text" 
+                                        label=""
+                                        className="md:w-3/4 mb-6 md:mb-0" 
+                                        autoWidth 
+                                        placeholder="eg. Marketing Lead @ Amce Inc" />
                                 </FormRow>
                                 <FormRow>
                                     {/* TODO: Change this to the emoji selecter */}
                                     <div className="px-3">
                                         <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{highlight2.emoji || "Pick an emoji"}</Button>
                                     </div>
-                                    {showPicker2 ? <Picker onEmojiClick={handleHighlight2Emoji} pickerStyle={{ zIndex:1,position:"absolute",left: "130px" }} /> : null}
-                                    <InputField {...register('highlight2.description', {required: true})} required type="text" className="md:w-3/4 mb-2 md:mb-0" autoWidth placeholder="eg. CEO @ Amce Labs" id="highlight2" name="highlight2"/>
+                                    {showPicker2 ? <Picker 
+                                        onEmojiClick={handleHighlight2Emoji} 
+                                        pickerStyle={{ zIndex:"1",position:"absolute",left: "130px" }} /> : null}
+                                    <InputField 
+                                        {...register('highlight2.description', {required: true})} 
+                                        required 
+                                        type="text" 
+                                        label=""
+                                        className="md:w-3/4 mb-2 md:mb-0" 
+                                        autoWidth 
+                                        placeholder="eg. CEO @ Amce Labs" />
                                 </FormRow>
                             </div>
                         </Slide>
@@ -281,19 +343,19 @@ export default function UserDetails() {
                                     <div className={`px-3`}>
                                         <GitHub style={{ fontSize: 42 }}></GitHub>
                                     </div>                                
-                                    <InputField {...register('socials.github')} type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Github Link" />   
+                                    <InputField {...register('socials.github')} type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Github Link" label=""/>   
                                 </FormRow>
                                 <FormRow >
                                     <div className={`px-3`}>
                                         <LanguageOutlined style={{ fontSize: 42 }}></LanguageOutlined>
                                     </div>                                
-                                    <InputField {...register('socials.personal')} type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Personal Website Link"/>   
+                                    <InputField {...register('socials.personal')} type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Personal Website Link" label=""/>   
                                 </FormRow>
                                 <FormRow>
                                     <div className={`px-3`}>
                                         <YouTubeIcon style={{ fontSize: 42 }}></YouTubeIcon>
                                     </div>                                
-                                    <InputField {...register('socials.youtube')} type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Youtube Link"/>   
+                                    <InputField {...register('socials.youtube')} type="text" className="md:w-3/4 mb-6 md:mb-0" autoWidth placeholder="Youtube Link" label=""/>   
                                 </FormRow>
                             </div>
                         </Slide>

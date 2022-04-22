@@ -1,6 +1,7 @@
 import React, { forwardRef, useState } from "react";
 import Select from 'react-select';
-import Input from '@mui/material/Input'
+import InputBase from '@mui/material/InputBase'
+import { InputBaseProps } from '@mui/material'
 type Props = {
     label: string,
     required?: boolean,
@@ -8,7 +9,7 @@ type Props = {
     type?: string,
     name?: string
 }
-const InputField = forwardRef<HTMLInputElement, ( Props & React.HTMLAttributes<HTMLInputElement>)>(({ className, label, id, required = false, onChange, autoWidth, ...props }, ref) => {
+const InputField = forwardRef<InputBaseProps, ( Props & InputBaseProps)>(({ className, label, id, required = false, onChange, autoWidth, ...props }, ref) => {
     const [empty, setEmpty] = useState(false);
 
     const handleInputChange = e => {
@@ -20,27 +21,30 @@ const InputField = forwardRef<HTMLInputElement, ( Props & React.HTMLAttributes<H
         {label && <label className="block titlecase tracking-wide text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>}
-        <Input ref={ref} 
+        <InputBase ref={ref} 
             className={`appearance-none block w-full ${empty && required ? "bg-red-100" : "bg-gray-200"} text-gray-700 placeholder-gray-400 border-0 focus:border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-gray-300 focus:border-gray-500`}
             id={id}
             onChange={handleInputChange}
+            size="small"
             {...props} />
     </div>
 })
 
-const InputAreaField = ({ className, label, id, required = false, ...props }: ({
-   required?: boolean, 
-   label: string
-} & React.HTMLAttributes<HTMLTextAreaElement>)) => {
+type InputAreaProps = { 
+    required?: boolean,  
+    label: string
+ }
+
+const InputAreaField = forwardRef<HTMLTextAreaElement, (InputAreaProps & React.HTMLAttributes<HTMLTextAreaElement>)>(({ className, label, id, required = false, ...props }, ref) => {
     return <div className={`w-full px-3 ${className}`}>
         {label && <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>}
-        <textarea className="appearance-none block w-full bg-gray-200 text-gray-700 border-0 focus:border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        <textarea ref={ref} className="appearance-none block w-full bg-gray-200 text-gray-700 border-0 focus:border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id={id}
             {...props} />
     </div>
-}
+})
 
 const selectStyle = {
     option: (provided, state) => ({
@@ -70,7 +74,12 @@ const selectStyle = {
   }
   
 
-const InputSelect = ({ className, label, id, required = false, ...props }) => {
+const InputSelect = ({ className="", label="", id, required = false, ...props } : {
+    required?: boolean,
+    className?: string,
+    label?: string,
+    id: string
+} & React.ComponentProps<typeof Select>) => {
     return <div className={`w-full px-3 ${className}`}>
         <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
