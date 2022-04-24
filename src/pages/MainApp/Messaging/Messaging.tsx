@@ -7,10 +7,8 @@ import { Helmet } from "react-helmet";
 import { useMediaQuery } from 'react-responsive'
 import StatsCard from '../../../components/Dashboard/StatsCard';
 import SlideTransition from '../../../components/SlideTransition/SlideTransition';
-//Might make this a container since it now does routing as well.
+import Zoom from '@mui/material/Zoom';
 
-// Should eventually make this responsive, mobile version will not show the sidebar and messaging section 
-//at the same time. When the person is clicked it shows the messaging section only, with an arrow to leave back to menu.
 function Messaging() {
 
     const [screenSize, setScreenSize] = useState(3);
@@ -37,27 +35,28 @@ function Messaging() {
     }, [isScreenXtraLarge, isScreenLarge, isScreenMedium])
     console.log(screenSize)
     return (
-        <div className="messaging h-app">
-            <Helmet>
-                <meta charSet="utf-8" />
-                <title>Messaging | Speer Education</title>
-            </Helmet>
-            <SlideTransition in timeout={50}>
+        <Zoom in={true} >
+            <div className="messaging h-app">
+                <Helmet>
+                    <meta charSet="utf-8" />
+                    <title>Messaging | Speer Education</title>
+                </Helmet>
                 <div className="flex flex-row h-full max-h-full w-screen">
                     {screenSize >= 1 ?
+                        // Laptop and Ipad
                         <div className="flex flex-col h-full h-app" style={{ width: `${leftSideSize}` }}>
                             <Sidebar screenSize={screenSize}/>
                             <StatsCard />
                         </div>
-                        : (isSidebarOnly && <div className="flex flex-col h-full ml-auto mr-auto h-app" style={{ width: `98%` }}>
+                        : /* Phone */(isSidebarOnly && <div className="flex flex-col h-full ml-auto mr-auto h-app" style={{ width: `98%` }}>
                             <Sidebar screenSize={screenSize}/>
                         </div>)}
                     <Routes>
                         <Route path={`/:roomId`} element={<Chat screenSize={screenSize} />}/>
                     </Routes>
                 </div>
-            </SlideTransition>
-        </div>
+            </div>
+        </Zoom>
     )
 }
 

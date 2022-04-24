@@ -110,7 +110,7 @@ export default function Login() {
                                 rules={{ required: true }}
                                 type="password"
                                 />
-                            <Button onClick={handleSubmit(onLogIn)}>Login</Button>
+                            <Button onClick={handleSubmit(onLogIn)}>Sign Up/Login</Button>
                         </div>
                         <Button type="submit" onClick={googleSignIn} variant="contained" color="primary" startIcon={<i className="fab fa-google"></i>}>Sign In With Google</Button>
 

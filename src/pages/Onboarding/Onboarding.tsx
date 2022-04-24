@@ -230,7 +230,7 @@ export default function UserDetails() {
                                             <InputSelect 
                                                 required 
                                                 className="md:w-1/2 mb-6 md:mb-0" 
-                                                bel="Country of Residence"
+                                                label="Country of Residence"
                                                 options={countryOptions}
                                                 value={value}
                                                 onChange={onChange}/>

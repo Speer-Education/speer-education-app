@@ -9,9 +9,10 @@ import UserSmallProfileCard from '../../../components/User/UserSmallProfileCard'
 import { useAuth } from '../../../hooks/useAuth';
 import { logEvent } from '../../../utils/analytics';
 import { TransitionGroup } from "react-transition-group";
-import SlideTransition from '../../../components/SlideTransition/SlideTransition';
+// import SlideTransition from '../../../components/SlideTransition/SlideTransition';
 import { Grow } from '@mui/material';
 import { MentorDetailsDocument } from '../../../types/User';
+import Zoom from '@mui/material/Zoom';
 
 const Mentors = () => {
 
@@ -39,7 +40,7 @@ const Mentors = () => {
         })
     },[user?.uid])
 
-    return (<SlideTransition in timeout={50}>
+    return (<Zoom in={true} >
         <div className="mentors h-app">
             <Helmet>
                 <meta charSet="utf-8" />
@@ -71,7 +72,7 @@ const Mentors = () => {
                 </div>
             </div>
         </div>
-    </SlideTransition>);
+    </Zoom>);
 }
 
 export default Mentors;
