@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { db, docConverter } from '../../config/firebase';
+import { db, docConverter, postConverter } from '../../config/firebase';
 import { getSnapshot } from '../../hooks/firestore';
 import { useAuth } from '../../hooks/useAuth';
 import PostCard from './PostCard';
@@ -18,7 +18,7 @@ const DOCUMENTS_PER_PAGE = 3;
  */
 const PostStream = () => {
     const { user } = useAuth();
-    const [streamPosts, loadMore, loading, finished] = usePaginateCollection<PostDocument>(collection(db, 'posts').withConverter(docConverter), {
+    const [streamPosts, loadMore, loading, finished] = usePaginateCollection<PostDocument>(collection(db, 'stage_posts').withConverter(postConverter), {
         orderKey: '_createdOn',
         direction: 'desc',
         pageLimit: DOCUMENTS_PER_PAGE

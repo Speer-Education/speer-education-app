@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MDEditor } from '../Blog/Editor/mdeditor';
 import { Button, TextField } from '@mui/material';
 import './PostComposerCard.css'
-import { db, firebase } from '../../config/firebase';
+import { db, firebase, postConverter } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import ProfilePicture from '../User/ProfilePicture';
 import { Image, YouTube } from '@mui/icons-material';
@@ -10,8 +10,11 @@ import { Dialog } from '@headlessui/react';
 import DialogBase from '../Dialog/DialogBase';
 import { logEvent } from '../../utils/analytics';
 import SlideTransition from '../SlideTransition/SlideTransition';
-import { Delta as TypeDelta } from 'quill';
+import { Delta } from 'quill';
 import ReactQuill from 'react-quill';
+import { collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { PostDocument } from '../../types/Posts';
+import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
 
 const AddImageButton = ({fileCallback}) => (<>
     <input id="uwu" type="file" name="file" accept="image/*" onChange={({ target }) => target.files && fileCallback(target.files[0])} hidden />
@@ -77,31 +80,33 @@ const AddYoutubeDialog =({ open, onClose, onUrl }) => {
  * @returns Component
  */
 const PostComposerCard = () => {
-    const [postContent, setPostContent] = useState<TypeDelta>();
+    const [postContent, setPostContent] = useState<Delta>();
     const [saving, setSaving] = useState<boolean>(false);
     const { user } = useAuth();
     const editor = useRef<ReactQuill>(null)
-    const [docId, setDocId] = useState(db.collection('posts').doc().id);
+    const [docId, setDocId] = useState(doc(collection(db, 'stage_posts')).id);
 
     useEffect(() => {
         if(saving) return;
-        setDocId(db.collection('posts').doc().id)
+        setDocId(doc(collection(db, 'stage_posts')).id)
     }, [saving]);
 
     //Save the post the user created
     const createNewPost = async () => {
-        console.log(postContent)
-        // if(!user) return;
-        // if(!docId) return;
-        // setSaving(true) //set saving to true to show loading
-        // await db.doc('posts/' + docId).set({
-        //     author: user.uid,
-        //     body: postContent,
-        //     _createdOn: firebase.firestore.Timestamp.now(),
-        // })
-        // setSaving(false)
-        // logEvent('post_created')
-        // setPostContent("") //reset editor content
+        if(!user || !docId || !postContent) return;
+        setSaving(true) //set saving to true to show loading
+        await setDoc(doc(db, 'stage_posts', docId).withConverter(postConverter), {
+            content: {
+                delta: postContent,
+                html: new QuillDeltaToHtmlConverter(postContent.ops || []).convert()
+            },
+            author: user.uid,
+            _createdOn: serverTimestamp(),
+            _updatedOn: serverTimestamp()
+        } as Partial<PostDocument>)
+        setSaving(false)
+        logEvent('post_created')
+        setPostContent(editor.current?.editor?.setContents(new Delta())) //reset editor content
     }
     
 

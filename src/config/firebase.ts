@@ -7,6 +7,8 @@ import "firebase/compat/functions";
 import "firebase/compat/analytics";
 import { isDevelopment } from "../utils/environment";
 import { DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore';
+import {PostDocument, UserPostData} from '../types/Posts';
+import { Delta } from 'quill';
 const firebaseConfig = {
   apiKey: "AIzaSyAx-OEKEZF6LgX5wv03qRilbGTWIJvL4kw",
   authDomain: 'auth.speeredu.com',
@@ -78,6 +80,34 @@ export const docConverter = {
       id: snapshot.id,
       ref: snapshot.ref,
       ...data,
+    };
+  },
+};
+
+export const postConverter = {
+  toFirestore(doc: PostDocument): DocumentData {
+      const { id, ref, content, ...docWithoutId } = doc;
+      return {
+        ...docWithoutId,
+        content: {
+          ...content,
+          delta: JSON.stringify(content.delta)
+        }
+      };
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions
+  ): PostDocument {
+    const data = snapshot.data(options) as Omit<UserPostData, 'content'> & { content: { delta: string, html: string } };
+    return {
+      id: snapshot.id,
+      ref: snapshot.ref,
+      ...data,
+      content: {
+        ...data.content,
+        delta: JSON.parse(data.content.delta)
+      }
     };
   },
 };

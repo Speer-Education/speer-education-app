@@ -10,7 +10,6 @@ export type UserPostData = {
     views: number,
     commentCount: number,
     likeCount: number,
-    organization: string | null,
     _updatedOn: Timestamp,
     _createdOn: Timestamp,
 }

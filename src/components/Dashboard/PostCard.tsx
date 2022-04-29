@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MDEditor } from '../Blog/Editor/mdeditor';
-import { db, firebase } from '../../config/firebase';
+import { db, firebase, postConverter } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -19,7 +19,9 @@ import { TransitionGroup } from 'react-transition-group';
 import { useNavigate } from 'react-router-dom';
 import { UserDetails } from '../../types/User';
 import { PostDocument } from '../../types/Posts';
-import { Delta as TypeDelta } from 'quill';
+import { Delta } from 'quill';
+import { doc, Timestamp, updateDoc } from 'firebase/firestore';
+import {QuillDeltaToHtmlConverter} from 'quill-delta-to-html';
 /**
  * Creates the post card for this post
  * @component
@@ -38,7 +40,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
     const { delta, html = "" } = content || {};
     const [saving, setSaving] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const [editedPostContent, setEditedPostContent] = useState<TypeDelta>(delta);
+    const [editedPostContent, setEditedPostContent] = useState<Delta>(delta);
     const navigate = useNavigate();
     const divRef = useRef<HTMLDivElement>(null);
     const dimensions = useRefDimensions(divRef);
@@ -81,7 +83,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
 
     useEffect(() => {
         if (!user?.uid) return;
-        return db.doc(`posts/${id}/likes/${user.uid}`).onSnapshot(snap => {
+        return db.doc(`stage_posts/${id}/likes/${user.uid}`).onSnapshot(snap => {
             const { liked } = snap.data() || {};
             setUserLiked(liked || false)
         })
@@ -89,12 +91,12 @@ const PostCard = ({ post }: { post: PostDocument }) => {
 
     const handleUserLikePost = async () => {
         if (!user?.uid) return;
-        if(!userLiked) await db.doc(`posts/${id}/likes/${user.uid}`).set({
+        if(!userLiked) await db.doc(`stage_posts/${id}/likes/${user.uid}`).set({
             liked: true,
             likeUser: user.uid,
             _createdOn: firebase.firestore.FieldValue.serverTimestamp()
         })
-        if(userLiked) await db.doc(`posts/${id}/likes/${user.uid}`).delete()
+        if(userLiked) await db.doc(`stage_posts/${id}/likes/${user.uid}`).delete()
         logEvent(userLiked? 'unlike_post' : 'like_post', {
             postId: id,
             postAuthor: author
@@ -102,19 +104,29 @@ const PostCard = ({ post }: { post: PostDocument }) => {
     }
 
     const handleDeletePost = () => {
-        db.doc(`posts/${post.id}`).delete()
+        db.doc(`stage_posts/${post.id}`).delete()
     }
 
     //Save the post the user created
     const createNewPost = async () => {
         if(!user) return;
         if(!post.id) return;
-        if (delta === editedPostContent) return;
+        if (Object.is(delta, editedPostContent)) return;
         setSaving(true) //set saving to true to show loading
-        await db.doc('posts/' + post.id).update({
-            body: editedPostContent,
-            _updatedOn: firebase.firestore.Timestamp.now(),
+        console.log({
+            content: {
+                delta: editedPostContent,
+                html: new QuillDeltaToHtmlConverter(editedPostContent.ops || []).convert()
+            },
         })
+        //@ts-ignore
+        await updateDoc(doc(db, 'stage_posts', post.id).withConverter(postConverter), {
+            content: {
+                delta: editedPostContent,
+                html: new QuillDeltaToHtmlConverter(editedPostContent.ops || []).convert()
+            },
+            _updatedOn: Timestamp.now(),
+        } as Partial<PostDocument>)
         setSaving(false)
         setIsEdit(false);
     }
@@ -164,9 +176,8 @@ const PostCard = ({ post }: { post: PostDocument }) => {
                         </IconButton>}
                     </div>}
                 </div>
-                <div ref={divRef} className="overflow-hidden" style={{'maxHeight':postCollapsed?'500px':''}}>
-                    {/* <MDEditor defaultValue={body} readOnly={!isEdit} onChange={val => setEditedPostContent(val())}/> */}
-                </div>
+                {!isEdit?<div ref={divRef} className="overflow-hidden prose" style={{'maxHeight':postCollapsed?'500px':''}} dangerouslySetInnerHTML={{__html: post.content.html}}></div>:
+                <MDEditor defaultValue={post.content.delta} docId={post.id} onChange={(val, delta, sources, editor) => setEditedPostContent(editor.getContents())}/>}
                 {postCollapsed && <span className="-mt-2 text-sm cursor-pointer text-blue-600" onClick={() => setPostCollapsed(false)}>See More</span>}
                 <div className="flex flex-row">
                     <div className=" border-0 border-t border-solid border-gray-400 py-2">

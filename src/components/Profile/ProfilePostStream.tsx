@@ -1,16 +1,14 @@
 //@ts-nocheck
 import { useEffect, useState } from 'react';
 import InView from 'react-intersection-observer';
-import { db } from '../../config/firebase';
+import {db, postConverter} from '../../config/firebase';
 import { getSnapshot } from '../../hooks/firestore';
 import { useAuth } from '../../hooks/useAuth';
 import PostCard from '../Dashboard/PostCard';
 import PostLoader from '../Dashboard/PostLoader';
-
-let postsArray = []
-let listeners = []    // list of listeners
-let start = null      // start position of listener
-let end = null        // end position of listener
+import {collection, where} from 'firebase/firestore';
+import usePaginateCollection from '../../hooks/usePaginateCollection';
+import {PostDocument} from '../../types/Posts';
 
 const DOCUMENTS_PER_PAGE = 3;
 
@@ -21,107 +19,24 @@ const DOCUMENTS_PER_PAGE = 3;
  */
 const ProfilePostStream = ({uid, isUser, name}) => {
     const { user } = useAuth();
-    const [streamPosts, setStreamPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [loadedAllPosts, setLoadedAllPosts] = useState(false);
-
-    useEffect(() => {
-        if (!user) return;
-
-        //Clear all variables before reloading page.
-        postsArray = [];
-        listeners = [];
-        start = null;
-        end = null;
-        getPosts();
-
-        return () => detachListeners();
-    }, [user, uid]);
-
-    function handleUpdatedPosts(snapshot) {
-        // append new messages to message array
-        snapshot.forEach((message) => {
-            // filter out any duplicates (from modify/delete events)         
-            postsArray = postsArray.filter(x => x.id !== message.id)
-            postsArray.push({ id: message.id, ...message.data() })
-        })
-
-        // remove post from local array if deleted
-        snapshot.docChanges().forEach(change => {
-            if (change.type === 'removed') {
-                const message = change.doc
-                //Remove post from our array if it is here
-                postsArray = postsArray.filter(x => x.id !== message.id)
-            }
-        });
-
-        //Sort array because it is unsorted
-        postsArray.sort(({ _createdOn: x }, { _createdOn: y }) => {
-            return y.toDate() - x.toDate()
-        })
-
-        setStreamPosts(postsArray)
-        setLoading(false)
-    }
-
-    
-
-    async function getPosts() {
-        // single query to get startAt snapshot
-        const ref = db.collection('posts').where('author','==',uid)
-        let snapshots = await getSnapshot(ref.orderBy('_createdOn', 'desc')
-            .limit(DOCUMENTS_PER_PAGE))
-        // save startAt snapshot
-        end = snapshots.docs[snapshots.docs.length - 1]
-        // create listener using startAt snapshot (starting boundary)   
-        const query = end?ref.orderBy('_createdOn', 'desc').endAt(end):ref.orderBy('_createdOn', 'desc')
-        let listener = query.onSnapshot(handleUpdatedPosts)
-        // add listener to list
-        listeners.push(listener)
-    }
-
-    async function getMoreMessages() {
-
-        setLoading(true)
-        if (!end) {
-            setLoadedAllPosts(true);
-            setLoading(false)
-            return;
-        }
-        // single query to get new startAt snapshot
-        const ref = db.collection('posts').where('author','==',uid)
-        let snapshots = await getSnapshot(ref.orderBy('_createdOn', 'desc')
-            .startAfter(end)
-            .limit(DOCUMENTS_PER_PAGE))
-        // previous starting boundary becomes new ending boundary
-        start = end
-        end = snapshots.docs[snapshots.docs.length - 1]
-        // create another listener using new boundaries     
-        if (!end) {
-            setLoadedAllPosts(true);
-            setLoading(false)
-            return;
-        }
-        let listener = ref.orderBy('_createdOn', 'desc')
-            .endAt(end).startAfter(start)
-            .onSnapshot(handleUpdatedPosts)
-        listeners.push(listener)
-    }
-
-    // call to detach all listeners
-    function detachListeners() {
-        listeners.forEach(listener => listener())
-    }
+    const [streamPosts, loadMore, loading, finished] = usePaginateCollection<PostDocument>(collection(db, 'stage_posts').withConverter(postConverter), {
+        orderKey: '_createdOn',
+        queryConstraints: [
+            where('author','==',uid)
+        ],
+        direction: 'desc',
+        pageLimit: DOCUMENTS_PER_PAGE
+    })
 
     return (
         <>
-            {streamPosts.length > 0 ? <p className="font-semibold text-lg">{isUser?"Your":name +"'s"} Posts</p> : <p className="font-semibold text-gray-600 text-lg text-center w-full">
+            {(streamPosts.length > 0) ? <p className="font-semibold text-lg">{isUser?"Your":name +"'s"} Posts</p> : (finished && <p className="font-semibold text-gray-600 text-lg text-center w-full">
                 {isUser?"You haven't":`${name} hasn't`}  made any posts yet!
-            </p>}
+            </p>)}
             <div className="space-y-2">
                 {streamPosts.map(post => <PostCard key={post.id} post={post}/>)}
                 {loading && <PostLoader/>}
-                <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
+                <InView as="div" onChange={(inView, entry) => { if (inView && !loading) loadMore() }} />
             </div>
         </>
     );

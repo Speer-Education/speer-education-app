@@ -25,7 +25,7 @@ let end = null        // end position of listener
 const DOCUMENTS_PER_PAGE = 5;
 
 export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>(({ post }, ref) => {
-    const [comments, loadMore, loading, finished] = usePaginateCollection(collection(db, 'posts', post.id, 'comments').withConverter(docConverter), {
+    const [comments, loadMore, loading, finished] = usePaginateCollection(collection(db, 'stage_posts', post.id, 'comments').withConverter(docConverter), {
         orderKey: 'commentedOn',
         direction: 'desc',
         pageLimit: DOCUMENTS_PER_PAGE
@@ -78,7 +78,7 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
 
     // async function getComments() {
     //     // query reference for the messages we want
-    //     let ref = db.collection(`posts/${post.id}/comments`)
+    //     let ref = db.collection(`stage_posts/${post.id}/comments`)
 
     //     // single query to get startAt snapshot
     //     let snapshots = await getSnapshot(ref.orderBy('commentedOn', 'desc')
@@ -96,7 +96,7 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
 
     // async function getMoreComments() {
     //     // query reference for the messages we want
-    //     let ref = db.collection(`posts/${post.id}/comments`)
+    //     let ref = db.collection(`stage_posts/${post.id}/comments`)
 
     //     setLoading(true)
     //     if (!end) {
@@ -130,7 +130,7 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
 
     const handleSubmitCommment = async () => {
         if(userComment.length === 0) return;
-        await db.collection(`posts/${post.id}/comments`).add({
+        await db.collection(`stage_posts/${post.id}/comments`).add({
             comment: userComment,
             author: { name, major, school, uid },
             parentPost: post.id,
@@ -174,7 +174,7 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
                             <h4 className="text-gray-600 text-normal font-normal">{comment}</h4>
                         </div>
                         {(author?.uid == uid) && <IconButton
-                            onClick={() => db.collection(`posts/${post.id}/comments`).doc(id).delete()}
+                            onClick={() => db.collection(`stage_posts/${post.id}/comments`).doc(id).delete()}
                             size="large">
                             <DeleteIcon className="text-red-500"/>
                         </IconButton>}
