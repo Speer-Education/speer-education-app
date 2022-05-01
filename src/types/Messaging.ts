@@ -39,10 +39,16 @@ export type MessageRoom = {
         [userId: string]: string;
     },
     users: string[],
-    name?: string,
-    picture?: string,
+    name?: string, //Only group chats will have these
+    picture?: string, //Only group chats will have these
 }
 
 export type MessageDocument = Message & InternalDoc
 export type MessageRoomDocument = MessageRoom & InternalDoc
 export type AttachmentDocument = Attachment & InternalDoc
+
+/* Group chats will have:
+1. Name
+2. Picture (Use some default img first, and let picture be changeable)
+3. roomName is not mandatory for group chats, since we get the name from the name field. Maybe make roomName and optional field, and ensure it isn't created when room is created.
+*/

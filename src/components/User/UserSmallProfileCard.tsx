@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth"
 import { UserDetailsToken } from "../../types/User";
 import ProfilePicture from "./ProfilePicture";
 import UserHighlight from "./UserHighlight";
+import { Button } from '@mui/material';
 
 const UserSmallProfileCard = ({ userDetails, uid }: {
     userDetails: UserDetailsToken,
@@ -34,7 +36,11 @@ const UserSmallProfileCard = ({ userDetails, uid }: {
                 <UserHighlight highlight={highlight1}/>
                 <UserHighlight highlight={highlight2}/>
             </div>
-        </div></>
+        </div>
+        <Link to={`/profile/${uid}`}>     
+            <Button variant="contained">Visit Profile</Button>
+        </Link>
+        </>
         }
     </div>
 }

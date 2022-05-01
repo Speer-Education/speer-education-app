@@ -15,6 +15,7 @@ import imageCompression from 'browser-image-compression';
 import SendMessageLoader from '../Loader/SendMessageLoader';
 import { logEvent } from '../../utils/analytics';
 import { MessageDocument, MessageRoomDocument } from '../../types/Messaging';
+import GroupProfileCard from './GroupProfileCard';
 
 const LazyProfileCard = lazy(() => import('./ProfileCard'));
 const LazyAttachmentsCard = lazy(() => import('./AttachmentsCard'));
@@ -33,9 +34,10 @@ function Chat({screenSize}) {
     const [input, setInput] = useState("");
     const { roomId } = useParams();
     const [roomDoc, setRoomDoc] = useState<MessageRoomDocument>();
-    const [roomName, setRoomName] = useState(""); //Will have to reach out again and figure out what its room name is.
+    const [roomName, setRoomName] = useState<string>(""); //Will have to reach out again and figure out what its room name is.
     const [roomPic, setRoomPic] = useState("");
-    const [recipientId, setRecipientId] = useState();
+    const [roomUsers, setRoomUsers] = useState<string[]>([]);
+    const [recipientId, setRecipientId] = useState<string>();
     const [isMentor, setIsMentor] = useState();
     const [messages, setMessages] = useState<MessageDocument[]>([]);
     const [loading, setLoading] = useState(true);
@@ -92,17 +94,18 @@ function Chat({screenSize}) {
                 } as MessageRoomDocument
 
                 setRoomDoc(snapData)
-                //If there is a name (it means it is a group chat)
                 
                 logEvent('loaded_room',{
                     roomId: roomId,
                     ...snapData
                 })
 
+                //If there is a name (it means it is a group chat)
                 if (snapData?.name) {
                     setRoomName(snapData.name)
                     setRoomPic(snapData.picture || "")
-                    //If there is no name (A direct message between two person chat)
+                    setRoomUsers(snapData.users)
+                //If there is no name (A direct message between two person chat)
                 } else {
                     const { roomName, roomPic, isMentor, recipientId } = await findRoomNameAndRoomPicAndRecipientId(snapData);
                     setRoomName(roomName) //Implemented function (actually from Sidebar.js) to get the actual room name    
@@ -465,10 +468,14 @@ function Chat({screenSize}) {
     // console.log(messages)
     return <>
         {showProfPicAndAttachments ? null : <div className="flex flex-1 flex-col overflow-hidden space-y-2 p-2 max-h-full w-full h-app">
-            <button onClick={screenSize >= 2 ? null : toggleShowProfPicAndAttachments} className="border-none"> {/* This toggles on and off the prof pic and attachment sections */}
+            {/* When the screen size is small, the button toggles on and off the profile and attachment sections normally on the right of laptop version.
+            When the screen size is normal/big, the link is used instead of the button, and it should lead to the user's profile*/}
+            <button onClick={screenSize < 2 ? toggleShowProfPicAndAttachments : null} className="border-none"> 
                 <div className={`px-5 py-2 flex flex-row items-center bg-white ${screenSize >= 2 ? null : "hover:bg-gray-200"} rounded-lg shadow-lg`}>
+                    {/* This is the left arrow that leads back to the message page for small devices */}
                     {screenSize < 3 ? <Link to={`/messages`} className="mr-5"> <i className="fas fa-arrow-left"></i></Link> : null}
-                    {loading? "Loading...": recipientId ?
+                    {/* If there is a recipientId & the screen size is normal/big, links to profile page, if not (it is a group), so no need link. */}
+                    {loading? "Loading...": recipientId && screenSize >= 2 ?
                         <Link to={`/profile/${recipientId}`} title="Visit Mentor Profile" className="flex flex-row items-center">
                             <Avatar src={roomPic} />
                             <div className="pl-5 mb-1 font-medium">
@@ -537,13 +544,21 @@ function Chat({screenSize}) {
                 </form>
             </div>
         </div >}
+        {/* ProfCard & Attachment cards are down here. */}
+        {/* This first section appears for screen sizes 2 and above */}
         <div className={`${screenSize < 2 ? "hidden" : ""} flex flex-col h-app`} style={screenSize < 3 ? {width: '275px'} : {width: '350px'}}>
-            <LazyProfileCard uid={recipientId} roomExists={!roomDoesNotExistWarning}/>
+            {/* THis is the profile card, if there is no recipientId, we show the group profile card instead */}
+            {recipientId ? <LazyProfileCard uid={recipientId} roomExists={!roomDoesNotExistWarning}/> : 
+            <GroupProfileCard roomExists={!roomDoesNotExistWarning} roomUsers={roomUsers}/>} 
             <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments} roomExists={!roomDoesNotExistWarning}/>
         </div>
+        {/* This second section is for screen sizes below 2 */}
         {showProfPicAndAttachments ? <div className={`${screenSize >= 2 ? "hidden" : "h-app overflow-auto"}`} style={{minWidth: 'calc(100vw - 260px)'}}>
+            {/* Small left arrow button to exit for mobile mode */}
             <button onClick={toggleShowProfPicAndAttachments} className="bg-transparent border-none p-5 cursor-pointer"><i className="fas fa-arrow-left text-2xl"></i></button>
-            <LazyProfileCard uid={recipientId} roomExists={!roomDoesNotExistWarning}/>
+            {/* THis is the profile card, if there is no recipientId, we show the group profile card instead */}
+            {recipientId ? <LazyProfileCard uid={recipientId} roomExists={!roomDoesNotExistWarning}/> : 
+            <GroupProfileCard roomExists={!roomDoesNotExistWarning} roomUsers={roomUsers}/>} 
             <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments} roomExists={!roomDoesNotExistWarning}/>
         </div> : null}
     </>;

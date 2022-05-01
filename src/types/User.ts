@@ -63,6 +63,11 @@ export type UserClaims = {
     _lastCommitted: Timestamp;
 }
 
+export type SimpleUserDetails = {
+    id: string;
+    name: string;
+}
+
 export type Relation = {
     createdAt: Timestamp;
     followerId: string;
