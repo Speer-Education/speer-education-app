@@ -111,7 +111,8 @@ function Chat({screenSize}) {
                     setRoomName(roomName) //Implemented function (actually from Sidebar.js) to get the actual room name    
                     setRoomPic(roomPic)
                     setIsMentor(isMentor)
-                    setRecipientId(recipientId)
+                    setRecipientId(recipientId) //Switch this to undefined, and add the line below to test group chats for now.
+                    // setRoomUsers(snapData.users) 
                 }
                 setLoading(false);
             }, error => {
@@ -553,7 +554,11 @@ function Chat({screenSize}) {
             <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments} roomExists={!roomDoesNotExistWarning}/>
         </div>
         {/* This second section is for screen sizes below 2 */}
-        {showProfPicAndAttachments ? <div className={`${screenSize >= 2 ? "hidden" : "h-app overflow-auto"}`} style={{minWidth: 'calc(100vw - 260px)'}}>
+        {showProfPicAndAttachments ? <div 
+            className={`${screenSize >= 2 ? "hidden" : "h-app overflow-auto"}`} 
+            /* Adjusted the minimum width for when screen size is 1 and 0. */
+            style={screenSize === 1 ? {minWidth: 'calc(100vw - 260px)'}: {minWidth: 'calc(100vw)'}}
+            >
             {/* Small left arrow button to exit for mobile mode */}
             <button onClick={toggleShowProfPicAndAttachments} className="bg-transparent border-none p-5 cursor-pointer"><i className="fas fa-arrow-left text-2xl"></i></button>
             {/* THis is the profile card, if there is no recipientId, we show the group profile card instead */}
