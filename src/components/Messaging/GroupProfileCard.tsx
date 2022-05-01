@@ -5,8 +5,12 @@ import { useAuth } from "../../hooks/useAuth";
 import { SimpleUserDetails } from "../../types/User";
 import { Avatar } from "@mui/material";
 import { Link } from "react-router-dom";
+import ProfilePicture from "../User/ProfilePicture";
 
-const GroupProfileCard = ({ roomExists, roomUsers: roomUsersIds }) => {
+const GroupProfileCard = ({ roomExists, roomUsers }: {
+  roomExists: boolean,
+  roomUsers: string[],
+}) => {
   //In case room doesn't exist.
   if (!roomExists) {
     return (
@@ -17,18 +21,21 @@ const GroupProfileCard = ({ roomExists, roomUsers: roomUsersIds }) => {
   }
   //Room Exists (So we spawn the room user ids)
   return (
-    <div className="p-3 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6">
+    <div className="p-3 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6 ">
       <div className="pb-2">
         <h2>Group Members:</h2>
       </div>
-      {roomUsersIds.map((roomUserId) => (
+      {/* Keep in mind roomUsers is an Array of strings not an array of objects. */}
+      {roomUsers.map((roomUserId) => (
         <GroupUserSmallProfileCard key={roomUserId} id={roomUserId} />
       ))}
     </div>
   );
 };
 
-const GroupUserSmallProfileCard = ({ id }) => {
+const GroupUserSmallProfileCard = ({ id }: {
+  id: string,
+}) => {
   const { user } = useAuth();
   const [details, setDetails] = useState<SimpleUserDetails>();
   const [loading, setLoading] = useState(true);
