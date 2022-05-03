@@ -79,23 +79,25 @@ const AddYoutubeDialog =({ open, onClose, onUrl }) => {
  * @component
  * @returns Component
  */
-const PostComposerCard = () => {
+const PostComposerCard = ({ organization }:{organization?: string}) => {
     const [postContent, setPostContent] = useState<Delta>();
     const [saving, setSaving] = useState<boolean>(false);
     const { user } = useAuth();
     const editor = useRef<ReactQuill>(null)
-    const [docId, setDocId] = useState(doc(collection(db, 'stage_posts')).id);
+    //@ts-ignore
+    const collectionRef = !organization?collection(db, 'stage_posts'):collection(db, 'organization', organization, 'posts')
+    const [docId, setDocId] = useState(doc(collectionRef).id);
 
     useEffect(() => {
         if(saving) return;
-        setDocId(doc(collection(db, 'stage_posts')).id)
+        setDocId(doc(collectionRef).id)
     }, [saving]);
 
     //Save the post the user created
     const createNewPost = async () => {
         if(!user || !docId || !postContent) return;
         setSaving(true) //set saving to true to show loading
-        await setDoc(doc(db, 'stage_posts', docId).withConverter(postConverter), {
+        await setDoc(doc(collectionRef, docId).withConverter(postConverter), {
             content: {
                 delta: postContent,
                 html: new QuillDeltaToHtmlConverter(postContent.ops || []).convert()

@@ -1,0 +1,48 @@
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+/* Styles */
+.dashboard{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    overflow-y: auto;
+    @apply bg-gray-100 
+}
+
+.stream_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width:100vw;
+}
+
+.dashboard_sidebar {
+    visibility: hidden;
+    display: none;
+}
+}
+
+@media only screen and (min-width : 1024px) {
+/* Styles */
+.dashboard{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    overflow-y: auto;
+    @apply bg-gray-100 
+}
+
+.stream_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width:60vw;
+}
+
+.dashboard_sidebar {
+    overflow: hidden;
+    min-width: 320px;
+    width: 20vw;
+    @apply flex flex-col
+}
+}

@@ -1,10 +1,10 @@
 import { useAuth } from "../../hooks/useAuth"
-import { UserDetailsToken } from "../../types/User";
+import { UserDetails, UserDetailsDocument } from "../../types/User";
 import ProfilePicture from "./ProfilePicture";
 import UserHighlight from "./UserHighlight";
 
 const UserSmallProfileCard = ({ userDetails, uid }: {
-    userDetails: UserDetailsToken,
+    userDetails: UserDetailsDocument,
     uid: string
 }) => {
     const { user } = useAuth();

@@ -1,6 +1,9 @@
 import { Timestamp } from 'firebase/firestore';
 import {InternalDoc} from './DocConverter';
 export type UserDetails = {
+    name: string;
+    major: string;
+    school: string;
     bio: string;
     country: string;
     dateOfBirth: string;
@@ -14,9 +17,6 @@ export type UserDetails = {
     hsGradYear: string;
     isAdm: boolean;
     isMtr: boolean;
-    major: string;
-    name: string;
-    school: string;
     socials: {
         github: string;
         personal: string;
@@ -28,6 +28,62 @@ export type UserDetails = {
     followedCount: number;
     followerCount: number;
     connectedMentees: string[]
+}
+
+export type NewUserDetails = {
+    name: string;
+    dateOfBirth: Date;
+    email: string;
+    country: string;
+    education: {
+        major: string;
+        school: string;
+        graduationDate: Date;
+        country: string;
+    }[],
+    activeRooms: {
+        [roomId: string]: ActiveRoom
+    }
+    highlights: UserHighlight[],
+    socials: {
+        github: string;
+        personal: string;
+        youtube: string;
+    },
+    permissions: {
+        isAdm: boolean;
+        isMtr: boolean;
+    },
+    stats: {
+        menteesCount: number;
+        mentoryCount: number;
+        profanities: number;
+        followedCount: number;
+        followerCount: number;
+        connectedMentees: string[]
+    },
+    _firstLogin: Timestamp,
+    _updatedOn: Timestamp
+}
+
+export type PublicUser = {
+    name: string;
+    dateOfBirth: Date;
+    email: string;
+    country: string;
+    education: {
+        major: string;
+        school: string;
+        graduationDate: Date;
+        country: string;
+    }[],
+    highlights: UserHighlight[],
+    socials: {
+        github: string;
+        personal: string;
+        youtube: string;
+    },
+
 }
 
 export type ActiveRoom = {
@@ -60,7 +116,6 @@ export type UserClaims = {
     finishSetup: boolean;
     isAdm: boolean;
     isMtr: boolean;
-    _lastCommitted: Timestamp;
 }
 
 export type Relation = {
@@ -70,6 +125,7 @@ export type Relation = {
     isMtr: boolean;
     roomId: string;
 }
+
 export type UserDetailsToken = UserDetails & UserClaims;
 export type UserDetailsDocument = UserDetails & InternalDoc
 export type MentorDetailsDocument = MentorDetails & InternalDoc;

@@ -16,9 +16,11 @@ const DOCUMENTS_PER_PAGE = 3;
  * @component
  * @returns PostCards
  */
-const PostStream = () => {
+const PostStream = ({ organization }: {organization?: string}) => {
     const { user } = useAuth();
-    const [streamPosts, loadMore, loading, finished] = usePaginateCollection<PostDocument>(collection(db, 'stage_posts').withConverter(postConverter), {
+    //@ts-ignore
+    const collectionRef = !organization?collection(db, 'stage_posts'):collection(db, 'organization', organization, 'posts');
+    const [streamPosts, loadMore, loading, finished] = usePaginateCollection<PostDocument>(collectionRef.withConverter(postConverter), {
         orderKey: '_createdOn',
         direction: 'desc',
         pageLimit: DOCUMENTS_PER_PAGE

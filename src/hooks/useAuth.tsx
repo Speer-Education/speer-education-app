@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth, db, firebase, rtdb } from "../config/firebase";
-import { UserClaims, UserDetails, UserDetailsToken } from "../types/User";
+import { UserClaims, UserDetails, UserDetailsDocument, UserDetailsToken } from "../types/User";
 import { logEvent, setUserProperties } from "../utils/analytics";
 import { useLocalStorage } from "./useHooks";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -37,13 +37,13 @@ export const useAuth = () => {
 
 
 //Use variable as userDetails might be immediately needed before react even renders
-let latestUserDetails: UserDetailsToken | null = null;
 let appInstance = Date.now();
 
 const useAuthProvider = () => {
     //@ts-ignore
     const [user, authing, authError] = useAuthState(auth); 
-    const [userDetails, setUserDetails] = useState<UserDetailsToken>();
+    const [userDetails, setUserDetails] = useState<UserDetailsDocument>();
+    const [userToken, setUserToken] = useState<UserClaims>();
     const [lastCommitted, setLastCommitted] = useLocalStorage("lastCommited", 0);  //The last committed state of our user claims document, decides if token needs to update if outdated
     const navigate = useNavigate();
     const location = useLocation();
@@ -118,7 +118,7 @@ const useAuthProvider = () => {
 
             if (lastCommitted && !(data?._lastCommitted || {}).isEqual(lastCommitted)) {
                 const claims = await getUserTokenResult(true);
-                if(claims) setUserDetails({ ...claims, ...(latestUserDetails!) || {} })
+                if(claims) setUserToken(claims)
             }
             setLastCommitted(data?._lastCommitted);
         },
@@ -135,12 +135,10 @@ const useAuthProvider = () => {
                 .collection("users")
                 .doc(user.uid)
                 .onSnapshot(async (doc) => {
-                    latestUserDetails = { ...(await getUserTokenResult()), ...doc.data() } as UserDetailsToken
-
                     //For analytics
-                    setUserProperties(user.uid, latestUserDetails);
-
-                    setUserDetails(latestUserDetails)
+                    setUserToken(await getUserTokenResult())
+                    setUserDetails(doc.data() as UserDetailsDocument)
+                    setUserProperties(user.uid, doc.data());
                 });
             var userStatusDatabaseRef = rtdb.ref('/status/' + user.uid);
 
@@ -187,6 +185,7 @@ const useAuthProvider = () => {
     return {
         user,
         userDetails,
+        userToken,
         getUserTokenResult,
         appInstance,
         signInWithEmailAndPassword,
