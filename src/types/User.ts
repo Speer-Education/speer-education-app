@@ -118,6 +118,11 @@ export type UserClaims = {
     isMtr: boolean;
 }
 
+export type SimpleUserDetails = {
+    id: string;
+    name: string;
+}
+
 export type Relation = {
     createdAt: Timestamp;
     followerId: string;
