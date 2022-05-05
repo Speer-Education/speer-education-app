@@ -1,26 +1,15 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import { useEffect } from 'react';
 import "./App.css";
-import { useAuth } from "./hooks/useAuth";
-import { Router, Routes, Route, Navigate } from "react-router-dom";
 import ServiceWorkerWrapper from './components/ServiceWorker/ServiceWorkerWrapper';
-import AppLoader from './components/Loader/AppLoader';
 import FallbackPage from './pages/Fallback/FallbackPage';
 import {ErrorBoundary} from 'react-error-boundary';
-import NotFoundPage from './pages/Fallback/NotFoundPage';
 import { logEvent } from './utils/analytics';
 import useRoutingInstrumentation from 'react-router-v6-instrumentation';
 import * as Sentry from '@sentry/react';
 import {Integrations} from '@sentry/tracing';
 
-const LazyLogin = lazy(() => import("./pages/Login/Login"))
-const LazyOnboarding = lazy(() => import("./pages/Onboarding/Onboarding"))
-const LazyMainApp = lazy(() => import("./container/MainApp/MainApp"))
-const LazyAdminApp = lazy(() => import("./container/AdminApp/AdminApp"))
-const LazyVerify = lazy(() => import("./pages/Login/Verify"))
-
 function App() {
 
-  const { user, userDetails } = useAuth();
   const routingInstrumentation = useRoutingInstrumentation();
   useEffect(() => {
     Sentry.init({
@@ -51,21 +40,14 @@ function App() {
   return (
     <ErrorBoundary FallbackComponent={FallbackPage} onError={errorHandler}>
       <div className="app bg-gray-100 min-h-screen">
-        <Suspense fallback={<AppLoader/>}>
-          <Routes>
-            {user !== null? <>
-              <Route path="/*" element={<LazyMainApp />}/>
-              <Route path={"/login"} element={<LazyLogin />}/>
-              <Route path="/onboarding" element={<LazyOnboarding />}/>
-              <Route path="/admin/*" element={<LazyAdminApp />}/>
-              {/* <Route path="*" component={NotFoundPage}/> */}
-              <Route path={"/verify"} element={<LazyVerify />}/>
-            </>: <>
-              <Route path={"/login"} element={<LazyLogin />}/>
-            </>}
-            {user === null && <Route path="/" element={<Navigate to="/login" />}/>}
-          </Routes>
-        </Suspense>
+        <div className="grid place-items-center w-screen h-screen bg-gray-100">
+          <div className="flex flex-col items-center space-y-2">
+            <img className="object-contain w-24 p-4" src="/rocket-logo@3x.png" />
+            <h2>Welcome to Speer Education!</h2>
+            <p>We're currently elevating our experience to new heights, come back in a few weeks as we're making the final changes</p>
+            <div className="animate-pulse h-2 rounded-md w-52 bg-gray-400"></div>
+          </div>
+        </div>
         <ServiceWorkerWrapper/>
       </div>
     </ErrorBoundary>
