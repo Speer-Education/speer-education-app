@@ -1,5 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 import {InternalDoc} from './DocConverter';
+
 export type UserDetails = {
     name: string;
     major: string;
@@ -11,7 +12,7 @@ export type UserDetails = {
     finishSetup: boolean;
     highlight1: UserHighlight;
     highlight2: UserHighlight;
-    activeRooms: {
+    activeRooms?: {
         [roomId: string]: ActiveRoom
     }
     hsGradYear: string;
@@ -30,18 +31,22 @@ export type UserDetails = {
     connectedMentees: string[]
 }
 
+export type CountryCode = string;
+
 export type NewUserDetails = {
     name: string;
     dateOfBirth: Date;
     email: string;
-    country: string;
+    country: CountryCode;
+    biography: string;
+    organization?: string;
     education: {
         major: string;
         school: string;
         graduationDate: Date;
         country: string;
     }[],
-    activeRooms: {
+    activeRooms?: {
         [roomId: string]: ActiveRoom
     }
     highlights: UserHighlight[],
@@ -71,6 +76,8 @@ export type PublicUser = {
     dateOfBirth: Date;
     email: string;
     country: string;
+    organization?: string;
+    biography: string;
     education: {
         major: string;
         school: string;
@@ -83,7 +90,6 @@ export type PublicUser = {
         personal: string;
         youtube: string;
     },
-
 }
 
 export type ActiveRoom = {
@@ -116,6 +122,7 @@ export type UserClaims = {
     finishSetup: boolean;
     isAdm: boolean;
     isMtr: boolean;
+    organization?: string;
 }
 
 export type SimpleUserDetails = {
