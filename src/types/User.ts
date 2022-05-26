@@ -1,39 +1,9 @@
 import { Timestamp } from 'firebase/firestore';
 import {InternalDoc} from './DocConverter';
 
-export type UserDetails = {
-    name: string;
-    major: string;
-    school: string;
-    bio: string;
-    country: string;
-    dateOfBirth: string;
-    email: string;
-    finishSetup: boolean;
-    highlight1: UserHighlight;
-    highlight2: UserHighlight;
-    activeRooms?: {
-        [roomId: string]: ActiveRoom
-    }
-    hsGradYear: string;
-    isAdm: boolean;
-    isMtr: boolean;
-    socials: {
-        github: string;
-        personal: string;
-        youtube: string;
-    },
-    menteesCount: number;
-    mentoryCount: number;
-    profanities: number;
-    followedCount: number;
-    followerCount: number;
-    connectedMentees: string[]
-}
-
 export type CountryCode = string;
 
-export type NewUserDetails = {
+export type UserDetails = {
     name: string;
     dateOfBirth: Date;
     email: string;
@@ -44,7 +14,7 @@ export type NewUserDetails = {
         major: string;
         school: string;
         graduationDate: Date;
-        country: string;
+        country: CountryCode;
     }[],
     activeRooms?: {
         [roomId: string]: ActiveRoom
@@ -71,26 +41,7 @@ export type NewUserDetails = {
     _updatedOn: Timestamp
 }
 
-export type PublicUser = {
-    name: string;
-    dateOfBirth: Date;
-    email: string;
-    country: string;
-    organization?: string;
-    biography: string;
-    education: {
-        major: string;
-        school: string;
-        graduationDate: Date;
-        country: string;
-    }[],
-    highlights: UserHighlight[],
-    socials: {
-        github: string;
-        personal: string;
-        youtube: string;
-    },
-}
+export type PublicUser = Omit<UserDetails, 'activeRooms'>;
 
 export type ActiveRoom = {
     date: Timestamp;
@@ -110,7 +61,7 @@ export type ActiveRoom = {
     senderUsername: string,
 }
 
-export type MentorDetails = Omit<UserDetails, 'activeRooms'>
+export type MentorDetails = PublicUser
 
 export type UserHighlight = {
     description: string;
@@ -138,6 +89,7 @@ export type Relation = {
     roomId: string;
 }
 
+export type PublicUserDoc =  PublicUser & InternalDoc;
 export type UserDetailsToken = UserDetails & UserClaims;
 export type UserDetailsDocument = UserDetails & InternalDoc
 export type MentorDetailsDocument = MentorDetails & InternalDoc;

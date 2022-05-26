@@ -13,7 +13,7 @@ const ProfileCard = ({ uid, roomExists }) => {
         //If no user, or room doesn't exist, then return
         if(!user || !roomExists) return;
         setLoading(true)
-        return db.doc(`users/${uid}`).onSnapshot(snap => {
+        return db.doc(`usersPublic/${uid}`).onSnapshot(snap => {
             setDetails({
                 id: snap.id,
                 ...snap.data()

@@ -75,7 +75,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
     useEffect(() => {
         setLoading(true); //BLock view of anything if author is loading
         if (!post) return;
-        return db.doc(`users/${author}`).onSnapshot(snap => {
+        return db.doc(`usersPublic/${author}`).onSnapshot(snap => {
             setAuthorProfile(snap.data() as UserDetails)
             setLoading(false)
         })

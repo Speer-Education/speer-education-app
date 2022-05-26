@@ -1,8 +1,8 @@
-//@ts-nocheck
 import { IconButton } from '@mui/material';
 import { EditOutlined, GitHub, LanguageOutlined, YouTube } from '@mui/icons-material';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import EditSocialsDialog from './EditSocialsDialog';
+import { PublicUser } from '../../types/User';
 
 const SocialLink = ({ link, icon }) => (
     <div className="flex flex-row items-center space-x-2 text-gray-600">
@@ -10,7 +10,7 @@ const SocialLink = ({ link, icon }) => (
         <a className="text-sm" target="_blank" href={'//'+link}>{link}</a>
     </div>
 )
-const SocialsCard = ({socials, isUser}) => {
+const SocialsCard: FC<{ socials: PublicUser['socials'], isUser?: boolean }> = ({socials, isUser}) => {
     const [openEditSocials, setOpenEditSocials] = useState(false);
 
     return <>

@@ -45,7 +45,7 @@ const GroupUserSmallProfileCard = ({ id }: {
     if (!user) return;
     setLoading(true);
 
-    return db.doc(`users/${id}`).onSnapshot((snap) => {
+    return db.doc(`usersPublic/${id}`).onSnapshot((snap) => {
       setDetails({
         id: snap.id,
         name: snap.get("name"),

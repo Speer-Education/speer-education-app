@@ -9,10 +9,11 @@ import { useAuth } from '../../hooks/useAuth';
 import MentorCardModal from '../Modal/MentorCardModal';
 import {UserDetails, MentorDetailsDocument} from '../../types/User';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { collection, orderBy, query } from 'firebase/firestore';
+import { collection, orderBy, query, where } from 'firebase/firestore';
+import {getMajor} from '../../utils/user';
 export default function MentorShowcase() {
 
-    const [mentors = [], loading, error] = useCollectionData<MentorDetailsDocument>(query(collection(db, 'mentors').withConverter(docConverter), orderBy('_updatedOn','desc')));
+    const [mentors = [], loading, error] = useCollectionData<MentorDetailsDocument>(query(collection(db, 'usersPublic').withConverter(docConverter), where('permissions.isMtr','==',true), orderBy('_firstLogin','desc')));
     const [creatingRoom, setCreatingRoom] = useState(false);
     const [mentorSelected, setMentorSelected] = useState<MentorDetailsDocument>();
     const [mentorModalOpen, setMentorModalOpen] = useState(false);
@@ -21,7 +22,7 @@ export default function MentorShowcase() {
     //Loads the mentors in mentor collection
     const userMentors = useMemo<MentorDetailsDocument[]>(() => {
         if(!user) return [];
-        else return mentors.slice().filter(({connectedMentees, id}) => !connectedMentees.includes(user.uid) && id != user.uid)
+        else return mentors.slice().filter(({stats: { connectedMentees=[] }, id}) => !connectedMentees.includes(user.uid) && id != user.uid)
     }, [mentors, user]);
 
     if(userMentors.length === 0) return (
@@ -43,7 +44,7 @@ export default function MentorShowcase() {
                             <ProfilePicture className="w-10 h-10 rounded-full" thumb uid={id}/>
                             <div className="ml-2">
                                 <h3 className="font-semibold text-lg">{props.name}</h3>
-                                <p className="text-gray-500 text-sm">{props.major}</p>
+                                <p className="text-gray-500 text-sm">{getMajor(props)}</p>
                             </div>
                         </Link>
                         {creatingRoom? "Loading..." : 

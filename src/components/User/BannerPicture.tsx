@@ -7,7 +7,7 @@ import { useAuth } from '../../hooks/useAuth';
  * @param {string} uid 
  * @returns 
  */
-export default function BannerPicture({ uid, forceRefresh, ...params }) {
+export default function BannerPicture({ uid, forceRefresh, ...params }: { uid: string, forceRefresh?: boolean } & React.HTMLAttributes<HTMLImageElement>) {
     const [url, setUrl] = useState<string>();
     const { user, appInstance } = useAuth();
     const imageRef = useRef<HTMLImageElement>(null);

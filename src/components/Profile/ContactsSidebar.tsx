@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
 import { useAuth } from '../../hooks/useAuth';
-import {Relation, UserDetails, UserDetailsDocument} from '../../types/User';
+import {PublicUserDoc, } from '../../types/User';
+import { getMajor } from '../../utils/user';
 
 export default function ContactsSidebar({ profileId, userDetails, isUser }) {
 
-    const [followers, setFollowers] = useState<UserDetailsDocument[]>([]);
+    const [followers, setFollowers] = useState<PublicUserDoc[]>([]);
     const { user } = useAuth();
     const [followersLoaded, setFollowersLoaded] = useState(false);
 
@@ -21,11 +22,11 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }) {
             let list = await Promise.all(snapshot.docs.map(async doc => {
                 const { followedId, followerId } = doc.data();
                 //Get user data from firestore
-                const userRef = db.collection('users').doc(followerId);
+                const userRef = db.collection('usersPublic').doc(followerId);
                 const userData = await userRef.get();
 
-                return {id: userData.id, ...userData.data()} as Partial<UserDetailsDocument>
-            })) as UserDetailsDocument[];
+                return {id: userData.id, ...userData.data()} as Partial<PublicUserDoc>
+            })) as PublicUserDoc[];
             setFollowers(list);
             setFollowersLoaded(true)
         })
@@ -43,13 +44,14 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }) {
     return (
         <div className="flex flex-col flex-1 p-3 m-2 shadow-lg rounded-md bg-white overflow-y-auto">
             <p>{isUser?"Your":`${userDetails.name}'s` || ""} Contacts</p>
-            {followers.map(({ id, name, school, major, bio }) => { 
+            {followers.map((user) => {
+                const { id, name } = user; 
                 return (<div className="flex flex-row py-2 transition-colors hover:bg-gray-100" key={id}>
                 <Link className="flex flex-row flex-1" to={`/profile/${id}`}>
                     <ProfilePicture className="w-10 h-10 rounded-full" uid={id}/>
                     <div className="ml-2">
                         <h3 className="font-medium">{name}</h3>
-                        <p className="text-gray-500 text-sm">{major}</p>
+                        <p className="text-gray-500 text-sm">{getMajor(user)}</p>
                     </div>
                 </Link>
             </div>)})}

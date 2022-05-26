@@ -69,7 +69,7 @@ function Sidebar({screenSize}) {
     const findRoomPicAndIsMentor = async (data) => {
         let recipientId = data.users.filter((id) => id !== user?.uid)[0]
 
-        const userData = (await db.doc(`users/${recipientId}`).get()).data()
+        const userData = (await db.doc(`usersPublic/${recipientId}`).get()).data()
 
         return {
             roomPic: `https://storage.googleapis.com/speer-education-dev.appspot.com/users/${recipientId}/thumb-profilePicture.png`,

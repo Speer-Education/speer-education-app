@@ -16,11 +16,7 @@ import { useNavigate } from "react-router-dom";
 import {UserPostData, PostDocument, PostCommentDocument} from '../../types/Posts';
 import { collection } from "firebase/firestore";
 import usePaginateCollection from "../../hooks/usePaginateCollection";
-
-let commentsArray = []
-let listeners = []    // list of listeners
-let start = null      // start position of listener
-let end = null        // end position of listener
+import { getMajor, getSchool } from "../../utils/user";
 
 const DOCUMENTS_PER_PAGE = 5;
 
@@ -32,107 +28,15 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
     })
     const [userComment, setUserComment] = useState<string>("");
     const { userDetails, user } = useAuth();
-    const { name, major, school } = userDetails || {};
-    const { uid } = user || {};
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     if(!post?.id) return;
-
-    //     //Clear all variables before reloading page.
-    //     commentsArray = [];
-    //     listeners = [];
-    //     start = null;
-    //     end = null;
-    //     setComments([]);
-    //     getComments();
-
-    //     return () => detachListeners();
-    // }, [post?.id])
- 
-    // function handleUpdatedComments(snapshot) {
-    //     // append new messages to message array
-    //     snapshot.forEach((message) => {
-    //         // filter out any duplicates (from modify/delete events)         
-    //         commentsArray = commentsArray.filter(x => x.id !== message.id)
-    //         commentsArray.push({ id: message.id, ...message.data() })
-    //     })
-
-    //     // remove post from local array if deleted
-    //     snapshot.docChanges().forEach(change => {
-    //         if (change.type === 'removed') {
-    //             const message = change.doc
-    //             //Remove post from our array if it is here
-    //             commentsArray = commentsArray.filter(x => x.id !== message.id)
-    //         }
-    //     });
-
-    //     //Sort array because it is unsorted
-    //     commentsArray.sort(({ commentedOn: x }, { commentedOn: y }) => {
-    //         return y.toDate() - x.toDate()
-    //     })
-
-    //     setComments(commentsArray)
-    //     setLoading(false)
-    // }
-
-    // async function getComments() {
-    //     // query reference for the messages we want
-    //     let ref = db.collection(`stage_posts/${post.id}/comments`)
-
-    //     // single query to get startAt snapshot
-    //     let snapshots = await getSnapshot(ref.orderBy('commentedOn', 'desc')
-    //         .limit(DOCUMENTS_PER_PAGE))
-    //     // save startAt snapshot
-    //     end = snapshots.docs[snapshots.docs.length - 1]
-    //     // create listener using startAt snapshot (starting boundary)    
-    //     let listener = (end?
-    //         ref.orderBy('commentedOn', 'desc').endAt(end):
-    //         ref.orderBy('commentedOn', 'desc'))
-    //         .onSnapshot(handleUpdatedComments)
-    //     // add listener to list
-    //     listeners.push(listener)
-    // }
-
-    // async function getMoreComments() {
-    //     // query reference for the messages we want
-    //     let ref = db.collection(`stage_posts/${post.id}/comments`)
-
-    //     setLoading(true)
-    //     if (!end) {
-    //         setLoadedAllPosts(true);
-    //         setLoading(false)
-    //         return;
-    //     }
-    //     // single query to get new startAt snapshot
-    //     let snapshots = await getSnapshot(ref.orderBy('commentedOn', 'desc')
-    //         .startAfter(end)
-    //         .limit(DOCUMENTS_PER_PAGE))
-    //     // previous starting boundary becomes new ending boundary
-    //     start = end
-    //     end = snapshots.docs[snapshots.docs.length - 1]
-    //     // create another listener using new boundaries     
-    //     if (!end) {
-    //         setLoadedAllPosts(true);
-    //         setLoading(false)
-    //         return;
-    //     }
-    //     let listener = ref.orderBy('commentedOn', 'desc')
-    //         .endAt(end).startAfter(start)
-    //         .onSnapshot(handleUpdatedComments)
-    //     listeners.push(listener)
-    // }
-
-    // // call to detach all listeners
-    // function detachListeners() {
-    //     listeners.forEach(listener => listener())
-    // }
-
+    const { name } = userDetails || {};
+    
     const handleSubmitCommment = async () => {
-        if(userComment.length === 0) return;
+        if(userComment.length === 0 || !userDetails || !user) return;
         await db.collection(`stage_posts/${post.id}/comments`).add({
             comment: userComment,
-            author: { name, major, school, uid },
+            author: { name, major: getMajor(userDetails), school: getSchool(userDetails), uid: user.uid },
             parentPost: post.id,
             commentedOn: firebase.firestore.Timestamp.now()
         })
@@ -173,7 +77,7 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
                             </div>
                             <h4 className="text-gray-600 text-normal font-normal">{comment}</h4>
                         </div>
-                        {(author?.uid == uid) && <IconButton
+                        {(author?.uid == user?.uid) && <IconButton
                             onClick={() => db.collection(`stage_posts/${post.id}/comments`).doc(id).delete()}
                             size="large">
                             <DeleteIcon className="text-red-500"/>

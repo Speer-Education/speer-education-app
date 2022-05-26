@@ -24,12 +24,12 @@ const Mentors = () => {
     useEffect(() => {
         if(!user) return;
         //Get all the mentors and set in mentors
-        return db.collection('mentors').orderBy('_addedDate','desc').onSnapshot(snap => {
+        return db.collection('usersPublic').where('permissions.isMtr','==', true).orderBy('_firstLogin','desc').onSnapshot(snap => {
             const allMentors = snap.docs.map( doc => {
                 return { id: doc.id, ...doc.data()} as MentorDetailsDocument
             })
 
-            const currentMentors = allMentors.filter(({connectedMentees, id}) => !(connectedMentees || []).includes(user.uid) && id !== user?.uid)
+            const currentMentors = allMentors.filter(({stats: { connectedMentees =[] }, id}) => !(connectedMentees || []).includes(user.uid) && id !== user?.uid)
 
             setMentors(currentMentors)
             logEvent('Loaded Mentors',{

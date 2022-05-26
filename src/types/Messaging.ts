@@ -33,7 +33,7 @@ export type MessageRoom = {
     _createdOn: Timestamp,
     attachments: Attachment[],
     attachmentsAmount: number,
-    lastMessage: Message,
+    lastMessage: Message & {messageId: string},
     messageAmount: number,
     roomName: {
         [userId: string]: string;

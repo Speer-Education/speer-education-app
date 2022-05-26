@@ -376,7 +376,7 @@ function Chat({screenSize}) {
     const findRoomNameAndRoomPicAndRecipientId = async (data) => {
         let recipientId = data?.users.filter((userId) => userId !== user?.uid)[0] //<-- Remove the destructuring
 
-        const userData = (await db.doc(`users/${recipientId}`).get()).data()
+        const userData = (await db.doc(`usersPublic/${recipientId}`).get()).data()
 
         return {
             roomName: userData?.name, //<-- asynchrously fetch user id's

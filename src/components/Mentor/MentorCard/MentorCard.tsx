@@ -9,8 +9,12 @@ import { getMessageUserRoom } from '../../../utils/chats';
 import { logEvent } from '../../../utils/analytics';
 import { useNavigate } from 'react-router-dom';
 import { MentorDetailsDocument } from '../../../types/User';
+import { getMajor, getSchool } from '../../../utils/user';
 
-const MentorCard = forwardRef<HTMLDivElement, MentorDetailsDocument>(({ id, name, school, major, bio, highlight1, highlight2, isMtr=true }, ref) => {
+const MentorCard = forwardRef<HTMLDivElement, MentorDetailsDocument>((props, ref) => {
+    const { id, name, biography, highlights:[highlight1, highlight2], permissions: { isMtr=true } } = props;
+    const school = getSchool(props);
+    const major = getMajor(props);
     const [message, setMessage] = useState("");
     const { user, userDetails } = useAuth();
     const [sendingMessage, setSendingMessage] = useState(false);
@@ -61,7 +65,7 @@ const MentorCard = forwardRef<HTMLDivElement, MentorDetailsDocument>(({ id, name
                 </div>
                 <div className="space-y-1 text-center flex-1 transform" onClick={() => navigate(`/profile/${id}`)}>
                     <p className="text-md text-gray-600">{major}</p>
-                    <p className="text-sm text-gray-600">{bio.substring(0, 125)}</p>
+                    <p className="text-sm text-gray-600">{biography.substring(0, 125)}</p>
                     <p>
                         <span className="text-sm text-gray-600 pr-1">{highlight1?.emoji}</span>
                         <span className="text-sm text-gray-600">{highlight1?.description}</span>

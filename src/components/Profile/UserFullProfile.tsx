@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { Button, IconButton } from "@mui/material";
 import { EditOutlined, ExitToAppOutlined, MessageOutlined } from "@mui/icons-material";
 import { lazy, useRef, useState } from "react";
@@ -10,11 +9,14 @@ import ProfilePicture from "../User/ProfilePicture";
 import UserHighlight from "../User/UserHighlight";
 import { logEvent } from "../../utils/analytics";
 import { useNavigate } from "react-router-dom";
+import lookup from 'country-code-lookup'
+import { PublicUser } from "../../types/User";
+import { getMajor, getSchool } from "../../utils/user";
 
 const LazyEditDetailsDialog = lazy(() => import("./EditDetailsDialog"));
 
 const UserProfilePicture = ({ profileId, isUser }) => {
-    const profileUpload = useRef();
+    const profileUpload = useRef<HTMLInputElement>(null);
 
     const handleUploadProfilePic = async (file) => {
         if (!isUser) return;
@@ -40,9 +42,9 @@ const UserProfilePicture = ({ profileId, isUser }) => {
     return (
         <div className="relative">
             <ProfilePicture className="w-24 h-24 md:w-32 md:h-32 rounded-full border-white border-8 border-solid shadow-lg transform -translate-y-16 mx-1" uid={profileId} forceRefresh/>
-            <input ref={profileUpload} type="file" name="file" accept="image/*" onChange={({ target }) => handleUploadProfilePic(target.files[0])} hidden />
+            <input ref={profileUpload} type="file" name="file" accept="image/*" onChange={({ target }) => handleUploadProfilePic(target.files?.[0])} hidden />
             {isUser && <div className="absolute top-0 right-0 text-white transform -translate-y-16 rounded-full bg-gray-800 scale-75">
-                <IconButton onClick={e => profileUpload.current.click()} size="large">
+                <IconButton onClick={e => profileUpload.current?.click()} size="large">
                     <EditOutlined className="text-white" />
                 </IconButton>
             </div>}
@@ -52,7 +54,7 @@ const UserProfilePicture = ({ profileId, isUser }) => {
 
 const UserBannerPicture = ({ profileId, isUser }) => {
     const { user } = useAuth();
-    const bannerUpload = useRef();
+    const bannerUpload = useRef<HTMLInputElement>(null);
 
     const handleUploadBannerPic = async (file) => {
         if (!isUser) return;
@@ -79,9 +81,9 @@ const UserBannerPicture = ({ profileId, isUser }) => {
     return (
         <div className="relative">
             <BannerPicture className="w-full h-32 rounded-xl shadow-md object-cover" uid={profileId} />
-            <input ref={bannerUpload} type="file" name="file" accept="image/png" onChange={({ target }) => handleUploadBannerPic(target.files[0])} hidden />
+            <input ref={bannerUpload} type="file" name="file" accept="image/png" onChange={({ target }) => handleUploadBannerPic(target.files?.[0])} hidden />
             {isUser && <div className="absolute top-0 right-0 m-1 text-white rounded-full bg-gray-100 transform scale-75">
-                <IconButton onClick={e => bannerUpload.current.click()} size="large">
+                <IconButton onClick={e => bannerUpload.current?.click()} size="large">
                     <EditOutlined />
                 </IconButton>
             </div>}
@@ -89,10 +91,11 @@ const UserBannerPicture = ({ profileId, isUser }) => {
     );
 }
 
-export default function UserFullProfile({ profileId, isMentor, isUser, userDetails }) {
+export default function UserFullProfile({ profileId, isMentor, isUser, userDetails }: { profileId: string, isMentor?: boolean, isUser?: boolean, userDetails: PublicUser }) {
     const navigate = useNavigate();
     const { user, signOut } = useAuth();
-    const { name, major, school, country, highlight1, highlight2 } = userDetails || {};
+    const { name, country, highlights } = userDetails || {};
+    const [highlight1, highlight2] = highlights;
     const [mentorModalOpen, setMentorModalOpen] = useState(false);
     const [openEditDetails, setOpenEditDetails] = useState(false);
 
@@ -146,8 +149,8 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
                             </div>
                         </>}
                     </div>
-                    <p className="text-gray-600 text-sm">{isMentor ? "Mentor" : major} at {school}</p>
-                    <p className="text-gray-600 text-sm ">{country}</p>
+                    <p className="text-gray-600 text-sm">{isMentor ? "Mentor" : getMajor(userDetails)} at {getSchool(userDetails)}</p>
+                    <p className="text-gray-600 text-sm ">{lookup.byInternet(country)?.country}</p>
                     <div className="flex flex-row items-center my-5 space-x-3">
                         <UserHighlight highlight={highlight1} />
                         <UserHighlight highlight={highlight2} />
