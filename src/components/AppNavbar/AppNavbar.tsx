@@ -68,7 +68,8 @@ const NavBarLink = ({ IconComponent, title, href, isContactIcon } : {
  */
 const AppNavbar = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, userToken } = useAuth();
+  
   return (<SlideTransition in timeout={50}>
     <div className="fixed bottom-0 lg:sticky lg:top-0 w-full h-14 lg:p-4 lg:h-24 bg-white z-10 shadow-md flex flex-row items-center justify-between">
       <img className="h-20 hidden lg:block cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => navigate('/')} />
@@ -78,7 +79,7 @@ const AppNavbar = () => {
           <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/" />
           <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/mentors" />
           <NavBarLink IconComponent={MessageTwoToneIcon} isContactIcon title="Contacts" href="/messages" />
-          <NavBarLink IconComponent={AccountBalanceOutlined} isContactIcon title="Your School" href={`/organization/${'d8wUjGjUJkv51sjYNTnK'}`} />
+          {userToken?.organization && <NavBarLink IconComponent={AccountBalanceOutlined} title="Your School" href={`/organization/${'d8wUjGjUJkv51sjYNTnK'}`} />}
           {/* <NavBarLink IconComponent={Notif0.  icationsTwoToneIcon} title="Notifications"/> */}
         </div>
         {/* <div className="hidden lg:block" >
