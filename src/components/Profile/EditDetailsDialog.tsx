@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Dialog } from '@headlessui/react';
+import DialogTitle from '@mui/material/DialogTitle';
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { db, firebase } from '../../config/firebase';
@@ -75,12 +75,11 @@ const EditDetailsDialog = ({open, onClose}) => {
     return (
         <DialogBase open={open} onClose={onClose}>
             <div className="space-y-2 inline-block w-full max-w-lg p-4 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg max-h-screen overflow-y-auto">
-                <Dialog.Title
-                  as="h3"
+                <DialogTitle
                   className="text-xl font-semibold leading-6 text-center text-gray-900"
                 >
                   Edit Details
-                </Dialog.Title>
+                </DialogTitle>
                 <div className="mt-2 h-full space-y-2 py-2">
                     <InputField 
                         required 

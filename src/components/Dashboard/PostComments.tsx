@@ -8,7 +8,7 @@ import { getSnapshot } from '../../hooks/firestore';
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Send } from "@mui/icons-material";
-import { Transition } from "@headlessui/react";
+import { Fade } from '@mui/material';
 import { logEvent } from "../../utils/analytics";
 import { TransitionGroup } from 'react-transition-group';
 import { set } from "react-hook-form";
@@ -86,16 +86,8 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
                 </Collapse>
             ))}
             </TransitionGroup>
-            <Transition
-                as={Fragment}
-                show={loading}
-                enter="transform transition duration-[400ms]"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="transform duration-200 transition ease-in-out"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-            >
+            <Fade
+                in={loading}            >
                 <div className="w-full flex flex-row space-x-2 flex-1 items-top animate-pulse">
                     <div className="rounded-full bg-gray-300 w-10 h-10 mt-1"></div>
                     <div className="flex flex-col flex-1 space-y-2">
@@ -105,7 +97,7 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
                         <div className="h-4 bg-gray-300 rounded w-5/6"></div>
                     </div>
                 </div>
-            </Transition>
+            </Fade>
             {!finished && comments.length != 0 && <a className="underline text-blue-700 block" onClick={loadMore}>Load More</a>}
         </div>
     );

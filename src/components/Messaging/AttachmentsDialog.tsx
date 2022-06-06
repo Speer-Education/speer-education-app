@@ -1,4 +1,4 @@
-import { Dialog } from '@headlessui/react';
+import DialogTitle from '@mui/material/DialogTitle';
 import { FolderOpenOutlined } from '@mui/icons-material';
 import { collection, orderBy, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
@@ -14,12 +14,11 @@ const AttachmentsDialog = ({open, onClose, roomId}) => {
   return (
       <DialogBase open={open} onClose={onClose}>
           <div className="inline-block w-full max-w-md p-4 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg overflow-y-auto" style={{maxHeight: "30rem"}}>
-              <Dialog.Title
-                as="h3"
+              <DialogTitle
                 className="text-lg font-medium leading-6 text-gray-900"
               >
                 Shared Files and Links
-              </Dialog.Title>
+              </DialogTitle>
               <div className="mt-2 h-full">
               {attachments.length === 0 ? "Loading..." : null}
               {attachments.map(({ attachmentType, url, title, image, downloadUrl, filename, fileType, uploadedOn }) => {

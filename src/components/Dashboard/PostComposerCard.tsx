@@ -6,7 +6,7 @@ import { db, firebase, postConverter } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import ProfilePicture from '../User/ProfilePicture';
 import { Image, YouTube } from '@mui/icons-material';
-import { Dialog } from '@headlessui/react';
+import DialogTitle from '@mui/material/DialogTitle';
 import DialogBase from '../Dialog/DialogBase';
 import { logEvent } from '../../utils/analytics';
 import SlideTransition from '../SlideTransition/SlideTransition';
@@ -41,12 +41,11 @@ const AddYoutubeDialog =({ open, onClose, onUrl }) => {
     const [link, setLink] = useState("");
     return <DialogBase open={open} onClose={onClose}>
         <div className="inline-block w-full max-w-md p-4 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg max-h-screen overflow-y-auto">
-            <Dialog.Title
-                as="h3"
+            <DialogTitle
                 className="text-lg font-medium leading-6 text-gray-900"
             >
                 Add Youtube Link
-            </Dialog.Title>
+            </DialogTitle>
             <div className="mt-2 h-full">
                 <TextField label="Youtube Link" fullWidth={true} value={link} onChange={e => setLink(e.target.value)}/>
             </div>
