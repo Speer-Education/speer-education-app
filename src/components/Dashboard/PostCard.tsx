@@ -22,6 +22,7 @@ import { PostDocument } from '../../types/Posts';
 import { Delta } from 'quill';
 import { doc, Timestamp, updateDoc } from 'firebase/firestore';
 import {QuillDeltaToHtmlConverter} from 'quill-delta-to-html';
+
 /**
  * Creates the post card for this post
  * @component
