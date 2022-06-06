@@ -15,8 +15,8 @@ import imageCompression from 'browser-image-compression';
 import SendMessageLoader from '../Loader/SendMessageLoader';
 import { logEvent } from '../../utils/analytics';
 import { MessageDocument, MessageRoomDocument } from '../../types/Messaging';
-import GroupProfileCard from './GroupProfileCard';
 
+const LazyGroupProfileCard = lazy(() => import('./GroupProfileCard'));
 const LazyProfileCard = lazy(() => import('./ProfileCard'));
 const LazyAttachmentsCard = lazy(() => import('./AttachmentsCard'));
 
@@ -101,18 +101,23 @@ function Chat({screenSize}) {
                 })
 
                 //If there is a name (it means it is a group chat)
+                // We can test group chats for the time being by going to the room in the firebase database, and manually adding a name field.
+                // We can also manually add a picture there to test it too.
                 if (snapData?.name) {
                     setRoomName(snapData.name)
                     setRoomPic(snapData.picture || "")
-                    setRoomUsers(snapData.users)
+                    setRoomUsers(snapData.users)// We set room users as opposed to ismentor like below.
+                    setRecipientId(undefined) //setRecipientId to undefined so GroupProfileCard renders instead of regular ProfileCard
+                    
                 //If there is no name (A direct message between two person chat)
                 } else {
                     const { roomName, roomPic, isMentor, recipientId } = await findRoomNameAndRoomPicAndRecipientId(snapData);
                     setRoomName(roomName) //Implemented function (actually from Sidebar.js) to get the actual room name    
                     setRoomPic(roomPic)
                     setIsMentor(isMentor)
-                    setRecipientId(recipientId) //Switch this to undefined, and add the line below to test group chats for now.
+                    setRecipientId(recipientId) //Switch this from receipientId to undefined, and add the line below to test group chats for now.
                     // setRoomUsers(snapData.users) 
+                    // THis is just for testing group chats on a two person chat, actual group chat should be created with if statement above.
                 }
                 setLoading(false);
             }, error => {
@@ -550,7 +555,7 @@ function Chat({screenSize}) {
         <div className={`${screenSize < 2 ? "hidden" : ""} flex flex-col h-app`} style={screenSize < 3 ? {width: '275px'} : {width: '350px'}}>
             {/* THis is the profile card, if there is no recipientId, we show the group profile card instead */}
             {recipientId ? <LazyProfileCard uid={recipientId} roomExists={!roomDoesNotExistWarning}/> : 
-            <GroupProfileCard roomExists={!roomDoesNotExistWarning} roomUsers={roomUsers}/>} 
+            <LazyGroupProfileCard roomExists={!roomDoesNotExistWarning} roomUsers={roomUsers}/>} 
             <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments} roomExists={!roomDoesNotExistWarning}/>
         </div>
         {/* This second section is for screen sizes below 2 */}
@@ -563,7 +568,7 @@ function Chat({screenSize}) {
             <button onClick={toggleShowProfPicAndAttachments} className="bg-transparent border-none p-5 cursor-pointer"><i className="fas fa-arrow-left text-2xl"></i></button>
             {/* THis is the profile card, if there is no recipientId, we show the group profile card instead */}
             {recipientId ? <LazyProfileCard uid={recipientId} roomExists={!roomDoesNotExistWarning}/> : 
-            <GroupProfileCard roomExists={!roomDoesNotExistWarning} roomUsers={roomUsers}/>} 
+            <LazyGroupProfileCard roomExists={!roomDoesNotExistWarning} roomUsers={roomUsers}/>} 
             <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments} roomExists={!roomDoesNotExistWarning}/>
         </div> : null}
     </>;
