@@ -7,6 +7,7 @@ import DialogBase from '../Dialog/DialogBase';
 import { InputAreaField } from '../Forms/Inputs';
 import Spinner from '../Loader/Spinner'
 import { logEvent } from "../../utils/analytics";
+import { DialogContent } from '@mui/material';
 
 const EditBiographyDialog = ({open, onClose}) => {
 
@@ -15,8 +16,8 @@ const EditBiographyDialog = ({open, onClose}) => {
     const [saving, setSaving] = useState(false)
 
     useEffect(() => {
-        const { bio } = userDetails || {};
-        setForm({bio})
+        const { biography } = userDetails || {};
+        setForm({biography})
     },[userDetails])
     
     const handleFormChange = (e) => {
@@ -40,30 +41,32 @@ const EditBiographyDialog = ({open, onClose}) => {
       setSaving(false)
       onClose();
     }
-    const { bio } = form;
+    const { biography } = form;
 
     return (
-        <DialogBase open={open} onClose={onClose}>
+        <DialogBase 
+          open={open} 
+          onClose={onClose} 
+        >
             <div className="space-y-2 inline-block w-full max-w-lg p-4 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg max-h-screen overflow-y-auto">
                 <DialogTitle
                   className="text-xl font-semibold leading-6 text-center text-gray-900"
                 >
                   Edit Biography
                 </DialogTitle>
-                <div className="mt-2 h-full space-y-2 py-2">
-                    <InputAreaField 
-                        style={{ resize: "none"}} 
-                        rows="3" 
-                        maxLength="300"
-                        type="text" 
-                        className="md:w-full mb-6 md:mb-0" 
-                        label="Short Description about yourself" 
-                        id="bio" 
-                        name="bio" 
-                        value={bio} 
-                        onChange={handleFormChange}/>
-
-                </div>
+                <DialogContent>
+                  <InputAreaField 
+                      style={{ resize: "none"}} 
+                      rows="3" 
+                      maxLength="300"
+                      type="text" 
+                      className="sm:w-96 mb-6 md:mb-0" 
+                      label="Short Description about yourself" 
+                      id="biography" 
+                      name="biography" 
+                      value={biography} 
+                      onChange={handleFormChange}/>
+                </DialogContent>
                 <div className="mt-4 pt-2">
                   <button
                     type="button"

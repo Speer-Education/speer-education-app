@@ -35,7 +35,7 @@ type FormValues = {
     },
     school: string
     major: string
-    bio: string
+    biography: string
     highlight1: {
         emoji: string,
         description: string
@@ -68,7 +68,7 @@ export default function UserDetails() {
             },
             school: "",
             major: "",
-            bio: "",
+            biography: "",
             highlight1: {
                 emoji: "🚀",
                 description: ""
@@ -280,7 +280,7 @@ export default function UserDetails() {
                             <div className="mt-2">
                                 <FormRow>
                                     <InputAreaField 
-                                        {...register('bio', {required: true})}
+                                        {...register('biography', {required: true})}
                                         required 
                                         className="resize-none"
                                         //@ts-ignore
