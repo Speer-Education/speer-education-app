@@ -9,7 +9,8 @@ import Spinner from '../Loader/Spinner'
 import { logEvent } from "../../utils/analytics";
 
 const EditSocialsDialog = ({open, onClose}) => {
-
+//FIXME: BROKEN FROM NEW FORMAT
+  //! This Edit is Broken from the new format
     const {user, userDetails} = useAuth();
     const [form, setForm] = useState({})
     const [saving, setSaving] = useState(false)

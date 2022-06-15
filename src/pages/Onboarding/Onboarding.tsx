@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import './Onboarding.css';
 import { gradeOptions, countryOptions } from './OnboardingConfig';
 import { functions } from '../../config/firebase';
 import Button from '@mui/material/Button';
 import { Helmet } from "react-helmet";
 import Spinner from '../../components/Loader/Spinner';
-import Picker from 'emoji-picker-react';
+import Picker, { IEmojiData } from 'emoji-picker-react';
 import { GitHub, LanguageOutlined } from '@mui/icons-material';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -16,9 +16,10 @@ import { useAuth } from '../../hooks/useAuth';
 import * as Sentry from "@sentry/react";
 import { Controller, useForm } from 'react-hook-form';
 import { Slide } from '@mui/material';
+import { FixMeLater } from '../../types/temp';
 
 
-const FormRow = ({ children }) => (
+const FormRow = ({ children }: PropsWithChildren<{}>) => (
     <div className="flex flex-wrap -mx-3 mb-6">{children}</div>
 )
 
@@ -93,7 +94,7 @@ export default function UserDetails() {
     const highlight2 = watch('highlight2')
     const form = watch()
     console.log(form)
-    const callOnboarding = async (numTries, form) => {
+    const callOnboarding = async (numTries: number, form: FixMeLater) => {
         if (numTries > 9){
             throw new Error ("Onboarding function failed too many times")
         }
@@ -143,12 +144,12 @@ export default function UserDetails() {
     }
 
 
-    const handleHighlight1Emoji = (event, emojiObject) => {
+    const handleHighlight1Emoji = (event: React.MouseEvent, emojiObject: IEmojiData) => {
         setValue("highlight1.emoji", emojiObject.emoji)
         setShowPicker1(false)
     };
 
-    const handleHighlight2Emoji = (event, emojiObject) => {
+    const handleHighlight2Emoji = (event: React.MouseEvent, emojiObject: IEmojiData) => {
         setValue("highlight2.emoji", emojiObject.emoji)
         setShowPicker2(false)
     };

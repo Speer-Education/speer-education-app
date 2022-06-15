@@ -44,7 +44,9 @@ function App() {
     });
   },[]);
 
-  const errorHandler= (error,errorInfo) => {
+  const errorHandler= (error: Error, errorInfo: {
+    componentStack: string;
+  }) => {
     console.log('logging error:', error, errorInfo)
   }
 

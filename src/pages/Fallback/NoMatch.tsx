@@ -1,6 +1,6 @@
 import { Navigate } from "react-router"
 
-const NoMatch = (props) => {
+const NoMatch = () => {
     return <Navigate to={'/404'} state={{ noMatch: true}} />
 }
 

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
+import { RefObject, useEffect, useState } from "react"
 
-const useRefDimensions = (ref) => {
+const useRefDimensions = <T extends Element>(ref: RefObject<T>) => {
     const [dimensions, setDimensions] = useState({ width: 1, height: 2 })
     useEffect(() => {
       if (ref.current) {

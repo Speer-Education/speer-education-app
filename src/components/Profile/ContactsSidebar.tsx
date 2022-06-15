@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
 import { useAuth } from '../../hooks/useAuth';
-import {PublicUserDoc, } from '../../types/User';
+import {PublicUser, PublicUserDoc, UserID, } from '../../types/User';
 import { getMajor } from '../../utils/user';
 
-export default function ContactsSidebar({ profileId, userDetails, isUser }) {
+export default function ContactsSidebar({ profileId, userDetails, isUser }: { profileId: UserID, userDetails: PublicUser, isUser?: boolean }) {
 
     const [followers, setFollowers] = useState<PublicUserDoc[]>([]);
     const { user } = useAuth();

@@ -93,3 +93,5 @@ export type PublicUserDoc =  PublicUser & InternalDoc;
 export type UserDetailsToken = UserDetails & UserClaims;
 export type UserDetailsDocument = UserDetails & InternalDoc
 export type MentorDetailsDocument = MentorDetails & InternalDoc;
+
+export type UserID = string;

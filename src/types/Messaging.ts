@@ -8,7 +8,7 @@ export type Attachment = {
     downloadUrl?: string,
     url?: string,
     fileSize: number,
-    fileType: 'file', 'image',
+    fileType: 'file' | 'image',
     filename: string,
     uploadedOn: Timestamp
 }
@@ -46,6 +46,8 @@ export type MessageRoom = {
 export type MessageDocument = Message & InternalDoc
 export type MessageRoomDocument = MessageRoom & InternalDoc
 export type AttachmentDocument = Attachment & InternalDoc
+
+export type RoomID = string;
 
 /* Group chats will have:
 1. Name

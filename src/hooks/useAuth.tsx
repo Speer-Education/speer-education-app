@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
+import React, { useState, useEffect, useContext, createContext, PropsWithChildren } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth, db, firebase, rtdb } from "../config/firebase";
 import { UserClaims, UserDetails, UserDetailsDocument, UserDetailsToken } from "../types/User";
@@ -17,7 +17,7 @@ const { Provider } = authContext;
  * @param {props} props children that require access to the useAuth hook
  * @returns {Provider}
  */
-export function AuthProvider({ children }) {
+export function AuthProvider({ children }: PropsWithChildren<{}>) {
     const auth = useAuthProvider();
     return <Provider value={auth}>{children}</Provider>;
 }
@@ -52,7 +52,7 @@ const useAuthProvider = () => {
      * Sign in user with email and password login
      * @param {*} params Email and Password  
      */
-    const signInWithEmailAndPassword = async ({ email, password }) => {
+    const signInWithEmailAndPassword = async ({ email, password }: { email: string, password: string }) => {
         await auth
             .signInWithEmailAndPassword(email, password)
             .catch((error) => {

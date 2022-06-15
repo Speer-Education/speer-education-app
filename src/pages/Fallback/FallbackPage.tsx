@@ -1,6 +1,6 @@
 import React from 'react'
 
-function FallbackPage({ error }) {
+function FallbackPage({ error }: { error: Error}) {
     return (
         <div className="grid place-items-center w-screen h-screen bg-gray-100">
             <div className="flex flex-col items-center space-y-2">

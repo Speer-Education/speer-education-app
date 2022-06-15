@@ -8,7 +8,7 @@ import "firebase/compat/analytics";
 import { isDevelopment } from "../utils/environment";
 import { DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore';
 import {PostDocument, UserPostData} from '../types/Posts';
-import { Delta } from 'quill';
+
 const firebaseConfig = {
   apiKey: "AIzaSyAx-OEKEZF6LgX5wv03qRilbGTWIJvL4kw",
   authDomain: 'auth.speeredu.com',

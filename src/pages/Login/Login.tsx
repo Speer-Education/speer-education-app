@@ -28,12 +28,7 @@ export default function Login() {
         }
     });
 
-    const googleSignIn = (e) => {
-        e.preventDefault();
-        initGoogleSignIn();
-    }
-
-    const onLogIn = (data) => {
+    const onLogIn = (data: {email: string, password: string}) => {
         signInWithEmailAndPassword(auth, data.email, data.password)
             .then(result => {
                 console.log(result);
@@ -112,7 +107,7 @@ export default function Login() {
                                 />
                             <Button onClick={handleSubmit(onLogIn)}>Sign Up/Login</Button>
                         </div>
-                        <Button type="submit" onClick={googleSignIn} variant="contained" color="primary" startIcon={<i className="fab fa-google"></i>}>Sign In With Google</Button>
+                        <Button type="submit" onClick={initGoogleSignIn} variant="contained" color="primary" startIcon={<i className="fab fa-google"></i>}>Sign In With Google</Button>
 
                     </div>
                 </div>

@@ -1,7 +1,8 @@
 import { functions } from "../config/firebase";
 import { getRoomId } from "./relationships"
+import {UserID} from '../types/User';
 
-const getMessageUserRoom = async (receiver, sender) => {
+const getMessageUserRoom = async (receiver: UserID, sender: UserID) => {
     let finalRoomId = await getRoomId(receiver, sender);
     if (finalRoomId) return finalRoomId;
     try {

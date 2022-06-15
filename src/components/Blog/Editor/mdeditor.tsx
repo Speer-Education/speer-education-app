@@ -86,16 +86,22 @@ export const MDEditor = forwardRef<ReactQuill, Props>(({
     },
     mention: {
       allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-      mentionDenotationChars: ["@"],
+      mentionDenotationChars: ["@", "#"],
       mentionContainerClass: '',
-      source: function(searchTerm, renderList, mentionChar) {
-        usersIndex.search<{name: string}>(searchTerm, {
-          hitsPerPage: 10
-          }).then(function(content) {
-            console.log(content.hits)
-            renderList(content.hits.map(e => ({id:e.objectID, value: e.name})), mentionChar);
-          }
-        );
+      source: function(searchTerm: string, renderList, mentionChar) {
+        if(mentionChar == '@') {
+          usersIndex.search<{name: string}>(searchTerm, {
+            hitsPerPage: 10
+            }).then(function(content) {
+              console.log(content.hits)
+              renderList(content.hits.map(e => ({id:e.objectID, value: e.name})), mentionChar);
+            }
+          );
+        } else if(mentionChar == '#') {
+          const _lowercase = searchTerm.trim().toLowerCase();
+          if(_lowercase == '') renderList([], mentionChar);
+          else renderList([{ id:1, value:_lowercase }], mentionChar);
+        }
       }
     }
   }), []);

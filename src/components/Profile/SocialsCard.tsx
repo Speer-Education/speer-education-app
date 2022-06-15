@@ -1,10 +1,10 @@
 import { IconButton } from '@mui/material';
-import { EditOutlined, GitHub, LanguageOutlined, YouTube } from '@mui/icons-material';
+import { EditOutlined, GitHub, LanguageOutlined, SvgIconComponent, YouTube } from '@mui/icons-material';
 import React, { FC, useState } from 'react';
 import EditSocialsDialog from './EditSocialsDialog';
 import { PublicUser } from '../../types/User';
 
-const SocialLink = ({ link, icon }) => (
+const SocialLink:FC<{link: string, icon: JSX.Element }> = ({ link, icon }) => (
     <div className="flex flex-row items-center space-x-2 text-gray-600">
         {icon}
         <a className="text-sm" target="_blank" href={'//'+link}>{link}</a>

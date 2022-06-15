@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, HTMLAttributes, FC } from 'react';
 import { MDEditor } from '../Blog/Editor/mdeditor';
 import { db, firebase, postConverter } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
@@ -8,7 +8,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import TimeAgo from 'react-timeago';
 import './PostCard.css';
 import { useAuth } from '../../hooks/useAuth';
-import { EditOutlined, Favorite, Cancel } from '@mui/icons-material';
+import { EditOutlined, Favorite, Cancel, SvgIconComponent } from '@mui/icons-material';
 import { PostComments } from './PostComments';
 import useRefDimensions from '../../hooks/useRefDimensions';
 import { Button, Collapse } from '@mui/material';
@@ -132,7 +132,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
         setIsEdit(false);
     }
 
-    const PostAction = ({ IconComponent, label, active, activeColours,icon_colour, colours, ...props }) => {
+    const PostAction: FC<{ IconComponent: SvgIconComponent, label: string, active?: boolean, activeColours: string ,icon_colour: string , colours: string } & HTMLAttributes<HTMLButtonElement>> = ({ IconComponent, label, active, activeColours,icon_colour, colours, ...props }) => {
         return <button className={`inline-flex items-center px-4 py-1 border border-transparent ${active?activeColours:colours} hover:shadow-sm text-base leading-6 font-medium rounded-md transition ease-in-out duration-150 cursor-pointer`} {...props}>
             <IconComponent className={`text-xl mr-1 ${icon_colour}`} />
             <span className="text-gray-500">{label}</span>

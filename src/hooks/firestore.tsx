@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { firebase, db } from '../config/firebase';
+import { FixMeLater } from '../types/temp';
 
-const useDocListener = (path) => {
+const useDocListener = (path: string) => {
     const [doc, setDoc] = useState({});
     useEffect(() => {
         return db.doc(path).onSnapshot(snap => {
@@ -15,7 +16,7 @@ const useDocListener = (path) => {
     return doc
 }
 
-const updateDoc = async (path, updates) => {
+const updateDoc = async (path: string, updates: FixMeLater) => {
     delete updates.id;
     return await db.doc(path).set({
         ...updates,
@@ -24,9 +25,9 @@ const updateDoc = async (path, updates) => {
     },{merge:true})
 }
 
-const getNewDocId = (path) => db.collection(path).doc().id
+const getNewDocId = (path: string) => db.collection(path).doc().id
 
-const deletePost = (path) => db.doc(path).delete();
+const deletePost = (path: string) => db.doc(path).delete();
 
 const getSnapshot = (ref: firebase.firestore.CollectionReference | firebase.firestore.Query ) => new Promise<firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>>((resolve, reject) => {
     let unsubscribe = ref.onSnapshot((snapshot) => {
