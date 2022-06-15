@@ -101,7 +101,7 @@ const useAuthProvider = () => {
         }
         else if (!claims.finishSetup && !location.pathname.startsWith('/onboarding')) {
             navigate('/onboarding');
-        } else if(claims.finishSetup && (location.pathname.startsWith('/onboarding') || location.pathname.startsWith('/login'))) { //If user completed setup but is on onboarding page, redirect to app
+        } else if((claims.finishSetup && location.pathname.startsWith('/onboarding') || location.pathname.startsWith('/login'))) { //If user completed setup but is on onboarding page, redirect to app
             navigate('/');
             if(location.pathname.startsWith('/onboarding')) logEvent('Completed Onboarding');
         }
