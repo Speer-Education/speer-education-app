@@ -17,7 +17,7 @@ const AttachmentItem = ({ image, IconComponent, title, hoverClass="hover:bg-gray
         </div>
         <div className="flex flex-col space-y-1 flex-1 overflow-hidden">
             <div className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12 font-bold">{title}</div>
-            <div className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12 text-gray-500"><TimeAgo date={date} />{subtitle}</div >
+            <div className="overflow-hidden overflow-ellipsis whitespace-nowrap w-10/12 text-gray-500">{date && <TimeAgo date={date} />}{subtitle}</div >
         </div>
     </div>)
 

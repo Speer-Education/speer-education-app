@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { db, docConverter } from '../../config/firebase';
+import {db, docConverter, publicUserCollection} from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
 import PersonAddTwoToneIcon from '@mui/icons-material/PersonAddTwoTone';
 import { IconButton } from '@mui/material';
@@ -13,7 +13,7 @@ import { collection, orderBy, query, where } from 'firebase/firestore';
 import {getMajor} from '../../utils/user';
 export default function MentorShowcase() {
 
-    const [mentors = [], loading, error] = useCollectionData<MentorDetailsDocument>(query(collection(db, 'usersPublic').withConverter(docConverter), where('permissions.isMtr','==',true), orderBy('_firstLogin','desc')));
+    const [mentors = [], loading, error] = useCollectionData<MentorDetailsDocument>(query(publicUserCollection, where('permissions.isMtr','==',true), orderBy('_firstLogin','desc')));
     const [creatingRoom, setCreatingRoom] = useState(false);
     const [mentorSelected, setMentorSelected] = useState<MentorDetailsDocument>();
     const [mentorModalOpen, setMentorModalOpen] = useState(false);

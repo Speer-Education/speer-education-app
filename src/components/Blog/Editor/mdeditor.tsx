@@ -1,3 +1,4 @@
+//@ts-ignore
 // import Editor from 'rich-markdown-editor';
 import './mdeditor.css'
 import { storage } from '../../../config/firebase';

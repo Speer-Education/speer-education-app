@@ -1,15 +1,15 @@
 import DialogTitle from '@mui/material/DialogTitle';
 import { FolderOpenOutlined } from '@mui/icons-material';
 import { collection, orderBy, query } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { db, docConverter } from '../../config/firebase';
+import {db, docConverter, attachmentsCollection} from '../../config/firebase';
 import DialogBase from '../Dialog/DialogBase';
 import AttachmentItem from './AttachmentItem';
-import {AttachmentDocument} from '../../types/Messaging';
+import {AttachmentDocument, RoomID} from '../../types/Messaging';
 
-const AttachmentsDialog = ({open, onClose, roomId}) => {
-  const [attachments = [], loading, error] = useCollectionData<AttachmentDocument>(query(collection(db,'rooms',roomId, 'attachments').withConverter(docConverter), orderBy('uploadedOn','desc')))
+const AttachmentsDialog: FC<{open: boolean, onClose: () => void, roomId: RoomID }> = ({open, onClose, roomId}) => {
+  const [attachments = [], loading, error] = useCollectionData<AttachmentDocument>(query(attachmentsCollection(roomId), orderBy('uploadedOn','desc')))
 
   return (
       <DialogBase open={open} onClose={onClose}>

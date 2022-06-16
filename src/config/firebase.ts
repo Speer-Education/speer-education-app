@@ -6,8 +6,12 @@ import "firebase/compat/storage";
 import "firebase/compat/functions";
 import "firebase/compat/analytics";
 import { isDevelopment } from "../utils/environment";
-import { DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore';
+import { collection, CollectionReference, DocumentData, DocumentReference, Firestore, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore';
 import {PostDocument, UserPostData} from '../types/Posts';
+import { InternalDoc } from "../types/DocConverter";
+import { MentorDetailsDocument, PublicUser, PublicUserDoc } from "../types/User";
+import { AttachmentDocument } from "../types/Messaging";
+import { FixMeLater } from "../types/temp";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAx-OEKEZF6LgX5wv03qRilbGTWIJvL4kw",
@@ -71,10 +75,8 @@ export const docConverter = {
     snapshot: QueryDocumentSnapshot,
     options: SnapshotOptions
   ): {
-    id: string,
-    ref: DocumentReference,
     [x: string]: any
-  } {
+  } & InternalDoc {
     const data = snapshot.data(options);
     return {
       id: snapshot.id,
@@ -111,3 +113,28 @@ export const postConverter = {
     };
   },
 };
+export const typeCollection: ({
+  <T extends InternalDoc>(base: firebase.firestore.Firestore, ...pathSegments: string[]): CollectionReference<T>;
+  <T extends InternalDoc>(base: DocumentReference<T>, ...pathSegments: string[]): CollectionReference<T>;
+}) = <T extends InternalDoc>(base: FixMeLater, ...pathSegments: string[]) => {
+  return collection(base, pathSegments[0], ...pathSegments).withConverter({
+    toFirestore(doc: T): DocumentData {
+        const { id, ref, ...docWithoutId } = doc;
+        return docWithoutId;
+    },
+    fromFirestore(
+      snapshot: QueryDocumentSnapshot,
+      options: SnapshotOptions
+    ): T {
+      const data = snapshot.data(options) as Omit<T, 'id' | 'ref'>;
+      return {
+        id: snapshot.id,
+        ref: snapshot.ref,
+        ...data,
+      } as T;
+    },
+  });
+}
+
+export const publicUserCollection = typeCollection<PublicUserDoc>(db, 'usersPublic');
+export const attachmentsCollection = (roomId: string) => typeCollection<AttachmentDocument>(db, roomId, 'attachments');

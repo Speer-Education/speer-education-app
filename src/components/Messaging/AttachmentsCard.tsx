@@ -10,7 +10,7 @@ const AttachmentsCard = ({ roomId, attachments = []}: { roomId: string, attachme
     const [open, setOpen] = useState(false);
     
     return <>
-        {open ?<LazyAttachmentsDialog open={open} onClose={_ => setOpen(false)} roomId={roomId}/> : null}
+        {open ?<LazyAttachmentsDialog open={open} onClose={() => setOpen(false)} roomId={roomId}/> : null}
         <div className="p-3 m-2 shadow-lg rounded-md bg-white space-y-3 flex-1 max-h-full overflow-auto">
             <div className="w-full flex flex-row justify-between">
                 <p className="font-medium">Shared Files and Links</p>

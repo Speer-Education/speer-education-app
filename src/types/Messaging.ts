@@ -6,6 +6,7 @@ export type Attachment = {
     attachmentType: 'file' | 'url',
     bucketPath: string,
     downloadUrl?: string,
+    image?: string;
     url?: string,
     fileSize: number,
     fileType: 'file' | 'image',
