@@ -13,7 +13,11 @@ script-shell = "C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
 ```
 
 ## Branch Rules ⛔⛔
+We have 3 important branches. 
+- `master` currently deployed version of the app. 
+- `develop` all development purposes
+- `feature_name` for developing a breaking feature. must be pull requested into develop later on.
 
-1. For new features, make sure to code them in a new branch to avoid major conficts
-2. Merge new features by creating a Pull Request, do not merge them locally.
+## Issues
+To keep track of tasks and bugs, use the issue tab to create them. While making a commit, mention the issue with #{issue_number}. Thus when you make a pull request, it will automatically close the issues.
 
