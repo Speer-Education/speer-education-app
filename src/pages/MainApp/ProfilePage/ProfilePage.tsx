@@ -79,7 +79,7 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
                 <div className="w-screen h-full flex flex-row">
                     <div className="hidden xl:flex flex-col h-full h-app w-sidebar">
                         <div className="fixed flex flex-col cc_cursor h-app w-sidebar">
-                            {profileId || user?.uid && userDetails && <ContactsSidebar profileId={profileId || user?.uid} userDetails={userDetails} isUser={isUser}/>}
+                            {((profileId || user?.uid) && userDetails) && <ContactsSidebar profileId={profileId || user!.uid} userDetails={userDetails} isUser={isUser}/>}
                             <StatsCard />
                         </div>
                     </div>
