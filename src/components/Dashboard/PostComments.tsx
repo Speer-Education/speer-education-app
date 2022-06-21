@@ -32,6 +32,8 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
 
     const { name } = userDetails || {};
     
+    //TODO: Should add press enter to submit comment
+
     const handleSubmitCommment = async () => {
         if(userComment.length === 0 || !userDetails || !user) return;
         await db.collection(`stage_posts/${post.id}/comments`).add({

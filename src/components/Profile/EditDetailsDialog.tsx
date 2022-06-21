@@ -1,100 +1,37 @@
-//@ts-nocheck
 import DialogTitle from '@mui/material/DialogTitle';
-import { Button, DialogActions, DialogContent } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { DialogActions, DialogContent } from '@mui/material';
 import { db, firebase } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import { countryOptions } from '../../pages/Onboarding/OnboardingConfig';
 import DialogBase from '../Dialog/DialogBase';
 import { InputField, InputSelect } from '../Forms/Inputs';
-import Picker from 'emoji-picker-react';
 import Spinner from '../Loader/Spinner';
 import { logEvent } from "../../utils/analytics";
 import { Controller, useForm } from 'react-hook-form';
+import { UserDetails } from '../../types/User';
+import {FormEmojiPicker} from '../Forms/EmojiPicker';
 
 
 const FormRow = ({ children }) => (
-  <div class="flex flex-wrap mb-6">{children}</div>
+  <div className="flex flex-wrap mb-6 flex-row">{children}</div>
 )
 
+type FormValues = Pick<UserDetails, 'name' | 'education' | 'dateOfBirth' | 'email' | 'country' | 'highlights'>;
+
 const EditDetailsDialog = ({ open, onClose }) => {
-  //FIXME: BROKEN FROM NEW FORMAT
-  //! This Edit is Broken from the new format
   const { user, userDetails } = useAuth();
   const { register, control, handleSubmit, watch, setValue, formState: { isValid, isSubmitting } } = useForm<FormValues>({
     mode: 'all',
-    defaultValues: {
-      name: "",
-      hsGradYear: {
-        value: "",
-        label: ""
-      },
-      country: {
-        value: "",
-        label: ""
-      },
-      school: "",
-      major: "",
-      biography: "",
-      highlight1: {
-        emoji: "🚀",
-        description: ""
-      },
-      highlight2: {
-        emoji: "🗣",
-        description: ""
-      },
-      socials: {
-        github: "",
-        personal: "",
-        youtube: "",
-      }
-    }
+    defaultValues: userDetails
   });
-  const [saving, setSaving] = useState(false);
-  const [showPicker1, setShowPicker1] = useState(false);
-  const [showPicker2, setShowPicker2] = useState(false);
 
-  useEffect(() => {
-    const { name, school, major, country, highlight1, highlight2 } = userDetails || {};
-    let formState = { name, school, major, country: countryOptions.filter(mod => mod.label == country)[0], highlight1, highlight2 }
-    if (formState === form) return;
-    setForm(formState)
-  }, [userDetails])
-
-  const { name, school, major, country, highlight1, highlight2 } = form;
-
-  const handleHighlight1Emoji = (event, emojiObject) => {
-    setForm({
-      ...form, highlight1: {
-        emoji: emojiObject.emoji,
-        description: highlight1.description
-      }
-    })
-    setShowPicker1(false)
-  };
-
-  const handleHighlight2Emoji = (event, emojiObject) => {
-    setForm({
-      ...form, highlight2: {
-        emoji: emojiObject.emoji,
-        description: highlight2.description
-      }
-    })
-    setShowPicker2(false)
-  };
-
-  const handleSaveDetails = () => {
+  const handleSaveDetails = async (data: FormValues) => {
     if (!user) return;
     logEvent('updated_details')
-    setSaving(true)
-    const submittingForm = JSON.parse(JSON.stringify(form));
-    submittingForm.country = submittingForm.country.label;
-    db.doc(`users/${user.uid}`).update({
-      ...submittingForm,
+    await db.doc(`users/${user.uid}`).update({
+      ...data,
       _updatedOn: firebase.firestore.Timestamp.now()
     })
-    setSaving(false)
     onClose();
   }
 
@@ -107,8 +44,8 @@ const EditDetailsDialog = ({ open, onClose }) => {
       </DialogTitle>
       <DialogContent>
         <InputField {...register('name', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="What is your full name" placeholder="John Doe" />
-        <InputField {...register('major', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major" />
-        <InputField {...register('school', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Name of Your School" id="school" name="school" placeholder="Harvard University" />
+        <InputField {...register('education.0.major', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major" />
+        <InputField {...register('education.0.school', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Name of Your School" id="school" name="school" placeholder="Harvard University" />
         <Controller
           control={control}
           name="country"
@@ -128,14 +65,11 @@ const EditDetailsDialog = ({ open, onClose }) => {
         </p>
         <FormRow>
           {/* TODO: Change this to the emoji selecter */}
-          <div className="px-3">
-            <Button variant="outlined" style={{ height: "40px", width: "40px" }} id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{highlight1.emoji || "Pick an emoji"}</Button>
-          </div>
-          {showPicker1 ? <Picker
-            onEmojiClick={handleHighlight1Emoji}
-            pickerStyle={{ zIndex: "1", position: "absolute", left: "130px" }} /> : null}
+          <FormEmojiPicker
+            control={control}
+            name="highlights.0.emoji"/>
           <InputField
-            {...register('highlight1.description', { required: true })}
+            {...register('highlights.0.description', { required: true })}
             required
             type="text"
             label=""
@@ -145,14 +79,11 @@ const EditDetailsDialog = ({ open, onClose }) => {
         </FormRow>
         <FormRow>
           {/* TODO: Change this to the emoji selecter */}
-          <div className="px-3">
-            <Button variant="outlined" style={{ height: "40px", width: "40px" }} id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{highlight2.emoji || "Pick an emoji"}</Button>
-          </div>
-          {showPicker2 ? <Picker
-            onEmojiClick={handleHighlight2Emoji}
-            pickerStyle={{ zIndex: "1", position: "absolute", left: "130px" }} /> : null}
+          <FormEmojiPicker
+            control={control}
+            name="highlights.1.emoji"/>
           <InputField
-            {...register('highlight2.description', { required: true })}
+            {...register('highlights.1.description', { required: true })}
             required
             type="text"
             label=""
@@ -165,9 +96,9 @@ const EditDetailsDialog = ({ open, onClose }) => {
         <button
           type="button"
           className="cursor-pointer ml-2 inline-flex justify-center px-4 py-2 float-right text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-          onClick={handleSaveDetails}
+          onClick={handleSubmit(handleSaveDetails)}
         >
-          {saving ? <Spinner /> : "Save"}
+          {isSubmitting ? <Spinner /> : "Save"}
         </button>
         <button
           type="button"

@@ -1,6 +1,4 @@
-//@ts-nocheck
 import DialogTitle from '@mui/material/DialogTitle';
-import { useEffect, useState } from 'react';
 import { db, firebase } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import DialogBase from '../Dialog/DialogBase';
@@ -8,40 +6,26 @@ import { InputAreaField } from '../Forms/Inputs';
 import Spinner from '../Loader/Spinner'
 import { logEvent } from "../../utils/analytics";
 import { DialogActions, DialogContent } from '@mui/material';
+import {useForm} from 'react-hook-form';
+import {UserDetails} from '../../types/User';
 
 const EditBiographyDialog = ({ open, onClose }) => {
 
   const { user, userDetails } = useAuth();
-  const [form, setForm] = useState({})
-  const [saving, setSaving] = useState(false)
+  const { register, control, handleSubmit, watch, setValue, formState: { isValid, isSubmitting } } = useForm<Pick<UserDetails, 'biography'>>({
+    mode: 'all',
+    defaultValues: userDetails
+  });
 
-  useEffect(() => {
-    const { biography } = userDetails || {};
-    setForm({ biography })
-  }, [userDetails])
-
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value })
-  }
-
-  const handleSelectInput = (name, value) => {
-    setForm({ ...form, [name]: value })
-  }
-
-  const handleSaveBio = () => {
+  const handleSaveBio = async (data: Pick<UserDetails, 'biography'>) => {
     if (!user) return;
     logEvent('updated_biography')
-    setSaving(true)
-    const submittingForm = JSON.parse(JSON.stringify(form));
-    db.doc(`users/${user.uid}`).update({
-      ...submittingForm,
+    await db.doc(`users/${user.uid}`).update({
+      ...data,
       _updatedOn: firebase.firestore.Timestamp.now()
     })
-    setSaving(false)
     onClose();
   }
-  const { biography } = form;
 
   return (
     <DialogBase
@@ -55,24 +39,22 @@ const EditBiographyDialog = ({ open, onClose }) => {
       </DialogTitle>
       <DialogContent>
         <InputAreaField
+          {...register('biography', {required: true})}
           style={{ resize: "none" }}
+          //@ts-ignore
           rows="3"
           maxLength="300"
           type="text"
           className="sm:w-96 mb-6 md:mb-0"
-          label="Short Description about yourself"
-          id="biography"
-          name="biography"
-          value={biography}
-          onChange={handleFormChange} />
+          label="Short Description about yourself"/>
       </DialogContent>
       <DialogActions>
         <button
           type="button"
           className="ml-2 inline-flex justify-center px-4 py-2 float-right text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-          onClick={handleSaveBio}
+          onClick={handleSubmit(handleSaveBio)}
         >
-          {saving ? <Spinner /> : "Save"}
+          {isSubmitting ? <Spinner /> : "Save"}
         </button>
         <button
           type="button"

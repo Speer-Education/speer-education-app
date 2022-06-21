@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from "react";
+import React, { FC, forwardRef, useState } from "react";
 import Select from 'react-select';
 import InputBase from '@mui/material/InputBase'
 import { InputBaseProps } from '@mui/material'
@@ -74,12 +74,12 @@ const selectStyle = {
   }
   
 
-const InputSelect = ({ className="", label="", id, required = false, ...props } : {
+const InputSelect: FC<({
     required?: boolean,
     className?: string,
     label?: string,
     id: string
-} & React.ComponentProps<typeof Select>) => {
+} & React.ComponentProps<typeof Select>)> = ({ className="", label="", id, required = false, ...props } ) => {
     return <div className={`w-full px-3 ${className}`}>
         <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
