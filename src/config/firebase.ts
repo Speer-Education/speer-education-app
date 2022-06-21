@@ -117,7 +117,7 @@ export const typeCollection: ({
   <T extends InternalDoc>(base: firebase.firestore.Firestore, ...pathSegments: string[]): CollectionReference<T>;
   <T extends InternalDoc>(base: DocumentReference<T>, ...pathSegments: string[]): CollectionReference<T>;
 }) = <T extends InternalDoc>(base: FixMeLater, ...pathSegments: string[]) => {
-  return collection(base, pathSegments[0], ...pathSegments).withConverter({
+  return collection(base, pathSegments[0], ...pathSegments.slice(1)).withConverter({
     toFirestore(doc: T): DocumentData {
         const { id, ref, ...docWithoutId } = doc;
         return docWithoutId;
