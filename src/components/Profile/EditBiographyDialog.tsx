@@ -21,7 +21,7 @@ const EditBiographyDialog = ({ open, onClose }) => {
     if (!user) return;
     logEvent('updated_biography')
     await db.doc(`users/${user.uid}`).update({
-      ...data,
+      biography: data.biography,
       _updatedOn: firebase.firestore.Timestamp.now()
     })
     onClose();

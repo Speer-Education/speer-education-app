@@ -22,7 +22,14 @@ const EditDetailsDialog = ({ open, onClose }) => {
   const { user, userDetails } = useAuth();
   const { register, control, handleSubmit, watch, setValue, formState: { isValid, isSubmitting } } = useForm<FormValues>({
     mode: 'all',
-    defaultValues: userDetails
+    defaultValues: {
+      name: userDetails?.name,
+      education: userDetails?.education,
+      dateOfBirth: userDetails?.dateOfBirth,
+      email: userDetails?.email,
+      country: userDetails?.country,
+      highlights: userDetails?.highlights
+    }
   });
 
   const handleSaveDetails = async (data: FormValues) => {
