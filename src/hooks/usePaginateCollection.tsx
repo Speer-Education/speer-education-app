@@ -15,7 +15,7 @@ import {
     startAt,
 } from 'firebase/firestore';
 import { useEffect, useRef, useState } from 'react';
-import { useIsFirestoreRefEqual } from '../utils/firestoreHelper';
+import {useIsFirestoreRefEqual, useIsFirestoreQueryEqual} from '../utils/firestoreHelper';
 
 const usePaginateCollection = <DocType extends DocumentData = DocumentData>(colRef: CollectionReference<DocType>, {
     orderKey,
@@ -55,7 +55,7 @@ const usePaginateCollection = <DocType extends DocumentData = DocumentData>(colR
         }
     }
 
-    const ref = useIsFirestoreRefEqual<CollectionReference<DocType>>(colRef, reset)
+    const ref = useIsFirestoreQueryEqual(query(colRef, ...queryConstraints), reset)
     useEffect(() => {
         if(!ref.current) {
             setDocuments([])
