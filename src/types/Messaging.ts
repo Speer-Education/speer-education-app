@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase/firestore"
 import { InternalDoc } from "./DocConverter"
+import { Organization } from "./Organization"
 
 export type Attachment = {
     title?: string,
@@ -37,11 +38,13 @@ export type MessageRoom = {
     lastMessage: Message & {messageId: string},
     messageAmount: number,
     users: string[],
-    roomName?: {
+    roomName?: { //Only for 2 person chats 
         [userId: string]: string;
     },
-    name?: string, //Only group chats will have these
+    name?: string, //Only group chats will have these (name of Group chat)
     picture?: string, //Only group chats will have these
+    organization?: Organization, /*If chat is affliated with an organization, we add it there. Currently have no methods of affliating 
+    chat with organization in the UI, so will need to add that */
 }
 
 export type MessageDocument = Message & InternalDoc

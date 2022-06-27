@@ -10,6 +10,7 @@ import { Button, Collapse } from '@mui/material';
 import { TransitionGroup } from "react-transition-group";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MessageRoomDocument } from '../../types/Messaging';
+import CreateGroupChatModal from '../Modal/CreateGroupChatModal';
 
 function Sidebar({screenSize}) {
     const location = useLocation();
@@ -19,6 +20,7 @@ function Sidebar({screenSize}) {
     const [rooms, setRooms] = useState<MessageRoomDocument[]>([]);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true)
+    const [createGroupChatModalOpen, setCreateGroupChatModalOpen] = useState(false);
 
     useEffect(() => {
         //If user is blank
@@ -111,6 +113,8 @@ function Sidebar({screenSize}) {
                         <Spinner /> Loading Chats
                     </div>
                 </div>}
+                <Button variant="contained" onClick={()=> setCreateGroupChatModalOpen(true)}>Create Group Chat</Button>
+                <CreateGroupChatModal open={createGroupChatModalOpen} setOpen={setCreateGroupChatModalOpen}/>
             </div>
         </div>
     )
