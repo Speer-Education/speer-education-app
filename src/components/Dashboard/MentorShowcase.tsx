@@ -11,13 +11,16 @@ import {UserDetails, MentorDetailsDocument} from '../../types/User';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { collection, orderBy, query, where } from 'firebase/firestore';
 import {getMajor} from '../../utils/user';
+import { useSpeerOrg } from '../../hooks/useSpeerOrg';
 export default function MentorShowcase() {
-
-    const [mentors = [], loading, error] = useCollectionData<MentorDetailsDocument>(query(publicUserCollection, where('permissions.isMtr','==',true), orderBy('_firstLogin','desc')));
+    const { orgId } = useSpeerOrg();
+    const [mentors = [], loading, error] = useCollectionData<MentorDetailsDocument>(query(publicUserCollection, where('permissions.isMtr','==',true), ...(orgId != 'global')?[where('organization', '==', orgId)]:[], orderBy('_firstLogin','desc')));
     const [creatingRoom, setCreatingRoom] = useState(false);
     const [mentorSelected, setMentorSelected] = useState<MentorDetailsDocument>();
     const [mentorModalOpen, setMentorModalOpen] = useState(false);
     const { user } = useAuth();
+
+    if(error) console.error(error)
     
     //Loads the mentors in mentor collection
     const userMentors = useMemo<MentorDetailsDocument[]>(() => {

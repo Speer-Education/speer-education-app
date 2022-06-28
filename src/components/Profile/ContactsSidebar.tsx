@@ -5,6 +5,7 @@ import ProfilePicture from '../User/ProfilePicture';
 import { useAuth } from '../../hooks/useAuth';
 import {PublicUser, PublicUserDoc, UserID, } from '../../types/User';
 import { getMajor } from '../../utils/user';
+import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
 
 export default function ContactsSidebar({ profileId, userDetails, isUser }: { profileId: UserID, userDetails: PublicUser, isUser?: boolean }) {
 
@@ -17,13 +18,13 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }: { pr
     useEffect(() => {
         if(!user || !profileId) return;
         setFollowersLoaded(false)
-        let ref = db.collection('relationships').where('followedId','==', profileId);
-        return ref.onSnapshot(async snapshot => {
-            let list = await Promise.all(snapshot.docs.map(async doc => {
-                const { followedId, followerId } = doc.data();
+        let ref = query(collection(db, 'relationships'), where('followedId','==', profileId));
+        return onSnapshot(ref, async snapshot => {
+            let list = await Promise.all(snapshot.docs.map(async docSnap => {
+                const { followedId, followerId } = docSnap.data();
                 //Get user data from firestore
-                const userRef = db.collection('usersPublic').doc(followerId);
-                const userData = await userRef.get();
+                const userRef = doc(db, 'usersPublic', followerId);
+                const userData = await getDoc(userRef);
 
                 return {id: userData.id, ...userData.data()} as Partial<PublicUserDoc>
             })) as PublicUserDoc[];

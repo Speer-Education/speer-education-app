@@ -8,6 +8,7 @@ import {collection} from 'firebase/firestore';
 import usePaginateCollection from '../../hooks/usePaginateCollection';
 import { PostDocument } from '../../types/Posts';
 import InView from 'react-intersection-observer';
+import { useSpeerOrg } from '../../hooks/useSpeerOrg';
 
 const DOCUMENTS_PER_PAGE = 3;
 
@@ -18,9 +19,8 @@ const DOCUMENTS_PER_PAGE = 3;
  */
 const PostStream = ({ organization }: {organization?: string}) => {
     const { user } = useAuth();
-    //@ts-ignore
-    const collectionRef = !organization?collection(db, 'stage_posts'):collection(db, 'organization', organization, 'posts');
-    const [streamPosts, loadMore, loading, finished] = usePaginateCollection<PostDocument>(collectionRef.withConverter(postConverter), {
+    const { orgRef } = useSpeerOrg();
+    const [streamPosts, loadMore, loading, finished] = usePaginateCollection<PostDocument>(collection(orgRef, 'posts').withConverter(postConverter), {
         orderKey: '_createdOn',
         direction: 'desc',
         pageLimit: DOCUMENTS_PER_PAGE

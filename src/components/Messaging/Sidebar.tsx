@@ -10,6 +10,7 @@ import { Button, Collapse } from '@mui/material';
 import { TransitionGroup } from "react-transition-group";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MessageRoomDocument } from '../../types/Messaging';
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 
 function Sidebar({screenSize}) {
     const location = useLocation();
@@ -25,7 +26,7 @@ function Sidebar({screenSize}) {
         if (!user) return
 
         //Fetch rooms where the user is in them
-        const unsubscribe = db.collection('rooms').where('users', 'array-contains', user?.uid).orderBy('lastMessage.date','desc').onSnapshot(snap => {
+        const unsubscribe = onSnapshot(query(collection(db, 'rooms'),where('users', 'array-contains', user?.uid), orderBy('lastMessage.date','desc')), snap => {
 
             Promise.all(snap.docs.map(async doc => {
 
