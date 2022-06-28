@@ -10,6 +10,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import {SnackbarProvider} from 'notistack';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import {OrgProvider} from './hooks/useSpeerOrg';
 const theme = createTheme({
   palette: {
     primary: {
@@ -32,7 +33,9 @@ ReactDOM.createRoot(
         <SnackbarProvider maxSnack={3}>
           <Router>
             <AuthProvider>
-              <App />
+              <OrgProvider>
+                <App />
+              </OrgProvider>
             </AuthProvider>
           </Router>
         </SnackbarProvider>

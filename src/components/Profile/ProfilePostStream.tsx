@@ -9,6 +9,7 @@ import PostLoader from '../Dashboard/PostLoader';
 import {collection, where} from 'firebase/firestore';
 import usePaginateCollection from '../../hooks/usePaginateCollection';
 import {PostDocument} from '../../types/Posts';
+import { useSpeerOrg } from '../../hooks/useSpeerOrg';
 
 const DOCUMENTS_PER_PAGE = 3;
 
@@ -18,8 +19,9 @@ const DOCUMENTS_PER_PAGE = 3;
  * @returns PostCards
  */
 const ProfilePostStream = ({uid, isUser, name}) => {
+    const { orgRef } = useSpeerOrg();
     const { user } = useAuth();
-    const [streamPosts, loadMore, loading, finished] = usePaginateCollection<PostDocument>(collection(db, 'stage_posts').withConverter(postConverter), {
+    const [streamPosts, loadMore, loading, finished] = usePaginateCollection<PostDocument>(collection(orgRef, 'posts').withConverter(postConverter), {
         orderKey: '_createdOn',
         queryConstraints: [
             where('author','==',uid)

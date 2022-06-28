@@ -1,3 +1,4 @@
+import { collection, doc } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { firebase, db } from '../config/firebase';
 import { FixMeLater } from '../types/temp';
@@ -25,7 +26,7 @@ const updateDoc = async (path: string, updates: FixMeLater) => {
     },{merge:true})
 }
 
-const getNewDocId = (path: string) => db.collection(path).doc().id
+const getNewDocId = (path: string) => doc(collection(db, path)).id
 
 const deletePost = (path: string) => db.doc(path).delete();
 

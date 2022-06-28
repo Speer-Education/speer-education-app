@@ -8,10 +8,12 @@ import {PlatformBlogDocument} from '../../types/PlatformBlogs';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { DialogActions, DialogContent } from '@mui/material';
+import { useSpeerOrg } from '../../hooks/useSpeerOrg';
 
 
 export default function BlogShowcase() {
-  const [blogData = [], loading, error] = useCollectionData<PlatformBlogDocument>(query(collection(db, 'blogs').withConverter(docConverter),orderBy('postedOn', 'desc')));
+  const { orgRef } = useSpeerOrg();
+  const [blogData = [], loading, error] = useCollectionData<PlatformBlogDocument>(query(collection(orgRef, 'blogs').withConverter(docConverter),orderBy('postedOn', 'desc')));
   const [blogOpen, setBlogOpen] = useState(false);
   const [activeBlog, setActiveBlog] = useState<PlatformBlogDocument>();
 

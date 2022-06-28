@@ -15,6 +15,7 @@ import ReactQuill from 'react-quill';
 import { collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { PostDocument } from '../../types/Posts';
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
+import { useSpeerOrg } from '../../hooks/useSpeerOrg';
 
 /**
  * Handles the Editor View for posts
@@ -22,24 +23,24 @@ import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
  * @returns Component
  */
 const PostComposerCard = ({ organization }:{organization?: string}) => {
+    const { orgRef } = useSpeerOrg();
     const [postContent, setPostContent] = useState<Delta>();
     const [saving, setSaving] = useState<boolean>(false);
     const { user } = useAuth();
     const editor = useRef<ReactQuill>(null)
     //@ts-ignore
-    const collectionRef = !organization?collection(db, 'stage_posts'):collection(db, 'organization', organization, 'posts')
-    const [docId, setDocId] = useState(doc(collectionRef).id);
+    const [docId, setDocId] = useState(doc(collection(orgRef, 'posts')).id);
 
     useEffect(() => {
         if(saving) return;
-        setDocId(doc(collectionRef).id)
+        setDocId(doc(collection(orgRef, 'posts')).id)
     }, [saving]);
 
     //Save the post the user created
     const createNewPost = async () => {
         if(!user || !docId || !postContent) return;
         setSaving(true) //set saving to true to show loading
-        await setDoc(doc(collectionRef, docId).withConverter(postConverter), {
+        await setDoc(doc(collection(orgRef, 'posts'), docId).withConverter(postConverter), {
             content: {
                 delta: postContent,
                 html: new QuillDeltaToHtmlConverter(postContent.ops || []).convert()

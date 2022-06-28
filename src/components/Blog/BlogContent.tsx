@@ -5,9 +5,11 @@ import remarkGfm from 'remark-gfm'
 import { PlatformBlogDocument } from '../../types/PlatformBlogs';
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 import { doc } from 'firebase/firestore';
+import { useSpeerOrg } from '../../hooks/useSpeerOrg';
 
 const BlogContent = forwardRef<HTMLDivElement, { content: PlatformBlogDocument }>(({ content: { id: slug } }, ref) => {
-    const [content, loading, error] = useDocumentData<PlatformBlogDocument>(doc(db, 'blogs', slug).withConverter(docConverter));
+    const { orgRef } = useSpeerOrg();
+    const [content, loading, error] = useDocumentData<PlatformBlogDocument>(doc(orgRef, 'blogs', slug).withConverter(docConverter));
     const editorRef = useRef();
     if(loading) {
         return <div>Loading...</div>

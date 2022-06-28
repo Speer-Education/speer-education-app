@@ -14,14 +14,16 @@ import { TransitionGroup } from 'react-transition-group';
 import { set } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {UserPostData, PostDocument, PostCommentDocument} from '../../types/Posts';
-import { collection } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, Timestamp } from "firebase/firestore";
 import usePaginateCollection from "../../hooks/usePaginateCollection";
 import { getMajor, getSchool } from "../../utils/user";
+import { useSpeerOrg } from "../../hooks/useSpeerOrg";
 
 const DOCUMENTS_PER_PAGE = 5;
 
 export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>(({ post }, ref) => {
-    const [comments, loadMore, loading, finished] = usePaginateCollection(collection(db, 'stage_posts', post.id, 'comments').withConverter(docConverter), {
+    const { orgRef } = useSpeerOrg();
+    const [comments, loadMore, loading, finished] = usePaginateCollection(collection(post.ref, 'comments').withConverter(docConverter), {
         orderKey: 'commentedOn',
         direction: 'desc',
         pageLimit: DOCUMENTS_PER_PAGE
@@ -32,15 +34,15 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
 
     const { name } = userDetails || {};
     
-    //TODO: Should add press enter to submit comment
+    //TODO: Should add press enter to submit comment as per #58
 
     const handleSubmitCommment = async () => {
         if(userComment.length === 0 || !userDetails || !user) return;
-        await db.collection(`stage_posts/${post.id}/comments`).add({
+        await addDoc(collection(post.ref, 'comments'), {
             comment: userComment,
             author: { name, major: getMajor(userDetails), school: getSchool(userDetails), uid: user.uid },
             parentPost: post.id,
-            commentedOn: firebase.firestore.Timestamp.now()
+            commentedOn: Timestamp.now()
         })
         logEvent('posted_comment', {
             parentPost: post.id,
@@ -80,7 +82,7 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
                             <h4 className="text-gray-600 text-normal font-normal">{comment}</h4>
                         </div>
                         {(author?.uid == user?.uid) && <IconButton
-                            onClick={() => db.collection(`stage_posts/${post.id}/comments`).doc(id).delete()}
+                            onClick={() => deleteDoc(doc(post.ref, 'comments', id))}
                             size="large">
                             <DeleteIcon className="text-red-500"/>
                         </IconButton>}

@@ -15,6 +15,7 @@ import imageCompression from 'browser-image-compression';
 import SendMessageLoader from '../Loader/SendMessageLoader';
 import { logEvent } from '../../utils/analytics';
 import { MessageDocument, MessageRoomDocument } from '../../types/Messaging';
+import { addDoc, collection, doc, onSnapshot } from 'firebase/firestore';
 
 const LazyGroupProfileCard = lazy(() => import('./GroupProfileCard'));
 const LazyProfileCard = lazy(() => import('./ProfileCard'));
@@ -82,7 +83,7 @@ function Chat({screenSize}) {
         if (roomId && user) {
             setLoading(true);
             //Get Room Name
-            const unsub1 = db.collection('rooms').doc(roomId).onSnapshot(async (snapshot) => { //<-- Add an unsubscribe
+            const unsub1 = onSnapshot(doc(db, 'rooms', roomId), async (snapshot) => { //<-- Add an unsubscribe
                 //NO ERROR, ROOM EXISTS
                 setRoomDoesNotExistWarning(false);
                 //TODO: fixable after firebase migration
@@ -310,7 +311,7 @@ function Chat({screenSize}) {
 
             const recipientIds =  roomDoc.users.filter(mod => mod !== user.uid)
 
-            db.collection('rooms').doc(roomId).collection('messages').add({
+            addDoc(collection(db, 'rooms', roomId, 'messages'),{
                 messageType: "file",
                 files: attachments,
                 date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -351,7 +352,7 @@ function Chat({screenSize}) {
 
             const recipientIds =  roomDoc.users.filter(mod => mod !== user.uid)
 
-            db.collection('rooms').doc(roomId).collection('messages').add({
+            addDoc(collection(db, 'rooms', roomId, 'messages'),{
                 messageType: "text",
                 message: input,
                 date: firebase.firestore.FieldValue.serverTimestamp(),

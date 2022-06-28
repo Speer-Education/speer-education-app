@@ -6,6 +6,7 @@ import { db } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { Message, MessageRoom } from '../../types/Messaging';
+import { collection, doc, onSnapshot } from 'firebase/firestore';
 
 const SidebarChat = forwardRef<HTMLDivElement, {
     id: string,
@@ -20,7 +21,7 @@ const SidebarChat = forwardRef<HTMLDivElement, {
     //Fetches the latest message for display
     useEffect(() => {
         if (id) {
-            return db.collection('rooms').doc(id).onSnapshot(doc => {
+            return onSnapshot(doc(db, 'rooms', id), doc => {
                 const roomDoc = doc.data() as MessageRoom
                 setMessages(roomDoc.lastMessage)
             })

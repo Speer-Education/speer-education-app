@@ -13,6 +13,7 @@ import { TransitionGroup } from "react-transition-group";
 import { Grow } from '@mui/material';
 import { MentorDetailsDocument } from '../../../types/User';
 import Zoom from '@mui/material/Zoom';
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 
 const Mentors = () => {
 
@@ -24,7 +25,7 @@ const Mentors = () => {
     useEffect(() => {
         if(!user) return;
         //Get all the mentors and set in mentors
-        return db.collection('usersPublic').where('permissions.isMtr','==', true).orderBy('_firstLogin','desc').onSnapshot(snap => {
+        return onSnapshot(query(collection(db, 'usersPublic'), where('permissions.isMtr','==', true), orderBy('_firstLogin','desc')), snap => {
             const allMentors = snap.docs.map( doc => {
                 return { id: doc.id, ...doc.data()} as MentorDetailsDocument
             })

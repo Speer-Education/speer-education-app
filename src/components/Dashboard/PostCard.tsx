@@ -121,7 +121,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
             },
         })
         //@ts-ignore
-        await updateDoc(doc(db, 'stage_posts', post.id).withConverter(postConverter), {
+        await updateDoc(post.ref, {
             content: {
                 delta: editedPostContent,
                 html: new QuillDeltaToHtmlConverter(editedPostContent.ops || []).convert()

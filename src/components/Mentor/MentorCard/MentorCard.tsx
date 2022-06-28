@@ -10,6 +10,7 @@ import { logEvent } from '../../../utils/analytics';
 import { useNavigate } from 'react-router-dom';
 import { MentorDetailsDocument } from '../../../types/User';
 import { getMajor, getSchool } from '../../../utils/user';
+import { addDoc, collection } from 'firebase/firestore';
 
 const MentorCard = forwardRef<HTMLDivElement, MentorDetailsDocument>((props, ref) => {
     const { id, name, biography, highlights:[highlight1, highlight2], permissions: { isMtr=true } } = props;
@@ -27,7 +28,7 @@ const MentorCard = forwardRef<HTMLDivElement, MentorDetailsDocument>((props, ref
         //send it in as profile id instead of mentor id (will need to change the backend so this still works)
         try {
             const targetRoomId = await getMessageUserRoom(id, user.uid)
-            await db.collection(`rooms/${targetRoomId}/messages`).add({
+            await addDoc(collection(db, `rooms/${targetRoomId}/messages`), {
                 date: firebase.firestore.Timestamp.now(),
                 message: message || "Hi 👋",
                 senderId: user?.uid,
