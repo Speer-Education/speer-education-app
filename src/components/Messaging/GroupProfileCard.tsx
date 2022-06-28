@@ -14,16 +14,16 @@ const GroupProfileCard = ({ roomExists, roomUsers }: {
   //In case room doesn't exist.
   if (!roomExists) {
     return (
-      <div className="p-3 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6">
+      <div className="p-2 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-2">
         <h3 className="text-gray-500">{roomExists ? "Loading" : "N/A"}</h3>
       </div>
     );
   }
   //Room Exists (So we spawn the room user ids)
   return (
-    <div className="p-3 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6 ">
-      <div className="pb-2">
-        <h2>Group Members:</h2>
+    <div className="p-2 m-2 shadow-lg rounded-md bg-white bg-opacity-90">
+      <div className="p-3">
+        <h3>Group Members:</h3>
       </div>
       {/* Keep in mind roomUsers is an Array of strings not an array of objects. */}
       {roomUsers.map((roomUserId) => (
@@ -57,7 +57,7 @@ const GroupUserSmallProfileCard = ({ id }: {
   //If still loading
   if (loading) {
     return (
-      <div className="p-3 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6">
+      <div className="px-2 py-1 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6">
         <h3 className="text-gray-500">Loading</h3>
       </div>
     );
@@ -65,7 +65,7 @@ const GroupUserSmallProfileCard = ({ id }: {
 
   //Pass id to profile picture, which will fetch the picture.
   return (
-    <div className={`p-3 pr-5 transition-colors hover:bg-gray-100`}>
+    <div className={`px-2 py-1 transition-colors hover:bg-gray-100`}>
       <Link className="flex items-center" to={`/profile/${details.id}`}>
         <Avatar
           src={`https://storage.googleapis.com/speer-education-dev.appspot.com/users/${details.id}/thumb-profilePicture.png`}

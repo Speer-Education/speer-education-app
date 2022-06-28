@@ -1,44 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import './Sidebar.css';
-import { SearchOutlined } from '@mui/icons-material';
+import { GroupAddRounded, SearchOutlined } from '@mui/icons-material';
 import SidebarChat from './SidebarChat';
-import { db, storage } from '../../config/firebase';
+import { db, docConverter, storage } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import ProfilePicture from '../User/ProfilePicture';
 import Spinner from '../Loader/Spinner';
-import { Button, Collapse } from '@mui/material';
+import { Button, Collapse, IconButton } from '@mui/material';
 import { TransitionGroup } from "react-transition-group";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MessageRoomDocument } from '../../types/Messaging';
 import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { useDialog } from '../../hooks/useDialog';
+import CreateGroupChatForm from '../Forms/CreateGroupChatForm';
 
 function Sidebar({screenSize}) {
     const location = useLocation();
     const navigate = useNavigate();
     const { user, userDetails } = useAuth();
+    const [openDialog, closeDialog] = useDialog();
 
-    const [rooms, setRooms] = useState<MessageRoomDocument[]>([]);
+    const [rooms, setRooms] = useState<FixTypeLater[]>([]);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true)
+
+    type FixTypeLater = {
+        id: string;
+        data: MessageRoomDocument;
+        name: string;
+        pic: string;
+        isMentor?: boolean;
+    }
 
     useEffect(() => {
         //If user is blank
         if (!user) return
 
         //Fetch rooms where the user is in them
-        const unsubscribe = onSnapshot(query(collection(db, 'rooms'),where('users', 'array-contains', user?.uid), orderBy('lastMessage.date','desc')), snap => {
+        const unsubscribe = onSnapshot(query(collection(db, 'rooms').withConverter(docConverter),where('users', 'array-contains', user?.uid), orderBy('lastMessage.date','desc')), snap => {
 
             Promise.all(snap.docs.map(async doc => {
 
-                const docData = doc.data();
+                const docData = doc.data() as MessageRoomDocument;
                 //Means it is a group chat
-                if (docData.users.length > 2) {
+                if (docData.type == 'group') {
                     return {
                         id: doc.id,
                         data: docData,
-                        name: docData.roomName[user?.uid], //Straight away can put name there if there is a name for the group (will be the case for when multiple people)
+                        name: docData.name, //Straight away can put name there if there is a name for the group (will be the case for when multiple people)
                         pic: docData.picture || "" //TODO: No picture property, will need to add this for group rooms.
-                    } as Partial<MessageRoomDocument>
+                    } as FixTypeLater
                 } else {
                     const { isMentor, roomPic } = await findRoomPicAndIsMentor(docData);
 
@@ -48,14 +59,14 @@ function Sidebar({screenSize}) {
                         name: docData.roomName[user?.uid],
                         isMentor: isMentor,
                         pic: roomPic,
-                    } as Partial<MessageRoomDocument>
+                    } as FixTypeLater
                 }
             })).then(res => {
                 if(res.length > 0 && location.pathname === '/messages' && screenSize >= 1) {
                     navigate(`/messages/${res[0].id}`);
                 }
                 setLoading(false)
-                setRooms(res as MessageRoomDocument[])
+                setRooms(res as FixTypeLater[])
             })
             
         })
@@ -79,11 +90,20 @@ function Sidebar({screenSize}) {
         // return "ERROR: NO ROOM NAME FOUND"
     }
 
+    const showCreateGroup = async () => {
+        openDialog({
+            children: <CreateGroupChatForm onClose={closeDialog}/>
+        })
+    }
+
     return (
         <div className="flex flex-col flex-1 rounded-md bg-white m-2 shadow-lg" style={{maxHeight: `${screenSize >= 1 ? "calc(100vh - 20rem)" : "100%"}`}}>
             <div className="flex justify-between items-center px-4 py-3">
                 <ProfilePicture uid={user!.uid} className="h-8 w-8 rounded-full"/>
                 <h1 className="sidebar__headerUsername">{userDetails?.name}</h1>
+                <IconButton onClick={showCreateGroup}>
+                    <GroupAddRounded />
+                </IconButton>
             </div>
             <div className="sidebar__searchContainer">
                 <div className="sidebar__search">

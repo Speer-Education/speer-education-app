@@ -5,7 +5,7 @@ import {Helmet} from "react-helmet";
 import { useSkipPageAfterAuth } from '../../hooks/useSkipPageAfterAuth';
 import { auth } from '../../config/firebase';
 import AppLoader from '../../components/Loader/AppLoader';
-import FormTextField from '../../components/form-components/FormTextField';
+import FormInputText from '../../components/form-components/FormTextField';
 import { useForm } from 'react-hook-form';
 import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
@@ -87,7 +87,7 @@ export default function Login() {
                     <p className="text-gray-600">Sign in or register to find out what we can do for you!</p>
                     <div className="flex flex-col items-center space-y-3">
                         <div className="flex flex-col space-y-1 min-w-[350px]">
-                            <FormTextField
+                            <FormInputText
                                 control={control}
                                 variant="filled"
                                 name="email"
@@ -96,7 +96,7 @@ export default function Login() {
                                 rules={{ required: true }}
                                 type="email"
                                 />
-                            <FormTextField
+                            <FormInputText
                                 control={control}
                                 variant="filled"
                                 name="password"

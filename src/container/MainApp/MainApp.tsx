@@ -1,10 +1,11 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { Routes, Route, useMatch } from "react-router-dom";
 import CircleLoader from "../../components/Loader/CircleLoader";
 import "./MainApp.css";
 
 import AppNavbar from "../../components/AppNavbar/AppNavbar";
 import { NoMatch } from "../../pages/Fallback/NoMatch";
+import { useSpeerOrg } from "../../hooks/useSpeerOrg";
 
 const LazyMessages = lazy(
   () => import("../../pages/MainApp/Messaging/Messaging")
