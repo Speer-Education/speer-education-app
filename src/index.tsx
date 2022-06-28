@@ -3,7 +3,7 @@ import './index.css';
 import App from './App';
 import { AuthProvider } from "./hooks/useAuth";
 import reportWebVitals from './reportWebVitals';
-import { createTheme, ThemeProvider, StyledEngineProvider, adaptV4Theme } from '@mui/material/styles';
+import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
