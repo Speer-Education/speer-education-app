@@ -11,6 +11,7 @@ import {SnackbarProvider} from 'notistack';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import {OrgProvider} from './hooks/useSpeerOrg';
+import DialogProvider from './hooks/useDialog';
 const theme = createTheme({
   palette: {
     primary: {
@@ -34,7 +35,9 @@ ReactDOM.createRoot(
           <Router>
             <AuthProvider>
               <OrgProvider>
-                <App />
+                <DialogProvider>
+                  <App />
+                </DialogProvider>
               </OrgProvider>
             </AuthProvider>
           </Router>

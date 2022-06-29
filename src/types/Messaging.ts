@@ -30,19 +30,32 @@ export type Message = {
     senderUsername: string,
 }
 
-export type MessageRoom = {
+export type IndividualMessageRoom = {
     _createdOn: Timestamp,
     attachments: Attachment[],
     attachmentsAmount: number,
-    lastMessage: Message & {messageId: string},
+    lastMessage: Message & { messageId: string },
     messageAmount: number,
     users: string[],
-    roomName?: {
+    roomName: {
         [userId: string]: string;
     },
-    name?: string, //Only group chats will have these
-    picture?: string, //Only group chats will have these
+    type?: 'individual' //TODO: should be required, db updates
 }
+
+export type GroupMessageRoom = {
+    _createdOn: Timestamp,
+    attachments: Attachment[],
+    attachmentsAmount: number,
+    lastMessage: Message & { messageId: string },
+    messageAmount: number,
+    users: string[],
+    name: string, 
+    picture: string, 
+    type: 'group', 
+}
+
+export type MessageRoom = GroupMessageRoom | IndividualMessageRoom
 
 export type MessageDocument = Message & InternalDoc
 export type MessageRoomDocument = MessageRoom & InternalDoc

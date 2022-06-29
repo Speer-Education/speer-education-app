@@ -1,29 +1,50 @@
-//@ts-nocheck
-import { useState, useEffect } from "react";
-import { db } from "../../config/firebase";
+import React, { useState, useEffect } from "react";
+import { db, functions } from "../../config/firebase";
 import { useAuth } from "../../hooks/useAuth";
-import { SimpleUserDetails } from "../../types/User";
-import { Avatar } from "@mui/material";
-import { Link } from "react-router-dom";
+import { SimpleUserDetails, UserID } from "../../types/User";
+import { Avatar, Button, DialogActions, DialogContent } from "@mui/material";
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import ProfilePicture from "../User/ProfilePicture";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import IconButton from "@mui/material/IconButton";
+import { AddRounded, MoreVertRounded } from "@mui/icons-material";
+import { useDialog } from "../../hooks/useDialog";
+import { httpsCallable } from "firebase/functions";
+import { RoomID } from "../../types/Messaging";
+import { useSnackbar } from "notistack";
+import AddGroupMembersForm from "../Forms/AddGroupMembersForm";
 
 const GroupProfileCard = ({ roomExists, roomUsers }: {
   roomExists: boolean,
   roomUsers: string[],
 }) => {
+  const [openDialog, closeDialog] = useDialog();
+  const { roomId } = useParams();
+
+  const showAddGroupMembers = () => {
+    openDialog({
+      children: <AddGroupMembersForm onClose={closeDialog} existing={roomUsers} roomId={roomId!} />,
+    })
+  }
+
   //In case room doesn't exist.
   if (!roomExists) {
     return (
-      <div className="p-3 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6">
+      <div className="p-2 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-2">
         <h3 className="text-gray-500">{roomExists ? "Loading" : "N/A"}</h3>
       </div>
     );
   }
   //Room Exists (So we spawn the room user ids)
   return (
-    <div className="p-3 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6 ">
-      <div className="pb-2">
-        <h2>Group Members:</h2>
+    <div className="p-2 m-2 shadow-lg rounded-md bg-white bg-opacity-90">
+      <div className="flex flex-row w-full items-center">
+        <h3 className="p-2 flex-1">Group Members:</h3>
+        <IconButton onClick={showAddGroupMembers}>
+          <AddRounded/>
+        </IconButton>
       </div>
       {/* Keep in mind roomUsers is an Array of strings not an array of objects. */}
       {roomUsers.map((roomUserId) => (
@@ -39,6 +60,10 @@ const GroupUserSmallProfileCard = ({ id }: {
   const { user } = useAuth();
   const [details, setDetails] = useState<SimpleUserDetails>();
   const [loading, setLoading] = useState(true);
+  const [openDialog, closeDialog] = useDialog();
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  const { roomId } = useParams();
 
   useEffect(() => {
     //If no user, then return
@@ -54,10 +79,30 @@ const GroupUserSmallProfileCard = ({ id }: {
     });
   }, [user, id]);
 
+  const handleKick = (user: SimpleUserDetails) => {
+    openDialog({
+      children: <>
+        <DialogContent>Are you sure you want to kick {user.name}?</DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog}>Cancel</Button>
+          <Button color="error" onClick={async () => {
+            closeDialog();
+            await httpsCallable<{roomId: RoomID, kickedUserId: UserID}, boolean>(functions, 'KickUserFromGroup')({
+              roomId: roomId!, //! Doesn't work, should have a room provider for easyy data acess.
+              kickedUserId: user.id,
+            }).catch(e => {
+              enqueueSnackbar(e.message, { variant: "error" });
+            })
+          }}>Continue</Button>
+        </DialogActions>
+      </>
+    })
+  }
+
   //If still loading
   if (loading) {
     return (
-      <div className="p-3 m-2 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6">
+      <div className="px-2 py-1 shadow-lg rounded-md bg-white bg-opacity-90 space-y-6">
         <h3 className="text-gray-500">Loading</h3>
       </div>
     );
@@ -65,15 +110,36 @@ const GroupUserSmallProfileCard = ({ id }: {
 
   //Pass id to profile picture, which will fetch the picture.
   return (
-    <div className={`p-3 pr-5 transition-colors hover:bg-gray-100`}>
-      <Link className="flex items-center" to={`/profile/${details.id}`}>
-        <Avatar
-          src={`https://storage.googleapis.com/speer-education-dev.appspot.com/users/${details.id}/thumb-profilePicture.png`}
-        />
-        <div className="pl-3 w-100">
-          <h3>{details.name}</h3>
-        </div>
-      </Link>
+    <div className={`px-2 py-1 transition-colors hover:bg-gray-100 flex flex-row w-full`}>
+      <Avatar
+        src={`https://storage.googleapis.com/speer-education-dev.appspot.com/users/${details!.id}/thumb-profilePicture.png`}
+      />
+      <div className="pl-3 flex-1">
+        <h3>{details!.name}</h3>
+      </div>
+      <PopupState variant="popover" popupId="demo-popup-menu">
+        {(popupState) => (
+          <React.Fragment>
+            <IconButton
+              aria-label="more"
+              {...bindTrigger(popupState)}
+              aria-haspopup="true"
+            >
+              <MoreVertRounded />
+            </IconButton>
+            <Menu {...bindMenu(popupState)}>
+              <MenuItem onClick={() => navigate(`/profile/${details!.id}`)}>View Profile</MenuItem>
+              <MenuItem onClick={() => {
+                handleKick(details!)
+                popupState.close();
+              }}>
+                <span className="text-red-600">Kick User</span>
+              </MenuItem>
+            </Menu>
+          </React.Fragment>
+        )}
+      </PopupState>
+      
     </div>
   );
 };
