@@ -28,6 +28,12 @@ let end = null        // end position of listener
 
 const DOCUMENTS_PER_PAGE = 15;
 
+//TODO: use this to store data
+const ChatContext = React.createContext<{
+    roomId: string;
+}>({});
+
+
 function Chat({screenSize}) {
 
     const { user, userDetails } = useAuth();

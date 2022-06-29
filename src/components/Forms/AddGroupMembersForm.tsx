@@ -16,15 +16,13 @@ import { useNavigate } from "react-router-dom";
 import FormUserSelector from "./FormUserSelector";
 
 type FormValues = {
-    name: string;
     participants: UserHit[];
 }
 
-const CreateGroupChatForm: FC<{ onClose: () => void }> = ({ onClose }) => {
+const AddGroupMembersForm: FC<{ onClose: () => void, existing: UserID[], roomId: string }> = ({ onClose, existing, roomId }) => {
     const { user } = useAuth();
     const { control, handleSubmit, watch, formState: { isValid, isSubmitting } } = useForm<FormValues>({
         defaultValues: {
-            name: "",
             participants: [],
         },
         mode: "onChange",
@@ -35,12 +33,11 @@ const CreateGroupChatForm: FC<{ onClose: () => void }> = ({ onClose }) => {
     const onSubmit = async (data: FormValues) => {
         try {
             console.log(data)
-            const CreateGroupChat = httpsCallable<{name: string, users: UserID[], picture?: String}, RoomID>(functions, 'CreateGroupChat');
-            const roomID = await CreateGroupChat({
-                name: data.name,
-                users: data.participants.map(participant => participant.objectID)
+            const UpdateGroupChat = httpsCallable<{ name?: string, newUsers?: UserID[], picture?: String, roomId: string }, boolean>(functions, 'UpdateGroupChat');
+            await UpdateGroupChat({
+                newUsers: data.participants.map(participant => participant.objectID),
+                roomId
             })
-            navigate(`/messages/${roomID.data}`);
             onClose();
         } catch (e) {
             console.error(e)
@@ -49,29 +46,20 @@ const CreateGroupChatForm: FC<{ onClose: () => void }> = ({ onClose }) => {
     }
 
     return <>
-        <DialogTitle>Create A Group Chat</DialogTitle>
+        <DialogTitle>Add Participants</DialogTitle>
         <DialogContent sx={{minWidth: '260px'}}>
-            <FormInputText
-                fullWidth
-                control={control}
-                name="name"
-                label="Chat Name"
-                variant="filled"
-                rules={{ required: true }}
-            />
-            <h3 className="py-2">Chat Participants</h3>
             <FormUserSelector 
                 control={control} 
                 name="participants" 
-                label="Participants" 
-                filter={(hit: UserHit) => (hit.objectID != user?.uid)}
+                label="New participants" 
+                filter={(hit: UserHit) => (hit.objectID != user?.uid && !existing.includes(hit.objectID))}
             />
         </DialogContent>
         <DialogActions>
             <Button onClick={onClose}>Cancel</Button>
-            <Button onClick={handleSubmit(onSubmit)} disabled={!isValid || isSubmitting}>Create</Button>
+            <Button onClick={handleSubmit(onSubmit)} disabled={!isValid || isSubmitting}>Add</Button>
         </DialogActions>
     </>
 }
 
-export default CreateGroupChatForm;
+export default AddGroupMembersForm;
