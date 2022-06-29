@@ -35,7 +35,8 @@ export type UserDetails = {
         profanities: number;
         followedCount: number;
         followerCount: number;
-        connectedMentees: string[]
+        connectedMentees: string[],
+        views: number;
     },
     _firstLogin: Timestamp,
     _updatedOn: Timestamp

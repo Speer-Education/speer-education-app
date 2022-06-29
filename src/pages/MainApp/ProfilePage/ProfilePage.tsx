@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy } from 'react';
+import { useState, useEffect, lazy } from 'react';
 import { db } from '../../../config/firebase';
 import { useNavigate, useParams } from 'react-router-dom';
 import {Helmet} from "react-helmet";
@@ -17,6 +17,7 @@ import NotFoundPage from '../../Fallback/NotFoundPage';
 import SlideTransition from '../../../components/SlideTransition/SlideTransition';
 import { UserDetails } from '../../../types/User';
 import Zoom from '@mui/material/Zoom';
+import { collection, doc, increment, onSnapshot, updateDoc } from 'firebase/firestore';
 
 const LazyEditBiographyDialog = lazy(() => import('../../../components/Profile/EditBiographyDialog'));
 
@@ -25,13 +26,13 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
     const { profileId } = useParams();
     const { user, userDetails: currentUserDetails } = useAuth();
     const [userDetails, setUserDetails] = useState<UserDetails>();
-    const [isMentor, setIsMentor] = useState(false);
     const [loading, setLoading] = useState(true);
     const [openEditBio, setOpenEditBio] = useState(false);
     const [profileFound, setProfileFound] = useState(true);
     
-    const { name, biography, socials, permissions } = userDetails || {};
+    const { name, biography, socials, permissions, stats } = userDetails || {};
     const { isMtr = false } = permissions || {};
+    const { views = 0 } = stats || {};
 
     //If profileId is userId, then redirect to profile page
     useEffect(() => {
@@ -51,19 +52,21 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
         if(isUser) {
             //Set profile found as true again, in case we are coming from a prof. not found page
             setProfileFound(true);
+            setLoading(false);
             return;
         };
-        return db.doc(`usersPublic/${profileId}`).onSnapshot(async snap => {
+        //update public user view count
+        const profileRef = doc(collection(db, 'usersPublic'), profileId);
+        updateDoc(profileRef, {
+            'stats.views': increment(1)
+        });
+        return onSnapshot(profileRef, async snap => {
             setUserDetails(snap.data() as UserDetails);
 
             //THis means that profile does not exist
             if (!snap.data()){
                 setProfileFound(false);
                 return
-            }
-
-            if (snap.data()?.isMtr){
-                setIsMentor(true)
             }
             setLoading(false);
         })
@@ -75,7 +78,7 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
                 <meta charSet="utf-8" />
                 <title>{isUser?"Your":name || ""} Profile | Speer Education</title>
             </Helmet>
-            <Zoom in={true}>
+            <Zoom in>
                 <div className="w-screen h-full flex flex-row">
                     <div className="hidden xl:flex flex-col h-full h-app w-sidebar">
                         <div className="fixed flex flex-col cc_cursor h-app w-sidebar">
@@ -111,6 +114,13 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
                             <div className="fixed flex flex-col cc_cursor h-app">
                                 {userDetails && <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMtr!} />}
                                 {socials && <SocialsCard socials={socials} isUser={isUser}/>}
+                                <div className="flex flex-col p-3 m-2 shadow-lg rounded-md bg-white space-y-3">
+                                    <h3 className="font-semibold text-lg">Lifetime Data</h3>
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <p className="text-3xl w-16 text-center">{views}</p>
+                                        <p className="text-gray-600">{"Profile Views"}</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
