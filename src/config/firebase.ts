@@ -16,6 +16,7 @@ import { FixMeLater } from "../types/temp";
 const firebaseConfig = {
   apiKey: "AIzaSyAx-OEKEZF6LgX5wv03qRilbGTWIJvL4kw",
   authDomain: 'auth.speeredu.com',
+  // authDomain: 'speer-education-dev.firebaseapp.com', //! Temp as domain is not renewed
   databaseURL: "https://speer-education-dev-default-rtdb.firebaseio.com",
   projectId: "speer-education-dev",
   storageBucket: "speer-education-dev.appspot.com",
