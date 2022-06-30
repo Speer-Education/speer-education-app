@@ -28,12 +28,11 @@ const AddUserToOrganization: FC<{ onClose: () => void }> = ({ onClose }) => {
 
     const onSubmit = async (data: FormValues) => {
         try {
-            console.log("TODO: add AddUserToOrganization backend", data)
-            // const UpdateGroupChat = httpsCallable<{ users: UserID[], orgId: string }, boolean>(functions, 'AddUserToOrganization');
-            // await UpdateGroupChat({
-            //     users: data.users.map(participant => participant.objectID),
-            //     orgId
-            // })
+            const UpdateGroupChat = httpsCallable<{ users: UserID[], orgId: string }, boolean>(functions, 'AddUserToOrganization');
+            await UpdateGroupChat({
+                users: data.users.map(participant => participant.objectID),
+                orgId
+            })
             onClose();
         } catch (e) {
             console.error(e)

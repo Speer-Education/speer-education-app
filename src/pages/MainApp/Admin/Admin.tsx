@@ -21,7 +21,8 @@ type LinkData = {
 
 const LinkItem = ({ href, label, children, Icon }: LinkData) => {
     const location = useLocation();
-    const [extended, setExtended] = useState(location.pathname.startsWith(href!));
+    const path = location.pathname.replace('/orgadmin/','').replace('/orgadmin','');
+    const [extended, setExtended] = useState(path.startsWith(href!));
     // check if userToken has any one of permission
     if(children) {
         return <div key={href} className="flex flex-col">
@@ -36,7 +37,7 @@ const LinkItem = ({ href, label, children, Icon }: LinkData) => {
         </div>
     }
     return <Link to={href!} key={href}>
-        <div className={`cursor-pointer px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors flex sm:flex-row flex-col items-center text-sm font-medium sm:space-x-2 ${location.pathname == href ? 'bg-blue-100 text-blue-600': 'text-neutral-700'}`}>
+        <div className={`cursor-pointer px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors flex sm:flex-row flex-col items-center text-sm font-medium sm:space-x-2 ${path == href ? 'bg-blue-100 text-blue-600': 'text-neutral-700'}`}>
             <Icon className="w-5 h-5 text-sm sm:text-base"/> <span>{label}</span>
         </div>
     </Link>
@@ -52,14 +53,8 @@ const AdminLayout: FC<PropsWithChildren<{}>>  =  ({ children }) => {
     }, [orgId])
 
     const links = [
-        { href: "/dashboard", label: "Dashboard", Icon: Home },
-        { href: "/users", label: "Users", Icon: GroupRounded },
-        { href: "/facility", label: "Facility", Icon: PrecisionManufacturingTwoTone },
-        { label: "Admin", href: "/admin", permission: ['isAdmin'], children: [
-            { href: "/admin/links", label: "Links", Icon: LinkRounded },
-            { href: "/admin/fabrication", label: "Fabrication", Icon: DesignServicesTwoTone },
-            { href: "/admin/cards", label: "Cards", Icon: CardMembershipRounded },
-        ], Icon: AdminPanelSettingsRounded },
+        { href: "", label: "Dashboard", Icon: Home },
+        { href: "users", label: "Users", Icon: GroupRounded },
     ]
 
     return <div className="h-app w-screen pb-12 pt-2 sm:pb-2 sm:grid grid-cols-[14rem_1fr] gap-4 max-w-[84rem] sm:px-4">
@@ -83,12 +78,14 @@ const AdminLayout: FC<PropsWithChildren<{}>>  =  ({ children }) => {
 }
 
 const LazyUsersManager = React.lazy(() => import('../../../components/OrgAdmin/UsersManager'));
+const LazyDashboard = React.lazy(() => import('../../../components/OrgAdmin/Dashboard'));
 
 const OrganizationAdmin: FC<{}> = () => {
     return <AdminLayout>
         <Suspense fallback={<AppLoader/>}>
             <Routes>
-            <Route path="/" element={<LazyUsersManager />} />
+                <Route path="/" element={<LazyDashboard />} />
+                <Route path="/users" element={<LazyUsersManager />} />
             </Routes>
         </Suspense>
     </AdminLayout>

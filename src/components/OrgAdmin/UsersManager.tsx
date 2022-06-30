@@ -5,11 +5,12 @@ import { useSpeerOrg } from "../../hooks/useSpeerOrg";
 import { DataGrid, GridActionsCellItem, GridColDef, GridColumns, GridRowParams, GridToolbar, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport, GridToolbarFilterButton, GridValueGetterParams } from '@mui/x-data-grid';
 import { Button, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { AddRounded, Delete, SecurityOutlined } from "@mui/icons-material";
-import { PublicUser, PublicUserDoc } from "../../types/User";
+import { PublicUser, PublicUserDoc, UserID } from "../../types/User";
 import { useDialog } from "../../hooks/useDialog";
 import AddUserToOrganization from "./AddUserToOrganization";
 import { httpsCallable } from "firebase/functions";
 import { useSnackbar } from "notistack";
+import EditUserOrganizationRole from "./EditUserOrganizationRole";
 
 function CustomToolbar() {
     const [openDialog, closeDialog] = useDialog();
@@ -52,9 +53,7 @@ const UsersManager = () => {
                 <DialogActions>
                     <Button onClick={closeDialog}>Cancel</Button>
                     <Button color="error" onClick={() => {
-                        console.log('TODO: Add RemoveUserFromOrganization backend', user.id)
-                        return;
-                        httpsCallable(functions, 'RemoveUserFromOrganization')({
+                        httpsCallable<{userId: UserID, orgId: string}, boolean>(functions, 'RemoveUserFromOrganization')({
                             userId: user.id,
                             orgId
                         }).then(() => {
@@ -66,6 +65,12 @@ const UsersManager = () => {
                     }}>Remove</Button>
                 </DialogActions>
             </>
+        })
+    }
+
+    const showEditRoleDialog = (user: PublicUserDoc) => () => {
+        openDialog({
+            children: <EditUserOrganizationRole user={user} onClose={closeDialog} />
         })
     }
 
@@ -92,7 +97,7 @@ const UsersManager = () => {
             field: 'actions',
             type: 'actions',
             getActions: (params: GridRowParams<PublicUserDoc>) => [
-                <GridActionsCellItem color="info" icon={<SecurityOutlined />} onClick={console.log} label="Edit Role" />,
+                <GridActionsCellItem color="info" icon={<SecurityOutlined />} onClick={showEditRoleDialog(params.row)} label="Edit Role" />,
                 <GridActionsCellItem color="error" icon={<Delete />} onClick={confirmDelete(params.row)} label="Delete" />
             ]
         }
