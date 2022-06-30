@@ -16,8 +16,8 @@ const LazyMentorsPage = lazy(
 const LazyProfilePage = lazy(
   () => import("../../pages/MainApp/ProfilePage/ProfilePage")
 );
-const LazyOrgDashboard = lazy(
-  () => import("../../pages/MainApp/OrgDashboard/OrgDashboard")
+const LazyOrgAdmin = lazy(
+  () => import("../../pages/MainApp/Admin/Admin")
 )
 const LazyDashboard = lazy(
   () => import("../../pages/MainApp/Dashboard/Dashboard")
@@ -37,7 +37,7 @@ export default function MainApp() {
       >
         <Routes>
           <Route path="/" element={<LazyDashboard />} />
-          <Route path="/organization/:orgId" element={<LazyOrgDashboard />} />
+          <Route path="/orgadmin/*" element={<LazyOrgAdmin />} />
           <Route path="/mentors" element={<LazyMentorsPage />} />
           <Route path="/profile/:profileId" element={<LazyProfilePage />} />
           <Route path="/profile" element={<LazyProfilePage isUser={true} />} />

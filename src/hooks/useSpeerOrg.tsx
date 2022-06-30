@@ -4,9 +4,10 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db, docConverter } from "../config/firebase";
 import { Organization, OrganizationDocument } from "../types/Organization";
 import { useAuth } from "./useAuth";
+import { useLocalStorage } from "./useHooks";
 
 const useSpeerOrgProvider = () => {
-    const [orgId, setOrgId] = useState<string>('global');
+    const [orgId, setOrgId] = useLocalStorage<string>('current_org','global');
     const [orgDoc, loading, error] = useDocumentData<OrganizationDocument>(doc(db, 'organization', orgId).withConverter(docConverter));
     const { userDetails } = useAuth();
 
