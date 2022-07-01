@@ -24,7 +24,8 @@ const ProfilePostStream = ({uid, isUser, name}) => {
     const [streamPosts, loadMore, loading, finished] = usePaginateCollection<PostDocument>(collection(orgRef, 'posts').withConverter(postConverter), {
         orderKey: '_createdOn',
         queryConstraints: [
-            where('author','==',uid)
+            where('author','==',uid),
+            where('deleted', '==', false)
         ],
         direction: 'desc',
         pageLimit: DOCUMENTS_PER_PAGE

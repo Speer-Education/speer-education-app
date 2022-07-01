@@ -26,9 +26,9 @@ const FormDatePicker = <T = unknown>({name, control, rules = {}, label, size, ..
                     }
                 onChange={onChange}
                 value={value}
+                {...props}
             />
         }
-        {...props}
     />
 }
 

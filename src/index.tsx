@@ -21,6 +21,9 @@ const theme = createTheme({
       main: '#F58A07',
     },
   },
+  typography: {
+    fontFamily: 'Lato',
+  }
 });
 
 

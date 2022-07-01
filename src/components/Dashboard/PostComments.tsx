@@ -90,8 +90,8 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
                 </Collapse>
             ))}
             </TransitionGroup>
-            <Fade
-                in={loading}            >
+            {loading && <Fade
+                in={loading}>
                 <div className="w-full flex flex-row space-x-2 flex-1 items-top animate-pulse">
                     <div className="rounded-full bg-gray-300 w-10 h-10 mt-1"></div>
                     <div className="flex flex-col flex-1 space-y-2">
@@ -101,7 +101,7 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
                         <div className="h-4 bg-gray-300 rounded w-5/6"></div>
                     </div>
                 </div>
-            </Fade>
+            </Fade>}
             {!finished && comments.length != 0 && <a className="underline text-blue-700 block" onClick={loadMore}>Load More</a>}
         </div>
     );

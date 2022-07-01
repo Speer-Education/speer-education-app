@@ -16,6 +16,7 @@ import { collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { PostDocument } from '../../types/Posts';
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
 import { useSpeerOrg } from '../../hooks/useSpeerOrg';
+import { useSnackbar } from 'notistack';
 
 /**
  * Handles the Editor View for posts
@@ -30,6 +31,7 @@ const PostComposerCard = ({ organization }:{organization?: string}) => {
     const editor = useRef<ReactQuill>(null)
     //@ts-ignore
     const [docId, setDocId] = useState(doc(collection(orgRef, 'posts')).id);
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         if(saving) return;
@@ -40,18 +42,25 @@ const PostComposerCard = ({ organization }:{organization?: string}) => {
     const createNewPost = async () => {
         if(!user || !docId || !postContent) return;
         setSaving(true) //set saving to true to show loading
-        await setDoc(doc(collection(orgRef, 'posts'), docId).withConverter(postConverter), {
-            content: {
-                delta: postContent,
-                html: new QuillDeltaToHtmlConverter(postContent.ops || []).convert()
-            },
-            author: user.uid,
-            _createdOn: serverTimestamp(),
-            _updatedOn: serverTimestamp()
-        } as Partial<PostDocument>)
-        setSaving(false)
-        logEvent('post_created')
-        setPostContent(editor.current?.editor?.setContents(new Delta())) //reset editor content
+        try {
+            await setDoc(doc(collection(orgRef, 'posts'), docId).withConverter(postConverter), {
+                content: {
+                    delta: postContent,
+                    html: new QuillDeltaToHtmlConverter(postContent.ops || []).convert()
+                },
+                author: user.uid,
+                deleted: false,
+                _createdOn: serverTimestamp(),
+                _updatedOn: serverTimestamp()
+            } as Partial<PostDocument>)
+            setSaving(false)
+            logEvent('post_created')
+            setPostContent(editor.current?.editor?.setContents(new Delta())) //reset editor content
+        } catch(e) {
+            console.error(e)
+            enqueueSnackbar('Error creating post', { variant: 'error' })
+            setSaving(false)
+        }
     }
     
 

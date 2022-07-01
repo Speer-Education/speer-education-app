@@ -20,8 +20,9 @@ import { useNavigate } from 'react-router-dom';
 import { UserDetails } from '../../types/User';
 import { PostDocument } from '../../types/Posts';
 import { Delta } from 'quill';
-import { doc, Timestamp, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, onSnapshot, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import {QuillDeltaToHtmlConverter} from 'quill-delta-to-html';
+import { useSnackbar } from 'notistack';
 
 /**
  * Creates the post card for this post
@@ -44,7 +45,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
     const [editedPostContent, setEditedPostContent] = useState<Delta>(delta);
     const navigate = useNavigate();
     const divRef = useRef<HTMLDivElement>(null);
-    const dimensions = useRefDimensions(divRef);
+    const { enqueueSnackbar } = useSnackbar();
 
     // useEffect(() => {
     //     if(dimensions.height > 500 && !oversizedPost){
@@ -76,7 +77,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
     useEffect(() => {
         setLoading(true); //BLock view of anything if author is loading
         if (!post) return;
-        return db.doc(`usersPublic/${author}`).onSnapshot(snap => {
+        return onSnapshot(doc(db, `usersPublic/${author}`), snap => {
             setAuthorProfile(snap.data() as UserDetails)
             setLoading(false)
         })
@@ -84,7 +85,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
 
     useEffect(() => {
         if (!user?.uid) return;
-        return db.doc(`stage_posts/${id}/likes/${user.uid}`).onSnapshot(snap => {
+        return onSnapshot(doc(post.ref, 'likes', user.uid), snap => {
             const { liked } = snap.data() || {};
             setUserLiked(liked || false)
         })
@@ -92,12 +93,12 @@ const PostCard = ({ post }: { post: PostDocument }) => {
 
     const handleUserLikePost = async () => {
         if (!user?.uid) return;
-        if(!userLiked) await db.doc(`stage_posts/${id}/likes/${user.uid}`).set({
+        if(!userLiked) await setDoc(doc(post.ref, 'likes', user.uid),{
             liked: true,
             likeUser: user.uid,
             _createdOn: firebase.firestore.FieldValue.serverTimestamp()
         })
-        if(userLiked) await db.doc(`stage_posts/${id}/likes/${user.uid}`).delete()
+        if(userLiked) await deleteDoc(doc(post.ref, 'likes', user.uid))
         logEvent(userLiked? 'unlike_post' : 'like_post', {
             postId: id,
             postAuthor: author
@@ -105,7 +106,11 @@ const PostCard = ({ post }: { post: PostDocument }) => {
     }
 
     const handleDeletePost = () => {
-        db.doc(`stage_posts/${post.id}`).delete()
+        updateDoc(post.ref, {
+            deleted: true,
+        } as Partial<PostDocument>).catch(err => {
+            enqueueSnackbar(err.message, { variant: 'error' })
+        });
     }
 
     //Save the post the user created
@@ -123,7 +128,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
         //@ts-ignore
         await updateDoc(post.ref, {
             content: {
-                delta: editedPostContent,
+                delta: JSON.stringify(editedPostContent),
                 html: new QuillDeltaToHtmlConverter(editedPostContent.ops || []).convert()
             },
             _updatedOn: Timestamp.now(),
