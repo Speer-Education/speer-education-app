@@ -1,5 +1,5 @@
 import { doc } from "firebase/firestore";
-import { createContext, PropsWithChildren, useContext, useMemo, useState } from "react";
+import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db, docConverter } from "../config/firebase";
 import { Organization, OrganizationDocument } from "../types/Organization";
@@ -9,7 +9,11 @@ import { useLocalStorage } from "./useHooks";
 const useSpeerOrgProvider = () => {
     const [orgId, setOrgId] = useLocalStorage<string>('current_org','global');
     const [orgDoc, loading, error] = useDocumentData<OrganizationDocument>(doc(db, 'organization', orgId).withConverter(docConverter));
-    const { userDetails } = useAuth();
+    const { user, userDetails } = useAuth();
+
+    useEffect(() => {
+        if(user == null) setOrgId('global');
+    }, [user])
 
     const orgRef = useMemo(() => doc(db, 'organization', orgId), [orgId]);
 
