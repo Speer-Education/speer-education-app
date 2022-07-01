@@ -65,7 +65,7 @@ function App() {
             </>: <>
               <Route path={"/login"} element={<LazyLogin />}/>
             </>}
-            {user === null && <Route path="/" element={<Navigate to="/login" />}/>}
+            {user === null && <Route path="/*" element={<Navigate to="/login" />}/>}
           </Routes>
         </Suspense>
         <ServiceWorkerWrapper/>
