@@ -17,6 +17,11 @@ import * as Sentry from "@sentry/react";
 import { Controller, useForm } from 'react-hook-form';
 import { Slide } from '@mui/material';
 import { FixMeLater } from '../../types/temp';
+import {Timestamp} from 'firebase/firestore';
+import {CountryCode, ActiveRoom, UserHighlight} from '../../types/User';
+import {FormEmojiPicker} from '../../components/Forms/EmojiPicker';
+import FormDatePicker from '../../components/form-components/FormDateTimePicker';
+import { useSnackbar } from 'notistack';
 
 
 const FormRow = ({ children }: PropsWithChildren<{}>) => (
@@ -24,32 +29,23 @@ const FormRow = ({ children }: PropsWithChildren<{}>) => (
 )
 
 type FormValues = {
-    name: string,
-    hsGradYear: {
-        value: string
-        label: string
-    },
-    dateOfBirth: Date
-    country: {
-        value: string
-        label: string
-    },
-    school: string
-    major: string
-    biography: string
-    highlight1: {
-        emoji: string,
-        description: string
-    },
-    highlight2: {
-        emoji: string,
-        description: string
-    },
+    name: string;
+    dateOfBirth: Date;
+    email: string;
+    country: CountryCode;
+    biography: string;
+    education: {
+        major: string;
+        school: string;
+        graduationDate: Date;
+        country: CountryCode;
+    }[],
+    highlights: UserHighlight[],
     socials: {
-        github: string
-        personal: string
-        youtube: string
-    }
+        github: string;
+        personal: string;
+        youtube: string;
+    },
 }
 
 export default function UserDetails() {
@@ -58,40 +54,34 @@ export default function UserDetails() {
     const { register, control, handleSubmit, watch, setValue, formState: { isValid, isSubmitting } } = useForm<FormValues>({
         mode: 'all',
         defaultValues: {
-            name: "",
-            hsGradYear: {
-                value: "",
-                label: ""
+            name: '',
+            dateOfBirth: new Date(new Date(0).setFullYear(2000)),
+            email: '',
+            country: '',
+            biography: '',
+            education: [{
+                major: '',
+                school: '',
+                graduationDate: new Date(new Date(0).setFullYear(2000)),
+                country: '',
+            }],
+            highlights: [{
+                emoji: '',
+                description: '',
             },
-            country: {
-                value: "",
-                label: ""
-            },
-            school: "",
-            major: "",
-            biography: "",
-            highlight1: {
-                emoji: "🚀",
-                description: ""
-            },
-            highlight2: {
-                emoji: "🗣",
-                description: ""
-            },
+            {
+                emoji: '',
+                description: '',
+            }],
             socials: {
-                github: "",
-                personal: "",
-                youtube: "",
-            }
+                github: '',
+                personal: '',
+                youtube: '',
+            },
         }
     });
-    const [showDatePicker, setShowDatePicker] = useState(false);
+    const { enqueueSnackbar } = useSnackbar();
     const [updatingClaims, setUpdatingClaims] = useState(false);
-    const [showPicker1, setShowPicker1] = useState(false);
-    const [showPicker2, setShowPicker2] = useState(false);
-    const [showError, setShowError] = useState(false);
-    const highlight1 = watch('highlight1')
-    const highlight2 = watch('highlight2')
     const form = watch()
     console.log(form)
     const callOnboarding = async (numTries: number, form: FixMeLater) => {
@@ -116,9 +106,8 @@ export default function UserDetails() {
         }
         const submitForm = {
             ...data,
+            //@ts-ignore
             country: data.country.label,
-            hsGradYear: data.hsGradYear.label,
-            dateOfBirth: data.dateOfBirth.toLocaleString()
         };
         try {
             await callOnboarding(0, submitForm)
@@ -130,7 +119,7 @@ export default function UserDetails() {
             setTimeout(() => {
                 Sentry.captureMessage("onBoarding timeout, updating token was not successful");
                 console.log('onBoarding timeout, updating token was not successful')
-                setShowError(true)
+                enqueueSnackbar('Something went wrong, please try again', { variant: 'error' });
                 setUpdatingClaims(false);
                 getUserTokenResult(true)
                 // navigate("/")
@@ -138,21 +127,10 @@ export default function UserDetails() {
         } catch (e) {
             Sentry.captureException(e);
             console.error('onBoarding submission error occured',e)
-            setShowError(true)
+            enqueueSnackbar('Something went wrong, please try again', { variant: 'error' });
             setUpdatingClaims(false);
         }
     }
-
-
-    const handleHighlight1Emoji = (event: React.MouseEvent, emojiObject: IEmojiData) => {
-        setValue("highlight1.emoji", emojiObject.emoji)
-        setShowPicker1(false)
-    };
-
-    const handleHighlight2Emoji = (event: React.MouseEvent, emojiObject: IEmojiData) => {
-        setValue("highlight2.emoji", emojiObject.emoji)
-        setShowPicker2(false)
-    };
 
 
     return (
@@ -184,41 +162,12 @@ export default function UserDetails() {
                                 <FormRow>
                                     {/* Date Of Birth */}
                                     <div className="md:w-1/2 mb-6 md:mb-0 flex flex-row items-baseline" >
-                                        <Controller
+                                        <FormDatePicker
                                             control={control}
                                             name="dateOfBirth"
-                                            rules={{required: true}}
-                                            render={({ field: { onChange, onBlur, value, ref }}) => (
-                                                <DatePicker
-                                                    disableFuture
-                                                    open={showDatePicker}
-                                                    onClose={() => setShowDatePicker(false)}
-                                                    label="Your Date of Birth"
-                                                    inputFormat="dd/MM/yyyy"
-                                                    value={value}    
-                                                    onChange={onChange}
-                                                    renderInput={({ 
-                                                        ref,
-                                                        inputProps,
-                                                        disabled,
-                                                        onChange,
-                                                        value
-                                                    }) => 
-                                                        <InputField 
-                                                            required
-                                                             //@ts-ignore
-                                                            ref={ref}
-                                                            value={value}
-                                                            label="Your Date of Birth"
-                                                            disabled={disabled}
-                                                            placeholder="dd/mm/yyyy"
-                                                            onChange={onChange}
-                                                            //@ts-ignore
-                                                            onClick={(e) => setShowDatePicker(true)}
-                                                            {...inputProps} />
-                                                    }
-                                                />
-                                            )}
+                                            disableFuture
+                                            label="Your Date of Birth"
+                                            inputFormat="dd/MM/yyyy"
                                         />
                                     </div>
                                 </FormRow>
@@ -248,27 +197,22 @@ export default function UserDetails() {
                             <div className="mt-2">
                                 <FormRow>
                                     {/* Their school Name: */}
-                                    <InputField {...register('school', {required: true})}  required type="text" className="md:w-64 mb-6 md:mb-0" label="Name of Your School" id="school" name="school" placeholder="Harvard University"/>
+                                    <InputField {...register('education.0.school', {required: true})}  required type="text" className="md:w-64 mb-6 md:mb-0" label="Name of Your School" placeholder="Harvard University"/>
                                     {/* Grade */}
                                 </FormRow>
                                 <FormRow>
-                                    <Controller
+                                    <FormDatePicker
                                         control={control}
-                                        name="hsGradYear"
-                                        rules={{required: true}}
-                                        render={({ field: { onChange, value }}) => (
-                                            <InputSelect 
-                                                required 
-                                                className="md:w-full mb-6 md:mb-0" 
-                                                label="Year Of Graduation from High School" 
-                                                options={gradeOptions}
-                                                value={value}
-                                                onChange={onChange}/>
-                                        )}/>
+                                        name="education.0.graduationDate"
+                                        views={['year']}
+                                        className="md:w-full mb-6 md:mb-0" 
+                                        label="Year Of Graduation from your School"
+                                        inputFormat="yyyy"
+                                    />
                                 </FormRow>
                                     {/* What they plan to major in */}
                                 <FormRow>
-                                    <InputField {...register('major', {required: true})}  required type="text" className="md:w-64 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major"/>
+                                    <InputField {...register('education.0.major', {required: true})}  required type="text" className="md:w-64 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...."/>
                                 </FormRow>
                             </div>
                         </Slide>
@@ -296,36 +240,30 @@ export default function UserDetails() {
                                 </p>                            
                                 <FormRow>
                                     {/* TODO: Change this to the emoji selecter */}
-                                    <div className="px-3">
-                                        <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight1Emoji" onClick={() => setShowPicker1(!showPicker1)}>{highlight1.emoji || "Pick an emoji"}</Button>
-                                    </div>
-                                    {showPicker1 ? <Picker 
-                                        onEmojiClick={handleHighlight1Emoji} 
-                                        pickerStyle={{ zIndex:"1",position:"absolute",left: "130px" }} /> : null}
-                                    <InputField 
-                                        {...register('highlight1.description', {required: true})} 
-                                        required 
-                                        type="text" 
+                                    <FormEmojiPicker
+                                        control={control}
+                                        name="highlights.0.emoji"/>
+                                    <InputField
+                                        {...register('highlights.0.description', { required: true })}
+                                        required
+                                        type="text"
                                         label=""
-                                        className="md:w-3/4 mb-6 md:mb-0" 
-                                        autoWidth 
+                                        className="md:w-3/4 mb-6 md:mb-0"
+                                        autoWidth
                                         placeholder="eg. Marketing Lead @ Amce Inc" />
-                                </FormRow>
-                                <FormRow>
+                                    </FormRow>
+                                    <FormRow>
                                     {/* TODO: Change this to the emoji selecter */}
-                                    <div className="px-3">
-                                        <Button variant="outlined" style={{height: "40px", width: "40px"}} id="highlight2Emoji" onClick={() => setShowPicker2(!showPicker2)}>{highlight2.emoji || "Pick an emoji"}</Button>
-                                    </div>
-                                    {showPicker2 ? <Picker 
-                                        onEmojiClick={handleHighlight2Emoji} 
-                                        pickerStyle={{ zIndex:"1",position:"absolute",left: "130px" }} /> : null}
-                                    <InputField 
-                                        {...register('highlight2.description', {required: true})} 
-                                        required 
-                                        type="text" 
+                                    <FormEmojiPicker
+                                        control={control}
+                                        name="highlights.1.emoji"/>
+                                    <InputField
+                                        {...register('highlights.1.description', { required: true })}
+                                        required
+                                        type="text"
                                         label=""
-                                        className="md:w-3/4 mb-2 md:mb-0" 
-                                        autoWidth 
+                                        className="md:w-3/4 mb-2 md:mb-0"
+                                        autoWidth
                                         placeholder="eg. CEO @ Amce Labs" />
                                 </FormRow>
                             </div>
@@ -402,11 +340,6 @@ export default function UserDetails() {
                 </div>
             </div>
             </>}
-            <Snackbar open={showError} onClose={() => setShowError(false)} autoHideDuration={3000}>
-                <Alert severity="error" onClose={() => setShowError(false)} sx={{ width: '100%' }}>
-                    An Error Occuured
-                </Alert>
-            </Snackbar>
         </div>
     )
 }

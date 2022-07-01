@@ -7,6 +7,7 @@ export type UserPostData = {
         delta: Delta,
         html: string
     },
+    deleted: boolean,
     views: number,
     commentCount: number,
     likeCount: number,

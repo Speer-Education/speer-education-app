@@ -4,7 +4,7 @@ import { getSnapshot } from '../../hooks/firestore';
 import { useAuth } from '../../hooks/useAuth';
 import PostCard from './PostCard';
 import PostLoader from './PostLoader';
-import {collection} from 'firebase/firestore';
+import {collection, where} from 'firebase/firestore';
 import usePaginateCollection from '../../hooks/usePaginateCollection';
 import { PostDocument } from '../../types/Posts';
 import InView from 'react-intersection-observer';
@@ -23,7 +23,8 @@ const PostStream = ({ organization }: {organization?: string}) => {
     const [streamPosts, loadMore, loading, finished] = usePaginateCollection<PostDocument>(collection(orgRef, 'posts').withConverter(postConverter), {
         orderKey: '_createdOn',
         direction: 'desc',
-        pageLimit: DOCUMENTS_PER_PAGE
+        pageLimit: DOCUMENTS_PER_PAGE,
+        queryConstraints: [where('deleted', '==', false)]
     })
 
 
