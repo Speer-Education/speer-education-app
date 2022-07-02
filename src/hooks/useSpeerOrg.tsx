@@ -25,14 +25,16 @@ const useSpeerOrgProvider = () => {
             setOrgId('global');
         }
     }
-
-
+    const isOwner = orgDoc?.permissions?.[user?.uid || ""] == 'owner';
+    const isAdmin = orgDoc?.permissions?.[user?.uid || ""] == 'admin' || isOwner;
 
     return {
         userOrg: userDetails?.organization,
         orgDoc,
         orgId,
         orgRef,
+        isOwner,
+        isAdmin,
         loadingDoc: loading,
         toggleOrg,
         setOrganization: (orgId: string) => { setOrgId(orgId) }
