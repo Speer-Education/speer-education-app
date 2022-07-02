@@ -5,7 +5,7 @@ import { UserClaims, UserDetails, UserDetailsDocument, UserDetailsToken } from "
 import { logEvent, setUserProperties } from "../utils/analytics";
 import { useLocalStorage } from "./useHooks";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { ParsedToken, signOut } from "firebase/auth"
+import { EmailAuthProvider, ParsedToken, reauthenticateWithCredential, signOut, updatePassword } from "firebase/auth"
 
 
 //@ts-ignore //TODO: FIX THIS
@@ -85,6 +85,18 @@ const useAuthProvider = () => {
                 return { error };
             });
     };
+
+    const isUsingPasswordLogin = () => {
+        if(!user) return;
+        return !!user.providerData.find((provider) => provider.providerId === "password");
+    }
+
+    const changePassword = async (oldPassword: string, newPassword: string) => {
+        if(!user) return;
+        if(!isUsingPasswordLogin()) throw new Error("Cannot change password without password login");
+        await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email!, oldPassword));
+        await updatePassword(user, newPassword);
+    }
 
     /**
      * Get firebase user tokens with custom claims for permission use, only refreshes if is true
@@ -195,6 +207,10 @@ const useAuthProvider = () => {
         appInstance,
         signInWithEmailAndPassword,
         signOut: signOutUser,
+        changePassword,
+        get isUsingPasswordLogin() {
+            return isUsingPasswordLogin();
+        },
         initGoogleSignIn,
         authing
     };

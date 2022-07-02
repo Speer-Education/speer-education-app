@@ -33,7 +33,7 @@ export default function Verify() {
                 <title>Sign Up | Speer Education</title>
             </Helmet>
             <div className="flex flex-row w-screen h-screen">
-                <div className="flex-1 text-left p-20 bg-white space-y-4">
+                <div className="flex-1 text-left p-6 md:p-20 bg-white space-y-4">
                     <div className="flex flex-row justify-between items-center">
                         <img className="h-24 -ml-4" src="/full-transparent-logo.png" alt="speer logo"/>
                         <div>

@@ -7,9 +7,10 @@ import { auth } from '../../config/firebase';
 import AppLoader from '../../components/Loader/AppLoader';
 import FormInputText from '../../components/form-components/FormTextField';
 import { useForm } from 'react-hook-form';
-import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import useKeyPress from '../../hooks/useKeyPress';
 
 export default function Login() {
     const { initGoogleSignIn } = useAuth();
@@ -17,6 +18,8 @@ export default function Login() {
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
     useSkipPageAfterAuth();
+    const enterPressed = useKeyPress('Enter');
+
     const { control, handleSubmit, formState: { isValid } } = useForm<{
         email: string,
         password: string
@@ -56,6 +59,12 @@ export default function Login() {
             });
     }
 
+    useEffect(() => {
+        if (enterPressed) {
+            console.log('enter pressed');
+            handleSubmit(onLogIn)();
+        }
+    }, [enterPressed]);
 
     //Check if user is trying to login, else show login page
     useEffect(() => {
@@ -66,7 +75,7 @@ export default function Login() {
             } else {
                 setLoggingIn(false);
             }
-          });
+        });
     });
 
     if(loggingIn) return <AppLoader/>
@@ -78,15 +87,15 @@ export default function Login() {
                 <title>Login | Speer Education</title>
             </Helmet>
             <div className="flex flex-row w-screen h-screen">
-                <div className="flex-1 text-left p-20 bg-white space-y-4">
+                <div className="flex-1 text-left p-6 md:p-20 bg-white space-y-4">
                     <img className="h-24 -ml-4" src="/full-transparent-logo.png" alt="speer logo"/>
                     <div className="space-y-2 text-speer-yellow font-extrabold">
                         <h1><span className="text-speer-blue">We Are</span> Speer</h1>
                         <h1>We help you connect to people</h1>
                     </div>
                     <p className="text-gray-600">Sign in or register to find out what we can do for you!</p>
-                    <div className="flex flex-col items-center space-y-3">
-                        <div className="flex flex-col space-y-1 min-w-[350px]">
+                    <div className="flex flex-col max-w-[350px] space-y-3">
+                        <div className="flex flex-col space-y-1 ">
                             <FormInputText
                                 control={control}
                                 variant="filled"
@@ -105,7 +114,10 @@ export default function Login() {
                                 rules={{ required: true }}
                                 type="password"
                                 />
-                            <Button onClick={handleSubmit(onLogIn)}>Sign Up/Login</Button>
+                            <Link to="/forgot_password">
+                                <p className='underline text-speer-blue font-semibold'>Forgot Password?</p>
+                            </Link>
+                            <Button variant="outlined" onClick={handleSubmit(onLogIn)}>Sign Up/Login</Button>
                         </div>
                         <Button type="submit" onClick={initGoogleSignIn} variant="contained" color="primary" startIcon={<i className="fab fa-google"></i>}>Sign In With Google</Button>
 
