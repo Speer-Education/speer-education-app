@@ -1,5 +1,5 @@
-import { Button, IconButton } from "@mui/material";
-import { EditOutlined, ExitToAppOutlined, MessageOutlined } from "@mui/icons-material";
+import { Button, IconButton, Tooltip } from "@mui/material";
+import { EditOutlined, ExitToAppOutlined, MessageOutlined, PasswordTwoTone } from "@mui/icons-material";
 import { FC, lazy, useRef, useState } from "react";
 import { functions, db } from "../../config/firebase";
 import { useAuth } from "../../hooks/useAuth";
@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import lookup from 'country-code-lookup'
 import { PublicUser } from "../../types/User";
 import { getMajor, getSchool } from "../../utils/user";
+import { useDialog } from "../../hooks/useDialog";
+import UpdatePasswordDialog from "./UpdatePasswordDialog";
 
 const LazyEditDetailsDialog = lazy(() => import("./EditDetailsDialog"));
 
@@ -93,12 +95,12 @@ const UserBannerPicture: FC<{ profileId: string, isUser?: boolean }>  = ({ profi
 
 export default function UserFullProfile({ profileId, isMentor, isUser, userDetails }: { profileId: string, isMentor?: boolean, isUser?: boolean, userDetails: PublicUser }) {
     const navigate = useNavigate();
-    const { user, signOut } = useAuth();
+    const { user, signOut, isUsingPasswordLogin } = useAuth();
     const { name, country, highlights } = userDetails || {};
     const [highlight1, highlight2] = highlights;
     const [mentorModalOpen, setMentorModalOpen] = useState(false);
     const [openEditDetails, setOpenEditDetails] = useState(false);
-
+    const [openDialog, closeDialog] = useDialog();
     const connectWithPerson = async () => {
         if (!user?.uid || !profileId) return;
 
@@ -120,6 +122,12 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
 
     }
 
+    const handlePasswordChangeDialog = () => {
+        openDialog({
+            children: <UpdatePasswordDialog onClose={closeDialog} />,
+        })
+    }
+
 
     return <>
         <div className="rounded-xl shadow-lg w-full overflow-hidden bg-white">
@@ -131,9 +139,16 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
                         <h1 className="text-2xl text-gray-800">{name}</h1>
                         {/* Show Edit Profile if is User, else show Message User */}
                         {isUser ? <div className="flex flex-row space-y-1">
-                            <IconButton onClick={() => signOut()} size="large">
-                                <ExitToAppOutlined className="text-red-600" />
-                            </IconButton>
+                            {isUsingPasswordLogin && <Tooltip title="Change Password">
+                                <IconButton onClick={handlePasswordChangeDialog} size="large">
+                                    <PasswordTwoTone className="text-orange-600" />
+                                </IconButton>
+                            </Tooltip>}
+                            <Tooltip title="Logout">
+                                <IconButton onClick={() => signOut()} size="large">
+                                    <ExitToAppOutlined className="text-red-600" />
+                                </IconButton>
+                            </Tooltip>
                             <div className="hidden md:inline">
                                 <Button variant="contained" color="primary" onClick={e => setOpenEditDetails(true)}>Edit Your Profile</Button>
                             </div>
