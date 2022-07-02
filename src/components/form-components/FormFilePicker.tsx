@@ -3,7 +3,7 @@ import { Controller, Control } from "react-hook-form";
 import React from "react";
 import { PhotoCamera } from "@mui/icons-material";
 
-const FormFilePicker = ({ control, name, rules, multiple=false, ...props }) => {
+const FormFilePicker = ({ control, name, rules, multiple=false, accept, ...props }) => {
     return <Controller
         name={name}
         control={control}
@@ -11,9 +11,9 @@ const FormFilePicker = ({ control, name, rules, multiple=false, ...props }) => {
         render={({ field: { onChange, value } }) => (
             <label className="flex flex-col w-full" htmlFor={name}>
                 <input
-                    multiple
+                    multiple= {multiple}
                     className="hidden"
-                    accept="image/*"
+                    accept={accept}
                     id={name}
                     type="file"
                     onChange={e=> onChange(e.target.files)}

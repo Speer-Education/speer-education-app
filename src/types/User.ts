@@ -16,6 +16,7 @@ export type UserDetails = {
         graduationDate: Date;
         country: CountryCode;
     }[],
+    resumeURL?: string;
     activeRooms?: {
         [roomId: string]: ActiveRoom
     }

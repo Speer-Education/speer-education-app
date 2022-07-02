@@ -9,7 +9,7 @@ import { isDevelopment } from "../utils/environment";
 import { collection, CollectionReference, DocumentData, DocumentReference, Firestore, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore';
 import {PostDocument, UserPostData} from '../types/Posts';
 import { InternalDoc } from "../types/DocConverter";
-import { MentorDetailsDocument, PublicUser, PublicUserDoc } from "../types/User";
+import { MentorDetailsDocument, PublicUser, PublicUserDoc, UserDetailsDocument } from "../types/User";
 import { AttachmentDocument } from "../types/Messaging";
 import { FixMeLater } from "../types/temp";
 
@@ -139,3 +139,4 @@ export const typeCollection: ({
 
 export const publicUserCollection = typeCollection<PublicUserDoc>(db, 'usersPublic');
 export const attachmentsCollection = (roomId: string) => typeCollection<AttachmentDocument>(db, roomId, 'attachments');
+export const usersCollection = typeCollection<UserDetailsDocument>(db, 'users');
