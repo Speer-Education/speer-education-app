@@ -18,6 +18,8 @@ import SlideTransition from '../../../components/SlideTransition/SlideTransition
 import { UserDetails } from '../../../types/User';
 import Zoom from '@mui/material/Zoom';
 import { collection, doc, increment, onSnapshot, updateDoc } from 'firebase/firestore';
+import ProfileViewsCard from '../../../components/Profile/ProfileViewsCard';
+import ResumeCard from '../../../components/Profile/ResumeCard';
 
 const LazyEditBiographyDialog = lazy(() => import('../../../components/Profile/EditBiographyDialog'));
 
@@ -114,13 +116,8 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
                             <div className="fixed flex flex-col cc_cursor h-app">
                                 {userDetails && <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMtr!} />}
                                 {socials && <SocialsCard socials={socials} isUser={isUser}/>}
-                                {isUser && <div className="flex flex-col p-3 m-2 shadow-lg rounded-md bg-white space-y-3">
-                                    <h3 className="font-semibold text-lg">Lifetime Data</h3>
-                                    <div className="flex flex-row items-center space-x-2">
-                                        <p className="text-3xl w-16 text-center">{views}</p>
-                                        <p className="text-gray-600">{"Profile Views"}</p>
-                                    </div>
-                                </div>}
+                                {isUser && <ProfileViewsCard views={views} />}
+                                {userDetails && <ResumeCard userDetails={userDetails} isUser={isUser}/>}
                             </div>
                         </div>
                     </div>
