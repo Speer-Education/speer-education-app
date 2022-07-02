@@ -94,19 +94,24 @@ const useAuthProvider = () => {
     const getUserTokenResult = async (refresh: boolean = false) => {
         if (!user) return;
         let { claims } = await user.getIdTokenResult(refresh);
-        
         //If user hasn't completed setup, redirect to onboarding page
         if (user && user != null && !user.emailVerified) {
             navigate("/verify");
         }
         else if (!claims.finishSetup && !location.pathname.startsWith('/onboarding')) {
             navigate('/onboarding');
-        } else if((claims.finishSetup && location.pathname.startsWith('/onboarding') || location.pathname.startsWith('/login'))) { //If user completed setup but is on onboarding page, redirect to app
+        } else if((claims.finishSetup && location.pathname.startsWith('/onboarding'))) { //If user completed setup but is on onboarding page, redirect to app
             navigate('/');
-            if(location.pathname.startsWith('/onboarding')) logEvent('Completed Onboarding');
+            logEvent('Completed Onboarding');
         }
         return claims as ParsedToken & UserClaims;
     };
+
+    useEffect(() => {
+        if(!authing && user && location.pathname.startsWith('/login')) {
+            navigate('/');
+        }
+    }, [user])
 
     //Attaches user claims documents to listen for changes in user permissions, if yes update token to ensure no permission errors
     useEffect(() => {

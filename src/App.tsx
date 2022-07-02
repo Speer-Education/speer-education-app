@@ -20,7 +20,7 @@ const LazyVerify = lazy(() => import("./pages/Login/Verify"))
 
 function App() {
 
-  const { user, userDetails } = useAuth();
+  const { user, authing } = useAuth();
   const routingInstrumentation = useRoutingInstrumentation();
   useEffect(() => {
     Sentry.init({
@@ -57,15 +57,14 @@ function App() {
           <Routes>
             {user !== null? <>
               <Route path="/*" element={<LazyMainApp />}/>
-              <Route path={"/login"} element={<LazyLogin />}/>
               <Route path="/onboarding" element={<LazyOnboarding />}/>
               <Route path="/admin/*" element={<LazyAdminApp />}/>
-              {/* <Route path="*" component={NotFoundPage}/> */}
-              <Route path={"/verify"} element={<LazyVerify />}/>
+              <Route path="/verify" element={<LazyVerify />}/>
             </>: <>
-              <Route path={"/login"} element={<LazyLogin />}/>
+              <Route path="/login" element={<LazyLogin />}/>
             </>}
             {user === null && <Route path="/*" element={<Navigate to="/login" />}/>}
+            {/* // <Route path="/*" element={<NotFoundPage/>}/> */}
           </Routes>
         </Suspense>
         <ServiceWorkerWrapper/>

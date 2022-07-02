@@ -1,11 +1,12 @@
 import React, { Suspense, lazy, useEffect } from "react";
-import { Routes, Route, useMatch } from "react-router-dom";
+import { Routes, Route, useMatch, useLocation } from "react-router-dom";
 import CircleLoader from "../../components/Loader/CircleLoader";
 import "./MainApp.css";
 
 import AppNavbar from "../../components/AppNavbar/AppNavbar";
 import { NoMatch } from "../../pages/Fallback/NoMatch";
 import { useSpeerOrg } from "../../hooks/useSpeerOrg";
+import NotFoundPage from "../../pages/Fallback/NotFoundPage";
 
 const LazyMessages = lazy(
   () => import("../../pages/MainApp/Messaging/Messaging")
@@ -24,6 +25,7 @@ const LazyDashboard = lazy(
 );
 
 export default function MainApp() {
+
   return (
     <>
       <AppNavbar />
@@ -42,7 +44,7 @@ export default function MainApp() {
           <Route path="/profile/:profileId" element={<LazyProfilePage />} />
           <Route path="/profile" element={<LazyProfilePage isUser={true} />} />
           <Route path="/messages/*" element={<LazyMessages />} />
-          <Route path="*" element={<NoMatch />} />
+          <Route path="/*" element={<NotFoundPage />} />
           {/* Refactored and Migrated Code */}
         </Routes>
       </Suspense>
