@@ -93,7 +93,7 @@ export default function Login() {
                         <h1><span className="text-speer-blue">We Are</span> Speer</h1>
                         <h1>We help you connect to people</h1>
                     </div>
-                    <p className="text-gray-600">Sign in or register to find out what we can do for you!</p>
+                    <p className="text-gray-600">Sign up or Login to find out what we can do for you!</p>
                     <div className="flex flex-col max-w-[350px] space-y-3">
                         <div className="flex flex-col space-y-1 ">
                             <FormInputText

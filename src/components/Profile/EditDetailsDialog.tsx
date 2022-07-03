@@ -37,6 +37,7 @@ const EditDetailsDialog = ({ open, onClose }) => {
     logEvent('updated_details')
     await db.doc(`users/${user.uid}`).update({
       ...data,
+      country: data.country.value,
       _updatedOn: firebase.firestore.Timestamp.now()
     })
     onClose();

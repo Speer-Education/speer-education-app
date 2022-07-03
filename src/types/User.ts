@@ -1,7 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
 import {InternalDoc} from './DocConverter';
 
-export type CountryCode = string;
+export type CountryCode = any;
 
 export type UserDetails = {
     name: string;
@@ -14,7 +14,6 @@ export type UserDetails = {
         major: string;
         school: string;
         graduationDate: Date;
-        country: CountryCode;
     }[],
     resumeURL?: string;
     activeRooms?: {

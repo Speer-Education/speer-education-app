@@ -56,14 +56,12 @@ export default function UserDetails() {
         defaultValues: {
             name: '',
             dateOfBirth: new Date(new Date(0).setFullYear(2000)),
-            email: '',
             country: '',
             biography: '',
             education: [{
                 major: '',
                 school: '',
                 graduationDate: new Date(new Date(0).setFullYear(2000)),
-                country: '',
             }],
             highlights: [{
                 emoji: '',
@@ -107,7 +105,7 @@ export default function UserDetails() {
         const submitForm = {
             ...data,
             //@ts-ignore
-            country: data.country.label,
+            country: data.country.value,
         };
         try {
             await callOnboarding(0, submitForm)
