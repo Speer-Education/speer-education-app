@@ -51,9 +51,16 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
         setUserComment("");
     }
 
+    const handleKeyPress = async (e) => {
+        if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey && !e.altKey && !e.metaKey) {
+            e.preventDefault();
+            await handleSubmitCommment();
+        }
+    }
+
     return (
         <div className="border-t border-0 border-solid border-gray-200 space-y-3" ref={ref}>
-            <div className="flex flex-row ">
+            <form className="flex flex-row " onKeyPress={handleKeyPress}>
                 <TextField 
                     label="Comment" 
                     value={userComment} 
@@ -68,7 +75,7 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
                         <Send className="text-speer-blue"/>
                     </IconButton>
                 </div>
-            </div>
+            </form>
             <TransitionGroup>
             {comments.map(({ comment, author, id, commentedOn}) => (
                 <Collapse key={id}>
