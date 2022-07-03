@@ -14,14 +14,18 @@ import { PublicUser } from "../../types/User";
 import { getMajor, getSchool } from "../../utils/user";
 import { useDialog } from "../../hooks/useDialog";
 import UpdatePasswordDialog from "./UpdatePasswordDialog";
+import CircleLoader from "../Loader/CircleLoader";
+
 
 const LazyEditDetailsDialog = lazy(() => import("./EditDetailsDialog"));
 
 const UserProfilePicture: FC<{ profileId: string, isUser?: boolean }>  = ({ profileId, isUser = false }) => {
     const profileUpload = useRef<HTMLInputElement>(null);
+    const [ppLoading, setppLoading] =  useState<boolean>(false);
 
     const handleUploadProfilePic = async (file: File) => {
         if (!isUser) return;
+        setppLoading(true); // Set loading bar
         logEvent('update_profile_picture')
         let reader = new FileReader();
         reader.readAsDataURL(file);
@@ -34,6 +38,7 @@ const UserProfilePicture: FC<{ profileId: string, isUser?: boolean }>  = ({ prof
             const storageRef = await functions.httpsCallable('updateProfilePicture')({
                 image: base64image,
             });
+            setppLoading(false);
             //reload to see changes
             window.location.reload()
         } catch (e) {
@@ -43,13 +48,19 @@ const UserProfilePicture: FC<{ profileId: string, isUser?: boolean }>  = ({ prof
 
     return (
         <div className="relative">
-            <ProfilePicture className="w-24 h-24 md:w-32 md:h-32 rounded-full border-white border-8 border-solid shadow-lg transform -translate-y-16 mx-1" uid={profileId} forceRefresh/>
-            <input ref={profileUpload} type="file" name="file" accept="image/*" onChange={({ target }) => target.files?.[0] && handleUploadProfilePic(target.files?.[0])} hidden />
-            {isUser && <div className="absolute top-0 right-0 text-white transform -translate-y-16 rounded-full bg-gray-800 scale-75">
+            {!ppLoading ? <>
+            <ProfilePicture 
+                className="w-24 h-24 md:w-32 md:h-32 rounded-full border-white border-8 border-solid shadow-lg transform -translate-y-16 mx-1" 
+                uid={profileId} 
+                forceRefresh/> 
+                <input ref={profileUpload} type="file" name="file" accept="image/*" onChange={({ target }) => target.files?.[0] && handleUploadProfilePic(target.files?.[0])} hidden />
+                {isUser && <div className="absolute top-0 right-0 text-white transform -translate-y-16 rounded-full bg-gray-800 scale-75">
                 <IconButton onClick={e => profileUpload.current?.click()} size="large">
                     <EditOutlined className="text-white" />
                 </IconButton>
             </div>}
+            </>
+            : <CircleLoader/>}
         </div>
     );
 }
