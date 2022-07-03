@@ -7,6 +7,8 @@ import { TransitionGroup } from "react-transition-group";
 import { useNavigate } from 'react-router-dom';
 import { usersIndex } from '../../config/algolia';
 import { FixMeLater } from '../../types/temp';
+import { getMajor } from '../../utils/user';
+import { UserHit } from '../../types/Algolia';
 
 let setSearchQuery: Dispatch<SetStateAction<string>> | null = null;
 
@@ -22,7 +24,7 @@ const Hit = ({ hit }) => {
     <ProfilePicture className="h-10 w-10 rounded-full" uid={hit.objectID} thumb />
     <div className="flex-col">
       <h3 className="font-semibold">{hit.name}</h3>
-      <p className="text-gray-500 text-sm">{hit.major}</p>
+      <p className="text-gray-500 text-sm">{getMajor(hit)}</p>
     </div>
   </div>
 };
@@ -39,7 +41,7 @@ const Hits = ({ hits }) => (
   </div>
 );
 const SearchBar = () => {
-  const [hits, setHits] = React.useState<FixMeLater[]>([]);
+  const [hits, setHits] = React.useState<UserHit[]>([]);
   const [search, setSearch] = React.useState<string | null>(null);
 
   setSearchQuery = setSearch;
@@ -47,7 +49,7 @@ const SearchBar = () => {
   React.useEffect(() => {
     if(!search) setHits([]);
     else {
-      usersIndex.search<{ name: string }>(search, {
+      usersIndex.search<UserHit>(search, {
         hitsPerPage: 10
       }).then(function (content) {
         setHits(content.hits)
