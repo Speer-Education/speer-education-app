@@ -1,4 +1,4 @@
-import { Button, IconButton, Tooltip } from "@mui/material";
+import { Button, CircularProgress, IconButton, LinearProgress, Tooltip } from "@mui/material";
 import { EditOutlined, ExitToAppOutlined, MessageOutlined, PasswordTwoTone } from "@mui/icons-material";
 import { FC, lazy, useRef, useState } from "react";
 import { functions, db } from "../../config/firebase";
@@ -15,6 +15,7 @@ import { getMajor, getSchool } from "../../utils/user";
 import { useDialog } from "../../hooks/useDialog";
 import UpdatePasswordDialog from "./UpdatePasswordDialog";
 import CircleLoader from "../Loader/CircleLoader";
+import imageCompression from 'browser-image-compression';
 
 
 const LazyEditDetailsDialog = lazy(() => import("./EditDetailsDialog"));
@@ -26,16 +27,17 @@ const UserProfilePicture: FC<{ profileId: string, isUser?: boolean }>  = ({ prof
     const handleUploadProfilePic = async (file: File) => {
         if (!isUser) return;
         setppLoading(true); // Set loading bar
-        logEvent('update_profile_picture')
+        logEvent('update_profile_picture');
+        const compressed = await imageCompression(file, {maxSizeMB: 0.49});
         let reader = new FileReader();
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(compressed);
         let base64image = await new Promise((resolve, reject) => {
             reader.addEventListener("load", function () {
                 resolve(reader.result);
             }, false);
         });
         try {
-            const storageRef = await functions.httpsCallable('updateProfilePicture')({
+            await functions.httpsCallable('updateProfilePicture')({
                 image: base64image,
             });
             setppLoading(false);
@@ -53,14 +55,16 @@ const UserProfilePicture: FC<{ profileId: string, isUser?: boolean }>  = ({ prof
                 className="w-24 h-24 md:w-32 md:h-32 rounded-full border-white border-8 border-solid shadow-lg transform -translate-y-16 mx-1" 
                 uid={profileId} 
                 forceRefresh/> 
-                <input ref={profileUpload} type="file" name="file" accept="image/*" onChange={({ target }) => target.files?.[0] && handleUploadProfilePic(target.files?.[0])} hidden />
+                <input ref={profileUpload} type="file" name="file" accept="image/png" onChange={({ target }) => target.files?.[0] && handleUploadProfilePic(target.files?.[0])} hidden />
                 {isUser && <div className="absolute top-0 right-0 text-white transform -translate-y-16 rounded-full bg-gray-800 scale-75">
                 <IconButton onClick={e => profileUpload.current?.click()} size="large">
                     <EditOutlined className="text-white" />
                 </IconButton>
             </div>}
             </>
-            : <CircleLoader/>}
+            : <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-white border-8 border-solid shadow-lg transform -translate-y-16 mx-1 grid place-items-center bg-gray-100 animate-pulse" >
+                <CircularProgress/>
+            </div>}
         </div>
     );
 }
@@ -68,38 +72,45 @@ const UserProfilePicture: FC<{ profileId: string, isUser?: boolean }>  = ({ prof
 const UserBannerPicture: FC<{ profileId: string, isUser?: boolean }>  = ({ profileId, isUser = false }) => {
     const { user } = useAuth();
     const bannerUpload = useRef<HTMLInputElement>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleUploadBannerPic = async (file:File) => {
         if (!isUser) return;
         logEvent('update_banner_picture')
+        setLoading(true);
         let reader = new FileReader();
-        reader.readAsDataURL(file);
+        const compressed = await imageCompression(file, {maxSizeMB: 0.49});
+        reader.readAsDataURL(compressed);
         let base64image = await new Promise((resolve, reject) => {
             reader.addEventListener("load", function () {
                 resolve(reader.result);
             }, false);
         });
         try {
-            const storageRef = await functions.httpsCallable('updateBannerPicture')({
+            await functions.httpsCallable('updateBannerPicture')({
                 image: base64image,
             });
             //reload to see changes
+            setLoading(false);
             window.location.reload()
         } catch (e) {
             console.error(e)
+            setLoading(false);
         }
-
     }
 
     return (
         <div className="relative">
-            <BannerPicture className="w-full h-32 rounded-xl shadow-md object-cover" uid={profileId} />
-            <input ref={bannerUpload} type="file" name="file" accept="image/png" onChange={({ target }) => target.files?.[0] && handleUploadBannerPic(target.files?.[0])} hidden />
-            {isUser && <div className="absolute top-0 right-0 m-1 text-white rounded-full bg-gray-100 transform scale-75">
-                <IconButton onClick={e => bannerUpload.current?.click()} size="large">
-                    <EditOutlined />
-                </IconButton>
-            </div>}
+            {loading? <div className="w-full h-32 rounded-xl shadow-md bg-gray-400 animate-pulse grid place-items-center">
+            </div>:<>
+                <BannerPicture className="w-full h-32 rounded-xl shadow-md object-cover" uid={profileId} />
+                <input ref={bannerUpload} type="file" name="file" accept="image/png" onChange={({ target }) => target.files?.[0] && handleUploadBannerPic(target.files?.[0])} hidden />
+                {isUser && <div className="absolute top-0 right-0 m-1 text-white rounded-full bg-gray-100 transform scale-75">
+                    <IconButton onClick={e => bannerUpload.current?.click()} size="large">
+                        <EditOutlined />
+                    </IconButton>
+                </div>}
+            </>}
         </div>
     );
 }
