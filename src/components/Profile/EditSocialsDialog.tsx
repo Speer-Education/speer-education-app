@@ -50,6 +50,21 @@ const EditSocialsDialog = ({open, onClose}) => {
                         type="text" 
                         className="md:w-full mb-6 md:mb-0" 
                         label="Github" />
+                    <InputField 
+                        {...register('linkedin')}
+                        type="text" 
+                        className="md:w-full mb-6 md:mb-0" 
+                        label="LinkedIn" />
+                    <InputField 
+                        {...register('dribbble')}
+                        type="text" 
+                        className="md:w-full mb-6 md:mb-0" 
+                        label="Dribbble" />
+                    <InputField 
+                        {...register('pinterest')}
+                        type="text" 
+                        className="md:w-full mb-6 md:mb-0" 
+                        label="Pinterest" />
                 </DialogContent>
                 <DialogActions>
                   <button

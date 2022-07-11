@@ -24,6 +24,9 @@ export type UserDetails = {
         github: string;
         personal: string;
         youtube: string;
+        linkedin: string;
+        dribbble: string;
+        pinterest: string;
     },
     permissions: {
         isAdm: boolean;
