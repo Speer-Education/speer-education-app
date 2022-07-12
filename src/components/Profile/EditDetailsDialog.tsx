@@ -34,10 +34,17 @@ const EditDetailsDialog = ({ open, onClose }) => {
 
   const handleSaveDetails = async (data: FormValues) => {
     if (!user) return;
+    
+    /*If Data.country is an object (meaning user changed their country so country field now holds an object like
+    {label: "Åland Islands", value: "AX"} instead of just abbreviated country name like "SG"), then if that's the case, we must change it back
+    to abbreviated country name,*/
+    if (typeof data.country === 'object' && !Array.isArray(data.country) && data.country !== null){
+      data.country = data.country.value
+    }
+
     logEvent('updated_details')
     await db.doc(`users/${user.uid}`).update({
       ...data,
-      country: data.country.value,
       _updatedOn: firebase.firestore.Timestamp.now()
     })
     onClose();
