@@ -1,6 +1,5 @@
 .post-composer {
     min-height: 250px;
-    @apply flex flex-col shadow-xl rounded-xl bg-white py-6 px-8;
 }
 
 .post-composer button {

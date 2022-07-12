@@ -66,19 +66,14 @@ const PostComposerCard = ({ organization }:{organization?: string}) => {
 
     return (
         <SlideTransition in timeout={50}>
-            <div className="post-composer">
-                <div className="flex-1 flex flex-row">
+            <div className="min-h-[150px] flex flex-col shadow-xl rounded-xl bg-white py-6 px-8">
+                <div className="flex-1 flex flex-row space-x-4">
                     {user?.uid && <ProfilePicture uid={user?.uid} className="w-12 h-12 rounded-full"/>}
-                    {/* <div className="pl-5 flex-1"> */}
-                    {!saving && <MDEditor ref={editor} docId={docId} onChange={(content, delta, source, editor) => setPostContent(editor.getContents())}/>}
-                    {/* </div> */}
+                    {!saving && <div className='flex-1 flex flex-col'>
+                        <MDEditor ref={editor} docId={docId} onChange={(content, delta, source, editor) => setPostContent(editor.getContents())}/>
+                    </div>}
                 </div>
-                <div className="flex flex-row w-full justify-between">
-                    {/* {!editor.current?.readonly &&<div className="flex flex-row ">
-                        <AddImageButton fileCallback={editor.current?.handleExternalImageUpload}/>
-                        <AddYoutubeButton urlCallback={editor.current?.handleAddYoutubeVideo}/>
-                    </div>} */}
-                    
+                <div className="flex flex-row w-full justify-end">
                     <Button 
                         className="float-right"
                         disabled={saving} 

@@ -1,11 +1,7 @@
-//@ts-ignore
-// import Editor from 'rich-markdown-editor';
-import './mdeditor.css'
 import { storage } from '../../../config/firebase';
 import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import { Delta as TypeDelta, DeltaStatic, Sources } from "quill";
-import 'react-quill/dist/quill.bubble.css';
 import MarkdownShortcuts from 'quill-markdown-shortcuts/dist/markdownShortcuts';
 import ImageUploader from "quill-image-uploader";
 import { ImageDrop } from 'quill-image-drop-module';
@@ -13,6 +9,10 @@ import BlotFormatter from 'quill-blot-formatter';
 import ImageSpec from 'quill-blot-formatter/dist/specs/ImageSpec';
 import "quill-mention";
 import { usersIndex } from '../../../config/algolia';
+import 'react-quill/dist/quill.snow.css';
+import './mdeditor.css'
+
+
 Quill.register('modules/blotFormatter', BlotFormatter);
 Quill.register('modules/markdownShortcuts', MarkdownShortcuts);
 Quill.register("modules/imageUploader", ImageUploader);
@@ -24,6 +24,20 @@ type Props = {
   readOnly?: boolean,
   onChange: (value: string, delta: DeltaStatic, source: Sources, editor: ReactQuill.UnprivilegedEditor) => void,
   defaultValue?: TypeDelta,
+}
+
+class CustomQuill extends ReactQuill {
+  destroyEditor() {
+    if (!this.editor) return;
+    this.unhookEditor(this.editor);
+  }
+
+  instantiateEditor() {
+    if(this.editor) {
+      this.hookEditor(this.editor);
+    }
+    super.instantiateEditor();
+  }
 }
 
 
@@ -107,10 +121,10 @@ export const MDEditor = forwardRef<ReactQuill, Props>(({
     }
   }), []);
 
-  return <ReactQuill
+  return <CustomQuill
     ref={_editor}
-    theme="bubble"
-    className="w-full prose lg:prose-xl"
+    theme="snow"
+    className="w-full prose lg:prose-xl max-w-none"
     placeholder="Write down a post~"
     modules={modules}
     readOnly={readOnly}
