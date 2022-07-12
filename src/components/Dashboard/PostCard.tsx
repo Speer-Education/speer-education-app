@@ -23,6 +23,7 @@ import { Delta } from 'quill';
 import { deleteDoc, doc, onSnapshot, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import {QuillDeltaToHtmlConverter} from 'quill-delta-to-html';
 import { useSnackbar } from 'notistack';
+import { useSpeerOrg } from '../../hooks/useSpeerOrg';
 
 /**
  * Creates the post card for this post
@@ -32,6 +33,7 @@ import { useSnackbar } from 'notistack';
  */
 const PostCard = ({ post }: { post: PostDocument }) => {
     const { user } = useAuth();
+    const { isAdmin, isOwner } = useSpeerOrg();
     const [loading, setLoading] = useState(true);
     const [authorProfile, setAuthorProfile] = useState<UserDetails>();
     const [userLiked, setUserLiked] = useState(false);
@@ -137,6 +139,8 @@ const PostCard = ({ post }: { post: PostDocument }) => {
         setIsEdit(false);
     }
 
+    const canDeletePost = user?.uid === author || isAdmin || isOwner;
+
     const PostAction: FC<{ IconComponent: SvgIconComponent, label: string, active?: boolean, activeColours: string ,icon_colour: string , colours: string } & HTMLAttributes<HTMLButtonElement>> = ({ IconComponent, label, active, activeColours,icon_colour, colours, ...props }) => {
         return <button className={`inline-flex items-center px-4 py-1 border border-transparent ${active?activeColours:colours} hover:shadow-sm text-base leading-6 font-medium rounded-md transition ease-in-out duration-150 cursor-pointer`} {...props}>
             <IconComponent className={`text-xl mr-1 ${icon_colour}`} />
@@ -159,15 +163,15 @@ const PostCard = ({ post }: { post: PostDocument }) => {
                             {_createdOn && <div className="post-timestamp_text"><TimeAgo date={_createdOn.toDate().getTime()} /></div>}
                         </div>
                     </div>
-                    {(user?.uid === author) && <div>
-                        <IconButton
+                    {canDeletePost && <div>
+                        {canDeletePost && <IconButton
                             aria-label="delete"
                             className="float-right"
                             onClick={handleDeletePost}
                             size="large">
                             <DeleteIcon className="text-red-600" />
-                        </IconButton>
-                        {!isEdit? <IconButton
+                        </IconButton>}
+                        {(user?.uid === author) && (!isEdit? <IconButton
                             aria-label="delete"
                             className="float-right"
                             onClick={() => setIsEdit(true)}
@@ -179,7 +183,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
                             onClick={() => setIsEdit(false)}
                             size="large">
                             <Cancel className="text-blue-600"/>
-                        </IconButton>}
+                        </IconButton>)}
                     </div>}
                 </div>
                 {!isEdit?<div ref={divRef} className="overflow-hidden prose" style={{'maxHeight':postCollapsed?'500px':''}} dangerouslySetInnerHTML={{__html: post.content.html}}></div>:
