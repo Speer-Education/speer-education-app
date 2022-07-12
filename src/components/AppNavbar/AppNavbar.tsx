@@ -77,10 +77,12 @@ const AppNavbar = () => {
   
   return (<SlideTransition in timeout={50}>
     <div className="fixed bottom-0 lg:sticky lg:top-0 w-full h-14 lg:p-4 lg:h-24 bg-white z-10 shadow-md flex flex-row items-center justify-between">
-      <img className="h-20 hidden lg:block cursor-pointer" src="/full-transparent-logo.png" alt="logo" onClick={() => navigate('/')} />
-      <div className="w-full lg:w-auto flex flex-row max-w-4xl justify-center items-center space-x-3">
+      <div className="flex flex-row	items-center">
+        <img className="h-20 hidden lg:block cursor-pointer pr-4" src="/full-transparent-logo.png" alt="logo" onClick={() => navigate('/')} />
         <SearchBar />
-        <div className="flex flex-row h-full flex-1 lg:flex-none">
+      </div>
+      <div className="w-full lg:w-auto flex flex-row max-w-4xl justify-center items-center space-x-3">
+        <div className="flex flex-row h-full flex-1 lg:flex-none pl-2">
           <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/" />
           <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/mentors" />
           <NavBarLink IconComponent={MessageTwoToneIcon} isContactIcon title="Contacts" href="/messages" />
@@ -95,8 +97,9 @@ const AppNavbar = () => {
         </div> */}
         <UserMenu />
       </div>
-      {/* Transparent image spcaer to center the stuff in the middle */}
-      <img className="h-20 hidden lg:block opacity-0 cursor-pointer" src="/full-transparent-logo.png" alt="logo" />
+      {/* Transparent images spacer to center the stuff in the middle */}
+      <img className="h-20 hidden lg:block opacity-0 cursor-pointer pr-5" src="/full-transparent-logo.png" alt="logo" />
+      <img className="h-20 hidden lg:block opacity-0 cursor-pointer pr-5" src="/full-transparent-logo.png" alt="logo" />
     </div>
   </SlideTransition>);
 };
