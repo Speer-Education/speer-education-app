@@ -49,7 +49,7 @@ export default function OpenChats() {
     }, [userDetails?.activeRooms])
 
     return (
-        <div className="flex flex-col rounded-md bg-white m-2 w-300 min-w-500 shadow-md flex-1 " style={{ 'maxHeight': '300px' }}>
+        <div className="hidden lg:flex flex-col rounded-md bg-white m-2 w-300 min-w-500 shadow-md flex-1" style={{ 'maxHeight': '300px' }}>
             {!chatrooms ? <div className="h-full p-3 grid place-items-center">
                 {/* TOOD: Add No Recent Chats Icon */}
                 <div className="space-y-2 grid place-items-center">

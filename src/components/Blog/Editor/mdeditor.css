@@ -17,6 +17,17 @@
     @apply text-blue-700 dark:text-blue-300 font-semibold !important;
 } */
 
+.ql-container {
+  border: 0 !important;
+}
+
+.ql-toolbar {
+  border-radius: 12px;
+  border: 0 !important;
+  background-color: #fff;
+  box-shadow: 0px 2px 6px 3px rgb(0 0 0 / 8%);
+}
+
 .ql-mention-list-container {
   width: 270px;
   border: 1px solid #f0f0f0;
@@ -69,3 +80,4 @@
 .mention > span {
   margin: 0 3px;
 }
+

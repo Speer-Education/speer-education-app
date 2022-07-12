@@ -1,5 +1,5 @@
 import { IconButton } from '@mui/material';
-import { EditOutlined, GitHub, LanguageOutlined, SvgIconComponent, YouTube } from '@mui/icons-material';
+import { EditOutlined, GitHub, LanguageOutlined, LinkedIn, Pinterest, SvgIconComponent, YouTube } from '@mui/icons-material';
 import React, { FC, useState } from 'react';
 import EditSocialsDialog from './EditSocialsDialog';
 import { PublicUser } from '../../types/User';
@@ -13,6 +13,10 @@ const SocialLink:FC<{link: string, icon: JSX.Element }> = ({ link, icon }) => (
 const SocialsCard: FC<{ socials: PublicUser['socials'], isUser?: boolean }> = ({socials, isUser}) => {
     const [openEditSocials, setOpenEditSocials] = useState(false);
 
+    const hasSocials = () => {
+        return Object.keys(socials).length > 0 && Object.values(socials).some(v => v !== '');
+    }
+
     return <>
         <EditSocialsDialog open={openEditSocials} onClose={() => setOpenEditSocials(false)}/>
         {(isUser || socials) && <div className="relative flex flex-col p-3 m-2 shadow-lg rounded-md bg-white space-y-2">
@@ -24,10 +28,13 @@ const SocialsCard: FC<{ socials: PublicUser['socials'], isUser?: boolean }> = ({
                     </IconButton>}
                 </div>
             </div>
-            {socials?.github && <SocialLink link={socials?.github} icon={<GitHub/>} />}
-            {socials?.personal && <SocialLink link={socials?.personal} icon={<LanguageOutlined/>} />}
-            {socials?.youtube && <SocialLink link={socials?.youtube} icon={<YouTube/>} />}
-            {(socials?.github === "" && socials?.personal === "" && socials?.youtube === "") && <h3 className="text-gray-500">No Social Links Added</h3>}
+            {socials?.github && <SocialLink link={socials.github} icon={<GitHub/>} />}
+            {socials?.personal && <SocialLink link={socials.personal} icon={<LanguageOutlined/>} />}
+            {socials?.youtube && <SocialLink link={socials.youtube} icon={<YouTube/>} />}
+            {socials?.linkedin && <SocialLink link={socials.linkedin} icon={<LinkedIn/>} />}
+            {socials?.dribbble && <SocialLink link={socials.dribbble} icon={<LanguageOutlined/>} />}
+            {socials?.pinterest && <SocialLink link={socials.pinterest} icon={<Pinterest/>} />}
+            {!hasSocials() && <h3 className="text-gray-500">No Social Links Added</h3>}
         </div>}
     </>;
 }
