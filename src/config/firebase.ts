@@ -6,12 +6,14 @@ import "firebase/compat/storage";
 import "firebase/compat/functions";
 import "firebase/compat/analytics";
 import { isDevelopment } from "../utils/environment";
-import { collection, CollectionReference, DocumentData, DocumentReference, Firestore, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore';
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, Firestore, FirestoreDataConverter, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore';
 import {PostDocument, UserPostData} from '../types/Posts';
 import { InternalDoc } from "../types/DocConverter";
 import { MentorDetailsDocument, PublicUser, PublicUserDoc, UserDetailsDocument } from "../types/User";
-import { AttachmentDocument } from "../types/Messaging";
+import { AttachmentDocument, MessageRoomDocument } from "../types/Messaging";
 import { FixMeLater } from "../types/temp";
+import { Organization } from "../types/Organization";
+import {Blog, BlogDocument} from '../types/Blogs';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAx-OEKEZF6LgX5wv03qRilbGTWIJvL4kw",
@@ -137,6 +139,34 @@ export const typeCollection: ({
   });
 }
 
+export const blogConverter = {
+  toFirestore(doc: BlogDocument): DocumentData {
+      const { id, ref, body, ...docWithoutId } = doc;
+      return {
+        body: {
+          html: body.html,
+          delta: JSON.stringify(body.delta)
+        },
+        ...docWithoutId
+      };
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions
+  ): BlogDocument {
+    const data = snapshot.data(options) as Omit<Blog, 'body'> & { body: { delta: string, html: string } };
+    return {
+      id: snapshot.id,
+      ref: snapshot.ref,
+      ...data,
+      body: {
+        ...data.body,
+        delta: JSON.parse(data.body.delta)
+      }
+    } as BlogDocument;
+  },
+}
+
 export const publicUserCollection = typeCollection<PublicUserDoc>(db, 'usersPublic');
-export const attachmentsCollection = (roomId: string) => typeCollection<AttachmentDocument>(db, roomId, 'attachments');
 export const usersCollection = typeCollection<UserDetailsDocument>(db, 'users');
+export const roomsCollection = typeCollection<MessageRoomDocument>(db, 'rooms');

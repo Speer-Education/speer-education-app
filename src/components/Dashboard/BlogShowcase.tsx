@@ -1,21 +1,25 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { db, docConverter } from '../../config/firebase';
+import { blogConverter, db, docConverter } from '../../config/firebase';
 import { Link } from 'react-router-dom';
 import DialogBase from '../Dialog/DialogBase';
 import BlogContent from '../Blog/BlogContent';
 import OpenInNewTwoToneIcon from '@mui/icons-material/OpenInNewTwoTone';
 import {PlatformBlogDocument} from '../../types/PlatformBlogs';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { collection, query, orderBy, limit } from 'firebase/firestore';
+import { collection, query, orderBy, limit, where } from 'firebase/firestore';
 import { DialogActions, DialogContent } from '@mui/material';
 import { useSpeerOrg } from '../../hooks/useSpeerOrg';
+import {BlogDocument} from '../../types/Blogs';
+import {format} from 'date-fns';
 
 
 export default function BlogShowcase() {
   const { orgRef } = useSpeerOrg();
-  const [blogData = [], loading, error] = useCollectionData<PlatformBlogDocument>(query(collection(orgRef, 'blogs').withConverter(docConverter),orderBy('postedOn', 'desc')));
+  const [blogData = [], loading, error] = useCollectionData<BlogDocument>(query(collection(orgRef, 'blogs').withConverter(blogConverter), where('status', '==', 'published'), orderBy('postedOn', 'desc')));
   const [blogOpen, setBlogOpen] = useState(false);
-  const [activeBlog, setActiveBlog] = useState<PlatformBlogDocument>();
+  const [activeBlog, setActiveBlog] = useState<BlogDocument>();
+
+  if(error) console.error(error);
 
   const handleShowBlog = (blog) => {
     setActiveBlog(blog);
@@ -40,10 +44,11 @@ export default function BlogShowcase() {
           </div>}
         {blogData.map(blog =>
           <div className="flex flex-row space-x-2 cursor-pointer" key={blog.id} onClick={e => handleShowBlog(blog)}>
-            <div className="flex flex-col text-sm">
+            <div className="flex flex-col text-sm flex-1">
               <b>{blog.title}</b>
               <p className="overflow-hidden overflow-ellipsis whitespace-nowrap flex-1 max-w-[30ch] pr-2">{blog.description}</p>
             </div>
+            <p className='text-sm font-semibold text-gray-400'>{format(blog.postedOn.toDate(), 'yyyy-MM-dd')}</p>
           </div>
         )}
         <DialogBase open={blogOpen} onClose={() => setBlogOpen(false)}>

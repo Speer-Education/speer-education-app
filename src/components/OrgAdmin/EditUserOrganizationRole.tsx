@@ -1,25 +1,20 @@
 import { Button, DialogActions, DialogContent, DialogTitle, Radio, RadioGroup } from "@mui/material";
-import { deleteField, updateDoc } from "firebase/firestore";
+import { deleteField, doc, setDoc, updateDoc } from "firebase/firestore";
 import { FC, useState } from "react";
 import { useSpeerOrg } from "../../hooks/useSpeerOrg";
 import { PublicUserDoc } from "../../types/User";
+import {OrgMergedUser} from '../../types/Organization';
   
-const EditUserOrganizationRole: FC<{onClose: () => void, user: PublicUserDoc}> = ({onClose, user}) => {
+const EditUserOrganizationRole: FC<{onClose: (newRole?: OrgMergedUser['role']) => void, user: OrgMergedUser}> = ({onClose, user}) => {
     const { orgDoc, orgRef } = useSpeerOrg();
-    const perm = orgDoc?.permissions[user.id] || "member";
+    const perm = user.role || "member";
     const [role, setRole] = useState(perm);
 
-    const onSubmit = () => {
-        if (role != 'member') {
-            updateDoc(orgRef, {
-                [`permissions.${user.id}`]: role
-            })
-        } else {
-            updateDoc(orgRef, {
-                [`permissions.${user.id}`]: deleteField()
-            })
-        }
-        onClose();
+    const onSubmit = async () => {
+        await setDoc(doc(orgRef, 'members', user.id), {
+            role
+        }, { merge: true })
+        onClose(role);
     }
 
     return <>
@@ -28,7 +23,7 @@ const EditUserOrganizationRole: FC<{onClose: () => void, user: PublicUserDoc}> =
             <RadioGroup
                 defaultValue={perm}
                 value={role}
-                onChange={(e) => setRole(e.target.value as string)}
+                onChange={(e) => setRole(e.target.value as OrgMergedUser['role'])}
             >
                 <label htmlFor="member" className="flex flex-row items-center cursor-pointer transition hover:bg-blue-600/10 rounded-lg">
                     <Radio id="member" value="member"/>
@@ -54,7 +49,7 @@ const EditUserOrganizationRole: FC<{onClose: () => void, user: PublicUserDoc}> =
             </RadioGroup>
         </DialogContent>
         <DialogActions>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={() => onClose()}>Cancel</Button>
             <Button disabled={perm == role} color="success" onClick={onSubmit}>Save</Button>
         </DialogActions>
     </>

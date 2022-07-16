@@ -1,6 +1,6 @@
 import { storage } from '../../../config/firebase';
 import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import ReactQuill, { Quill } from 'react-quill';
+import ReactQuill, { Quill, ReactQuillProps } from 'react-quill';
 import { Delta as TypeDelta, DeltaStatic, Sources } from "quill";
 import MarkdownShortcuts from 'quill-markdown-shortcuts/dist/markdownShortcuts';
 import ImageUploader from "quill-image-uploader";
@@ -24,7 +24,7 @@ type Props = {
   readOnly?: boolean,
   onChange: (value: string, delta: DeltaStatic, source: Sources, editor: ReactQuill.UnprivilegedEditor) => void,
   defaultValue?: TypeDelta,
-}
+} & ReactQuillProps
 
 class CustomQuill extends ReactQuill {
   destroyEditor() {
@@ -41,7 +41,7 @@ class CustomQuill extends ReactQuill {
 }
 
 
-export const MDEditor = forwardRef<ReactQuill, Props>(({
+export const MDEditor = forwardRef<ReactQuill | null, Props>(({
   docId,
   className,
   defaultValue,
@@ -50,7 +50,7 @@ export const MDEditor = forwardRef<ReactQuill, Props>(({
   ...props
 }, editor) => {
   const _editor = useRef<ReactQuill>(null);
-
+  useImperativeHandle<ReactQuill | null, ReactQuill | null>(editor, () => _editor.current, [_editor.current]);
 
   function videoHandler() {
     let url = prompt("Enter Video URL: ");
@@ -130,5 +130,6 @@ export const MDEditor = forwardRef<ReactQuill, Props>(({
     readOnly={readOnly}
     defaultValue={defaultValue}
     onChange={onChange}
+    {...props}
   />
 })

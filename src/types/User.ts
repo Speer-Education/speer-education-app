@@ -1,5 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 import {InternalDoc} from './DocConverter';
+import { RoomID } from './Messaging';
 
 export type CountryCode = any;
 
@@ -81,7 +82,7 @@ export type UserClaims = {
 }
 
 export type SimpleUserDetails = {
-    id: string;
+    id: UserID;
     name: string;
 }
 
@@ -90,7 +91,7 @@ export type Relation = {
     followerId: string;
     followedId: string;
     isMtr: boolean;
-    roomId: string;
+    roomId: RoomID;
 }
 
 export type PublicUserDoc =  PublicUser & InternalDoc;

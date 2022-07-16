@@ -3,13 +3,13 @@ import { FolderOpenOutlined } from '@mui/icons-material';
 import { collection, orderBy, query } from 'firebase/firestore';
 import React, { FC, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import {db, docConverter, attachmentsCollection} from '../../config/firebase';
+import {db, docConverter, roomsCollection} from '../../config/firebase';
 import DialogBase from '../Dialog/DialogBase';
 import AttachmentItem from './AttachmentItem';
 import {AttachmentDocument, RoomID} from '../../types/Messaging';
 
 const AttachmentsDialog: FC<{open: boolean, onClose: () => void, roomId: RoomID }> = ({open, onClose, roomId}) => {
-  const [attachments = [], loading, error] = useCollectionData<AttachmentDocument>(query(attachmentsCollection(roomId), orderBy('uploadedOn','desc')))
+  const [attachments = [], loading, error] = useCollectionData<AttachmentDocument>(query(collection(roomsCollection, roomId, 'blogs').withConverter(docConverter), orderBy('uploadedOn','desc')))
 
   return (
       <DialogBase open={open} onClose={onClose}>

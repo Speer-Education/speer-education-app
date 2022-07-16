@@ -200,7 +200,7 @@ const useAuthProvider = () => {
     };
 
     return {
-        user,
+        user: authing? undefined: user,
         userDetails,
         userToken,
         getUserTokenResult,
