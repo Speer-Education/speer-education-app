@@ -105,6 +105,7 @@ function Chat({screenSize}) {
                 } as MessageRoomDocument
 
                 console.log("snap data", snapData)
+                console.log(68)
 
                 setRoomDoc(snapData)
                 
