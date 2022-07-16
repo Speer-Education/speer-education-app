@@ -28,14 +28,17 @@ export type Message = {
     },
     senderId: string,
     senderUsername: string,
+    roomId?: string,
+    messageId?: string,
+
 }
 
 export type IndividualMessageRoom = {
     _createdOn: Timestamp,
-    attachments: Attachment[],
+    attachments?: Attachment[],
     attachmentsAmount: number,
     lastMessage: Message & { messageId: string },
-    messageAmount: number,
+    messagesAmount: number,
     users: string[],
     roomName: {
         [userId: string]: string;
@@ -45,14 +48,15 @@ export type IndividualMessageRoom = {
 
 export type GroupMessageRoom = {
     _createdOn: Timestamp,
-    attachments: Attachment[],
+    attachments?: Attachment[],
     attachmentsAmount: number,
     lastMessage: Message & { messageId: string },
-    messageAmount: number,
+    messagesAmount: number,
     users: string[],
     name: string, 
     picture: string, 
     type: 'group', 
+    organization? : any,
 }
 
 export type MessageRoom = GroupMessageRoom | IndividualMessageRoom

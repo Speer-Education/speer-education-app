@@ -107,8 +107,14 @@ function Chat({screenSize}) {
                 console.log("snap data", snapData)
                 console.log(68)
 
+                console.log("room doc b4", roomDoc)
+
                 setRoomDoc(snapData)
+
+                console.log("room doc Aft", roomDoc)
                 
+                console.log(68.5)
+
                 logEvent('loaded_room',{
                     roomId: roomId,
                     ...snapData
