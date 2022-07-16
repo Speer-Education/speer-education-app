@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { db, functions } from "../../config/firebase";
+import {db, functions, docConverter} from '../../config/firebase';
 import { useAuth } from "../../hooks/useAuth";
-import { SimpleUserDetails, UserID } from "../../types/User";
+import {SimpleUserDetails, UserID, PublicUserDoc} from '../../types/User';
 import { Avatar, Button, DialogActions, DialogContent } from "@mui/material";
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import ProfilePicture from "../User/ProfilePicture";
@@ -15,6 +15,8 @@ import { httpsCallable } from "firebase/functions";
 import { RoomID } from "../../types/Messaging";
 import { useSnackbar } from "notistack";
 import AddGroupMembersForm from "../Forms/AddGroupMembersForm";
+import {useDocumentData} from 'react-firebase-hooks/firestore';
+import { doc } from "firebase/firestore";
 
 const GroupProfileCard = ({ roomExists, roomUsers }: {
   roomExists: boolean,
@@ -58,26 +60,11 @@ const GroupUserSmallProfileCard = ({ id }: {
   id: string,
 }) => {
   const { user } = useAuth();
-  const [details, setDetails] = useState<SimpleUserDetails>();
-  const [loading, setLoading] = useState(true);
+  const [details, loading, error] = useDocumentData<PublicUserDoc>(user && doc(db, 'usersPublic', id).withConverter(docConverter));
   const [openDialog, closeDialog] = useDialog();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { roomId } = useParams();
-
-  useEffect(() => {
-    //If no user, then return
-    if (!user) return;
-    setLoading(true);
-
-    return db.doc(`usersPublic/${id}`).onSnapshot((snap) => {
-      setDetails({
-        id: snap.id,
-        name: snap.get("name"),
-      });
-      setLoading(false);
-    });
-  }, [user, id]);
 
   const handleKick = (user: SimpleUserDetails) => {
     openDialog({

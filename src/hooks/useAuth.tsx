@@ -6,6 +6,8 @@ import { logEvent, setUserProperties } from "../utils/analytics";
 import { useLocalStorage } from "./useHooks";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { EmailAuthProvider, ParsedToken, reauthenticateWithCredential, signOut, updatePassword } from "firebase/auth"
+import { doc, onSnapshot } from "firebase/firestore";
+import { onDisconnect, onValue, ref, set } from "firebase/database";
 
 
 //@ts-ignore //TODO: FIX THIS
@@ -128,7 +130,7 @@ const useAuthProvider = () => {
     //Attaches user claims documents to listen for changes in user permissions, if yes update token to ensure no permission errors
     useEffect(() => {
         if (!user) return;
-        return db.doc(`user_claims/${user.uid}`).onSnapshot(async (snap) => {
+        return onSnapshot(doc(db,`user_claims/${user.uid}`), async (snap) => {
             const data = snap.data();
             
             if(!data?._lastCommitted) return;
@@ -148,16 +150,14 @@ const useAuthProvider = () => {
     useEffect(() => {
         if (user?.uid) {
             // Subscribe to user document on mount
-            const unsubscribe = db
-                .collection("users")
-                .doc(user.uid)
-                .onSnapshot(async (doc) => {
+            const unsubscribe = onSnapshot(doc(db, "users", user.uid),
+                async (doc) => {
                     //For analytics
                     setUserToken(await getUserTokenResult())
                     setUserDetails(doc.data() as UserDetailsDocument)
                     setUserProperties(user.uid, doc.data());
                 });
-            var userStatusDatabaseRef = rtdb.ref('/status/' + user.uid);
+            var userStatusDatabaseRef = ref(rtdb, '/status/' + user.uid);
 
             var isOfflineForDatabase = {
                 version: process.env.REACT_APP_VERSION,
@@ -170,12 +170,12 @@ const useAuthProvider = () => {
                 state: 'online',
                 last_changed: firebase.database.ServerValue.TIMESTAMP,
             };
-            firebase.database().ref('.info/connected').on('value', function(snapshot) {
+            onValue(ref(rtdb, '.info/connected'), function(snapshot) {
                 // If we're not currently connected, don't do anything.
                 if (snapshot.val() == false) return;
-
-                userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
-                    userStatusDatabaseRef.set(isOnlineForDatabase);
+                
+                onDisconnect(userStatusDatabaseRef).set(isOfflineForDatabase).then(function() {
+                    set(userStatusDatabaseRef, isOnlineForDatabase);
                 });
             });
 

@@ -10,7 +10,7 @@ import { Button, Collapse, IconButton } from '@mui/material';
 import { TransitionGroup } from "react-transition-group";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MessageRoomDocument } from '../../types/Messaging';
-import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { useDialog } from '../../hooks/useDialog';
 import CreateGroupChatForm from '../Forms/CreateGroupChatForm';
 
@@ -81,7 +81,7 @@ function Sidebar({screenSize}) {
     const findRoomPicAndIsMentor = async (data) => {
         let recipientId = data.users.filter((id) => id !== user?.uid)[0]
 
-        const userData = (await db.doc(`usersPublic/${recipientId}`).get()).data()
+        const userData = (await getDoc(doc(db, `usersPublic`,`${recipientId}`))).data()
 
         return {
             roomPic: `https://storage.googleapis.com/speer-education-dev.appspot.com/users/${recipientId}/thumb-profilePicture.png`,

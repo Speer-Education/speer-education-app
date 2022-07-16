@@ -1,6 +1,7 @@
 import { firebase, db } from "../config/firebase"
 import {UserID} from '../types/User';
 import {RoomID} from '../types/Messaging';
+import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 
 /**
  * 
@@ -9,7 +10,7 @@ import {RoomID} from '../types/Messaging';
  * @param {string} roomId The UID of the private room the user is in
  */
  const followUser = (followerUid: UserID, followingUid: UserID, roomId: RoomID) => {
-    return db.doc(`relationships/${followerUid}_${followingUid}`).set({
+    return setDoc(doc(db, 'relationships', `${followerUid}_${followingUid}`), {
         followerId: followerUid,
         followedId: followingUid,
         roomId: roomId,
@@ -23,7 +24,7 @@ import {RoomID} from '../types/Messaging';
  * @param {string} followingUid The UID of the recieving user of the following function who is being followed
  */
 const getRoomId = async (followerUid: UserID, followingUid: UserID) => {
-    const snap = await db.doc(`relationships/${followerUid}_${followingUid}`).get()
+    const snap = await getDoc(doc(db, 'relationships', `${followerUid}_${followingUid}`))
     if(!snap.exists) return;
     return snap.data()?.roomId
 }
@@ -34,7 +35,7 @@ const getRoomId = async (followerUid: UserID, followingUid: UserID) => {
  * @param {string} followingUid The UID of the user that is being unfollowed
  */
 const unfollowUser = (followerUid: UserID, followingUid: UserID) => {
-    return db.doc(`relationships/${followerUid}_${followingUid}`).delete()
+    return deleteDoc(doc(db, 'relationships', `${followerUid}_${followingUid}`))
 }
 
 export {followUser, getRoomId, unfollowUser} 

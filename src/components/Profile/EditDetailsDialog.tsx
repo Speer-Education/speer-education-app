@@ -10,6 +10,7 @@ import { logEvent } from "../../utils/analytics";
 import { Controller, useForm } from 'react-hook-form';
 import { UserDetails } from '../../types/User';
 import {FormEmojiPicker} from '../Forms/EmojiPicker';
+import { doc, updateDoc } from 'firebase/firestore';
 
 
 const FormRow = ({ children }) => (
@@ -43,7 +44,7 @@ const EditDetailsDialog = ({ open, onClose }) => {
     }
 
     logEvent('updated_details')
-    await db.doc(`users/${user.uid}`).update({
+    await updateDoc(doc(db, `users`, `${user.uid}`), {
       ...data,
       _updatedOn: firebase.firestore.Timestamp.now()
     })

@@ -16,6 +16,7 @@ import { useDialog } from "../../hooks/useDialog";
 import UpdatePasswordDialog from "./UpdatePasswordDialog";
 import CircleLoader from "../Loader/CircleLoader";
 import imageCompression from 'browser-image-compression';
+import { doc, getDoc } from "firebase/firestore";
 
 
 const LazyEditDetailsDialog = lazy(() => import("./EditDetailsDialog"));
@@ -126,7 +127,7 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
     const connectWithPerson = async () => {
         if (!user?.uid || !profileId) return;
 
-        const snap = await db.doc(`relationships/${profileId}_${user.uid}`).get()
+        const snap = await getDoc(doc(db,`relationships`, `${profileId}_${user.uid}`))
 
         //Relationsip has not been made, room does not exist yet, open the modal.
         if(!snap.exists) {

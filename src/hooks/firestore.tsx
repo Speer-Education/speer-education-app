@@ -1,25 +1,25 @@
-import { collection, doc } from 'firebase/firestore';
+import { collection, CollectionReference, deleteDoc, doc, DocumentData, onSnapshot, Query, QuerySnapshot, setDoc } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { firebase, db } from '../config/firebase';
 import { FixMeLater } from '../types/temp';
 
 const useDocListener = (path: string) => {
-    const [doc, setDoc] = useState({});
+    const [docs, setDocs] = useState({});
     useEffect(() => {
-        return db.doc(path).onSnapshot(snap => {
-            setDoc({
+        return onSnapshot(doc(db, path), snap => {
+            setDocs({
                 ...snap.data(),
                 id: snap.id,
                 loaded: true
             })
         })
-    }, [path, setDoc])
-    return doc
+    }, [path, setDocs])
+    return docs
 }
 
 const updateDoc = async (path: string, updates: FixMeLater) => {
     delete updates.id;
-    return await db.doc(path).set({
+    return await setDoc(doc(db, path), {
         ...updates,
         _updatedOn: firebase.firestore.FieldValue.serverTimestamp(),
         _createdOn: !updates.createdOn && firebase.firestore.FieldValue.serverTimestamp()
@@ -28,10 +28,10 @@ const updateDoc = async (path: string, updates: FixMeLater) => {
 
 const getNewDocId = (path: string) => doc(collection(db, path)).id
 
-const deletePost = (path: string) => db.doc(path).delete();
+const deletePost = (path: string) => deleteDoc(doc(db, path));
 
-const getSnapshot = (ref: firebase.firestore.CollectionReference | firebase.firestore.Query ) => new Promise<firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>>((resolve, reject) => {
-    let unsubscribe = ref.onSnapshot((snapshot) => {
+const getSnapshot = (ref: CollectionReference | Query ) => new Promise<QuerySnapshot<DocumentData>>((resolve, reject) => {
+    let unsubscribe = onSnapshot(ref, (snapshot) => {
         unsubscribe();
         resolve(snapshot)
     })

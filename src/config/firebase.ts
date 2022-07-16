@@ -6,7 +6,7 @@ import "firebase/compat/storage";
 import "firebase/compat/functions";
 import "firebase/compat/analytics";
 import { isDevelopment } from "../utils/environment";
-import { collection, CollectionReference, doc, DocumentData, DocumentReference, Firestore, FirestoreDataConverter, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore';
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, enableMultiTabIndexedDbPersistence, Firestore, FirestoreDataConverter, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore';
 import {PostDocument, UserPostData} from '../types/Posts';
 import { InternalDoc } from "../types/DocConverter";
 import { MentorDetailsDocument, PublicUser, PublicUserDoc, UserDetailsDocument } from "../types/User";
@@ -63,7 +63,7 @@ if (isDevelopment()) {
 //Enable persistence for firestore so it saves in browser
 db.settings({ cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED });
 
-db.enablePersistence()
+enableMultiTabIndexedDbPersistence(db)
 
 export { firebase, auth, db, now, storage, rtdb, functions, analytics };
 

@@ -15,7 +15,7 @@ import imageCompression from 'browser-image-compression';
 import SendMessageLoader from '../Loader/SendMessageLoader';
 import { logEvent } from '../../utils/analytics';
 import { MessageDocument, MessageRoomDocument } from '../../types/Messaging';
-import { addDoc, collection, doc, onSnapshot } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, onSnapshot } from 'firebase/firestore';
 
 const LazyGroupProfileCard = lazy(() => import('./GroupProfileCard'));
 const LazyProfileCard = lazy(() => import('./ProfileCard'));
@@ -203,7 +203,7 @@ function Chat({screenSize}) {
         // query reference for the messages we want
         // single query to get startAt snapshot
 
-        let ref = db.collection('rooms').doc(roomId).collection('messages')
+        let ref = collection(db, 'rooms', roomId, 'messages')
         let snapshots = await ref.orderBy('date', 'desc')
             .limit(DOCUMENTS_PER_PAGE).get()
         // save startAt snapshot
@@ -232,7 +232,7 @@ function Chat({screenSize}) {
     }
 
     async function getMoreMessages() {
-        let ref = db.collection('rooms').doc(roomId).collection('messages')
+        let ref = collection(db, 'rooms', roomId, 'messages')
         setMessageLoading(true)
         if (!start) {
             setLoadedAllMessages(true);
@@ -391,7 +391,7 @@ function Chat({screenSize}) {
     const findRoomNameAndRoomPicAndRecipientId = async (data) => {
         let recipientId = data?.users.filter((userId) => userId !== user?.uid)[0] //<-- Remove the destructuring
 
-        const userData = (await db.doc(`usersPublic/${recipientId}`).get()).data()
+        const userData = (await getDoc(doc(db,`usersPublic`,`${recipientId}`))).data()
 
         return {
             roomName: userData?.name, //<-- asynchrously fetch user id's

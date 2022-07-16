@@ -8,6 +8,7 @@ import { logEvent } from "../../utils/analytics";
 import { DialogActions, DialogContent } from '@mui/material';
 import {useForm} from 'react-hook-form';
 import {UserDetails} from '../../types/User';
+import { doc, updateDoc } from 'firebase/firestore';
 
 const EditBiographyDialog = ({ open, onClose }) => {
 
@@ -20,7 +21,7 @@ const EditBiographyDialog = ({ open, onClose }) => {
   const handleSaveBio = async (data: Pick<UserDetails, 'biography'>) => {
     if (!user) return;
     logEvent('updated_biography')
-    await db.doc(`users/${user.uid}`).update({
+    await updateDoc(doc(db, `users`,`${user.uid}`),{
       biography: data.biography,
       _updatedOn: firebase.firestore.Timestamp.now()
     })

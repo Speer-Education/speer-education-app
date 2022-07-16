@@ -8,6 +8,7 @@ import { logEvent } from "../../utils/analytics";
 import {useForm} from 'react-hook-form';
 import {UserDetails} from '../../types/User';
 import { DialogActions, DialogContent } from '@mui/material';
+import { doc, updateDoc } from 'firebase/firestore';
 
 const EditSocialsDialog = ({open, onClose}) => {
     const {user, userDetails} = useAuth();
@@ -20,7 +21,7 @@ const EditSocialsDialog = ({open, onClose}) => {
     const handleSaveDetails = async (data: UserDetails['socials']) => {
       if(!user) return;
       logEvent('updated_socials');
-      await db.doc(`users/${user.uid}`).update({
+      await updateDoc(doc(db, `users/${user.uid}`), {
         socials: data,
         _updatedOn: firebase.firestore.Timestamp.now()
       })
