@@ -94,11 +94,17 @@ function Chat({screenSize}) {
                 setRoomDoesNotExistWarning(false);
                 //TODO: fixable after firebase migration
                 //@ts-ignore
+
+                console.log("snapshot", snapshot)
+                console.log("snapshot Data", snapshot.data())
+
                 const snapData = {
                     id: snapshot.id,
                     ref: snapshot.ref,
                     ...(snapshot.data())
                 } as MessageRoomDocument
+
+                console.log("snap data", snapData)
 
                 setRoomDoc(snapData)
                 
