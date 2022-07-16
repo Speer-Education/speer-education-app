@@ -115,10 +115,10 @@ function Chat({screenSize}) {
                 
                 console.log(68.5)
 
-                logEvent('loaded_room',{
-                    roomId: roomId,
-                    ...snapData
-                })
+                // logEvent('loaded_room',{
+                //     roomId: roomId,
+                //     ...snapData
+                // })
 
                 console.log(69)
                 //If there is a name (it means it is a group chat)
