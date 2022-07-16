@@ -102,10 +102,13 @@ function Chat({screenSize}) {
 
                 setRoomDoc(snapData)
                 
-                logEvent('loaded_room',{
-                    roomId: roomId,
-                    ...snapData
-                })
+                /*THE ANALYTICS LOGGING BELOW CAUSED ERROR DURING STAGING, "Uncaught (in promise) 
+                    RangeError: Maximum call stack size exceeded at Object(<anonymous>)" */
+                    
+                // logEvent('loaded_room',{
+                //     roomId: roomId,
+                //     ...snapData
+                // })
 
                 //If there is a name (it means it is a group chat)
                 // We can test group chats for the time being by going to the room in the firebase database, and manually adding a name field.

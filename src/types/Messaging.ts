@@ -35,7 +35,7 @@ export type IndividualMessageRoom = {
     attachments: Attachment[],
     attachmentsAmount: number,
     lastMessage: Message & { messageId: string },
-    messageAmount: number,
+    messagesAmount: number,
     users: string[],
     roomName: {
         [userId: string]: string;
@@ -48,7 +48,7 @@ export type GroupMessageRoom = {
     attachments: Attachment[],
     attachmentsAmount: number,
     lastMessage: Message & { messageId: string },
-    messageAmount: number,
+    messagesAmount: number,
     users: string[],
     name: string, 
     picture: string, 
