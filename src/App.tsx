@@ -50,22 +50,23 @@ function App() {
   }) => {
     console.log('logging error:', error, errorInfo)
   }
-
+  console.log('user', user)
   return (
     <ErrorBoundary FallbackComponent={FallbackPage} onError={errorHandler}>
       <div className="app bg-gray-100 min-h-screen">
         <Suspense fallback={<AppLoader/>}>
           <Routes>
-            {user !== null? <>
+            {user && user !== null && <>
               <Route path="/*" element={<LazyMainApp />}/>
               <Route path="/onboarding" element={<LazyOnboarding />}/>
               <Route path="/admin/*" element={<LazyAdminApp />}/>
               <Route path="/verify" element={<LazyVerify />}/>
-            </>: <>
+            </>}
+            {user === null &&  <>
               <Route path="/login" element={<LazyLogin />}/>
               <Route path="/forgot_password" element={<LazyForgotPassword />}/>
+              <Route path="/*" element={<Navigate to="/login" />}/>
             </>}
-            {user === null && <Route path="/*" element={<Navigate to="/login" />}/>}
             {/* // <Route path="/*" element={<NotFoundPage/>}/> */}
           </Routes>
         </Suspense>

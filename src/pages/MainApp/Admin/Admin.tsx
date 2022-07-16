@@ -1,6 +1,6 @@
 import React, { Component, FC, PropsWithChildren, PropsWithoutRef, ReactChildren, ReactElement, Suspense, useEffect, useState } from 'react';
-import { AccountCircle, AdminPanelSettingsRounded, AppRegistrationTwoTone, AppShortcutTwoTone, AppsTwoTone, CardMembershipRounded, ClassRounded, DesignServicesTwoTone, GroupRounded, Home, LinkRounded, LogoutRounded, PrecisionManufacturingTwoTone } from "@mui/icons-material";
-import { Collapse, IconButton, Tooltip } from "@mui/material";
+import { AccountCircle, AdminPanelSettingsRounded, AppRegistrationTwoTone, AppShortcutTwoTone, AppsTwoTone, Article, CardMembershipRounded, ClassRounded, DesignServicesTwoTone, GroupRounded, Home, LinkRounded, LogoutRounded, PrecisionManufacturingTwoTone } from "@mui/icons-material";
+import { Collapse, IconButton, LinearProgress, Tooltip } from "@mui/material";
 import AccountBalanceTwoToneIcon from '@mui/icons-material/AccountBalanceTwoTone';
 import { Helmet } from 'react-helmet';
 import {Link, useLocation, useNavigate, Routes, Route} from 'react-router-dom';
@@ -55,9 +55,13 @@ const AdminLayout: FC<PropsWithChildren<{}>>  =  ({ children }) => {
     const links = [
         { href: "", label: "Dashboard", Icon: Home },
         { href: "users", label: "Users", Icon: GroupRounded },
+        { href: "blogs", label: "Blogs", Icon: Article, children: [
+            { href: "blogs/new", label: "Create Blog", Icon: AppShortcutTwoTone },
+            { href: "blogs/list", label: "List Blogs", Icon: AppShortcutTwoTone },
+        ] },
     ]
 
-    return <div className="h-app w-screen pb-12 pt-2 sm:pb-2 sm:grid grid-cols-[14rem_1fr] gap-4 max-w-[84rem] sm:px-4">
+    return <div className="h-app w-screen pb-12 pt-2 sm:pb-2 sm:grid grid-cols-[14rem_1fr] gap-4 max-w-[84rem] sm:px-4 overflow-hidden">
         <Helmet>
             <title>Member</title>
         </Helmet>
@@ -70,7 +74,7 @@ const AdminLayout: FC<PropsWithChildren<{}>>  =  ({ children }) => {
             </div>
         </aside>
         <SlideTransition in timeout={150}>
-            <div className="flex flex-col overflow-hidden p-3 bg-white rounded-lg shadow-lg">
+            <div className="flex flex-col overflow-x-hidden overflow-y-auto p-3 bg-white rounded-lg shadow-lg">
                 {children}
             </div>
         </SlideTransition>
@@ -78,14 +82,20 @@ const AdminLayout: FC<PropsWithChildren<{}>>  =  ({ children }) => {
 }
 
 const LazyUsersManager = React.lazy(() => import('../../../components/OrgAdmin/UsersManager'));
+const LazyBlogsManager = React.lazy(() => import('../../../components/OrgAdmin/BlogsManager'));
+const LazyBlogEditor = React.lazy(() => import('../../../components/OrgAdmin/BlogEditor'));
+// const LazyMentorsManager = React.lazy(() => import('../../../components/OrgAdmin/MentorsManager'));
 const LazyDashboard = React.lazy(() => import('../../../components/OrgAdmin/Dashboard'));
 
 const OrganizationAdmin: FC<{}> = () => {
     return <AdminLayout>
-        <Suspense fallback={<AppLoader/>}>
+        <Suspense fallback={<div className='w-full h-full grid place-items-center'><LinearProgress/></div>}>
             <Routes>
                 <Route path="/" element={<LazyDashboard />} />
                 <Route path="/users" element={<LazyUsersManager />} />
+                <Route path="/blogs/list" element={<LazyBlogsManager />} />
+                <Route path="/blogs/:id" element={<LazyBlogEditor />} />
+                {/* <Route path="/mentors" element={<LazyMentorsManager />} /> */}
             </Routes>
         </Suspense>
     </AdminLayout>

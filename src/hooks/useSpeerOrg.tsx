@@ -1,4 +1,4 @@
-import { doc } from "firebase/firestore";
+import { doc, DocumentReference } from "firebase/firestore";
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db, docConverter } from "../config/firebase";
@@ -15,7 +15,7 @@ const useSpeerOrgProvider = () => {
         if(user == null) setOrgId('global');
     }, [user])
 
-    const orgRef = useMemo(() => doc(db, 'organization', orgId), [orgId]);
+    const orgRef = useMemo(() => doc(db, 'organization', orgId).withConverter(docConverter), [orgId]);
 
     const toggleOrg = () => {
         if(!userDetails) return;

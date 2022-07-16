@@ -4,14 +4,14 @@ import { functions, publicUserCollection } from "../../config/firebase";
 import { useSpeerOrg } from "../../hooks/useSpeerOrg";
 import { DataGrid, GridActionsCellItem, GridColDef, GridColumns, GridRowParams, GridToolbar, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport, GridToolbarFilterButton, GridValueGetterParams } from '@mui/x-data-grid';
 import { Button, DialogActions, DialogContent, DialogTitle } from "@mui/material";
-import { AddRounded, Delete, SecurityOutlined } from "@mui/icons-material";
+import { AddRounded, Delete, ManageAccountsRounded, SecurityOutlined } from "@mui/icons-material";
 import { PublicUser, PublicUserDoc, UserID } from "../../types/User";
 import { useDialog } from "../../hooks/useDialog";
 import AddUserToOrganization from "./AddUserToOrganization";
 import { httpsCallable } from "firebase/functions";
 import { useSnackbar } from "notistack";
 import EditUserOrganizationRole from "./EditUserOrganizationRole";
-
+import './UsersManager.css'
 function CustomToolbar() {
     const [openDialog, closeDialog] = useDialog();
 
@@ -75,7 +75,7 @@ const UsersManager = () => {
     }
 
     const columns: GridColumns<PublicUserDoc> = [
-        { field: 'id', headerName: 'ID', width: 200 },
+        { field: 'id', headerName: 'ID', width: 250, cellClassName: "id-cell",  },
         {
             field: 'name',
             headerName: 'Name',
@@ -90,7 +90,7 @@ const UsersManager = () => {
             field: 'role',
             headerName: 'Role',
             description: 'This column has a value getter and is not sortable.',
-            width: 160,
+            width: 80,
             valueGetter: (params: GridValueGetterParams) => orgDoc?.permissions?.[params.row.id] || 'member'
         },
         {
@@ -98,7 +98,8 @@ const UsersManager = () => {
             type: 'actions',
             getActions: (params: GridRowParams<PublicUserDoc>) => [
                 <GridActionsCellItem color="info" icon={<SecurityOutlined />} onClick={showEditRoleDialog(params.row)} label="Edit Role" />,
-                <GridActionsCellItem color="error" icon={<Delete />} onClick={confirmDelete(params.row)} label="Delete" />
+                <GridActionsCellItem color="info" icon={<ManageAccountsRounded />} onClick={confirmDelete(params.row)} label="Make Mentor" showInMenu />,
+                <GridActionsCellItem color="error" icon={<Delete />} onClick={confirmDelete(params.row)} label="Delete" showInMenu/>
             ]
         }
     ];
