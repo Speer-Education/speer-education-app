@@ -113,6 +113,7 @@ function Chat({screenSize}) {
                     ...snapData
                 })
 
+                console.log(69)
                 //If there is a name (it means it is a group chat)
                 // We can test group chats for the time being by going to the room in the firebase database, and manually adding a name field.
                 // We can also manually add a picture there to test it too.
@@ -121,9 +122,10 @@ function Chat({screenSize}) {
                     setRoomPic(snapData.picture || "")
                     setRoomUsers(snapData.users)// We set room users as opposed to ismentor like below.
                     setRecipientId(undefined) //setRecipientId to undefined so GroupProfileCard renders instead of regular ProfileCard
-                    
+                    console.log(70)
                 //If there is no name (A direct message between two person chat)
                 } else {
+                    console.log(71)
                     const { roomName, roomPic, isMentor, recipientId } = await findRoomNameAndRoomPicAndRecipientId(snapData);
                     setRoomName(roomName) //Implemented function (actually from Sidebar.js) to get the actual room name    
                     setRoomPic(roomPic)
@@ -131,7 +133,9 @@ function Chat({screenSize}) {
                     setRecipientId(recipientId) //Switch this from receipientId to undefined, and add the line below to test group chats for now.
                     // setRoomUsers(snapData.users) 
                     // THis is just for testing group chats on a two person chat, actual group chat should be created with if statement above.
+                    console.log(72)
                 }
+                console.log(73)
                 setLoading(false);
             }, error => {
                 console.log("error", error);
