@@ -1,45 +1,41 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import './Mentors.css'
 import MentorCard from '../../../components/Mentor/MentorCard/MentorCard';
-import { db } from '../../../config/firebase';
+import { db, docConverter } from '../../../config/firebase';
 import {Helmet} from "react-helmet";
 import StatsCard from '../../../components/Dashboard/StatsCard';
 import UserSmallProfileCard from '../../../components/User/UserSmallProfileCard';
 import { useAuth } from '../../../hooks/useAuth';
-import { logEvent } from '../../../utils/analytics';
 import { TransitionGroup } from "react-transition-group";
 // import SlideTransition from '../../../components/SlideTransition/SlideTransition';
 import { Grow } from '@mui/material';
-import { MentorDetailsDocument } from '../../../types/User';
+import { PublicUserDoc } from '../../../types/User';
 import Zoom from '@mui/material/Zoom';
-import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, query, where } from 'firebase/firestore';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { useSpeerOrg } from '../../../hooks/useSpeerOrg';
+import { OrganizationMemberDocument, OrgMergedUser } from '../../../types/Organization';
 
 const Mentors = () => {
-
     const { user, userDetails } = useAuth();
-    const [mentors, setMentors] = useState<MentorDetailsDocument[]>([]);
-    const [mentorsLoaded, setMentorsLoaded] = useState(false);
-
+    const { orgRef } = useSpeerOrg();
+    const [mentors, setMentors] = useState<OrgMergedUser[]>([]);
+    const [mentorMembers = [], loadMembers, errorMembers] = useCollectionData<OrganizationMemberDocument>(query(collection(orgRef, 'members').withConverter(docConverter), where('isMentor', '==', true)))
+    const mentorsLoaded = mentorMembers.length == mentors.length;
 
     useEffect(() => {
         if(!user) return;
-        //Get all the mentors and set in mentors
-        return onSnapshot(query(collection(db, 'usersPublic'), where('permissions.isMtr','==', true), orderBy('_firstLogin','desc')), snap => {
-            const allMentors = snap.docs.map( doc => {
-                return { id: doc.id, ...doc.data()} as MentorDetailsDocument
-            })
-
-            const currentMentors = allMentors.filter(({stats: { connectedMentees =[] }, id}) => !(connectedMentees || []).includes(user.uid) && id !== user?.uid)
-
-            setMentors(currentMentors)
-            logEvent('Loaded Mentors',{
-                mentorsLoaded: currentMentors.length,
-                mentorsList: currentMentors.map(({name}) => name)
-            })
-            setMentorsLoaded(true)
-        })
-    },[user?.uid])
+        if(loadMembers) return;
+        //get all mentors profiles
+        Promise.all(mentorMembers.map(async (member) => {
+            const mentor = await getDoc(doc(db, 'usersPublic', member.id).withConverter(docConverter));
+            return {
+                ...member,
+                ...mentor.data() as PublicUserDoc,
+            }
+        }))
+        .then(setMentors)
+    },[user?.uid, mentorMembers, loadMembers])
 
     return (<Zoom in={true} >
         <div className="mentors h-app">

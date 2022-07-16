@@ -71,9 +71,7 @@ const NavBarLink = ({ IconComponent, title, href, isContactIcon } : {
 const AppNavbar = () => {
   const navigate = useNavigate();
   const { user, userToken } = useAuth();
-  const { toggleOrg, orgId, orgDoc } = useSpeerOrg();
-
-  const orgAdmin = (orgDoc?.permissions?.[user?.uid || ''] == 'owner') || (orgDoc?.permissions?.[user?.uid || ''] == 'admin')
+  const { toggleOrg, isAdmin, orgId } = useSpeerOrg();
   
   return (<SlideTransition in timeout={50}>
     <div className="fixed bottom-0 lg:sticky lg:top-0 w-full h-14 lg:p-4 lg:h-24 bg-white z-10 shadow-md flex flex-row items-center justify-between">
@@ -86,7 +84,7 @@ const AppNavbar = () => {
           <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/" />
           <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/mentors" />
           <NavBarLink IconComponent={MessageTwoToneIcon} isContactIcon title="Contacts" href="/messages" />
-          {orgAdmin && <NavBarLink IconComponent={LibraryBooksTwoToneIcon} title="Admin" href="/orgadmin" />}
+          {isAdmin && <NavBarLink IconComponent={LibraryBooksTwoToneIcon} title="Admin" href="/orgadmin" />}
           {userToken?.organization && <Switch onChange={toggleOrg} checked={orgId != 'global'} />}
           {/* <NavBarLink IconComponent={Notif0.  icationsTwoToneIcon} title="Notifications"/> */}
         </div>

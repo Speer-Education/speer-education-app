@@ -2,20 +2,21 @@ import { doc, DocumentReference } from "firebase/firestore";
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db, docConverter } from "../config/firebase";
-import { Organization, OrganizationDocument } from "../types/Organization";
+import { Organization, OrganizationDocument, OrganizationMember, OrganizationMemberDocument } from "../types/Organization";
 import { useAuth } from "./useAuth";
 import { useLocalStorage } from "./useHooks";
 
 const useSpeerOrgProvider = () => {
-    const [orgId, setOrgId] = useLocalStorage<string>('current_org','global');
-    const [orgDoc, loading, error] = useDocumentData<OrganizationDocument>(doc(db, 'organization', orgId).withConverter(docConverter));
     const { user, userDetails } = useAuth();
+    const [orgId, setOrgId] = useLocalStorage<string>('current_org','global');
+    const orgRef = useMemo(() => doc(db, 'organization', orgId).withConverter(docConverter), [orgId]);
+    const [orgDoc, loading, error] = useDocumentData<OrganizationDocument>(orgRef);
+    const [memberDoc, loadMember, errorMember] = useDocumentData<OrganizationMemberDocument>(user && doc(orgRef, 'members', user.uid).withConverter(docConverter));
 
     useEffect(() => {
         if(user == null) setOrgId('global');
     }, [user])
 
-    const orgRef = useMemo(() => doc(db, 'organization', orgId).withConverter(docConverter), [orgId]);
 
     const toggleOrg = () => {
         if(!userDetails) return;
@@ -25,8 +26,8 @@ const useSpeerOrgProvider = () => {
             setOrgId('global');
         }
     }
-    const isOwner = orgDoc?.permissions?.[user?.uid || ""] == 'owner';
-    const isAdmin = orgDoc?.permissions?.[user?.uid || ""] == 'admin' || isOwner;
+    const isOwner = memberDoc?.role == 'owner';
+    const isAdmin = memberDoc?.role == 'admin' || isOwner;
 
     return {
         userOrg: userDetails?.organization,
@@ -37,6 +38,7 @@ const useSpeerOrgProvider = () => {
         isAdmin,
         loadingDoc: loading,
         toggleOrg,
+        memberDoc,
         setOrganization: (orgId: string) => { setOrgId(orgId) }
     }
 };

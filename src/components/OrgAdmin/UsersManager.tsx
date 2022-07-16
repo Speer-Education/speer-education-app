@@ -1,6 +1,6 @@
-import { query, where } from "firebase/firestore";
+import { doc, getDoc, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { functions, publicUserCollection } from "../../config/firebase";
+import { db, docConverter, functions, publicUserCollection } from "../../config/firebase";
 import { useSpeerOrg } from "../../hooks/useSpeerOrg";
 import { DataGrid, GridActionsCellItem, GridColDef, GridColumns, GridRowParams, GridToolbar, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport, GridToolbarFilterButton, GridValueGetterParams } from '@mui/x-data-grid';
 import { Button, DialogActions, DialogContent, DialogTitle } from "@mui/material";
@@ -12,6 +12,8 @@ import { httpsCallable } from "firebase/functions";
 import { useSnackbar } from "notistack";
 import EditUserOrganizationRole from "./EditUserOrganizationRole";
 import './UsersManager.css'
+import { useEffect, useState } from "react";
+import {OrganizationMember, OrganizationMemberDocument, OrgMergedUser} from '../../types/Organization';
 function CustomToolbar() {
     const [openDialog, closeDialog] = useDialog();
 
@@ -37,12 +39,24 @@ function CustomToolbar() {
 
 
 const UsersManager = () => {
-    const { orgId, orgDoc } = useSpeerOrg();
+    const { orgId, orgDoc, orgRef } = useSpeerOrg();
     const [users = [], loading, error] = useCollectionData(query(publicUserCollection, where('organization', '==', orgId)));
+    const [orgUsers, setOrgUsers] = useState<OrgMergedUser[]>([]);
     const [openDialog, closeDialog] = useDialog();
     const { enqueueSnackbar } = useSnackbar();
+    
+    useEffect(() => {
+        if (users.length > 0) {
+            Promise.all(users.map(async (user) => ({
+                ...(await getDoc(doc(orgRef, 'members', user.id).withConverter(docConverter))).data() as OrganizationMemberDocument,
+                ...user
+            })))
+                .then(setOrgUsers)
+                .catch(console.error);
+        }
+    }, [users]);
 
-    const confirmDelete = (user: PublicUserDoc) => () => {
+    const confirmDelete = (user: OrgMergedUser) => () => {
         console.log(user);
         openDialog({
             children: <>
@@ -68,10 +82,23 @@ const UsersManager = () => {
         })
     }
 
-    const showEditRoleDialog = (user: PublicUserDoc) => () => {
+    const showEditRoleDialog = (user: OrgMergedUser) => () => {
         openDialog({
-            children: <EditUserOrganizationRole user={user} onClose={closeDialog} />
+            children: <EditUserOrganizationRole user={user} onClose={(newRole) => {
+                if(newRole)setOrgUsers(orgUsers.map(u => u.id === user.id ? { ...u, role: newRole } : u));
+                closeDialog();
+            }} />
         })
+    }
+
+    const toggleMentor = (user: OrgMergedUser) => async () => {
+        console.log(user)
+        await setDoc(doc(orgRef, 'members', user.id), {
+            isMentor: !user.isMentor
+        } as Partial<OrganizationMember>, { merge: true })
+        enqueueSnackbar(`${user.name} is now ${user.isMentor ? 'a mentor' : 'a member'}`, { variant: "success" });
+        //replace user with updated user in the array
+        setOrgUsers(orgUsers.map(u => u.id === user.id ? { ...u, isMentor: !user.isMentor } : u));
     }
 
     const columns: GridColumns<PublicUserDoc> = [
@@ -91,14 +118,21 @@ const UsersManager = () => {
             headerName: 'Role',
             description: 'This column has a value getter and is not sortable.',
             width: 80,
-            valueGetter: (params: GridValueGetterParams) => orgDoc?.permissions?.[params.row.id] || 'member'
+            valueGetter: (params: GridValueGetterParams) => params.row.role || 'member'
+        },
+        {
+            field: 'isMentor',
+            headerName: 'Is Mentor',
+            width: 80,
+            type: 'boolean',
+            valueGetter: (params: GridValueGetterParams) => params.row.isMentor || false
         },
         {
             field: 'actions',
             type: 'actions',
-            getActions: (params: GridRowParams<PublicUserDoc>) => [
+            getActions: (params: GridRowParams<OrgMergedUser>) => [
                 <GridActionsCellItem color="info" icon={<SecurityOutlined />} onClick={showEditRoleDialog(params.row)} label="Edit Role" />,
-                <GridActionsCellItem color="info" icon={<ManageAccountsRounded />} onClick={confirmDelete(params.row)} label="Make Mentor" showInMenu />,
+                <GridActionsCellItem color="info" icon={<ManageAccountsRounded />} onClick={toggleMentor(params.row)} label={!params.row.isMentor?"Make Mentor": "Remove Mentor"} showInMenu />,
                 <GridActionsCellItem color="error" icon={<Delete />} onClick={confirmDelete(params.row)} label="Delete" showInMenu/>
             ]
         }
@@ -111,7 +145,7 @@ const UsersManager = () => {
                 autoHeight
                 loading={loading}
                 error={error}
-                rows={users}
+                rows={orgUsers}
                 columns={columns}
                 density={'compact'}
                 checkboxSelection
