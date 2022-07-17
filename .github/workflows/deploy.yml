@@ -7,6 +7,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - run: npm install -g vercel@27.0.0
       - uses: actions/checkout@v2
       - uses: amondnet/vercel-action@v25 #deploy
         with:
@@ -16,3 +17,5 @@ jobs:
           vercel-org-id: ${{ secrets.ORG_ID}}  #Required
           vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
           working-directory: ./
+          alias-domains: |
+            app.speeredu.com
