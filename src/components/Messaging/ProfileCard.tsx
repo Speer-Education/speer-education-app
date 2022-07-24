@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { db, docConverter } from "../../config/firebase"; 
+import { doc } from "firebase/firestore"
 import UserSmallProfileCard from "../User/UserSmallProfileCard";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { PublicUserDoc } from "../../types/User";
