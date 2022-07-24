@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './Sidebar.css';
 import { GroupAddRounded, SearchOutlined } from '@mui/icons-material';
 import SidebarChat from './SidebarChat';
-import { db, docConverter, storage } from '../../config/firebase';
+import { db, docConverter } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import ProfilePicture from '../User/ProfilePicture';
 import Spinner from '../Loader/Spinner';
