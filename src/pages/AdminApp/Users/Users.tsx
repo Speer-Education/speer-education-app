@@ -1,11 +1,10 @@
-//@ts-nocheck
 import { Button } from '@mui/material';
-import { collection, orderBy, query, updateDoc } from 'firebase/firestore';
+import { collection, doc, orderBy, query, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import ReactTimeago from 'react-timeago';
 import ProfilePicture from '../../../components/User/ProfilePicture';
-import { db, rtdb } from '../../../config/firebase';
+import { db, docConverter, rtdb } from '../../../config/firebase';
 import { useAuth } from '../../../hooks/useAuth';
 import { UserDetails, UserDetailsDocument } from '../../../types/User';
 import { useObjectVal } from 'react-firebase-hooks/database';
@@ -13,7 +12,7 @@ import { ref } from 'firebase/database';
 
 const UserCard = ({ uid, userDetails }) => {
     const { user } = useAuth();
-    const [userState, loading, error] = useObjectVal(ref(rtdb, 'status', uid));
+    const [userState, loading, error] = useObjectVal(ref(rtdb, 'status/'+ uid));
     const { name, email, country, major, hsGradYear, isMtr } = userDetails;
     const { state, last_changed, version } = userState || {};
 
@@ -30,10 +29,10 @@ const UserCard = ({ uid, userDetails }) => {
             </div>
             <div>
                 {!isMtr && <Button variant="outlined" onClick={() => {
-                    updateDoc(collection(db, 'user_claims'), {isMtr: true})
+                    updateDoc(doc(db, 'user_claims', uid), {isMtr: true})
                 }}>Make Mentor</Button>}
                 {isMtr && <Button variant="outlined" style={{borderColor: "red"}} onClick={() => {
-                    updateDoc(collection(db, 'user_claims'), {isMtr: false})
+                    updateDoc(doc(db, 'user_claims', uid), {isMtr: false})
                 }}>REMOVE Mentor</Button>}
             </div>
         </div>
@@ -44,7 +43,7 @@ const UserCard = ({ uid, userDetails }) => {
 const Users = () => {
     const { user } = useAuth();
     const [latestVersion, setLatestVersion] = useState(0);
-    const [users = [], loading, error] = useCollectionData<UserDetailsDocument>(query(collection(db, 'users'), orderBy('name')))
+    const [users = [], loading, error] = useCollectionData<UserDetailsDocument>(query(collection(db, 'users').withConverter(docConverter), orderBy('name')))
     
     useEffect(() => {
         fetch('https://imjustchew.npkn.net/check-outdated-speer')
@@ -67,9 +66,9 @@ const Users = () => {
                 </div>
             </div>
             <div className="flex flex-col space-y-3">
-                {users.map(userDetails => (
-                    <UserCard key={user.id} uid={userDetails.id} userDetails={userDetails} />
-                ))}
+                {users.map(userDetails => (<>
+                    {userDetails && <UserCard key={userDetails.id} uid={userDetails.id} userDetails={userDetails} />}
+                </>))}
             </div>
             
         </div>

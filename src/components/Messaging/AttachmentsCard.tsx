@@ -1,12 +1,12 @@
-import React, { lazy, useState } from "react";
+import { lazy, useState } from "react";
 import { FolderOpenOutlined } from "@mui/icons-material";
 import AttachmentItem from "./AttachmentItem";
 import bytesToSize from "../../utils/bytesToSize";
-import { AttachmentDocument } from "../../types/Messaging";
+import { Attachment } from "../../types/Messaging";
 
 const LazyAttachmentsDialog = lazy(() => import('./AttachmentsDialog'))
 
-const AttachmentsCard = ({ roomId, attachments = []}: { roomId: string, attachments: AttachmentDocument[]}) => {
+const AttachmentsCard = ({ roomId, attachments = []}: { roomId: string, attachments: Attachment[]}) => {
     const [open, setOpen] = useState(false);
     
     return <>

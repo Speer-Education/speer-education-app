@@ -14,11 +14,17 @@ export type Attachment = {
     uploadedOn: Timestamp
 }
 
-export type Message = {
+export type FileDeclaration = {
+    bucketPath: string,
+    downloadUrl: string,
+    fileSize: number,
+    fileType: 'file' | 'image',
+    filename: string,
+    uploadedOn: Timestamp
+}
+
+export type MessageBase = {
     date: Timestamp;
-    files: any[],
-    message: string,
-    messageType: 'text',
     read: {
         [userId: string]: boolean;
     },
@@ -29,6 +35,20 @@ export type Message = {
     senderId: string,
     senderUsername: string,
 }
+
+export type TextMessage = {
+    message: string,
+    messageType: 'text',
+    
+}
+
+export type FileMessage = {
+    message: string,
+    files: FileDeclaration[],
+    messageType: 'file'
+}
+
+export type Message = (TextMessage | FileMessage) & MessageBase;
 
 export type IndividualMessageRoom = {
     _createdOn: Timestamp,
@@ -55,9 +75,9 @@ export type GroupMessageRoom = {
     type: 'group', 
 }
 
-export type MessageRoom = GroupMessageRoom | IndividualMessageRoom
-
 export type MessageDocument = Message & InternalDoc
+
+export type MessageRoom = GroupMessageRoom | IndividualMessageRoom
 export type MessageRoomDocument = MessageRoom & InternalDoc
 export type AttachmentDocument = Attachment & InternalDoc
 

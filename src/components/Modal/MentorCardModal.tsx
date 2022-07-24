@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React from 'react';
 import { makeStyles } from '@mui/styles'
 import Modal from '@mui/material/Modal';
@@ -21,9 +20,12 @@ function getModalStyle() {
       position: 'absolute',
       width: "98vw",
       maxWidth: "400px",
+      //@ts-ignore
       backgroundColor: theme.palette.background.paper,
       border: '1px solid #000',
+      //@ts-ignore
       boxShadow: theme.shadows[5],
+      //@ts-ignore
       padding: theme.spacing(2, 4, 3),
       display: "flex",
       justifyContent: "center",

@@ -1,10 +1,9 @@
-//@ts-nocheck
-import React, { useState, useEffect, useRef, lazy } from 'react';
+import React, { useState, useEffect, useRef, lazy, EventHandler, ChangeEventHandler } from 'react';
 import { Avatar, IconButton } from '@mui/material';
-import { AttachFile, EnhancedEncryptionSharp, Send } from '@mui/icons-material';
+import { AttachFile, Send } from '@mui/icons-material';
 import { useParams, Link } from 'react-router-dom';
 import Filter from 'bad-words';
-import { firebase, db, storage, functions } from '../../config/firebase';
+import { firebase, db, storage, functions, docConverter } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import badWordsList from '../../config/badWords.json';
 import ChatMessage from './ChatMessage';
@@ -16,28 +15,22 @@ import SendMessageLoader from '../Loader/SendMessageLoader';
 import { logEvent } from '../../utils/analytics';
 import { MessageDocument, MessageRoomDocument } from '../../types/Messaging';
 import { addDoc, collection, doc, getDoc, onSnapshot } from 'firebase/firestore';
+import usePaginateCollection from '../../hooks/usePaginateCollection';
 
 const LazyGroupProfileCard = lazy(() => import('./GroupProfileCard'));
 const LazyProfileCard = lazy(() => import('./ProfileCard'));
 const LazyAttachmentsCard = lazy(() => import('./AttachmentsCard'));
-
-let messageArray = []
-let listeners = []    // list of listeners
-let start = null      // start position of listener
-let end = null        // end position of listener
 
 const DOCUMENTS_PER_PAGE = 15;
 
 //TODO: use this to store data
 const ChatContext = React.createContext<{
     roomId: string;
+//@ts-ignore
 }>({});
 
-
 function Chat({screenSize}) {
-
     const { user, userDetails } = useAuth();
-
     const [input, setInput] = useState("");
     const { roomId } = useParams();
     const [roomDoc, setRoomDoc] = useState<MessageRoomDocument>();
@@ -46,20 +39,25 @@ function Chat({screenSize}) {
     const [roomUsers, setRoomUsers] = useState<string[]>([]);
     const [recipientId, setRecipientId] = useState<string>();
     const [isMentor, setIsMentor] = useState();
-    const [messages, setMessages] = useState<MessageDocument[]>([]);
+    //@ts-ignore
+    const [messages, getMoreMessages, messageLoading, loadedAllMessages] = usePaginateCollection<MessageDocument>(collection(db, 'rooms', roomId, 'messages').withConverter(docConverter), {
+        orderKey: 'date',
+        direction: 'asc',
+        pageLimit: DOCUMENTS_PER_PAGE,
+        sortFunc({ date: x }, { date: y }){
+            return x.toMillis() - y.toMillis()
+        },
+    });
     const [loading, setLoading] = useState(true);
-    const [messageLoading, setMessageLoading] = useState(true);
     const [sendLoading, setSendLoading] = useState(false);
-    const [loadedAllMessages, setLoadedAllMessages] = useState(false);
-    const [fileMessages, setFileMessages] = useState([]);
-    const [newMessageFlag, setNewMessageFlag] = useState(false);
+    const [fileMessages, setFileMessages] = useState<File[]>([]);
     const [showProfPicAndAttachments, setShowProfPicAndAttachments] = useState(false);
     const [doneInitialScroll, setDoneInitialScroll] = useState(false);
     const [fileSizeWarning, setFileSizeWarning] = useState(false);
     const [tooManyFilesWarning, setTooManyFilesWarning] = useState(false);
     const [roomDoesNotExistWarning, setRoomDoesNotExistWarning] = useState(false);
 
-    const messagesEndRef = useRef(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
     const filter = new Filter({ emptyList: true, list: badWordsList });
 
     //For if screen size updates
@@ -69,36 +67,16 @@ function Chat({screenSize}) {
         }
     }, [screenSize])
 
-    //TO get the messages
-    useEffect(() => {
-        if (!user) return;
-
-        //Clear all variables before reloading page.
-        messageArray = [];
-        listeners = [];
-        start = null;
-        end = null;
-        setMessages(messageArray)
-        getMessages();
-
-        return () => detachListeners();
-    }, [roomId, user]);
-
     //To get the roomName and info
     useEffect(() => {
         if (roomId && user) {
             setLoading(true);
             //Get Room Name
-            const unsub1 = onSnapshot(doc(db, 'rooms', roomId), async (snapshot) => { //<-- Add an unsubscribe
+            const unsub1 = onSnapshot(doc(db, 'rooms', roomId).withConverter(docConverter), async (snapshot) => { //<-- Add an unsubscribe
                 //NO ERROR, ROOM EXISTS
                 setRoomDoesNotExistWarning(false);
                 //TODO: fixable after firebase migration
-                //@ts-ignore
-                const snapData = {
-                    id: snapshot.id,
-                    ref: snapshot.ref,
-                    ...(snapshot.data())
-                } as MessageRoomDocument
+                const snapData = snapshot.data() as MessageRoomDocument
 
                 setRoomDoc(snapData)
                 
@@ -113,7 +91,7 @@ function Chat({screenSize}) {
                 //If there is a name (it means it is a group chat)
                 // We can test group chats for the time being by going to the room in the firebase database, and manually adding a name field.
                 // We can also manually add a picture there to test it too.
-                if (snapData?.name) {
+                if (snapData.type == 'group') {
                     setRoomName(snapData.name)
                     setRoomPic(snapData.picture || "")
                     setRoomUsers(snapData.users)// We set room users as opposed to ismentor like below.
@@ -148,8 +126,8 @@ function Chat({screenSize}) {
     useEffect(() => {
         //Only scrolls once when messages have loaded
         if (!doneInitialScroll && messages.length > 0){
-            scrollToBottom()
             setDoneInitialScroll(true)
+            scrollToBottom()
         }        
     }, [messages]);
 
@@ -167,108 +145,12 @@ function Chat({screenSize}) {
         }
     }, [fileSizeWarning])
 
-    function handleUpdatedMessages(snapshot) {
-        if(!user) return;
-        // append new messages to message array
-        snapshot.forEach((message) => {
-            //Update the message's read field for the user to true
-            if(!(message.data()?.read || {})[user.uid]){
-                message.ref.update({ [`read.${user.uid}`] : true })
-            } 
-
-            // filter out any duplicates (from modify/delete events)         
-            messageArray = messageArray.filter(x => x.id !== message.id)
-            messageArray.push({ id: message.id, ...message.data() })
-        })
-
-        // remove post from local array if deleted
-        snapshot.docChanges().forEach(change => {
-            if (change.type === 'removed') {
-                const message = change.doc
-                //Remove post from our array if it is here
-                messageArray = messageArray.filter(x => x.id !== message.id)
-            }
-        });
-        
-        messageArray = messageArray.filter(({ date }) => date != null);
-        //Sort array because it is unsorted, filter date as it might be null
-        messageArray.sort(({ date: x }, { date: y }) => {
-            return x.toDate() - y.toDate()
-        })
-        setMessages(messageArray)
-        setMessageLoading(false)
-    }
-
-    async function getMessages() {
-        // query reference for the messages we want
-        // single query to get startAt snapshot
-
-        let ref = collection(db, 'rooms', roomId, 'messages')
-        let snapshots = await ref.orderBy('date', 'desc')
-            .limit(DOCUMENTS_PER_PAGE).get()
-        // save startAt snapshot
-        start = snapshots.docs[snapshots.docs.length - 1]
-
-        let listener;
-
-        if (!start) {
-            listener = ref.orderBy('date', 'asc')
-                .onSnapshot(snap => {
-                    setNewMessageFlag(true)
-                    handleUpdatedMessages(snap)
-                })
-        } else {
-            // create listener using startAt snapshot (starting boundary)    
-            listener = ref.orderBy('date', 'asc')
-                .startAt(start)
-                .onSnapshot(snap => {
-                    setNewMessageFlag(true)
-                    handleUpdatedMessages(snap)
-                })
-        }
-
-        // add listener to list
-        listeners.push(listener)
-    }
-
-    async function getMoreMessages() {
-        let ref = collection(db, 'rooms', roomId, 'messages')
-        setMessageLoading(true)
-        if (!start) {
-            setLoadedAllMessages(true);
-            setMessageLoading(false)
-            return;
-        }
-        // single query to get new startAt snapshot
-        let snapshots = await ref.orderBy('date', 'desc')
-            .startAt(start)
-            .limit(DOCUMENTS_PER_PAGE).get()
-        // previous starting boundary becomes new ending boundary
-        end = start
-        start = snapshots.docs[snapshots.docs.length - 1]
-        // create another listener using new boundaries     
-        if (!end) {
-            setLoadedAllMessages(true);
-            setMessageLoading(false)
-            return;
-        }
-        let listener = ref.orderBy('date', 'asc')
-            .startAt(start).endBefore(end)
-            .onSnapshot(handleUpdatedMessages)
-        listeners.push(listener)
-    }
-
-    // call to detach all listeners
-    function detachListeners() {
-        listeners.forEach(listener => listener())
-    }
-
     const sendMessage = async (e) => {
         e.preventDefault();
 
         //We need to ensure that user exists, that room exists, and that it is not still loading. <-- We have to check for loading because
         // roomDoesNotExist starts off as true, and we need to make sure it stays as true even after loading.
-        if (!user || roomDoesNotExistWarning || loading) return;
+        if (!user || !userDetails || roomDoesNotExistWarning || loading) return;
 
         //Check whether there are files and then send them. (Don't need to worry about below, if the user adds files and adds a message, it will send the files as one message then
         //the text message as the next message. If not, it just sends the files (or vice versa if there are no files))
@@ -318,8 +200,9 @@ function Chat({screenSize}) {
                 }
             })
 
-            const recipientIds =  roomDoc.users.filter(mod => mod !== user.uid)
+            const recipientIds =  roomDoc!.users.filter(mod => mod !== user.uid)
 
+            //@ts-ignore
             addDoc(collection(db, 'rooms', roomId, 'messages'),{
                 messageType: "file",
                 files: attachments,
@@ -331,8 +214,8 @@ function Chat({screenSize}) {
                 read: read,
             }).then(() => {
                 if (input === ""){
-                    setSendLoading(false)
                     scrollToBottom()
+                    setSendLoading(false)
                 } 
                 logEvent("send_file_message", {
                     files: attachments.length,
@@ -359,8 +242,9 @@ function Chat({screenSize}) {
             //Creating roomNameObject object
             const {read, roomNameObject} = createReadAndRoomName(roomDoc)
 
-            const recipientIds =  roomDoc.users.filter(mod => mod !== user.uid)
+            const recipientIds =  roomDoc!.users.filter(mod => mod !== user.uid)
 
+            //@ts-ignore
             addDoc(collection(db, 'rooms', roomId, 'messages'),{
                 messageType: "text",
                 message: input,
@@ -403,40 +287,32 @@ function Chat({screenSize}) {
     }
 
     const createReadAndRoomName = (roomDoc) => {
+        //Creating read object
+        const read: {[userId: string]: boolean } = {}
+        roomDoc.users.forEach((id) => read[id] = false) //Set all as false
+        read[user!.uid] = true //then set our current user to true (since we are sending we obv have read it)
 
-            //Creating read object
-            const read = {}
-            roomDoc.users.forEach((id) => read[id] = false) //Set all as false
-            read[user.uid] = true //then set our current user to true (since we are sending we obv have read it)
+        //Creating roomNameObject object
+        const roomNameObject: {[userId: string]: string } = {};
 
-            //Creating roomNameObject object
-            const roomNameObject = {};
+        //If more than 2 users, it's a group
+        if (roomDoc.users.length > 2){
 
-            //If more than 2 users, it's a group
-            if (roomDoc.users.length > 2){
+            //For roomNameObject, just use roomName for all
+            roomDoc.users.forEach((id) => roomNameObject[id] = roomName)
 
-                //For roomNameObject, just use roomName for all
-                roomDoc.users.forEach((id) => roomNameObject[id] = roomName)
-
-            } else {
-                //Since only 2 users, we put both the id's and the our users' name
-                roomDoc.users.forEach((id) => roomNameObject[id] = userDetails.name) 
-                //We don't want our id to be our own name, we set it to the current roomName (the other user's name)
-                roomNameObject[user.uid] = roomName 
-            }
-
+        } else {
+            //Since only 2 users, we put both the id's and the our users' name
+            roomDoc.users.forEach((id) => roomNameObject[id] = userDetails!.name) 
+            //We don't want our id to be our own name, we set it to the current roomName (the other user's name)
+            roomNameObject[user!.uid] = roomName 
+        }
 
         return {read: read, roomNameObject: roomNameObject}
     }
 
-    useEffect(() => {
-        if(newMessageFlag) newMessageFlag.current?.scrollIntoView()
-        setNewMessageFlag(false);
-    },[newMessageFlag])
-
-    const handleFileAdd = (e) => {
-        let files = e.target.files;
-        files = [...files]; //Turning FileList into an array
+    const handleFileAdd: ChangeEventHandler<HTMLInputElement> = (e) => {
+        let files = [...(e.target.files || [])]; //Turning FileList into an array
 
         //Too many files
         if (files.length > 3) {
@@ -456,7 +332,7 @@ function Chat({screenSize}) {
                 setFileMessages([]);
                 setFileSizeWarning(true);
                 setSendLoading(false);
-                scrollToBottom();
+                scrollToBottom()
 
                 //TODO: add a sound to notify user (actually shouldn't do this here, should do this in a useEffect that listens to the Warning becoming true)
                 return;
@@ -475,18 +351,17 @@ function Chat({screenSize}) {
     }
 
     const toggleShowProfPicAndAttachments = () => {
-        setShowProfPicAndAttachments(!showProfPicAndAttachments)
+        if(screenSize < 2) setShowProfPicAndAttachments(!showProfPicAndAttachments)
     }
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({behavior: "smooth"})
-      }
+    const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({behavior: "smooth"})
+
     // console.log(messages)
     return <>
         {showProfPicAndAttachments ? null : <div className="flex flex-1 flex-col overflow-hidden space-y-2 p-2 max-h-full w-full h-app">
             {/* When the screen size is small, the button toggles on and off the profile and attachment sections normally on the right of laptop version.
             When the screen size is normal/big, the link is used instead of the button, and it should lead to the user's profile*/}
-            <button onClick={screenSize < 2 ? toggleShowProfPicAndAttachments : null} className="border-none"> 
+            <button onClick={toggleShowProfPicAndAttachments} className="border-none"> 
                 <div className={`px-5 py-2 flex flex-row items-center bg-white ${screenSize >= 2 ? null : "hover:bg-gray-200"} rounded-lg shadow-lg`}>
                     {/* This is the left arrow that leads back to the message page for small devices */}
                     {screenSize < 3 ? <Link to={`/messages`} className="mr-5"> <i className="fas fa-arrow-left"></i></Link> : null}
@@ -510,20 +385,20 @@ function Chat({screenSize}) {
                 <InView as="div" onChange={(inView, entry) => { if (inView && !loading) getMoreMessages() }} />
                 {messageLoading && <div className="w-full grid place-items-center"><Loader /></div>}
                 {roomDoesNotExistWarning && <div className="w-full h-full grid place-items-center text-center"><h1 className="text-red-600">ROOM DOES NOT EXIST, OR YOUR DON'T HAVE ACCESS</h1></div>}
-                {messages.map(({ messageType, files, message, date, id, senderId, senderUsername }) => (
-                    messageType === "file" ? <ChatMessage
-                        key={id}
+                {messages.map((message) => (
+                    (message.messageType === "file") ? <ChatMessage
+                        key={message.id}
                         hasFiles
-                        files={files}
-                        username={senderUsername}
-                        timestamp={date.toMillis()}
-                        isCurrentUser={senderId === user?.uid}
+                        files={message.files}
+                        username={message.senderUsername}
+                        timestamp={message.date.toMillis()}
+                        isCurrentUser={message.senderId === user?.uid}
                     /> : <ChatMessage
-                        key={id}
-                        message={filter.isProfane(message) ? filter.clean(message) : message}
-                        username={senderUsername}
-                        timestamp={date.toMillis()}
-                        isCurrentUser={senderId === user?.uid} />
+                        key={message.id}
+                        message={filter.isProfane(message.message) ? filter.clean(message.message) : message.message}
+                        username={message.senderUsername}
+                        timestamp={message.date.toMillis()}
+                        isCurrentUser={message.senderId === user?.uid} />
                 ))}
                 {fileSizeWarning ? <><ChatMessage 
                     message={"One or more of the files were too large."}
@@ -548,7 +423,15 @@ function Chat({screenSize}) {
                         </label>
                         {fileMessages.length > 0 ? <span className="text-sm text-gray-500">{fileMessages.length} files</span> : null}
                     </div>
-                    <TextareaAutosize className="w-full h-full rounded-xl p-2 border-none outline-none resize-none overflow-hidden" value={input} placeholder="Write A Message" onChange={(e) => setInput(e.target.value)} maxRows="10" minRows="2"/>
+                    <TextareaAutosize 
+                        className="w-full h-full rounded-xl p-2 border-none outline-none resize-none overflow-hidden" 
+                        value={input} 
+                        placeholder="Write A Message" 
+                        onChange={(e) => setInput(e.target.value)} 
+                        // @ts-ignore
+                        maxRows="10" 
+                        // @ts-ignore
+                        minRows="2"/>
                     <IconButton
                         className="w-12"
                         type="submit"
@@ -566,9 +449,12 @@ function Chat({screenSize}) {
             {/* THis is the profile card, if there is no recipientId, we show the group profile card instead */}
             {recipientId ? <LazyProfileCard uid={recipientId} roomExists={!roomDoesNotExistWarning}/> : 
             <LazyGroupProfileCard roomExists={!roomDoesNotExistWarning} roomUsers={roomUsers}/>} 
-            <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments} roomExists={!roomDoesNotExistWarning}/>
+            {roomId && roomDoc?.attachments && <LazyAttachmentsCard
+                roomId={roomId} 
+                attachments={roomDoc?.attachments}
+            />}
         </div>
-        {/* This second section is for screen sizes below 2 */}
+        {/* This second section is for screen siz   es below 2 */}
         {showProfPicAndAttachments ? <div 
             className={`${screenSize >= 2 ? "hidden" : "h-app overflow-auto"}`} 
             /* Adjusted the minimum width for when screen size is 1 and 0. */
@@ -579,7 +465,10 @@ function Chat({screenSize}) {
             {/* THis is the profile card, if there is no recipientId, we show the group profile card instead */}
             {recipientId ? <LazyProfileCard uid={recipientId} roomExists={!roomDoesNotExistWarning}/> : 
             <LazyGroupProfileCard roomExists={!roomDoesNotExistWarning} roomUsers={roomUsers}/>} 
-            <LazyAttachmentsCard roomId={roomId} attachments={roomDoc?.attachments} roomExists={!roomDoesNotExistWarning}/>
+            {roomId && roomDoc?.attachments && <LazyAttachmentsCard 
+                roomId={roomId} 
+                attachments={roomDoc?.attachments} 
+            />}
         </div> : null}
     </>;
 }

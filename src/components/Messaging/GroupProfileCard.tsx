@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {db, functions, docConverter} from '../../config/firebase';
 import { useAuth } from "../../hooks/useAuth";
 import {SimpleUserDetails, UserID, PublicUserDoc} from '../../types/User';
 import { Avatar, Button, DialogActions, DialogContent } from "@mui/material";
-import {Link, useNavigate, useParams} from 'react-router-dom';
-import ProfilePicture from "../User/ProfilePicture";
+import { useNavigate, useParams } from 'react-router-dom';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';

@@ -1,8 +1,5 @@
-//@ts-nocheck
-import { useEffect, useState } from 'react';
 import InView from 'react-intersection-observer';
-import {db, postConverter} from '../../config/firebase';
-import { getSnapshot } from '../../hooks/firestore';
+import { postConverter } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import PostCard from '../Dashboard/PostCard';
 import PostLoader from '../Dashboard/PostLoader';
