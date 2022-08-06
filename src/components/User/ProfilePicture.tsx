@@ -1,6 +1,7 @@
 import { storage } from '../../config/firebase';
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+import { getDownloadURL, ref } from 'firebase/storage';
 
 /**
  * This component is used to laod the profile picture of a uid in a img, the url is dynamic thus this component handles the state for it.
@@ -25,8 +26,7 @@ export default function ProfilePicture({ uid, thumb = false, className, isRoom =
         setUrl(`https://storage.googleapis.com/speer-education-dev.appspot.com/users/${uid}/${thumb?'thumb-':''}profilePicture.png?${(forceRefresh || uid == user?.uid)?appInstance:''}`);
 
         if (isRoom){
-            storage.ref(`/roompics/${uid}/${thumb?"thumb-":""}roomPicture.png`)
-            .getDownloadURL()
+            getDownloadURL(ref(storage,`/roompics/${uid}/${thumb?"thumb-":""}roomPicture.png`))
             .then(setUrl)
             .catch(e => {
                 if(e.code !== 'storage/object-not-found') {

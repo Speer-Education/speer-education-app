@@ -1,7 +1,7 @@
 import { firebase, db } from "../config/firebase"
 import {UserID} from '../types/User';
 import {RoomID} from '../types/Messaging';
-import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 
 /**
  * 
@@ -14,7 +14,7 @@ import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
         followerId: followerUid,
         followedId: followingUid,
         roomId: roomId,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        createdAt: serverTimestamp()
     },{merge: true})
 }
 

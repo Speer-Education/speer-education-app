@@ -5,9 +5,9 @@ import { UserClaims, UserDetails, UserDetailsDocument, UserDetailsToken } from "
 import { logEvent, setUserProperties } from "../utils/analytics";
 import { useLocalStorage } from "./useHooks";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { EmailAuthProvider, ParsedToken, reauthenticateWithCredential, signOut, updatePassword } from "firebase/auth"
+import { EmailAuthProvider, ParsedToken, reauthenticateWithCredential, signOut, updatePassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect } from "firebase/auth"
 import { doc, onSnapshot } from "firebase/firestore";
-import { onDisconnect, onValue, ref, set } from "firebase/database";
+import { onDisconnect, onValue, ref, serverTimestamp, set } from "firebase/database";
 
 
 //@ts-ignore //TODO: FIX THIS
@@ -54,9 +54,8 @@ const useAuthProvider = () => {
      * Sign in user with email and password login
      * @param {*} params Email and Password  
      */
-    const signInWithEmailAndPassword = async ({ email, password }: { email: string, password: string }) => {
-        await auth
-            .signInWithEmailAndPassword(email, password)
+    const emailSignIn = async ({ email, password }: { email: string, password: string }) => {
+        await signInWithEmailAndPassword(auth, email, password)
             .catch((error) => {
                 return { error };
             });
@@ -66,23 +65,12 @@ const useAuthProvider = () => {
      * Sign in user with a Google Account with a redirect
      */
     const initGoogleSignIn = async () => {
-        await auth
-            .signInWithRedirect(
-                new firebase.auth.GoogleAuthProvider().setCustomParameters({
+        await signInWithRedirect(
+                auth,
+                new GoogleAuthProvider().setCustomParameters({
                     prompt: "select_account",
                 })
             )
-            .catch((error) => {
-                return { error };
-            });
-    };
-
-    /**
-     * Sign in user with a Facebook Account with a redirect
-     */
-    const initFacebookSignIn = async () => {
-        await auth
-            .signInWithRedirect(new firebase.auth.FacebookAuthProvider())
             .catch((error) => {
                 return { error };
             });
@@ -162,13 +150,13 @@ const useAuthProvider = () => {
             var isOfflineForDatabase = {
                 version: process.env.REACT_APP_VERSION,
                 state: 'offline',
-                last_changed: firebase.database.ServerValue.TIMESTAMP,
+                last_changed: serverTimestamp(),
             };
 
             var isOnlineForDatabase = {
                 version: process.env.REACT_APP_VERSION,
                 state: 'online',
-                last_changed: firebase.database.ServerValue.TIMESTAMP,
+                last_changed: serverTimestamp(),
             };
             onValue(ref(rtdb, '.info/connected'), function(snapshot) {
                 // If we're not currently connected, don't do anything.
@@ -205,7 +193,7 @@ const useAuthProvider = () => {
         userToken,
         getUserTokenResult,
         appInstance,
-        signInWithEmailAndPassword,
+        signInWithEmailAndPassword: emailSignIn,
         signOut: signOutUser,
         changePassword,
         get isUsingPasswordLogin() {

@@ -1,12 +1,13 @@
 import { isDevelopment } from './environment';
 import { analytics } from '../config/firebase';
 import mixpanel from '../config/mixpanel';
+import { logEvent as logEventToAnalytics } from 'firebase/analytics'
 
 const logEvent = (eventName: string, eventData: any = null) => {
     
     // Only log analytics if NOT in development mode (because analytics doesn't exist in development mode)
     if(isDevelopment() || !analytics) return;
-    analytics.logEvent(eventName, eventData);
+    logEventToAnalytics(analytics, eventName, eventData);
     mixpanel.track(eventName, eventData);
 }
 

@@ -1,19 +1,23 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-import "firebase/compat/firestore";
-import "firebase/compat/database";
-import "firebase/compat/storage";
-import "firebase/compat/functions";
-import "firebase/compat/analytics";
+import { initializeApp } from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/database";
+import "firebase/storage";
+import "firebase/functions";
+import "firebase/analytics";
 import { isDevelopment } from "../utils/environment";
-import { collection, CollectionReference, doc, DocumentData, DocumentReference, enableMultiTabIndexedDbPersistence, Firestore, FirestoreDataConverter, QueryDocumentSnapshot, SnapshotOptions, WithFieldValue } from 'firebase/firestore';
+import { CACHE_SIZE_UNLIMITED, collection, CollectionReference, doc, DocumentData, DocumentReference, enableMultiTabIndexedDbPersistence, Firestore, FirestoreDataConverter, getFirestore, initializeFirestore, QueryDocumentSnapshot, SnapshotOptions, Timestamp, WithFieldValue } from 'firebase/firestore';
 import {PostDocument, UserPostData} from '../types/Posts';
 import { InternalDoc } from "../types/DocConverter";
-import { MentorDetailsDocument, PublicUser, PublicUserDoc, UserDetailsDocument } from "../types/User";
-import { AttachmentDocument, MessageRoomDocument } from "../types/Messaging";
+import { PublicUserDoc, UserDetailsDocument } from "../types/User";
+import { MessageRoomDocument } from "../types/Messaging";
 import { FixMeLater } from "../types/temp";
-import { Organization } from "../types/Organization";
 import {Blog, BlogDocument} from '../types/Blogs';
+import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
+import { getFunctions } from "firebase/functions";
+import { getStorage } from "firebase/storage";
+import { Analytics, getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAx-OEKEZF6LgX5wv03qRilbGTWIJvL4kw",
@@ -28,31 +32,43 @@ const firebaseConfig = {
 };
 
 //Make sure there are firebase apps loaded to initialize
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+// if (!firebase.apps.length) {
+//   firebase.initializeApp(firebaseConfig);
+// }
 
-//make sure firestore caches everything that it needs
-firebase.firestore().settings({
-  cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
-});
+// //make sure firestore caches everything that it needs
+// firebase.firestore().settings({
+//   cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+// });
 
-const app = firebase.app();
-const auth = firebase.auth();
-const db = firebase.firestore();
-const rtdb = firebase.database();
-const now = firebase.firestore.Timestamp.now();
-const storage = firebase.storage();
-const functions = firebase.functions();
+// const app = firebase.app();
+// const auth = firebase.auth();
+// const db = firebase.firestore();
+// const rtdb = firebase.database();
+// const now = firebase.firestore.Timestamp.now();
+// const storage = firebase.storage();
+// const functions = firebase.functions();
 
-let analytics: firebase.analytics.Analytics | null = null;
+// let analytics: firebase.analytics.Analytics | null = null;
 
+// Initialize Firebase
+const firebase = initializeApp(firebaseConfig);
+// Get all the services we'll use in this app, then export them
+const auth = getAuth(firebase)
+const db = getFirestore(firebase); //We'll limit the cache size to 40MB for now. else client side will get super bloated
+const rtdb = getDatabase(firebase);
+const functions = getFunctions(firebase);
+const storage = getStorage(firebase);
+const now = Timestamp.now();
+
+
+let analytics: Analytics | null = null;
 if (isDevelopment()) {
   // dev code
   // analytics = firebase.analytics();
 } else {
   // production code
-  analytics = firebase.analytics();
+  analytics = getAnalytics(firebase);
 }
 
 // FOR LOCAL EMULATORS  =================
@@ -60,14 +76,13 @@ if (isDevelopment()) {
 // rtdb.useEmulator("localhost", 9000);
 // functions.useEmulator("localhost", 5001);
 
-//Enable persistence for firestore so it saves in browser
-db.settings({ cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED });
+
 
 enableMultiTabIndexedDbPersistence(db)
 
 export { firebase, auth, db, now, storage, rtdb, functions, analytics };
 
-console.log(app.name ? "Firebase Mode Activated!" : "Firebase not working :(");
+console.log(firebase.name ? "Firebase Mode Activated!" : "Firebase not working :(");
 
 export const docConverter = {
   toFirestore(doc: WithFieldValue<any>): DocumentData {
@@ -117,7 +132,7 @@ export const postConverter = {
   },
 };
 export const typeCollection: ({
-  <T extends InternalDoc>(base: firebase.firestore.Firestore, ...pathSegments: string[]): CollectionReference<T>;
+  <T extends InternalDoc>(base: Firestore, ...pathSegments: string[]): CollectionReference<T>;
   <T extends InternalDoc>(base: DocumentReference<T>, ...pathSegments: string[]): CollectionReference<T>;
 }) = <T extends InternalDoc>(base: FixMeLater, ...pathSegments: string[]) => {
   return collection(base, pathSegments[0], ...pathSegments.slice(1)).withConverter({

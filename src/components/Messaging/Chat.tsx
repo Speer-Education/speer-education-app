@@ -14,9 +14,11 @@ import imageCompression from 'browser-image-compression';
 import SendMessageLoader from '../Loader/SendMessageLoader';
 import { logEvent } from '../../utils/analytics';
 import { MessageDocument, MessageRoomDocument } from '../../types/Messaging';
-import { addDoc, collection, doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { addDoc, collection, doc, FieldValue, getDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import usePaginateCollection from '../../hooks/usePaginateCollection';
 import useMessages from '../../hooks/useMessages';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { httpsCallable } from 'firebase/functions';
 
 const LazyGroupProfileCard = lazy(() => import('./GroupProfileCard'));
 const LazyProfileCard = lazy(() => import('./ProfileCard'));
@@ -176,8 +178,8 @@ function Chat({screenSize}) {
             //Go through the files here and upload them to storage, keep track of the id. The room should be messageFiles/roomId/
             const fileMessagesStorageDetails = await Promise.all(fileMessages.map(async (file, index) => {
                 const storagePath = `roomFiles/${roomId}/${fileSendDate.toISOString()}_${file.name}`;
-                const result = await storage.ref(storagePath).put(file);
-                return { path: storagePath, ref: await result.ref.getDownloadURL() };
+                const result = await uploadBytes(ref(storage, storagePath),file);
+                return { path: storagePath, ref: await getDownloadURL(result.ref) };
             }))
 
             const attachments = fileMessagesStorageDetails.map((storageDetail, index) => {
@@ -202,7 +204,7 @@ function Chat({screenSize}) {
             addDoc(collection(db, 'rooms', roomId, 'messages'),{
                 messageType: "file",
                 files: attachments,
-                date: firebase.firestore.FieldValue.serverTimestamp(),
+                date: serverTimestamp(),
                 senderId: user.uid,
                 senderUsername: userDetails.name,
                 recipientIds: recipientIds,
@@ -220,7 +222,7 @@ function Chat({screenSize}) {
 
                 if (input === ""){
                     // If there is no text imput, then we can go ahead and call the sendEmailNotification function
-                    functions.httpsCallable('sendEmailNotification')({ recipientIds: recipientIds})
+                    httpsCallable(functions, 'sendEmailNotification')({ recipientIds: recipientIds})
                     .catch((error) => {
                         console.error(error)
                     })
@@ -244,7 +246,7 @@ function Chat({screenSize}) {
             addDoc(collection(db, 'rooms', roomId, 'messages'),{
                 messageType: "text",
                 message: input,
-                date: firebase.firestore.FieldValue.serverTimestamp(),
+                date: serverTimestamp(),
                 senderId: user.uid,
                 senderUsername: userDetails.name,
                 recipientIds: recipientIds,
@@ -258,7 +260,7 @@ function Chat({screenSize}) {
                     messageLength: input.length,
                 });
                 // Call the sendEmailNotification backend function
-                functions.httpsCallable('sendEmailNotification')({ recipientIds: recipientIds})
+                httpsCallable(functions, 'sendEmailNotification')({ recipientIds: recipientIds})
                 .catch((error) => {
                     console.error(error)
                 })
