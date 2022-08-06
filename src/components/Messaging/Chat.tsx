@@ -16,6 +16,7 @@ import { logEvent } from '../../utils/analytics';
 import { MessageDocument, MessageRoomDocument } from '../../types/Messaging';
 import { addDoc, collection, doc, getDoc, onSnapshot } from 'firebase/firestore';
 import usePaginateCollection from '../../hooks/usePaginateCollection';
+import useMessages from '../../hooks/useMessages';
 
 const LazyGroupProfileCard = lazy(() => import('./GroupProfileCard'));
 const LazyProfileCard = lazy(() => import('./ProfileCard'));
@@ -40,13 +41,8 @@ function Chat({screenSize}) {
     const [recipientId, setRecipientId] = useState<string>();
     const [isMentor, setIsMentor] = useState();
     //@ts-ignore
-    const [messages, getMoreMessages, messageLoading, loadedAllMessages] = usePaginateCollection<MessageDocument>(collection(db, 'rooms', roomId, 'messages').withConverter(docConverter), {
-        orderKey: 'date',
-        direction: 'asc',
+    const [messages, getMoreMessages, messageLoading, loadedAllMessages] = useMessages(doc(db, 'rooms', roomId).withConverter(docConverter), {
         pageLimit: DOCUMENTS_PER_PAGE,
-        sortFunc({ date: x }, { date: y }){
-            return x.toMillis() - y.toMillis()
-        },
     });
     const [loading, setLoading] = useState(true);
     const [sendLoading, setSendLoading] = useState(false);
