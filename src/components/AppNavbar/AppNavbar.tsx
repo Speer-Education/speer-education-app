@@ -85,7 +85,6 @@ const AppNavbar = () => {
           <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/mentors" />
           <NavBarLink IconComponent={MessageTwoToneIcon} isContactIcon title="Contacts" href="/messages" />
           {isAdmin && <NavBarLink IconComponent={LibraryBooksTwoToneIcon} title="Admin" href="/orgadmin" />}
-          {userToken?.organization && <Switch onChange={toggleOrg} checked={orgId != 'global'} />}
           {/* <NavBarLink IconComponent={Notif0.  icationsTwoToneIcon} title="Notifications"/> */}
         </div>
         {/* <div className="hidden lg:block" >

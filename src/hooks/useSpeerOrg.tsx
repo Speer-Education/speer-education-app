@@ -14,6 +14,12 @@ const useSpeerOrgProvider = () => {
     const [memberDoc, loadMember, errorMember] = useDocumentData<OrganizationMemberDocument>(user && doc(orgRef, 'members', user.uid).withConverter(docConverter));
 
     useEffect(() => {
+        if(window.location.host.split('.')[0] === 'chew') {
+            setOrgId('d8wUjGjUJkv51sjYNTnK');
+        }
+    }, [])
+
+    useEffect(() => {
         if(user == null) setOrgId('global');
     }, [user])
 
