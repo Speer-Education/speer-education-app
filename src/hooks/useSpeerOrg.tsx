@@ -19,9 +19,9 @@ const useSpeerOrgProvider = () => {
         }
     }, [])
 
-    useEffect(() => {
-        if(user == null) setOrgId('global');
-    }, [user])
+    // useEffect(() => {
+    //     if(user == null) setOrgId('global');
+    // }, [user])
 
 
     const toggleOrg = () => {
