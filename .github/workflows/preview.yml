@@ -21,3 +21,4 @@ jobs:
           working-directory: ./
           alias-domains: |
             staging.speeredu.com
+            chew.speeredu.com

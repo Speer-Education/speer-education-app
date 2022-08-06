@@ -19,3 +19,4 @@ jobs:
           working-directory: ./
           alias-domains: |
             app.speeredu.com
+            chew.speeredu.com
