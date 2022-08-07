@@ -7,7 +7,7 @@ import { auth } from '../../config/firebase';
 import AppLoader from '../../components/Loader/AppLoader';
 import FormInputText from '../../components/form-components/FormTextField';
 import { useForm } from 'react-hook-form';
-import { createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getRedirectResult, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import useKeyPress from '../../hooks/useKeyPress';
@@ -68,9 +68,9 @@ export default function Login() {
 
     //Check if user is trying to login, else show login page
     useEffect(() => {
-        auth.getRedirectResult().then(result => {
+        getRedirectResult(auth).then(result => {
             // If user just signed in or already signed in, hide spinner.
-            if (result.user || auth.currentUser) {
+            if (result && result.user || auth.currentUser) {
                 setLoggingIn(true);
             } else {
                 setLoggingIn(false);

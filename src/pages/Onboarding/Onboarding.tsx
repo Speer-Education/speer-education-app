@@ -22,6 +22,7 @@ import {CountryCode, ActiveRoom, UserHighlight} from '../../types/User';
 import {FormEmojiPicker} from '../../components/Forms/EmojiPicker';
 import FormDatePicker from '../../components/form-components/FormDateTimePicker';
 import { useSnackbar } from 'notistack';
+import { httpsCallable } from 'firebase/functions';
 
 
 const FormRow = ({ children }: PropsWithChildren<{}>) => (
@@ -86,8 +87,7 @@ export default function UserDetails() {
         if (numTries > 9){
             throw new Error ("Onboarding function failed too many times")
         }
-        await functions
-            .httpsCallable('onBoarding')({ form: form })
+        await httpsCallable(functions, 'onBoarding')({ form: form })
             .catch((error) => {
                 callOnboarding(numTries +1, form)
             })

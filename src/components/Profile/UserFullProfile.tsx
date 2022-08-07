@@ -17,6 +17,7 @@ import UpdatePasswordDialog from "./UpdatePasswordDialog";
 import CircleLoader from "../Loader/CircleLoader";
 import imageCompression from 'browser-image-compression';
 import { doc, getDoc } from "firebase/firestore";
+import { httpsCallable } from "firebase/functions";
 
 
 const LazyEditDetailsDialog = lazy(() => import("./EditDetailsDialog"));
@@ -38,7 +39,7 @@ const UserProfilePicture: FC<{ profileId: string, isUser?: boolean }>  = ({ prof
             }, false);
         });
         try {
-            await functions.httpsCallable('updateProfilePicture')({
+            await httpsCallable(functions, 'updateProfilePicture')({
                 image: base64image,
             });
             setppLoading(false);
@@ -88,7 +89,7 @@ const UserBannerPicture: FC<{ profileId: string, isUser?: boolean }>  = ({ profi
             }, false);
         });
         try {
-            await functions.httpsCallable('updateBannerPicture')({
+            await httpsCallable(functions,'updateBannerPicture')({
                 image: base64image,
             });
             //reload to see changes

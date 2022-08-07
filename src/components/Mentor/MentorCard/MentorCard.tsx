@@ -10,7 +10,7 @@ import { logEvent } from '../../../utils/analytics';
 import { useNavigate } from 'react-router-dom';
 import { MentorDetailsDocument } from '../../../types/User';
 import { getMajor, getSchool } from '../../../utils/user';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
 
 type MentorCardDetails = MentorDetailsDocument & {
     isMtr: boolean;
@@ -33,7 +33,7 @@ const MentorCard = forwardRef<HTMLDivElement, MentorCardDetails>((props, ref) =>
         try {
             const targetRoomId = await getMessageUserRoom(id, user.uid)
             await addDoc(collection(db, `rooms/${targetRoomId}/messages`), {
-                date: firebase.firestore.Timestamp.now(),
+                date: Timestamp.now(),
                 message: message || "Hi 👋",
                 senderId: user?.uid,
                 messageType: "text",

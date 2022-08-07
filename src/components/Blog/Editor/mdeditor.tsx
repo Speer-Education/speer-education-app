@@ -11,6 +11,7 @@ import "quill-mention";
 import { usersIndex } from '../../../config/algolia';
 import 'react-quill/dist/quill.snow.css';
 import './mdeditor.css'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 
 Quill.register('modules/blotFormatter', BlotFormatter);
@@ -85,8 +86,8 @@ export const MDEditor = forwardRef<ReactQuill | null, Props>(({
     markdownShortcuts: {},
     imageUploader: {
       upload: async (file) => {
-        const result = await storage.ref(`updates/${docId}/${`${docId}_${new Date().toISOString()}`}`).put(file);
-        return await result.ref.getDownloadURL();
+        const result = await uploadBytes(ref(storage, `updates/${docId}/${`${docId}_${new Date().toISOString()}`}`),file);
+        return await getDownloadURL(result.ref);
 
       }
     },

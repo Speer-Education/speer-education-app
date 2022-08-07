@@ -1,4 +1,4 @@
-import { collection, CollectionReference, deleteDoc, doc, DocumentData, onSnapshot, Query, QuerySnapshot, setDoc } from 'firebase/firestore';
+import { collection, CollectionReference, deleteDoc, doc, DocumentData, onSnapshot, Query, QuerySnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { firebase, db } from '../config/firebase';
 import { FixMeLater } from '../types/temp';
@@ -21,8 +21,8 @@ const updateDoc = async (path: string, updates: FixMeLater) => {
     delete updates.id;
     return await setDoc(doc(db, path), {
         ...updates,
-        _updatedOn: firebase.firestore.FieldValue.serverTimestamp(),
-        _createdOn: !updates.createdOn && firebase.firestore.FieldValue.serverTimestamp()
+        _updatedOn: serverTimestamp(),
+        _createdOn: !updates.createdOn && serverTimestamp()
     },{merge:true})
 }
 

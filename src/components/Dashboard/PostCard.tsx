@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserDetails } from '../../types/User';
 import { PostDocument } from '../../types/Posts';
 import { Delta } from 'quill';
-import { deleteDoc, doc, onSnapshot, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, onSnapshot, serverTimestamp, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import {QuillDeltaToHtmlConverter} from 'quill-delta-to-html';
 import { useSnackbar } from 'notistack';
 import { useSpeerOrg } from '../../hooks/useSpeerOrg';
@@ -98,7 +98,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
         if(!userLiked) await setDoc(doc(post.ref, 'likes', user.uid),{
             liked: true,
             likeUser: user.uid,
-            _createdOn: firebase.firestore.FieldValue.serverTimestamp()
+            _createdOn: serverTimestamp()
         })
         if(userLiked) await deleteDoc(doc(post.ref, 'likes', user.uid))
         logEvent(userLiked? 'unlike_post' : 'like_post', {
