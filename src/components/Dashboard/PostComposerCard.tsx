@@ -17,6 +17,7 @@ import { PostDocument } from '../../types/Posts';
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
 import { useSpeerOrg } from '../../hooks/useSpeerOrg';
 import { useSnackbar } from 'notistack';
+import { useMediaQuery } from 'react-responsive';
 
 /**
  * Handles the Editor View for posts
@@ -29,9 +30,10 @@ const PostComposerCard = ({ organization }:{organization?: string}) => {
     const [saving, setSaving] = useState<boolean>(false);
     const { user } = useAuth();
     const editor = useRef<ReactQuill>(null)
-    //@ts-ignore
+    //@ts-ignore 
     const [docId, setDocId] = useState(doc(collection(orgRef, 'posts')).id);
     const { enqueueSnackbar } = useSnackbar();
+    const miniEditor = useMediaQuery({ maxWidth: 768 });
 
     useEffect(() => {
         if(saving) return;
@@ -66,10 +68,10 @@ const PostComposerCard = ({ organization }:{organization?: string}) => {
 
     return (
         <SlideTransition in timeout={50}>
-            <div className="min-h-[150px] flex flex-col shadow-xl rounded-xl bg-white py-6 px-8">
+            <div className={`min-h-[150px] max-w-[calc(100vw-2rem)] flex flex-col shadow-xl rounded-xl bg-white py-3 px-4 md:py-6 md:px-8`}>
                 <div className="flex-1 flex flex-row space-x-4">
                     {user?.uid && <ProfilePicture uid={user?.uid} className="w-12 h-12 rounded-full"/>}
-                    {!saving && <div className='flex-1 flex flex-col'>
+                    {!saving && <div className='flex-1 flex flex-col min-w-[0]'>
                         <MDEditor ref={editor} docId={docId} onChange={(content, delta, source, editor) => setPostContent(editor.getContents())}/>
                     </div>}
                 </div>
@@ -79,6 +81,7 @@ const PostComposerCard = ({ organization }:{organization?: string}) => {
                         disabled={saving} 
                         variant="contained" 
                         color="primary" 
+                        size={miniEditor? "small" : "medium"}
                         onClick={createNewPost}>Post</Button>
                 </div>
             </div>
