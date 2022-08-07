@@ -16,28 +16,8 @@ code {
     monospace;
 }
 
-.bg-speer-blue {
-  background:#084887;
-}
-
-.text-speer-blue {
-  color:#084887;
-}
-
-.bg-speer-yellow {
-  background:#F58A07;
-}
-
-.text-speer-yellow {
-  color:#F58A07;
-}
-
 .h-app {
   height: calc(100vh - 3.5rem);
-}
-
-.w-sidebar {
-  width: 350px;
 }
 
 @media (min-width: 1024px) {

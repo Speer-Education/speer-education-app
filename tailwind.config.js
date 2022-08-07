@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   mode: 'jit',
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
@@ -10,6 +12,23 @@ module.exports = {
       minWidth: (theme) => ({
         ...theme('spacing'),
       }),
+      width: {
+        sidebar: '350px',
+      },
+      colors: {
+        transparent: 'transparent',
+        current: 'currentColor',
+        black: colors.black,
+        white: colors.white,
+        gray: colors.gray,
+        emerald: colors.emerald,
+        indigo: colors.indigo,
+        yellow: colors.yellow,
+        speer: {
+          blue: '#084887',
+          yellow: '#F58A07'
+        }
+      }
     }
   },
   variants: {

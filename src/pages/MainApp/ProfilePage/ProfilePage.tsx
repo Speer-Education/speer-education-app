@@ -82,16 +82,15 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
                 <title>{isUser?"Your":name || ""} Profile | Speer Education</title>
             </Helmet>
             <Zoom in>
-                <div className="w-screen h-full flex flex-row">
+                <div className="w-screen h-full grid xl:grid-cols-[350px_auto_350px] md:grid-cols-[auto_350px] grid-cols-1 ">
                     <div className="hidden xl:flex flex-col h-full h-app w-sidebar">
                         <div className="fixed flex flex-col cc_cursor h-app w-sidebar">
                             {((profileId || user?.uid) && userDetails) && <ContactsSidebar profileId={profileId || user!.uid} userDetails={userDetails} isUser={isUser}/>}
                             <StatsCard />
                         </div>
                     </div>
-                    <div className="flex-1 flex flex-row w-full">
-                        <SlideTransition in timeout={50}>
-                        <div className="flex flex-row justify-center flex-1 w-full p-3 md:p-0">
+                    <SlideTransition in timeout={50}>
+                        <div className="flex flex-row justify-center flex-1 w-full md:p-0">
                             <div className="flex flex-col h-full p-3 space-y-4 flex-1" style={{ maxWidth: "1024px" }}>
                                     <p className="font-semibold text-lg">
                                         {isUser?"Your":name +"'s"} Profile
@@ -120,14 +119,13 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
                                     <ProfilePostStream uid={profileId || user?.uid} isUser={isUser} name={name}/>
                             </div>
                         </div>
-                        </SlideTransition>
-                        <div className=" hidden md:flex flex-col h-app w-sidebar pl-3 mr-6">
-                            <div className="fixed flex flex-col cc_cursor h-app">
-                                {userDetails && <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMtr!} />}
-                                {socials && <SocialsCard socials={socials} isUser={isUser}/>}
-                                {isUser && <ProfileViewsCard views={views} />}
-                                {userDetails && <ResumeCard userDetails={userDetails} isUser={isUser}/>}
-                            </div>
+                    </SlideTransition>
+                    <div className="flex flex-col h-app md:w-sidebar ">
+                        <div className="md:fixed flex flex-col cc_cursor h-app p-3 space-y-2">
+                            {userDetails && <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMtr!} />}
+                            {socials && <SocialsCard socials={socials} isUser={isUser}/>}
+                            {isUser && <ProfileViewsCard views={views} />}
+                            {userDetails && <ResumeCard userDetails={userDetails} isUser={isUser}/>}
                         </div>
                     </div>
                 </div>

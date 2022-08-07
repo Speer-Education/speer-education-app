@@ -19,7 +19,7 @@ const SocialsCard: FC<{ socials: PublicUser['socials'], isUser?: boolean }> = ({
 
     return <>
         <EditSocialsDialog open={openEditSocials} onClose={() => setOpenEditSocials(false)}/>
-        {(isUser || socials) && <div className="relative flex flex-col p-3 m-2 shadow-lg rounded-md bg-white space-y-2">
+        {(isUser || socials) && <div className="relative flex flex-col p-3 shadow-lg rounded-md bg-white space-y-2">
             <div className=" flex flex-row space-between">
                 <p className="font-semibold text-lg">Socials</p> 
                 <div className="absolute top-0 right-0 m-1 text-white rounded-full bg-gray-100 transform scale-75">
