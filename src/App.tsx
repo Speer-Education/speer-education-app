@@ -46,10 +46,9 @@ function App() {
 
   const errorHandler= (error: Error, errorInfo: {
     componentStack: string;
-  }) => {
+  }) => { 
     console.log('logging error:', error, errorInfo)
   }
-  console.log('user', user)
   return (
     <ErrorBoundary FallbackComponent={FallbackPage} onError={errorHandler}>
       <div className="app bg-gray-100 min-h-screen">

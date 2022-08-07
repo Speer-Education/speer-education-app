@@ -82,7 +82,6 @@ export default function UserDetails() {
     const { enqueueSnackbar } = useSnackbar();
     const [updatingClaims, setUpdatingClaims] = useState(false);
     const form = watch()
-    console.log(form)
     const callOnboarding = async (numTries: number, form: FixMeLater) => {
         if (numTries > 9){
             throw new Error ("Onboarding function failed too many times")

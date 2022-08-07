@@ -7,6 +7,7 @@ import AppNavbar from "../../components/AppNavbar/AppNavbar";
 import { NoMatch } from "../../pages/Fallback/NoMatch";
 import { useSpeerOrg } from "../../hooks/useSpeerOrg";
 import NotFoundPage from "../../pages/Fallback/NotFoundPage";
+import MobileTopBar from "../../components/AppNavbar/MobileTopBar";
 
 const LazyMessages = lazy(
   () => import("../../pages/MainApp/Messaging/Messaging")
@@ -31,6 +32,7 @@ export default function MainApp() {
 
   return (
     <>
+      <MobileTopBar />
       <AppNavbar />
       <Suspense
         fallback={

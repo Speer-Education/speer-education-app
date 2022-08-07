@@ -121,12 +121,6 @@ const PostCard = ({ post }: { post: PostDocument }) => {
         if(!post.id) return;
         if (Object.is(delta, editedPostContent)) return;
         setSaving(true) //set saving to true to show loading
-        console.log({
-            content: {
-                delta: editedPostContent,
-                html: new QuillDeltaToHtmlConverter(editedPostContent.ops || []).convert()
-            },
-        })
         //@ts-ignore
         await updateDoc(post.ref, {
             content: {

@@ -107,7 +107,6 @@ function Chat({screenSize}) {
                 }
                 setLoading(false);
             }, error => {
-                console.log("error", error);
                 setRoomDoesNotExistWarning(true);
                 setLoading(false);
                 return

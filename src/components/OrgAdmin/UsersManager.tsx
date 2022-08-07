@@ -57,7 +57,6 @@ const UsersManager = () => {
     }, [users]);
 
     const confirmDelete = (user: OrgMergedUser) => () => {
-        console.log(user);
         openDialog({
             children: <>
                 <DialogTitle>Confirm Action</DialogTitle>
@@ -92,7 +91,6 @@ const UsersManager = () => {
     }
 
     const toggleMentor = (user: OrgMergedUser) => async () => {
-        console.log(user)
         await setDoc(doc(orgRef, 'members', user.id), {
             isMentor: !user.isMentor
         } as Partial<OrganizationMember>, { merge: true })

@@ -68,7 +68,6 @@ export const MDEditor = forwardRef<ReactQuill | null, Props>(({
       let match = url.match(/^(?:(https?):\/\/)?(?:(?:www|m)\.)?youtube\.com\/watch.*v=([a-zA-Z0-9_-]+)/) ||
           url.match(/^(?:(https?):\/\/)?(?:(?:www|m)\.)?youtu\.be\/([a-zA-Z0-9_-]+)/) ||
           url.match(/^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/);
-      console.log(match[2]);
       if (match && match[2].length === 11) {
           return ('https') + '://www.youtube.com/embed/' + match[2] + '?showinfo=0';
       }
@@ -113,7 +112,6 @@ export const MDEditor = forwardRef<ReactQuill | null, Props>(({
           usersIndex.search<{name: string}>(searchTerm, {
             hitsPerPage: 10
             }).then(function(content) {
-              console.log(content.hits)
               renderList(content.hits.map(e => ({id:e.objectID, value: e.name})), mentionChar);
             }
           );

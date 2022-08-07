@@ -32,7 +32,6 @@ const AddGroupMembersForm: FC<{ onClose: () => void, existing: UserID[], roomId:
 
     const onSubmit = async (data: FormValues) => {
         try {
-            console.log(data)
             const UpdateGroupChat = httpsCallable<{ name?: string, newUsers?: UserID[], picture?: String, roomId: string }, boolean>(functions, 'UpdateGroupChat');
             await UpdateGroupChat({
                 newUsers: data.participants.map(participant => participant.objectID),

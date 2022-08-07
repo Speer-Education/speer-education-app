@@ -33,7 +33,7 @@ function Messaging() {
             setLeftSideSize('350px')
         }
     }, [isScreenXtraLarge, isScreenLarge, isScreenMedium])
-    console.log(screenSize)
+
     return (
         <Zoom in={true} >
             <div className="messaging h-app">

@@ -121,7 +121,7 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
                         </div>
                     </SlideTransition>
                     <div className="flex flex-col h-app md:w-sidebar ">
-                        <div className="md:fixed flex flex-col cc_cursor h-app p-3 space-y-2">
+                        <div className="md:fixed flex flex-col cc_cursor p-3 space-y-2">
                             {userDetails && <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMtr!} />}
                             {socials && <SocialsCard socials={socials} isUser={isUser}/>}
                             {isUser && <ProfileViewsCard views={views} />}

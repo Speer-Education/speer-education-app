@@ -130,7 +130,7 @@ const useAuthProvider = () => {
             setLastCommitted(data?._lastCommitted);
         },
         error => {
-            console.log(error)
+            // console.log(error)
         });
     }, [user?.uid]); //Only reattach if user uid is updated :(
 
