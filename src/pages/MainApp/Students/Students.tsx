@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import './Students.css'
 import MentorCard from '../../../components/Mentor/MentorCard/MentorCard';
-import { db, docConverter } from '../../../config/firebase';
-import {Helmet} from "react-helmet";
+import { docConverter, publicUserCollection } from '../../../config/firebase';
+import { Helmet } from "react-helmet";
 import StatsCard from '../../../components/Dashboard/StatsCard';
 import UserSmallProfileCard from '../../../components/User/UserSmallProfileCard';
 import { useAuth } from '../../../hooks/useAuth';
@@ -11,21 +11,17 @@ import { TransitionGroup } from "react-transition-group";
 import { Grow } from '@mui/material';
 import { PublicUserDoc } from '../../../types/User';
 import Zoom from '@mui/material/Zoom';
-import { collection, doc, getDoc, query, where } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { useSpeerOrg } from '../../../hooks/useSpeerOrg';
 import { OrganizationMemberDocument, OrgMergedUser } from '../../../types/Organization';
+import { collection, query, where } from 'firebase/firestore';
 
 const Students = () => {
     const { user, userDetails } = useAuth();
-    const { orgRef } = useSpeerOrg();
-    const { orgId } = useSpeerOrg();
-    const usersPublicRef = collection(db, "usersPublic");
+    const { orgId, orgRef } = useSpeerOrg();
     const [students, setStudents] = useState<PublicUserDoc[]>([]);
-
     const [mentorMembers = [], loadMentorMembers, errorMentorMembers] = useCollectionData<OrganizationMemberDocument>(query(collection(orgRef, 'members').withConverter(docConverter), where('isMentor', '==', true)))
-    const [allMembers = [], loadAllMembers, errorAllMembers] = useCollectionData<PublicUserDoc>(query(usersPublicRef.withConverter(docConverter), where('organization', '==', orgId)))
-
+    const [allMembers = [], loadAllMembers, errorAllMembers] = useCollectionData<PublicUserDoc>(query(publicUserCollection, where('organization', '==', orgId), where('finishSetup', '==', true)))
     // Still need to seperate students from Mentors
     // To do this, we  will need to get all mentors from the member collection,
     // Then filter out the mentors from there
