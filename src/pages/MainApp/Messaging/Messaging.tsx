@@ -14,7 +14,7 @@ function Messaging() {
     const [screenSize, setScreenSize] = useState(3);
     const [leftSideSize, setLeftSideSize] = useState('350px');
 
-    const isScreenXtraLarge = useMediaQuery({ query: '(max-width: 1280px' })
+    const isScreenXtraLarge = useMediaQuery({ query: '(max-width: 1280px)' })
     const isScreenLarge = useMediaQuery({ query: '(max-width: 1024px)' })
     const isScreenMedium = useMediaQuery({ query: '(max-width: 767px)' })
 
@@ -33,7 +33,7 @@ function Messaging() {
             setLeftSideSize('350px')
         }
     }, [isScreenXtraLarge, isScreenLarge, isScreenMedium])
-
+    
     return (
         <Zoom in={true} >
             <div className="messaging h-app">
