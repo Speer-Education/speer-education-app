@@ -29,10 +29,6 @@ export type UserDetails = {
         dribbble: string;
         pinterest: string;
     },
-    permissions: {
-        isAdm: boolean;
-        isMtr: boolean;
-    },
     stats: {
         menteesCount: number;
         mentoryCount: number;

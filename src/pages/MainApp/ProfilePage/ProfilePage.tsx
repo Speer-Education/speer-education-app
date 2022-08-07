@@ -32,8 +32,9 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
     const [openEditBio, setOpenEditBio] = useState(false);
     const [profileFound, setProfileFound] = useState(true);
     
-    const { name, biography, socials, permissions, stats } = userDetails || {};
-    const { isMtr = false } = permissions || {};
+    const { name, biography, socials, stats } = userDetails || {};
+    // const { isMtr = false } = permissions || {}
+    const isMtr = true; //TODO: Query for isMtr status from the members doc. This is because the permissions field has been removed. 
     const { views = 0 } = stats || {};
 
     //If profileId is userId, then redirect to profile page

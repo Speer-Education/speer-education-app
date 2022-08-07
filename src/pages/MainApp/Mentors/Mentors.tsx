@@ -27,11 +27,15 @@ const Mentors = () => {
         if(!user) return;
         if(loadMembers) return;
         //get all mentors profiles
+
+        console.log("mentor members:", mentorMembers)
+
         Promise.all(mentorMembers.map(async (member) => {
-            const mentor = await getDoc(doc(db, 'usersPublic', member.id).withConverter(docConverter));
+            const mentor = await getDoc(doc(db, 'usersPublic', member.id).withConverter(docConverter))
+
             return {
                 ...member,
-                ...mentor.data() as PublicUserDoc,
+                ...mentor.data() as PublicUserDoc
             }
         }))
         .then(setMentors)
@@ -49,7 +53,9 @@ const Mentors = () => {
                         {mentors.map((props) => 
                             <Grow in timeout={50} key={props.id}>
                                 {/* @ts-ignore */}
-                                <MentorCard {...props} />
+                                <MentorCard {...props} isMtr={true} /> 
+                                {/*Since this is the mentor page, all users are mentors (we know they 
+                                are mentors becuase we queried for IsMtr from the Organization Members collection) */}
                             </Grow>
                         )}
                     </div>

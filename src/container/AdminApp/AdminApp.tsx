@@ -12,14 +12,14 @@ export default function AdminApp() {
         <div>
             <AppNavbar/>
             {/* Only exist if user is admin */}
-            {userDetails?.permissions?.isAdm && <Routes>
+            {/* {userDetails?.permissions?.isAdm && <Routes>
                 <Route path="/" element={<>
                     <h1>Admin Page</h1>
                     <a href ={`/users`}>Users</a>
                 </>}/>
                 <Route path={`/users`} element={<Users/>} />
                 <Route path={`/blog-manager`} element={<h1>Manage Blog</h1>} />
-            </Routes>}
+            </Routes>} */}
         </div>
     )
 }

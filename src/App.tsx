@@ -15,7 +15,6 @@ import {Integrations} from '@sentry/tracing';
 const LazyLogin = lazy(() => import("./pages/Login/Login"))
 const LazyOnboarding = lazy(() => import("./pages/Onboarding/Onboarding"))
 const LazyMainApp = lazy(() => import("./container/MainApp/MainApp"))
-const LazyAdminApp = lazy(() => import("./container/AdminApp/AdminApp"))
 const LazyVerify = lazy(() => import("./pages/Login/Verify"))
 const LazyForgotPassword = lazy(() => import("./pages/Login/ForgotPassword"))
 
@@ -59,7 +58,6 @@ function App() {
             {user && user !== null && <>
               <Route path="/*" element={<LazyMainApp />}/>
               <Route path="/onboarding" element={<LazyOnboarding />}/>
-              <Route path="/admin/*" element={<LazyAdminApp />}/>
               <Route path="/verify" element={<LazyVerify />}/>
             </>}
             {user === null &&  <>
