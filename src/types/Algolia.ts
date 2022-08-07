@@ -11,4 +11,4 @@ export type Hit<T = any> = T & {
     } 
 }
 
-export type UserHit = Hit<Pick<PublicUser, 'name' | 'email' | 'organization' | 'education' | 'permissions'>>
+export type UserHit = Hit<Pick<PublicUser, 'name' | 'email' | 'organization' | 'education' >>

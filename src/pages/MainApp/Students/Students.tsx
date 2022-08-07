@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './Mentors.css'
+import './Students.css'
 import MentorCard from '../../../components/Mentor/MentorCard/MentorCard';
 import { db, docConverter } from '../../../config/firebase';
 import {Helmet} from "react-helmet";
@@ -16,30 +16,37 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { useSpeerOrg } from '../../../hooks/useSpeerOrg';
 import { OrganizationMemberDocument, OrgMergedUser } from '../../../types/Organization';
 
-const Mentors = () => {
+const Students = () => {
     const { user, userDetails } = useAuth();
     const { orgRef } = useSpeerOrg();
-    const [mentors, setMentors] = useState<OrgMergedUser[]>([]);
-    const [mentorMembers = [], loadMembers, errorMembers] = useCollectionData<OrganizationMemberDocument>(query(collection(orgRef, 'members').withConverter(docConverter), where('isMentor', '==', true)))
-    const mentorsLoaded = mentorMembers.length == mentors.length;
+    const { orgId } = useSpeerOrg();
+    const usersPublicRef = collection(db, "usersPublic");
+    const [students, setStudents] = useState<PublicUserDoc[]>([]);
+
+    const [mentorMembers = [], loadMentorMembers, errorMentorMembers] = useCollectionData<OrganizationMemberDocument>(query(collection(orgRef, 'members').withConverter(docConverter), where('isMentor', '==', true)))
+    const [allMembers = [], loadAllMembers, errorAllMembers] = useCollectionData<PublicUserDoc>(query(usersPublicRef.withConverter(docConverter), where('organization', '==', orgId)))
+
+    // Still need to seperate students from Mentors
+    // To do this, we  will need to get all mentors from the member collection,
+    // Then filter out the mentors from there
+    const studentsLoaded = (allMembers.length - mentorMembers.length) === students.length;
 
     useEffect(() => {
         if(!user) return;
-        if(loadMembers) return;
-        //get all mentors profiles
+        if(loadAllMembers && loadMentorMembers) return; //Ensure all members and all mentors are loaded before performing.
 
-        console.log("mentor members:", mentorMembers)
+        //Get all mentor IDs
+        const mentorIds = mentorMembers.map(mentor => mentor.id)
+        //Filter out the members that have mentor Ids as we only want the students
+        const filteredStudents = allMembers.filter(m => !mentorIds.includes(m.id))
 
-        Promise.all(mentorMembers.map(async (member) => {
-            const mentor = await getDoc(doc(db, 'usersPublic', member.id).withConverter(docConverter))
-
+        Promise.all(filteredStudents.map(async (student) => {
             return {
-                ...member,
-                ...mentor.data() as PublicUserDoc
+                ...student as PublicUserDoc,
             }
         }))
-        .then(setMentors)
-    },[user?.uid, mentorMembers, loadMembers])
+        .then(setStudents)
+    },[user?.uid, allMembers, loadAllMembers])
 
     return (<Zoom in={true} >
         <div className="mentors h-app">
@@ -50,20 +57,20 @@ const Mentors = () => {
             <div className="pt-10 p-3 2xl:p-10">   
                 <TransitionGroup>
                     <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 grid-flow-row justify-start  gap-4 -mt-12 flex-1">
-                        {mentors.map((props) => 
+                        {students.map((props) => 
                             <Grow in timeout={50} key={props.id}>
                                 {/* @ts-ignore */}
-                                <MentorCard {...props} isMtr={true} /> 
-                                {/*Since this is the mentor page, all users are mentors (we know they 
-                                are mentors becuase we queried for IsMtr from the Organization Members collection) */}
+                                <MentorCard {...props} isMtr={false}/>
+                                {/*Since this is the students page, all users are students (we know they 
+                                are students becuase we filtered out the mentors */}
                             </Grow>
                         )}
                     </div>
                 </TransitionGroup>
-                {!mentorsLoaded ? <div className="grid place-items-center h-full min-w-[50vw]">
+                {!studentsLoaded ? <div className="grid place-items-center h-full min-w-[50vw]">
                         <h1 className="text-gray-500 lg:px-10">Loading Mentors...</h1>
                 </div>: null}
-                {mentors.length === 0 && mentorsLoaded && <div className="grid place-items-center h-full">
+                {students.length === 0 && studentsLoaded && <div className="grid place-items-center h-full">
                         <h1 className="text-gray-500 lg:px-10">You've Connected with All Our Mentors!</h1>
                 </div>}
                 <br></br>
@@ -78,4 +85,4 @@ const Mentors = () => {
     </Zoom>);
 }
 
-export default Mentors;
+export default Students;

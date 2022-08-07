@@ -12,9 +12,12 @@ import { MentorDetailsDocument } from '../../../types/User';
 import { getMajor, getSchool } from '../../../utils/user';
 import { addDoc, collection } from 'firebase/firestore';
 
-const MentorCard = forwardRef<HTMLDivElement, MentorDetailsDocument>((props, ref) => {
-    const { id, name, biography, highlights:[highlight1, highlight2], permissions } = props;
-    const { isMtr=true } = permissions || {};
+type MentorCardDetails = MentorDetailsDocument & {
+    isMtr: boolean;
+};
+
+const MentorCard = forwardRef<HTMLDivElement, MentorCardDetails>((props, ref) => {
+    const { id, name, biography, highlights:[highlight1, highlight2], isMtr } = props;
     const school = getSchool(props);
     const major = getMajor(props);
     const [message, setMessage] = useState("");
