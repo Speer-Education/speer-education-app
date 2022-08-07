@@ -52,7 +52,7 @@ const Students = () => {
         <div className="mentors h-app">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Mentors | Speer Education</title>
+                <title>Students | Speer Education</title>
             </Helmet>
             <div className="pt-10 p-3 2xl:p-10">   
                 <TransitionGroup>
@@ -68,10 +68,10 @@ const Students = () => {
                     </div>
                 </TransitionGroup>
                 {!studentsLoaded ? <div className="grid place-items-center h-full min-w-[50vw]">
-                        <h1 className="text-gray-500 lg:px-10">Loading Mentors...</h1>
+                        <h1 className="text-gray-500 lg:px-10">Loading Students...</h1>
                 </div>: null}
                 {students.length === 0 && studentsLoaded && <div className="grid place-items-center h-full">
-                        <h1 className="text-gray-500 lg:px-10">You've Connected with All Our Mentors!</h1>
+                        <h1 className="text-gray-500 lg:px-10">You've Connected with All Our Students!</h1>
                 </div>}
                 <br></br>
             </div>
