@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@capacitor/android": "^4.0.1",
+    "@capacitor/cli": "^4.0.1",
+    "@capacitor/core": "^4.0.1",
+    "@capacitor/ios": "^4.0.1",
     "@date-io/date-fns": "^2.13.1",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
@@ -88,7 +92,7 @@
   },
   "scripts": {
     "start": "cross-env REACT_APP_VERSION=$(git rev-parse --short HEAD) react-scripts start",
-    "build": "GENERATE_SOURCEMAP=false cross-env REACT_APP_VERSION=$(git rev-parse --short HEAD) react-scripts build",
+    "build": "cross-env GENERATE_SOURCEMAP=false REACT_APP_VERSION=$(git rev-parse --short HEAD) react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "typecheck": "tsc -noEmit"
