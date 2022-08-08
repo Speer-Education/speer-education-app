@@ -1,0 +1,85 @@
+{
+  "project_info": {
+    "project_number": "768215592962",
+    "firebase_url": "https://speer-education-dev-default-rtdb.firebaseio.com",
+    "project_id": "speer-education-dev",
+    "storage_bucket": "speer-education-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768215592962:android:57d16a17f3c07a690c371b",
+        "android_client_info": {
+          "package_name": "com.speeredu.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768215592962-fracab1id31ag68t1eku6uadmsgioul5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.speeredu.android",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "768215592962-6gt5u88jc4r12ue0vv7sso5ds2mgmms2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDetYFaUsxB7fVsYT4CIwAAHFtfkFcZOAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768215592962-6gt5u88jc4r12ue0vv7sso5ds2mgmms2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768215592962:android:5964278f8bbc2f5a0c371b",
+        "android_client_info": {
+          "package_name": "com.speeredu.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768215592962-flfna89u5aqvgo2aeqpkh4t6cj6gqo09.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.speeredu.mobile",
+            "certificate_hash": "4c233240b4c9395240e62c197ce7581458fd4ae0"
+          }
+        },
+        {
+          "client_id": "768215592962-6gt5u88jc4r12ue0vv7sso5ds2mgmms2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDetYFaUsxB7fVsYT4CIwAAHFtfkFcZOAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768215592962-6gt5u88jc4r12ue0vv7sso5ds2mgmms2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

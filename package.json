@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@capacitor-firebase/authentication": "^0.5.1",
     "@capacitor/android": "^4.0.1",
     "@capacitor/cli": "^4.0.1",
     "@capacitor/core": "^4.0.1",
@@ -37,7 +38,7 @@
     "date-fns": "^2.28.0",
     "emailjs-com": "^3.1.0",
     "emoji-picker-react": "^3.4.8",
-    "firebase": "^9.8.4",
+    "firebase": "^9.9.2",
     "install": "^0.13.0",
     "material-ui-popup-state": "^3.1.1",
     "mixpanel-browser": "^2.41.0",
@@ -95,7 +96,9 @@
     "build": "cross-env GENERATE_SOURCEMAP=false REACT_APP_VERSION=$(git rev-parse --short HEAD) react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "typecheck": "tsc -noEmit"
+    "typecheck": "tsc -noEmit",
+    "ionic:build": "npm run build",
+    "ionic:serve": "npm run start"
   },
   "eslintConfig": {
     "extends": [

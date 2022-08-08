@@ -5,9 +5,11 @@ import { UserClaims, UserDetails, UserDetailsDocument, UserDetailsToken } from "
 import { logEvent, setUserProperties } from "../utils/analytics";
 import { useLocalStorage } from "./useHooks";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { EmailAuthProvider, ParsedToken, reauthenticateWithCredential, signOut, updatePassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect } from "firebase/auth"
+import { EmailAuthProvider, ParsedToken, reauthenticateWithCredential, signOut, updatePassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect, signInWithCredential } from "firebase/auth"
 import { doc, onSnapshot } from "firebase/firestore";
 import { onDisconnect, onValue, ref, serverTimestamp, set } from "firebase/database";
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import { Capacitor } from "@capacitor/core";
 
 
 //@ts-ignore //TODO: FIX THIS
@@ -65,15 +67,13 @@ const useAuthProvider = () => {
      * Sign in user with a Google Account with a redirect
      */
     const initGoogleSignIn = async () => {
-        await signInWithRedirect(
-                auth,
-                new GoogleAuthProvider().setCustomParameters({
-                    prompt: "select_account",
-                })
-            )
-            .catch((error) => {
-                return { error };
-            });
+        const result = await FirebaseAuthentication.signInWithGoogle();
+        // 2. Sign in on the web layer using the id token
+        const credential = GoogleAuthProvider.credential(result.credential?.idToken);
+        auth.onAuthStateChanged(user => {
+            console.log('User: ' + user);
+        });
+        await signInWithCredential(auth, credential);
     };
 
     const isUsingPasswordLogin = () => {
@@ -183,7 +183,12 @@ const useAuthProvider = () => {
     const signOutUser = () => {
         return signOut(auth).then(() => {
             logEvent('logout');
-            window.location.replace('https://speeredu.com')
+            if(!Capacitor.isNativePlatform()){
+                window.location.replace('https://speeredu.com')
+            } else {
+                navigate('/login');
+            }
+            
         });
     };
 
