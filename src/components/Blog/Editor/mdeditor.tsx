@@ -12,6 +12,7 @@ import { usersIndex } from '../../../config/algolia';
 import 'react-quill/dist/quill.snow.css';
 import './mdeditor.css'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { useMediaQuery } from 'react-responsive';
 
 
 Quill.register('modules/blotFormatter', BlotFormatter);
@@ -51,6 +52,7 @@ export const MDEditor = forwardRef<ReactQuill | null, Props>(({
   ...props
 }, editor) => {
   const _editor = useRef<ReactQuill>(null);
+  const mobile = useMediaQuery({ maxWidth: 767 });
   useImperativeHandle<ReactQuill | null, ReactQuill | null>(editor, () => _editor.current, [_editor.current]);
 
   function videoHandler() {
@@ -66,7 +68,6 @@ export const MDEditor = forwardRef<ReactQuill | null, Props>(({
       let match = url.match(/^(?:(https?):\/\/)?(?:(?:www|m)\.)?youtube\.com\/watch.*v=([a-zA-Z0-9_-]+)/) ||
           url.match(/^(?:(https?):\/\/)?(?:(?:www|m)\.)?youtu\.be\/([a-zA-Z0-9_-]+)/) ||
           url.match(/^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/);
-      console.log(match[2]);
       if (match && match[2].length === 11) {
           return ('https') + '://www.youtube.com/embed/' + match[2] + '?showinfo=0';
       }
@@ -78,7 +79,9 @@ export const MDEditor = forwardRef<ReactQuill | null, Props>(({
 
   const modules = useMemo(() => ({
     toolbar: {
-      container: [["bold","italic","underline","strike"],["link","image","video"],[{"header":1},{"header":2}],[{"list":"ordered"},{"list":"bullet"},{"list":"check"}],["clean"]],
+      container: mobile?
+        [["bold","link","image",{"header":1},{"header":2},{"list":"ordered"},{"list":"bullet"}]]: 
+        [["bold","italic","underline","strike"],["link","image","video"],[{"header":1},{"header":2}],[{"list":"ordered"},{"list":"bullet"},{"list":"check"}],["clean"]],
       handler: {
         'video': videoHandler
       }
@@ -109,7 +112,6 @@ export const MDEditor = forwardRef<ReactQuill | null, Props>(({
           usersIndex.search<{name: string}>(searchTerm, {
             hitsPerPage: 10
             }).then(function(content) {
-              console.log(content.hits)
               renderList(content.hits.map(e => ({id:e.objectID, value: e.name})), mentionChar);
             }
           );
@@ -120,7 +122,7 @@ export const MDEditor = forwardRef<ReactQuill | null, Props>(({
         }
       }
     }
-  }), []);
+  }), [mobile]);
 
   return <CustomQuill
     ref={_editor}

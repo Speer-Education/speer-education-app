@@ -34,10 +34,8 @@ export default function Login() {
     const onLogIn = (data: {email: string, password: string}) => {
         signInWithEmailAndPassword(auth, data.email, data.password)
             .then(result => {
-                console.log(result);
             })
             .catch(error => {
-                console.log(error.code);
                 if(error.code == 'auth/user-not-found') {
                     //User does not exist, create user
                     createUserWithEmailAndPassword(auth, data.email, data.password)
@@ -46,7 +44,7 @@ export default function Login() {
                             navigate('/verify')
                         })
                         .catch(error => {
-                            console.log(error.message);
+                            console.error(error.message);
                             enqueueSnackbar(error.message, {
                                 variant: 'error'
                             })
@@ -61,7 +59,6 @@ export default function Login() {
 
     useEffect(() => {
         if (enterPressed) {
-            console.log('enter pressed');
             handleSubmit(onLogIn)();
         }
     }, [enterPressed]);

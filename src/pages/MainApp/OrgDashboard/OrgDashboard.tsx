@@ -19,10 +19,8 @@ import { OrganizationDocument } from '../../../types/Organization';
 
 function OrgDashboard() {
     const { orgId } = useParams();
-    console.log('orgparm',orgId)
     //@ts-ignore
     const [organization, loading, error] = useDocumentData<OrganizationDocument>(orgId && doc(db, 'organization', orgId).withConverter(docConverter))
-    console.log('orgdoc', organization)
     //log error if exists
     if (error) {
         console.error('orgerr',error);

@@ -61,14 +61,14 @@ const MentorCard = forwardRef<HTMLDivElement, MentorCardDetails>((props, ref) =>
     }
 
     return (
-        <div ref={ref} className="bg-white rounded-lg shadow-lg flex flex-col items-center p-3 mt-16 min-h-80 transition-transform transform hover:scale-105 duration-200 cursor-pointer" style={{flex: "1 0 30%", width: '17.5rem'}}>
-            <ProfilePicture uid={id} className="w-28 h-28 transform rounded-full -mt-16 border-white border-8 border-solid shadow-lg" style={{aspectRatio: '1'}} onClick={() => navigate(`/profile/${id}`)}/>
-            <div className="mt-2 space-y-2 h-full flex flex-col w-full">
-                <div className="space-y-1 text-center transform" onClick={() => navigate(`/profile/${id}`)}>
+        <div ref={ref} className="bg-white rounded-lg shadow-lg flex flex-row md:flex-col md:items-center p-3 md:mt-16 md:min-h-80 transition-transform transform hover:scale-105 duration-200 cursor-pointer md:w-[17.6rem] flex-[1 0 30%]">
+            <ProfilePicture uid={id} className="w-20 h-20 md:w-28 md:h-28 transform rounded-full md:-mt-16 border-white border-4 md:border-8 border-solid shadow-lg" style={{aspectRatio: '1'}} onClick={() => navigate(`/profile/${id}`)}/>
+            <div className="mt-2 space-y-2 h-full flex flex-col w-full ml-4 md:ml-0">
+                <div className="space-y-1 md:text-center transform" onClick={() => navigate(`/profile/${id}`)}>
                     <h3 className="font-semibold text-xl">{name}</h3>
                     <p className="text-md text-gray-600">{isMtr?"Mentor":"Student"} @ {school}</p>
                 </div>
-                <div className="space-y-1 text-center flex-1 transform" onClick={() => navigate(`/profile/${id}`)}>
+                <div className="space-y-1 md:text-center flex-1" onClick={() => navigate(`/profile/${id}`)}>
                     <p className="text-md text-gray-600">{major}</p>
                     <p className="text-sm text-gray-600">{biography.substring(0, 125)}</p>
                     <p>

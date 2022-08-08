@@ -121,12 +121,6 @@ const PostCard = ({ post }: { post: PostDocument }) => {
         if(!post.id) return;
         if (Object.is(delta, editedPostContent)) return;
         setSaving(true) //set saving to true to show loading
-        console.log({
-            content: {
-                delta: editedPostContent,
-                html: new QuillDeltaToHtmlConverter(editedPostContent.ops || []).convert()
-            },
-        })
         //@ts-ignore
         await updateDoc(post.ref, {
             content: {
@@ -154,7 +148,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
             <PostLoader/>
         </SlideTransition> :
         <SlideTransition in timeout={150}>
-            <div className={`py-4 px-6 bg-white rounded-xl shadow-lg overflow-hidden space-y-2 transition ${isEdit ? "border-solid border-2 border-blue-500" : null}`}>
+            <div className={`py-3 px-4 md:py-6 md:px-8 bg-white rounded-xl shadow-lg overflow-hidden space-y-2 transition ${isEdit ? "border-solid border-2 border-blue-500" : null}`}>
                 <div className="post-author_container w-full">
                     <div className="flex flex-row flex-1 items-center cursor-pointer" onClick={e => navigate(`/profile/${author}`)}>
                         <ProfilePicture uid={author} className="shadow-md bg-blue-400 overflow-hidden h-12 w-12 rounded-full" />

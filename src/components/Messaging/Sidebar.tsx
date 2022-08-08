@@ -74,7 +74,7 @@ function Sidebar({screenSize}) {
         return () => {
             unsubscribe();
         }
-    }, [user?.uid])
+    }, [user?.uid, screenSize])
 
 
     //resolve a room name for this
@@ -114,9 +114,9 @@ function Sidebar({screenSize}) {
             <div className="flex flex-col overflow-y-auto flex-1">
                 <TransitionGroup>
                     {rooms.filter(room => room.name!.toLowerCase().includes(search.toLowerCase())).map(room => {
-                        return <Collapse>
+                        return <Collapse key={room!.id}>
                         {/* @ts-ignore */}
-                            <SidebarChat key={room?.id} id={room!.id} roomName={room.name!} isMentor={room!.isMentor} roomPic={room!.pic} read={(room.data!.lastMessage.read || {})[user!.uid] !== false}/>
+                            <SidebarChat id={room!.id} roomName={room.name!} isMentor={room!.isMentor} roomPic={room!.pic} read={(room.data!.lastMessage.read || {})[user!.uid] !== false}/>
                         </Collapse>
                     })}
                 </TransitionGroup>

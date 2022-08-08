@@ -28,8 +28,6 @@ const Mentors = () => {
         if(loadMembers) return;
         //get all mentors profiles
 
-        console.log("mentor members:", mentorMembers)
-
         Promise.all(mentorMembers.map(async (member) => {
             const mentor = await getDoc(doc(db, 'usersPublic', member.id).withConverter(docConverter))
 

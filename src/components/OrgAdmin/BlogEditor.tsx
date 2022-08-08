@@ -63,7 +63,6 @@ const BlogEditor: FC = () => {
 
     const onSave = async (data: BlogForm) => {
         if(!user || !userDetails) return;
-        console.log(blogId)
         await setDoc(doc(orgRef, 'blogs', blogId).withConverter(blogConverter), {
             ...data,
             postedOn: Timestamp.now(),

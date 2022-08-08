@@ -30,7 +30,7 @@ const Hit = ({ hit }) => {
 };
 
 const Hits = ({ hits }) => (
-  <div className="hidden lg:flex absolute flex-col mt-2 shadow-xl bg-white rounded-xl overflow-hidden min-w-[400px] max-h-[60vh] overflow-y-auto scrollbar-hide">
+  <div className="flex absolute flex-col mt-2 shadow-xl bg-white rounded-xl overflow-hidden min-w-[400px] max-h-[60vh] overflow-y-auto scrollbar-hide z-50">
     <TransitionGroup>
       {hits.map(hit => (
         <Collapse in key={hit.objectID}>
@@ -59,13 +59,14 @@ const SearchBar = () => {
 
   return (<div className="relative">
       <form noValidate action="" role="search">
-        <div className="hidden lg:flex flex-row items-center w-80 bg-gray-200 text-gray-700  py-3 px-4 rounded focus:bg-gray-300 focus:border-gray-500">
+        <div className="flex flex-row items-center w-80 bg-gray-200 text-gray-700  py-3 px-4 rounded focus:bg-gray-300 focus:border-gray-500">
           <SearchOutlined className="text-gray-500 w-8 h-8" />
           <input className="appearance-none ml-1 flex-1 border-0 leading-tight focus:outline-none bg-gray-200 ring-0 focus:border-0"
             type="input"
             id="search-box"
             autoComplete="off"
             placeholder="Search For Users"
+            name="search"
             value={search || ""}
             onChange={event => setSearch(event.currentTarget.value)} 
             onFocus={() => setSearch("")}

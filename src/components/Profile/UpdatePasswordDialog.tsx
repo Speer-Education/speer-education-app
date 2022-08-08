@@ -35,7 +35,6 @@ const UpdatePasswordDialog: FC<{ onClose: () => void}> = ({ onClose }) => {
             enqueueSnackbar(error.message, { variant: "error" });
         }
     }
-    console.log(user)
 
     return <>
         <DialogTitle>
