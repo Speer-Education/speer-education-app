@@ -1,0 +1,7 @@
+{
+  "name": "speer-education-app-1",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}
