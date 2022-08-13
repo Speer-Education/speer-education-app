@@ -18,6 +18,7 @@ import { addDoc, collection, deleteDoc, doc, Timestamp } from "firebase/firestor
 import usePaginateCollection from "../../hooks/usePaginateCollection";
 import { getMajor, getSchool } from "../../utils/user";
 import { useSpeerOrg } from "../../hooks/useSpeerOrg";
+import ConfirmationModal from "../Modal/ConfirmationModal";
 
 const DOCUMENTS_PER_PAGE = 5;
 
@@ -33,6 +34,10 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
     const navigate = useNavigate();
 
     const { name } = userDetails || {};
+
+    const [confirmationModal, setConfirmationModal] = useState(false);
+    const [commentId, setCommentId] = useState("");
+    
     
     //TODO: Should add press enter to submit comment as per #58
 
@@ -56,6 +61,10 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
             e.preventDefault();
             await handleSubmitCommment();
         }
+    }
+
+    const handleDeleteComment = (id) => {
+        deleteDoc(doc(post.ref, 'comments', id));
     }
 
     return (
@@ -89,10 +98,20 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
                             <h4 className="text-gray-600 text-normal font-normal">{comment}</h4>
                         </div>
                         {(author?.uid == user?.uid) && <IconButton
-                            onClick={() => deleteDoc(doc(post.ref, 'comments', id))}
+                            onClick={() => {
+                                setConfirmationModal(true);
+                                setCommentId(id);
+                            }}
                             size="large">
                             <DeleteIcon className="text-red-500"/>
                         </IconButton>}
+                        <ConfirmationModal 
+                            open={confirmationModal} 
+                            setOpen={setConfirmationModal} 
+                            contentType={"comment"} 
+                            handleDelete={handleDeleteComment} 
+                            deleteParam={commentId}
+                        />
                     </div>
                 </Collapse>
             ))}

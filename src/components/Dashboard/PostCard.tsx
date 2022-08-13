@@ -167,7 +167,12 @@ const PostCard = ({ post }: { post: PostDocument }) => {
                             size="large">
                             <DeleteIcon className="text-red-600" />
                         </IconButton>}
-                        <ConfirmationModal open={confirmationModal} setOpen={setConfirmationModal} handleDeletePost={handleDeletePost}/>
+                        <ConfirmationModal 
+                            open={confirmationModal} 
+                            setOpen={setConfirmationModal} 
+                            contentType={"post"} 
+                            handleDelete={handleDeletePost} 
+                        />
                         {(user?.uid === author) && (!isEdit? <IconButton
                             aria-label="delete"
                             className="float-right"
