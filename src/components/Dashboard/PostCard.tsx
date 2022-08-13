@@ -191,7 +191,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
                             icon_colour="text-red-500"
                             IconComponent={Favorite} 
                             onClick={handleUserLikePost} 
-                            label={"Like" + (likeCount? ("\t" + likeCount):"")} 
+                            label={(likeCount? (likeCount + "\t"):"") + "Like" + (likeCount > 1 ? "s":"")} 
                         active={userLiked}/>
                     </div>
                     <div className=" border-0 border-t border-solid border-gray-400 py-2">
@@ -201,7 +201,8 @@ const PostCard = ({ post }: { post: PostDocument }) => {
                             icon_colour="text-green-500"
                             IconComponent={MessageIcon} 
                             onClick={() => setShowComments(!showComments)}
-                            label={"Comment" + (commentCount? ("\t" + commentCount):"")} 
+                            
+                            label={(commentCount? (commentCount + "\t"):"") + "Comment" + (commentCount > 1 ? "s":"")} 
                             active={showComments}/>
                     </div>
                         {isEdit ? <Button 
