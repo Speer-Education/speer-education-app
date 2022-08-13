@@ -24,6 +24,7 @@ import { deleteDoc, doc, onSnapshot, serverTimestamp, setDoc, Timestamp, updateD
 import {QuillDeltaToHtmlConverter} from 'quill-delta-to-html';
 import { useSnackbar } from 'notistack';
 import { useSpeerOrg } from '../../hooks/useSpeerOrg';
+import ConfirmationModal from '../Modal/ConfirmationModal';
 
 /**
  * Creates the post card for this post
@@ -44,6 +45,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
     const { delta, html = "" } = content || {};
     const [saving, setSaving] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
+    const [confirmationModal, setConfirmationModal] = useState(false);
     const [editedPostContent, setEditedPostContent] = useState<Delta>(delta);
     const navigate = useNavigate();
     const divRef = useRef<HTMLDivElement>(null);
@@ -161,10 +163,11 @@ const PostCard = ({ post }: { post: PostDocument }) => {
                         {canDeletePost && <IconButton
                             aria-label="delete"
                             className="float-right"
-                            onClick={handleDeletePost}
+                            onClick={() => setConfirmationModal(true)}
                             size="large">
                             <DeleteIcon className="text-red-600" />
                         </IconButton>}
+                        <ConfirmationModal open={confirmationModal} setOpen={setConfirmationModal} handleDeletePost={handleDeletePost}/>
                         {(user?.uid === author) && (!isEdit? <IconButton
                             aria-label="delete"
                             className="float-right"
