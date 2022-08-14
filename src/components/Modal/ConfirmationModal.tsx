@@ -34,7 +34,7 @@ function getModalStyle() {
     },
   }));
 
-//TODO: Use unstyled modal to fix bug of modal background being extremely dark when there are multiplee comments.
+//KIND OF USELESS, we use useDialog instead now.
 
 // If there is no additional inputs for handleDelete, leave deleteParam balnk. Otherwise, if there is input required
 // for handleDelete function such as an id of the thing to delete, put it in the deleteParam field.
