@@ -24,7 +24,7 @@ import { deleteDoc, doc, onSnapshot, serverTimestamp, setDoc, Timestamp, updateD
 import {QuillDeltaToHtmlConverter} from 'quill-delta-to-html';
 import { useSnackbar } from 'notistack';
 import { useSpeerOrg } from '../../hooks/useSpeerOrg';
-import ConfirmationModal from '../Modal/ConfirmationModal';
+import { useDialog } from '../../hooks/useDialog';
 
 /**
  * Creates the post card for this post
@@ -45,12 +45,11 @@ const PostCard = ({ post }: { post: PostDocument }) => {
     const { delta, html = "" } = content || {};
     const [saving, setSaving] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const [confirmationModal, setConfirmationModal] = useState(false);
+    const [openDialog, closeDialog] = useDialog();
     const [editedPostContent, setEditedPostContent] = useState<Delta>(delta);
     const navigate = useNavigate();
     const divRef = useRef<HTMLDivElement>(null);
     const { enqueueSnackbar } = useSnackbar();
-
     // useEffect(() => {
     //     if(dimensions.height > 500 && !oversizedPost){
     //         setPostCollapsed(true);
@@ -135,6 +134,34 @@ const PostCard = ({ post }: { post: PostDocument }) => {
         setIsEdit(false);
     }
 
+    const openConfirmationDialog = () => {
+        openDialog({
+            children: <div className="p-5 rounded-sm">
+                <h2 className="text-center mb-5">Are you sure you want to delete this post?</h2>
+                <div className="flex justify-around">
+                    <Button 
+                        variant="contained" 
+                        color="error"
+                        sx={{
+                            fontWeight: "bold",
+                            fontSize: "0.75rem",
+                        }} 
+                        startIcon={<DeleteIcon />}
+                        onClick={() => {handleDeletePost(); closeDialog()}}
+                    > Delete </Button>
+                    <Button 
+                        variant="contained" 
+                        onClick={closeDialog}
+                        sx={{
+                            fontWeight: "bold",
+                            fontSize: "0.75rem",
+                        }} 
+                    >Cancel</Button>
+                </div>
+            </div>
+        })
+    }
+
     const canDeletePost = user?.uid === author || isAdmin || isOwner;
 
     const PostAction: FC<{ IconComponent: SvgIconComponent, label: string, active?: boolean, activeColours: string ,icon_colour: string , colours: string } & HTMLAttributes<HTMLButtonElement>> = ({ IconComponent, label, active, activeColours,icon_colour, colours, ...props }) => {
@@ -163,16 +190,10 @@ const PostCard = ({ post }: { post: PostDocument }) => {
                         {canDeletePost && <IconButton
                             aria-label="delete"
                             className="float-right"
-                            onClick={() => setConfirmationModal(true)}
+                            onClick={openConfirmationDialog}
                             size="large">
                             <DeleteIcon className="text-red-600" />
                         </IconButton>}
-                        <ConfirmationModal 
-                            open={confirmationModal} 
-                            setOpen={setConfirmationModal} 
-                            contentType={"post"} 
-                            handleDelete={handleDeletePost} 
-                        />
                         {(user?.uid === author) && (!isEdit? <IconButton
                             aria-label="delete"
                             className="float-right"

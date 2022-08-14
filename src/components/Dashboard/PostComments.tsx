@@ -18,7 +18,7 @@ import { addDoc, collection, deleteDoc, doc, Timestamp } from "firebase/firestor
 import usePaginateCollection from "../../hooks/usePaginateCollection";
 import { getMajor, getSchool } from "../../utils/user";
 import { useSpeerOrg } from "../../hooks/useSpeerOrg";
-import ConfirmationModal from "../Modal/ConfirmationModal";
+import { useDialog } from "../../hooks/useDialog";
 
 const DOCUMENTS_PER_PAGE = 5;
 
@@ -35,9 +35,8 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
 
     const { name } = userDetails || {};
 
-    const [confirmationModal, setConfirmationModal] = useState(false);
-    const [commentId, setCommentId] = useState("");
-    
+    const [openDialog, closeDialog] = useDialog();
+
     
     //TODO: Should add press enter to submit comment as per #58
 
@@ -65,6 +64,34 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
 
     const handleDeleteComment = (id) => {
         deleteDoc(doc(post.ref, 'comments', id));
+    }
+
+    const openConfirmationDialog = (id) => {
+        openDialog({
+            children: <div className="p-5 rounded-sm">
+                <h2 className="text-center mb-5">Are you sure you want to delete this comment?</h2>
+                <div className="flex justify-around">
+                    <Button 
+                        variant="contained" 
+                        color="error"
+                        sx={{
+                            fontWeight: "bold",
+                            fontSize: "0.75rem"
+                        }} 
+                        startIcon={<DeleteIcon />}
+                        onClick={() => {handleDeleteComment(id); closeDialog()}}
+                    > Delete </Button>
+                    <Button 
+                        variant="contained" 
+                        onClick={closeDialog}
+                        sx={{
+                            fontWeight: "bold",
+                            fontSize: "0.75rem",
+                        }} 
+                    >Cancel</Button>
+                </div>
+            </div>
+        })
     }
 
     return (
@@ -98,20 +125,10 @@ export const PostComments = forwardRef<HTMLDivElement, { post: PostDocument }>((
                             <h4 className="text-gray-600 text-normal font-normal">{comment}</h4>
                         </div>
                         {(author?.uid == user?.uid) && <IconButton
-                            onClick={() => {
-                                setConfirmationModal(true);
-                                setCommentId(id);
-                            }}
+                            onClick={()=> openConfirmationDialog(id)}
                             size="large">
                             <DeleteIcon className="text-red-500"/>
                         </IconButton>}
-                        <ConfirmationModal 
-                            open={confirmationModal} 
-                            setOpen={setConfirmationModal} 
-                            contentType={"comment"} 
-                            handleDelete={handleDeleteComment} 
-                            deleteParam={commentId}
-                        />
                     </div>
                 </Collapse>
             ))}
