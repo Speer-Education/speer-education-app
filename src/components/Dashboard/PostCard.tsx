@@ -137,7 +137,7 @@ const PostCard = ({ post }: { post: PostDocument }) => {
     const openConfirmationDialog = () => {
         openDialog({
             children: <div className="p-5 rounded-sm">
-                <h2 className="text-center mb-5">Are you sure you want to delete this post?</h2>
+                <h2 className="text-center mb-5 font-medium">Are you sure you want to delete this post?</h2>
                 <div className="flex justify-around">
                     <Button 
                         variant="contained" 
