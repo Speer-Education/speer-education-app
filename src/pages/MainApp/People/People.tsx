@@ -66,7 +66,7 @@ const People = () => {
     }
 
     return (<Zoom in={true} >
-        <div className="mentors h-app">
+        <div className="people h-app">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Mentors | Speer Education</title>
