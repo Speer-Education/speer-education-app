@@ -96,6 +96,10 @@ function Sidebar({screenSize}) {
         })
     }
 
+    const showNewPeople = () => {
+        navigate('/people')
+    }
+
     return (
         <div className="flex flex-col flex-1 rounded-md bg-white m-2 shadow-lg" style={{maxHeight: `${screenSize >= 1 ? "calc(100vh - 20rem)" : "100%"}`}}>
             <div className="flex justify-between items-center px-4 py-3">
@@ -111,7 +115,7 @@ function Sidebar({screenSize}) {
                     <input type="text" placeholder="Search by name" value={search} onChange={(e) => setSearch(e.target.value)}/>
                 </div>
             </div>
-            <div className="flex flex-col overflow-y-auto flex-1">
+            <div className="flex flex-col overflow-y-auto flex-1 relative">
                 <TransitionGroup>
                     {rooms.filter(room => room.name!.toLowerCase().includes(search.toLowerCase())).map(room => {
                         return <Collapse key={room!.id}>
@@ -120,11 +124,16 @@ function Sidebar({screenSize}) {
                         </Collapse>
                     })}
                 </TransitionGroup>
+                {screenSize <= 1 && <div className="absolute bottom-0 w-full">
+                    <Button className="w-full" variant="contained" onClick={showNewPeople}>
+                        Find New People
+                    </Button>
+                </div>}
                 {rooms.length === 0 && !loading && 
                 <div className="h-full grid place-items-center">
                     <div className="space-y-3 grid place-items-center">
                         <h3 className="text-gray-500">No Contacts yet</h3>
-                        <Button variant="contained" color="primary" onClick={() => navigate('/mentors')}>Find a mentor</Button>
+                        <Button variant="contained" color="primary" onClick={() => navigate('/people')}>Find a mentor</Button>
                     </div>
                 </div>}
                 {loading&& <div className="grid place-items-center w-full h-14">
