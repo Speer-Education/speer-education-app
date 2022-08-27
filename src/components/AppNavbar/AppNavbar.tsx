@@ -86,8 +86,8 @@ const AppNavbar = () => {
         <div className="flex flex-row h-full flex-1 lg:flex-none pl-2">
           <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/" />
           <NavBarLink IconComponent={PeopleTwoToneIcon} title="Meet People" href="/people" />
-          <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/mentors" />
-          <NavBarLink IconComponent={PersonAddIcon} title="Meet Students" href="/students" />
+          {/* <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/mentors" />
+          <NavBarLink IconComponent={PersonAddIcon} title="Meet Students" href="/students" /> */}
           <NavBarLink IconComponent={MessageTwoToneIcon} isContactIcon title="Contacts" href="/messages" />
           {isAdmin && <NavBarLink IconComponent={LibraryBooksTwoToneIcon} title="Admin" href="/orgadmin" />}
           {/* <NavBarLink IconComponent={Notif0.  icationsTwoToneIcon} title="Notifications"/> */}

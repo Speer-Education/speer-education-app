@@ -15,12 +15,12 @@ const LazyMessages = lazy(
 const LazyPeoplePage = lazy(
   () => import("../../pages/MainApp/People/People")
 );
-const LazyMentorsPage = lazy(
-  () => import("../../pages/MainApp/Mentors/Mentors")
-);
-const LazyStudentsPage = lazy(
-  () => import("../../pages/MainApp/Students/Students")
-);
+// const LazyMentorsPage = lazy(
+//   () => import("../../pages/MainApp/Mentors/Mentors")
+// );
+// const LazyStudentsPage = lazy(
+//   () => import("../../pages/MainApp/Students/Students")
+// );
 const LazyProfilePage = lazy(
   () => import("../../pages/MainApp/ProfilePage/ProfilePage")
 );
@@ -49,8 +49,6 @@ export default function MainApp() {
           <Route path="/" element={<LazyDashboard />} />
           <Route path="/orgadmin/*" element={<LazyOrgAdmin />} />
           <Route path="/people" element={<LazyPeoplePage />} />
-          <Route path="/mentors" element={<LazyMentorsPage />} />
-          <Route path="/students" element={<LazyStudentsPage />} />
           <Route path="/profile/:profileId" element={<LazyProfilePage />} />
           <Route path="/profile" element={<LazyProfilePage isUser={true} />} />
           <Route path="/messages/*" element={<LazyMessages />} />
