@@ -1,0 +1,34 @@
+.mentors {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    overflow-y: auto;
+    padding:20px 12px;
+    @apply bg-gray-100
+}
+
+.mentors__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: 10px;
+    row-gap: 15px;
+  
+}
+
+@media (max-width: 1024px){
+    .mentors__grid {
+        grid-template-columns: 1fr 1fr 1fr ;
+    }
+}
+
+@media (max-width: 768px){
+    .mentors__grid {
+        grid-template-columns: 1fr 1fr ;
+    }
+}
+
+@media (max-width: 480px){
+    .mentors__grid {
+        grid-template-columns: 1fr ;
+    }
+}

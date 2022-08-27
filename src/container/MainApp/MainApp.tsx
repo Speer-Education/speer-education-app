@@ -12,6 +12,9 @@ import MobileTopBar from "../../components/AppNavbar/MobileTopBar";
 const LazyMessages = lazy(
   () => import("../../pages/MainApp/Messaging/Messaging")
 );
+const LazyPeoplePage = lazy(
+  () => import("../../pages/MainApp/People/People")
+);
 const LazyMentorsPage = lazy(
   () => import("../../pages/MainApp/Mentors/Mentors")
 );
@@ -45,6 +48,7 @@ export default function MainApp() {
         <Routes>
           <Route path="/" element={<LazyDashboard />} />
           <Route path="/orgadmin/*" element={<LazyOrgAdmin />} />
+          <Route path="/people" element={<LazyPeoplePage />} />
           <Route path="/mentors" element={<LazyMentorsPage />} />
           <Route path="/students" element={<LazyStudentsPage />} />
           <Route path="/profile/:profileId" element={<LazyProfilePage />} />
