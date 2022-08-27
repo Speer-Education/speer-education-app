@@ -190,7 +190,7 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
                     </div>
                     <p className="text-gray-600 text-sm">{isMentor ? "Mentor" : getMajor(userDetails)} at {getSchool(userDetails)}</p>
                     <p className="text-gray-600 text-sm ">{lookup.byInternet(country)?.country}</p>
-                    <div className="flex flex-row items-center my-5 space-x-3">
+                    <div className="flex flex-col sm:flex-row items-center my-5 space-x-3">
                         <UserHighlight highlight={highlight1} />
                         <UserHighlight highlight={highlight2} />
                     </div>
