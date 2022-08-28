@@ -3,7 +3,7 @@ import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import PeopleTwoToneIcon from '@mui/icons-material/PeopleTwoTone';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import MessageTwoToneIcon from '@mui/icons-material/MessageTwoTone';
-import LibraryBooksTwoToneIcon from '@mui/icons-material/LibraryBooksTwoTone';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import Badge from '@mui/material/Badge';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
@@ -23,7 +23,7 @@ import { useMediaQuery } from 'react-responsive';
  * @param {string} href
  * @returns 
  */
-const NavBarLink = ({ IconComponent, title, href, isContactIcon } : {
+export const NavBarLink = ({ IconComponent, title, href, isContactIcon } : {
   IconComponent: SvgIconComponent,
   title: string,
   href: string,
@@ -89,7 +89,7 @@ const AppNavbar = () => {
           {/* <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/mentors" />
           <NavBarLink IconComponent={PersonAddIcon} title="Meet Students" href="/students" /> */}
           <NavBarLink IconComponent={MessageTwoToneIcon} isContactIcon title="Contacts" href="/messages" />
-          {isAdmin && <NavBarLink IconComponent={LibraryBooksTwoToneIcon} title="Admin" href="/orgadmin" />}
+          {isAdmin && !mobileBar && <NavBarLink IconComponent={AutoGraphIcon} title="Admin" href="/orgadmin" />}
           {/* <NavBarLink IconComponent={Notif0.  icationsTwoToneIcon} title="Notifications"/> */}
         </div>
         {/* <div className="hidden lg:block" >
@@ -97,7 +97,7 @@ const AppNavbar = () => {
             Compose a message
           </Button>
         </div> */}
-        {!mobileBar && <UserMenu />}
+        <UserMenu />
       </div>
       {/* Transparent images spacer to center the stuff in the middle */}
       <img className="h-20 hidden lg:block opacity-0 cursor-pointer pr-5" src="/full-transparent-logo.png" alt="logo" />

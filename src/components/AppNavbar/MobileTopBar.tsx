@@ -1,13 +1,18 @@
 import { SearchRounded } from '@mui/icons-material';
 import { DialogContent, IconButton } from '@mui/material';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import BookIcon from '@mui/icons-material/Book';
 import { useNavigate } from 'react-router-dom';
 import { useDialog } from '../../hooks/useDialog';
+import { useSpeerOrg } from '../../hooks/useSpeerOrg';
+import { NavBarLink } from './AppNavbar';
 import SearchBar from './SearchBar';
 import { UserMenu } from './UserMenu/UserMenu';
 
 const MobileTopBar = () => {
     const navigate = useNavigate();
     const [openDialog, closeDialog] = useDialog();
+    const { isAdmin } = useSpeerOrg();
 
     const openSearchDialog = () => {
         openDialog({
@@ -27,6 +32,8 @@ const MobileTopBar = () => {
                     <IconButton onClick={openSearchDialog}>
                         <SearchRounded />
                     </IconButton>
+                    {isAdmin && <NavBarLink IconComponent={AutoGraphIcon} title="Admin" href="/orgadmin" />}
+                    <NavBarLink IconComponent={BookIcon} title="Blogs" href="/blogs" />
                     <UserMenu />
                 </div>
             </div>

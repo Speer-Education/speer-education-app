@@ -64,7 +64,7 @@ const MentorCard = forwardRef<HTMLDivElement, MentorCardDetails>((props, ref) =>
 
     return (
         <div ref={ref} className="bg-white rounded-lg shadow-lg flex flex-row md:flex-col md:items-center p-2 md:mt-16 lg:min-h-80 transition-transform transform hover:scale-105 duration-200 cursor-pointer md:w-[17.6rem] flex-[1 0 30%]">
-            <ProfilePicture uid={id} className="w-16 h-16 md:w-28 md:h-28 transform rounded-full  m-2 mr-0 md:m-0 md:-mt-16 border-white border-4 md:border-8 border-solid shadow-lg" style={{aspectRatio: '1'}} onClick={() => navigate(`/profile/${id}`)}/>
+            <ProfilePicture uid={id} className="w-16 h-16 md:w-28 md:h-28 transform rounded-full mt-4 md:-mt-16 border-white border-4 md:border-8 border-solid shadow-lg" style={{aspectRatio: '1'}} onClick={() => navigate(`/profile/${id}`)}/>
             <div className="mt-2 space-y-2 h-full flex flex-col w-full ml-4 md:ml-0 p-2 pl-0 lg:p-0">
                 <div className="space-y-1 md:text-center transform" onClick={() => navigate(`/profile/${id}`)}>
                     <h3 className="font-semibold text-xl">{name}</h3>

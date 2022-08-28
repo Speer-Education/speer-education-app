@@ -30,6 +30,9 @@ const LazyOrgAdmin = lazy(
 const LazyDashboard = lazy(
   () => import("../../pages/MainApp/Dashboard/Dashboard")
 );
+const LazyBlogs = lazy(
+  () => import("../../components/Dashboard/BlogShowcase")
+);
 
 export default function MainApp() {
 
@@ -52,6 +55,7 @@ export default function MainApp() {
           <Route path="/profile/:profileId" element={<LazyProfilePage />} />
           <Route path="/profile" element={<LazyProfilePage isUser={true} />} />
           <Route path="/messages/*" element={<LazyMessages />} />
+          <Route path="/blogs" element={<LazyBlogs/>} />
           <Route path="/*" element={<NotFoundPage />} />
           {/* Refactored and Migrated Code */}
         </Routes>
