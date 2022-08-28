@@ -14,9 +14,9 @@ function Messaging() {
     const [screenSize, setScreenSize] = useState(3);
     const [leftSideSize, setLeftSideSize] = useState('350px');
 
-    const isScreenXtraLarge = useMediaQuery({ query: '(max-width: 1280px)' })
-    const isScreenLarge = useMediaQuery({ query: '(max-width: 1024px)' })
-    const isScreenMedium = useMediaQuery({ query: '(max-width: 767px)' })
+    const isScreenXtraLarge = useMediaQuery({ maxWidth: 1280 })
+    const isScreenLarge = useMediaQuery({ maxWidth: 1024})
+    const isScreenMedium = useMediaQuery({ maxWidth: 767 })
 
     const isSidebarOnly = useMatch('/messages')
     useEffect(() => {

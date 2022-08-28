@@ -85,7 +85,7 @@ const AppNavbar = () => {
       <div className="w-full lg:w-auto flex flex-row max-w-4xl justify-center items-center space-x-3">
         <div className="flex flex-row h-full flex-1 lg:flex-none pl-2">
           <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/" />
-          {!mobileBar && <NavBarLink IconComponent={PeopleTwoToneIcon} title="Meet People" href="/people" />}
+          <NavBarLink IconComponent={PeopleTwoToneIcon} title="Meet People" href="/people" />
           {/* <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/mentors" />
           <NavBarLink IconComponent={PersonAddIcon} title="Meet Students" href="/students" /> */}
           <NavBarLink IconComponent={MessageTwoToneIcon} isContactIcon title="Contacts" href="/messages" />
