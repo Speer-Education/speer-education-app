@@ -6,11 +6,13 @@ import ServiceWorkerWrapper from './components/ServiceWorker/ServiceWorkerWrappe
 import AppLoader from './components/Loader/AppLoader';
 import FallbackPage from './pages/Fallback/FallbackPage';
 import {ErrorBoundary} from 'react-error-boundary';
-import NotFoundPage from './pages/Fallback/NotFoundPage';
 import { logEvent } from './utils/analytics';
 import useRoutingInstrumentation from 'react-router-v6-instrumentation';
 import * as Sentry from '@sentry/react';
 import {Integrations} from '@sentry/tracing';
+import * as amplitude from '@amplitude/analytics-browser';
+import smartlookClient from 'smartlook-client';
+
 
 const LazyLogin = lazy(() => import("./pages/Login/Login"))
 const LazyOnboarding = lazy(() => import("./pages/Onboarding/Onboarding"))
@@ -20,8 +22,14 @@ const LazyForgotPassword = lazy(() => import("./pages/Login/ForgotPassword"))
 
 function App() {
 
-  const { user, authing } = useAuth();
+  const { user } = useAuth();
   const routingInstrumentation = useRoutingInstrumentation();
+
+  useEffect(() => {
+    amplitude.init('627e19822eb4482290feebf284cd9f4c');
+    smartlookClient.init('784a0552bf8bbf15124518cb462f45113638da83');
+  }, [])
+
   useEffect(() => {
     Sentry.init({
       dsn: "https://0ea940615ee84c89a07bb2e2cc91dbfe@o992434.ingest.sentry.io/5949937",
