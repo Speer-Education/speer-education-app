@@ -18,7 +18,7 @@ const logEvent = (eventName: string, eventData: any = null) => {
 const setUserProperties = (uid: string, userDetails: any) => {
     
     // Only log analytics if NOT in development mode (because analytics doesn't exist in development mode)
-    // if(isDevelopment()) return;
+    if(isDevelopment()) return;
     //@ts-ignore
     if(analytics) analytics.setUserProperties(uid, userDetails);
     //@ts-ignore
@@ -28,8 +28,12 @@ const setUserProperties = (uid: string, userDetails: any) => {
 
     //Amplitude
     const event = new amplitude.Identify();
-    event.set(uid, userDetails);
-    amplitude.identify(event);
+    for (const key in userDetails) {
+        event.set(key, userDetails[key]);
+    }
+    amplitude.identify(event, {
+        'user_id': uid,
+    });
 
     //Smartlook
     smartlookClient.identify(uid, userDetails);
