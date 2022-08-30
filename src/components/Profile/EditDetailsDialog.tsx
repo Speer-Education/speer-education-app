@@ -19,9 +19,9 @@ const FormRow = ({ children }) => (
 
 type FormValues = Pick<UserDetails, 'name' | 'education' | 'dateOfBirth' | 'email' | 'country' | 'highlights'>;
 
-const EditDetailsDialog = ({ open, onClose }) => {
+const EditDetailsDialog = ({ onClose }) => {
   const { user, userDetails } = useAuth();
-  const { register, control, handleSubmit, watch, setValue, formState: { isValid, isSubmitting } } = useForm<FormValues>({
+  const { register, control, handleSubmit, formState: { isSubmitting } } = useForm<FormValues>({
     mode: 'all',
     defaultValues: {
       name: userDetails?.name,
@@ -52,7 +52,7 @@ const EditDetailsDialog = ({ open, onClose }) => {
   }
 
   return (
-    <DialogBase open={open} onClose={onClose}>
+    <>
       <DialogTitle
         className="text-xl font-semibold leading-6 text-center text-gray-900"
       >
@@ -86,10 +86,11 @@ const EditDetailsDialog = ({ open, onClose }) => {
             name="highlights.0.emoji"/>
           <InputField
             {...register('highlights.0.description', { required: true })}
+            sx={{ fontSize: "14px" }}
             required
             type="text"
             label=""
-            className="md:w-3/4 mb-6 md:mb-0"
+            className="w-[calc(100%-100px)] mb-6 md:mb-0"
             autoWidth
             placeholder="eg. Marketing Lead @ Amce Inc" />
         </FormRow>
@@ -100,10 +101,11 @@ const EditDetailsDialog = ({ open, onClose }) => {
             name="highlights.1.emoji"/>
           <InputField
             {...register('highlights.1.description', { required: true })}
+            sx={{ fontSize: "14px" }}
             required
             type="text"
             label=""
-            className="md:w-3/4 mb-2 md:mb-0"
+            className="w-[calc(100%-100px)] mb-2 md:mb-0"
             autoWidth
             placeholder="eg. CEO @ Amce Labs" />
         </FormRow>
@@ -124,7 +126,7 @@ const EditDetailsDialog = ({ open, onClose }) => {
           Close
         </button>
       </DialogActions>
-    </DialogBase>
+    </>
   );
 }
 
