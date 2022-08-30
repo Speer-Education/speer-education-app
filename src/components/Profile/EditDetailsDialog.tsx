@@ -60,8 +60,8 @@ const EditDetailsDialog = ({ open, onClose }) => {
       </DialogTitle>
       <DialogContent>
         <InputField {...register('name', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="What is your full name" placeholder="John Doe" />
-        <InputField {...register('education.0.major', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major" name="major" />
-        <InputField {...register('education.0.school', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Name of Your School" id="school" name="school" placeholder="Harvard University" />
+        <InputField {...register('education.0.major', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major"/>
+        <InputField {...register('education.0.school', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Name of Your School" id="school" placeholder="Harvard University" />
         <Controller
           control={control}
           name="country"
