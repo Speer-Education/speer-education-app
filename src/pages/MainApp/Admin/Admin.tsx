@@ -3,7 +3,7 @@ import { AccountCircle, AdminPanelSettingsRounded, AppRegistrationTwoTone, AppSh
 import { Collapse, IconButton, LinearProgress, Tooltip } from "@mui/material";
 import AccountBalanceTwoToneIcon from '@mui/icons-material/AccountBalanceTwoTone';
 import { Helmet } from 'react-helmet';
-import {Link, useLocation, useNavigate, Routes, Route} from 'react-router-dom';
+import {Link, useLocation, useNavigate, Routes, Route, Navigate} from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import { UserClaims } from '../../../types/User';
 import SlideTransition from '../../../components/SlideTransition/SlideTransition';
@@ -53,7 +53,6 @@ const AdminLayout: FC<PropsWithChildren<{}>>  =  ({ children }) => {
     }, [orgId])
 
     const links = [
-        { href: "", label: "Dashboard", Icon: Home },
         { href: "users", label: "Users", Icon: GroupRounded },
         { href: "blogs", label: "Blogs", Icon: Article, children: [
             { href: "blogs/new", label: "Create Blog", Icon: AppShortcutTwoTone },
@@ -91,7 +90,7 @@ const OrganizationAdmin: FC<{}> = () => {
     return <AdminLayout>
         <Suspense fallback={<div className='w-full h-full grid place-items-center'><LinearProgress/></div>}>
             <Routes>
-                <Route path="/" element={<LazyDashboard />} />
+                <Route path="/" element={<Navigate to="users" />} />
                 <Route path="/users" element={<LazyUsersManager />} />
                 <Route path="/blogs/list" element={<LazyBlogsManager />} />
                 <Route path="/blogs/:id" element={<LazyBlogEditor />} />
