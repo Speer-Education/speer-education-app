@@ -91,12 +91,7 @@ const AppNavbar = () => {
           {isAdmin && !mobileBar && <NavBarLink IconComponent={AutoGraphIcon} title="Admin" href="/orgadmin" />}
           {/* <NavBarLink IconComponent={Notif0.  icationsTwoToneIcon} title="Notifications"/> */}
         </div>
-        {/* <div className="hidden lg:block" >
-          <Button variant="contained" color="primary" endIcon={<ArrowDropDownTwoToneIcon/>} style={{textTransform: "capitalize"}}>
-            Compose a message
-          </Button>
-        </div> */}
-        <UserMenu />
+        {!mobileBar && <UserMenu />}
       </div>
     </div>
   </SlideTransition>);
