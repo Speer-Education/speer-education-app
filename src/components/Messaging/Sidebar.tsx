@@ -102,17 +102,13 @@ function Sidebar({screenSize}) {
 
     return (
         <div className="flex flex-col flex-1 rounded-md bg-white m-2 shadow-lg" style={{maxHeight: `${screenSize >= 1 ? "calc(100vh - 20rem)" : "100%"}`}}>
-            <div className="flex justify-between items-center px-4 py-3">
-                <ProfilePicture uid={user!.uid} className="h-8 w-8 rounded-full"/>
-                <h1 className="sidebar__headerUsername">{userDetails?.name}</h1>
-                <IconButton onClick={showCreateGroup}>
-                    <GroupAddRounded />
-                </IconButton>
-            </div>
             <div className="sidebar__searchContainer">
                 <div className="sidebar__search">
                     <SearchOutlined />
                     <input type="text" placeholder="Search by name" value={search} onChange={(e) => setSearch(e.target.value)}/>
+                    <IconButton onClick={showCreateGroup}>
+                        <GroupAddRounded />
+                    </IconButton>
                 </div>
             </div>
             <div className="flex flex-col overflow-y-auto flex-1 relative">
