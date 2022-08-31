@@ -49,6 +49,9 @@ function Messaging() {
                             <StatsCard />
                         </div>
                         : /* Phone */(isSidebarOnly && <div className="flex flex-col h-full ml-auto mr-auto h-app" style={{ width: `98%` }}>
+                            <p className="font-semibold text-lg pt-3 pl-2">   
+                                Your Recent Chats
+                            </p>
                             <Sidebar screenSize={screenSize}/>
                         </div>)}
                     <Routes>
