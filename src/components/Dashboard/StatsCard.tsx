@@ -11,7 +11,7 @@ export default function StatsCard() {
         return Object.keys(userDetails?.activeRooms || {}).length;
     },[userDetails?.activeRooms])
     return (
-        <div className="flex flex-col mentorShowcase">
+        <div className="flex flex-col p-3 shadow-lg rounded-md bg-white pr-[5px]">
             <div className="flex flex-row justify-between pb-1">
                 <p>Your Stats</p>
                 <HelpOutlineIcon style={{ fontSize: 18 }}/>

@@ -84,7 +84,7 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
             <Zoom in>
                 <div className="w-screen h-full grid xl:grid-cols-[350px_auto_350px] md:grid-cols-[auto_350px] grid-cols-1 ">
                     <div className="hidden xl:flex flex-col h-full h-app w-sidebar">
-                        <div className="fixed flex flex-col cc_cursor h-app w-sidebar">
+                        <div className="fixed flex flex-col cc_cursor h-app w-sidebar p-3 space-y-2">
                             {((profileId || user?.uid) && userDetails) && <ContactsSidebar profileId={profileId || user!.uid} userDetails={userDetails} isUser={isUser}/>}
                             <StatsCard />
                         </div>

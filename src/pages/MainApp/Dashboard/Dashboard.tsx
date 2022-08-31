@@ -28,7 +28,7 @@ function Dashboard() {
                 }}/>
                 <div className="dashboard_sidebar">
                     {/* left side bar */}
-                    <div className="dashboard_sidebar h-app fixed hidden xl:visible">
+                    <div className="dashboard_sidebar h-app fixed hidden xl:visible p-3 space-y-2">
                         <MentorShowcase/>
                         <StatsCard/>
                     </div>
@@ -46,7 +46,7 @@ function Dashboard() {
                 </div>
                 <div className="dashboard_sidebar">
                     {/* right side bar */}
-                    <div className="dashboard_sidebar h-app fixed">
+                    <div className="dashboard_sidebar h-app fixed p-3 space-y-2">
                         <OpenChats/>
                         <BlogShowcase/>
                     </div>

@@ -43,7 +43,7 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }: { pr
     }
 
     return (
-        <div className="flex flex-col flex-1 p-3 m-2 shadow-lg rounded-md bg-white overflow-y-auto">
+        <div className="flex flex-col flex-1 p-3 shadow-lg rounded-md bg-white overflow-y-auto">
             <p>{isUser?"Your":`${userDetails.name}'s` || ""} Contacts</p>
             {followers.map((user) => {
                 const { id, name } = user; 
