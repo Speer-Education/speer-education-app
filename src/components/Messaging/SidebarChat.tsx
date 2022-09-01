@@ -2,11 +2,12 @@ import React, { useState, useEffect, forwardRef } from 'react';
 import "./SidebarChat.css";
 import { Avatar } from "@mui/material";
 import { Link, useLocation, useMatch, useNavigate } from 'react-router-dom';
-import { db } from '../../config/firebase';
+import { db, publicUserCollection } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { Message, MessageRoom } from '../../types/Messaging';
 import { collection, doc, onSnapshot } from 'firebase/firestore';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 
 const SidebarChat = forwardRef<HTMLDivElement, {
     id: string,
@@ -17,6 +18,7 @@ const SidebarChat = forwardRef<HTMLDivElement, {
 }>(({ id, roomName, isMentor = false, roomPic, read }, ref) =>{
     const { user } = useAuth();
     const [messages, setMessages] = useState<Message>();
+    const [senderInfo, loadSenderInfo, error] = useDocumentData((messages?.senderId &&  messages.senderId !== user?.uid)? doc(publicUserCollection, messages.senderId): null);
     const location = useLocation();
     //Fetches the latest message for display
     useEffect(() => {
@@ -35,7 +37,7 @@ const SidebarChat = forwardRef<HTMLDivElement, {
                 only 2 users, and  the group pic if it is a group chat. <-- Implement this to come from Sidebar and be passed down as a prop */}
                 <div className="sidebarChat__info">
                     <h2>{roomName} {isMentor ? <i className="fas fa-user-check"></i> : null}</h2> 
-                    <p className="text-sm text-gray-600">{messages ? `${messages.senderId === user?.uid?"You: ":""}${messages.message}` : "No Message History"}</p>
+                    <p className="text-sm text-gray-600">{messages ? `${messages.senderId === user?.uid?"You: ":(`${senderInfo?.name}: ` || "...")}${messages.message}` : "No Message History"}</p>
                 </div>
                 {!read ? <FiberManualRecordIcon style={{color: "#F58B09"}}/> : null}
             </div>
