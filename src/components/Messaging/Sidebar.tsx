@@ -14,12 +14,15 @@ import { collection, doc, getDoc, onSnapshot, orderBy, query, where } from 'fire
 import { useDialog } from '../../hooks/useDialog';
 import CreateGroupChatForm from '../Forms/CreateGroupChatForm';
 import PersonAdd from '@mui/icons-material/PersonAdd';
+import { useSpeerOrg } from '../../hooks/useSpeerOrg';
+import { OrganizationMemberDocument } from '../../types/Organization';
 
 function Sidebar({screenSize}) {
     const location = useLocation();
     const navigate = useNavigate();
     const { user, userDetails } = useAuth();
     const [openDialog, closeDialog] = useDialog();
+    const { orgRef } = useSpeerOrg();
 
     const [rooms, setRooms] = useState<FixTypeLater[]>([]);
     const [search, setSearch] = useState('');
@@ -82,11 +85,11 @@ function Sidebar({screenSize}) {
     const findRoomPicAndIsMentor = async (data) => {
         let recipientId = data.users.filter((id) => id !== user?.uid)[0]
 
-        const userData = (await getDoc(doc(db, `usersPublic`,`${recipientId}`))).data()
+        const userData = (await getDoc(doc(orgRef, 'members', recipientId))).data() as OrganizationMemberDocument
 
         return {
             roomPic: `https://storage.googleapis.com/speer-education-dev.appspot.com/users/${recipientId}/thumb-profilePicture.png`,
-            isMentor: userData?.isMtr,
+            isMentor: !!userData?.isMentor,
         }
         // return "ERROR: NO ROOM NAME FOUND"
     }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import "./SidebarChat.css";
-import { Avatar } from "@mui/material";
+import { Avatar, Tooltip } from "@mui/material";
 import { Link, useLocation, useMatch, useNavigate } from 'react-router-dom';
 import { db, publicUserCollection } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
@@ -39,7 +39,7 @@ const SidebarChat = forwardRef<HTMLDivElement, {
                 <Avatar src={roomPic}/> {/* Add src={*room_pic*} in the Avatar tag. Room pic defaults to the other user's prof pic if there are
                 only 2 users, and  the group pic if it is a group chat. <-- Implement this to come from Sidebar and be passed down as a prop */}
                 <div className="sidebarChat__info">
-                    <h2>{roomName} {isMentor ? <i className="fas fa-user-check"></i> : null}</h2> 
+                    <h2>{roomName} {isMentor ? <Tooltip title="This is a verified mentor" placement="top"><span>🎓</span></Tooltip> : null}</h2> 
                     <p className="text-sm text-gray-600">{messages ? `${messages.senderId === user?.uid?"You: ":(`${senderInfo?.name}: ` || "...")}${messages.message}` : "No Message History"}</p>
                 </div>
                 {isMobile && <ArrowRight/>}
