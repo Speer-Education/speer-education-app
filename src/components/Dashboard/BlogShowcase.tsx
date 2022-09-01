@@ -31,8 +31,8 @@ export default function BlogShowcase() {
   return (
     <>
       {/**? display the video img base on list read from firebase */}
-      <div className="flex flex-col w-300 p-3 min-w-500 shadow-lg rounded-md bg-white space-y-3">
-        <div className="flex flex-row space-x-2">
+      <div className="flex flex-col w-300 min-w-500 md:shadow-lg rounded-md md:bg-white space-y-3">
+        <div className="hidden md:flex flex-row space-x-2 pl-3 pt-3">
           <img src="/full-transparent-logo.png" className="h-7" alt="logo" />
           <h3 className="text-base">Blogs</h3>
         </div>
@@ -42,8 +42,9 @@ export default function BlogShowcase() {
               <p className="text-gray-500">We have yet to upload any blogs, stay tuned!</p>
             </div>
           </div>}
+        <div className='space-y-1'>
         {blogData.map(blog =>
-          <div className="flex flex-row space-x-2 cursor-pointer" key={blog.id} onClick={e => handleShowBlog(blog)}>
+          <div className="flex flex-row space-x-2 cursor-pointer bg-white rounded-md shadow-md md:shadow-none p-2" key={blog.id} onClick={e => handleShowBlog(blog)}>
             <div className="flex flex-col text-sm flex-1">
               <b>{blog.title}</b>
               <p className="overflow-hidden overflow-ellipsis whitespace-nowrap flex-1 max-w-[30ch] pr-2">{blog.description}</p>
@@ -51,6 +52,7 @@ export default function BlogShowcase() {
             <p className='text-sm font-semibold text-gray-400'>{format(blog.postedOn.toDate(), 'yyyy-MM-dd')}</p>
           </div>
         )}
+        </div>
         <DialogBase open={blogOpen} onClose={() => setBlogOpen(false)}>
         
                 <DialogContent className="mt-2 h-full space-y-2 py-2 max-h-[70vh] overflow-y-auto">
