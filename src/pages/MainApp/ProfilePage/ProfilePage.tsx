@@ -20,6 +20,7 @@ import Zoom from '@mui/material/Zoom';
 import { collection, doc, increment, onSnapshot, updateDoc } from 'firebase/firestore';
 import ProfileViewsCard from '../../../components/Profile/ProfileViewsCard';
 import ResumeCard from '../../../components/Profile/ResumeCard';
+import OccupationCard from '../../../components/Profile/OccupationCard';
 
 const LazyEditBiographyDialog = lazy(() => import('../../../components/Profile/EditBiographyDialog'));
 
@@ -123,6 +124,7 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
                     <div className="flex flex-col h-app md:w-sidebar ">
                         <div className="md:fixed flex flex-col cc_cursor p-3 space-y-2">
                             {userDetails && <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMtr!} />}
+                            {userDetails && <OccupationCard userDetails={userDetails} isUser={isUser} isMentor={isMtr!} />}
                             {socials && <SocialsCard socials={socials} isUser={isUser}/>}
                             {isUser && <ProfileViewsCard views={views} />}
                             {userDetails && <ResumeCard userDetails={userDetails} isUser={isUser}/>}

@@ -16,6 +16,12 @@ export type UserDetails = {
         school: string;
         graduationDate: Timestamp;
     }[],
+    occupation?: {
+        company: string;
+        position: string;
+        startDate: Timestamp;
+        endDate?: Timestamp;
+    }[],
     resumeURL?: string;
     activeRooms?: {
         [roomId: string]: ActiveRoom

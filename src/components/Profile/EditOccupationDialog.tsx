@@ -15,14 +15,14 @@ const FormRow = ({ children }) => (
   <div className="flex flex-wrap mb-6 flex-row">{children}</div>
 )
 
-type FormValues = Pick<UserDetails, 'education'>;
+type FormValues = Pick<UserDetails, 'occupation'>;
 
-const EditEducationDialog = ({ onClose }) => {
+const EditOccupationDialog = ({ onClose }) => {
   const { user, userDetails } = useAuth();
   const { register, control, handleSubmit, formState: { isSubmitting } } = useForm<FormValues>({
     mode: 'all',
     defaultValues: {
-      education: userDetails?.education.map(edu => ({...edu, graduationDate: edu.graduationDate.toDate()}))
+      occupation: userDetails?.occupation?.map(edu => ({...edu, startDate: edu.startDate.toDate(), endDate: edu.endDate?.toDate()})) || []
     }
   });
   console.log(userDetails?.education)
@@ -43,19 +43,28 @@ const EditEducationDialog = ({ onClose }) => {
       <DialogTitle
         className="text-xl font-semibold leading-6 text-center text-gray-900"
       >
-        Edit Education
+        Edit Occupation
       </DialogTitle>
       <DialogContent>
-        <InputField {...register('education.0.major', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...." id="major"/>
-        <InputField {...register('education.0.school', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Name of Your School" id="school" placeholder="Harvard University" />
+        <InputField {...register('occupation.0.position', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Title" placeholder="Head of heads" id="major"/>
+        <InputField {...register('occupation.0.company', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Company" placeholder="AMCE Inc" />
         <FormDatePicker
             control={control}
-            name="education.0.graduationDate"
-            views={['year']}
+            name="occupation.0.startDate"
             rules={{required: true}}
+            views={['month','year']}
             className="md:w-full mb-6 md:mb-0" 
-            label="Year Of Graduation from your School"
-            inputFormat="yyyy"
+            label="Start Year"
+            inputFormat="MMM yyyy"
+        />
+        <FormDatePicker
+            control={control}
+            name="occupation.0.endDate"
+            views={['month','year']}
+            className="md:w-full mb-6 md:mb-0" 
+            label="End Year (Optional)"
+            inputFormat="MMM yyyy"
+            clearable={true}
         />
       </DialogContent>
       <DialogActions>
@@ -78,4 +87,4 @@ const EditEducationDialog = ({ onClose }) => {
   );
 }
 
-export default EditEducationDialog;
+export default EditOccupationDialog;
