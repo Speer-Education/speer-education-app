@@ -45,11 +45,11 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }: { pr
     }
 
     return (
-        <div className="flex flex-col flex-1 p-3 shadow-lg rounded-md bg-white overflow-y-auto">
-            <p>{isUser?"Your":`${userDetails.name}'s` || ""} Contacts</p>
+        <div className="flex flex-col flex-1 py-3 shadow-lg rounded-md bg-white overflow-y-auto">
+            <p className='px-3'>{isUser?"Your":`${userDetails.name}'s` || ""} Contacts</p>
             {followers.map((user) => {
                 const { id, name } = user; 
-                return (<div className="flex flex-row py-2 transition-colors hover:bg-gray-100" key={id}>
+                return (<div className="flex flex-row py-2 transition-colors hover:bg-gray-100 px-3" key={id}>
                 <Link className="flex flex-row flex-1" to={`/profile/${id}`}>
                     <ProfilePicture className="w-10 h-10 rounded-full" uid={id}/>
                     <div className="ml-2">
