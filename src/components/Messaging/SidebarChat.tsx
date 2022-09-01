@@ -35,7 +35,7 @@ const SidebarChat = forwardRef<HTMLDivElement, {
 
     return (
         <Link to={`${id}`}>
-            <div ref={ref} className={`flex items-center p-3 pr-5 ${(`/messages/${id}` === location.pathname)?'bg-gray-100':''} transition-colors hover:bg-gray-100`}>
+            <div ref={ref} className={`flex items-center p-2 md:p-3 pr-5 bg-white rounded-lg shadow-sm md:shadow-none ${(`/messages/${id}` === location.pathname)?'bg-gray-100':''} transition-colors hover:bg-gray-100`}>
                 <Avatar src={roomPic}/> {/* Add src={*room_pic*} in the Avatar tag. Room pic defaults to the other user's prof pic if there are
                 only 2 users, and  the group pic if it is a group chat. <-- Implement this to come from Sidebar and be passed down as a prop */}
                 <div className="sidebarChat__info">

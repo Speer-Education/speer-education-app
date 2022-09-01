@@ -1,9 +1,6 @@
 .sidebarChat {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    cursor: pointer;
     border-bottom: 1px solid #f6f6f6;
+    @apply flex items-center p-[20px] cursor-pointer
 }
 
 a{
