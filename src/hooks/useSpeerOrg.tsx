@@ -7,7 +7,7 @@ import { useAuth } from "./useAuth";
 import { useLocalStorage } from "./useHooks";
 
 const useSpeerOrgProvider = () => {
-    const { user, userDetails } = useAuth();
+    const { user, userDetails, userToken } = useAuth();
     const [orgId, setOrgId] = useLocalStorage<string>('current_org','global');
     const orgRef = useMemo(() => doc(db, 'organization', orgId).withConverter(docConverter), [orgId]);
     const [orgDoc, loading, error] = useDocumentData<OrganizationDocument>(orgRef);
@@ -15,9 +15,12 @@ const useSpeerOrgProvider = () => {
 
     useEffect(() => {
         // if(window.location.host.split('.')[0] === 'chew') {
+            //check if user belongs to this organization first, if not, redirect to home page
+            //! FIX THIS BEFORE LAUNCH
+            if(userToken?.organization !== 'd8wUjGjUJkv51sjYNTnK') return;
             setOrgId('d8wUjGjUJkv51sjYNTnK');
         // }
-    }, [])
+    }, [userToken, setOrgId])
 
     // useEffect(() => {
     //     if(user == null) setOrgId('global');

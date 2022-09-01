@@ -6,7 +6,7 @@ export type CountryCode = any;
 
 export type UserDetails = {
     name: string;
-    dateOfBirth: Date;
+    dateOfBirth: Timestamp;
     email: string;
     country: CountryCode;
     biography: string;
@@ -14,7 +14,7 @@ export type UserDetails = {
     education: {
         major: string;
         school: string;
-        graduationDate: Date;
+        graduationDate: Timestamp;
     }[],
     resumeURL?: string;
     activeRooms?: {

@@ -78,13 +78,23 @@ const InputSelect: FC<({
     required?: boolean,
     className?: string,
     label?: string,
-    id: string
-} & React.ComponentProps<typeof Select>)> = ({ className="", label="", id, required = false, ...props } ) => {
+    id: string,
+} & React.ComponentProps<typeof Select>)> = ({ className="", label="", id, required = false, value, options,...props } ) => {
     return <div className={`w-full ${className}`}>
         <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>
-        <Select className="user-details__custom-select" styles={selectStyle} id={id} {...props} />
+        <Select 
+            className="user-details__custom-select" 
+            styles={selectStyle} 
+            id={id} 
+            options={options}
+            value={options.filter((option) => value?.includes(option.value))}
+            defaultValue={options.filter((option) =>
+                value?.includes(option.value)
+            )}
+            {...props} 
+            />
     </div>
 }
 
