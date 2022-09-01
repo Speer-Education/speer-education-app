@@ -8,6 +8,8 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { Message, MessageRoom } from '../../types/Messaging';
 import { collection, doc, onSnapshot } from 'firebase/firestore';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useMediaQuery } from 'react-responsive';
+import { ArrowRight } from '@mui/icons-material';
 
 const SidebarChat = forwardRef<HTMLDivElement, {
     id: string,
@@ -20,6 +22,7 @@ const SidebarChat = forwardRef<HTMLDivElement, {
     const [messages, setMessages] = useState<Message>();
     const [senderInfo, loadSenderInfo, error] = useDocumentData((messages?.senderId &&  messages.senderId !== user?.uid)? doc(publicUserCollection, messages.senderId): null);
     const location = useLocation();
+    const isMobile = useMediaQuery({ maxWidth: 767 });
     //Fetches the latest message for display
     useEffect(() => {
         if (id) {
@@ -39,6 +42,7 @@ const SidebarChat = forwardRef<HTMLDivElement, {
                     <h2>{roomName} {isMentor ? <i className="fas fa-user-check"></i> : null}</h2> 
                     <p className="text-sm text-gray-600">{messages ? `${messages.senderId === user?.uid?"You: ":(`${senderInfo?.name}: ` || "...")}${messages.message}` : "No Message History"}</p>
                 </div>
+                {isMobile && <ArrowRight/>}
                 {!read ? <FiberManualRecordIcon style={{color: "#F58B09"}}/> : null}
             </div>
         </Link>
