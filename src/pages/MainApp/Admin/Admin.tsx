@@ -48,10 +48,6 @@ const AdminLayout: FC<PropsWithChildren<{}>>  =  ({ children }) => {
     const { orgDoc, orgId } = useSpeerOrg();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if(orgId == 'global') navigate('/');
-    }, [orgId])
-
     const links = [
         { href: "users", label: "Users", Icon: GroupRounded },
         { href: "blogs", label: "Blogs", Icon: Article, children: [
