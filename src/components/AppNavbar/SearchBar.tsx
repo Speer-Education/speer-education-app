@@ -9,6 +9,7 @@ import { usersIndex } from '../../config/algolia';
 import { FixMeLater } from '../../types/temp';
 import { getMajor } from '../../utils/user';
 import { UserHit } from '../../types/Algolia';
+import { useSpeerOrg } from '../../hooks/useSpeerOrg';
 
 let setSearchQuery: Dispatch<SetStateAction<string>> | null = null;
 
@@ -43,6 +44,7 @@ const Hits = ({ hits }) => (
 const SearchBar = () => {
   const [hits, setHits] = React.useState<UserHit[]>([]);
   const [search, setSearch] = React.useState<string | null>(null);
+  const { orgId } = useSpeerOrg();
 
   setSearchQuery = setSearch;
 
@@ -50,12 +52,13 @@ const SearchBar = () => {
     if(!search) setHits([]);
     else {
       usersIndex.search<UserHit>(search, {
-        hitsPerPage: 10
+        hitsPerPage: 10,
+        filters: orgId !== 'global' ? `organization:${orgId}`: ""
       }).then(function (content) {
         setHits(content.hits)
       });
     }
-  }, [search]);
+  }, [search, orgId]);
 
   return (<div className="relative">
       <form noValidate action="" role="search">

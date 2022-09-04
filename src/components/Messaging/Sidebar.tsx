@@ -1,24 +1,28 @@
 import { useState, useEffect } from 'react';
 import './Sidebar.css';
-import { GroupAddRounded, SearchOutlined } from '@mui/icons-material';
+import { AddCircle, GroupAddRounded, SearchOutlined } from '@mui/icons-material';
 import SidebarChat from './SidebarChat';
 import { db, docConverter } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import ProfilePicture from '../User/ProfilePicture';
 import Spinner from '../Loader/Spinner';
-import { Button, Collapse, IconButton } from '@mui/material';
+import { Button, Collapse, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { TransitionGroup } from "react-transition-group";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MessageRoomDocument } from '../../types/Messaging';
 import { collection, doc, getDoc, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { useDialog } from '../../hooks/useDialog';
 import CreateGroupChatForm from '../Forms/CreateGroupChatForm';
+import PersonAdd from '@mui/icons-material/PersonAdd';
+import { useSpeerOrg } from '../../hooks/useSpeerOrg';
+import { OrganizationMemberDocument } from '../../types/Organization';
 
 function Sidebar({screenSize}) {
     const location = useLocation();
     const navigate = useNavigate();
     const { user, userDetails } = useAuth();
     const [openDialog, closeDialog] = useDialog();
+    const { orgRef } = useSpeerOrg();
 
     const [rooms, setRooms] = useState<FixTypeLater[]>([]);
     const [search, setSearch] = useState('');
@@ -81,11 +85,11 @@ function Sidebar({screenSize}) {
     const findRoomPicAndIsMentor = async (data) => {
         let recipientId = data.users.filter((id) => id !== user?.uid)[0]
 
-        const userData = (await getDoc(doc(db, `usersPublic`,`${recipientId}`))).data()
+        const userData = (await getDoc(doc(orgRef, 'members', recipientId))).data() as OrganizationMemberDocument
 
         return {
             roomPic: `https://storage.googleapis.com/speer-education-dev.appspot.com/users/${recipientId}/thumb-profilePicture.png`,
-            isMentor: userData?.isMtr,
+            isMentor: !!userData?.isMentor,
         }
         // return "ERROR: NO ROOM NAME FOUND"
     }
@@ -97,26 +101,38 @@ function Sidebar({screenSize}) {
     }
 
     const showNewPeople = () => {
-        navigate('/people')
+        openDialog({
+            children: <>
+                <DialogTitle>New Chat</DialogTitle>
+                <DialogContent>
+                    <div className='flex flex-col space-y-2'>
+                        <p>What would you like to do?</p>
+                        <Button variant="outlined" onClick={() => {
+                            navigate('/people')
+                            closeDialog()
+                        }} startIcon={<PersonAdd/>}>Find New People</Button>
+                        <Button variant="outlined" onClick={() => {
+                            showCreateGroup()
+                        }} startIcon={<GroupAddRounded/>}>Create a group</Button>
+                    </div>
+                </DialogContent>
+            </>
+        })
     }
 
     return (
-        <div className="flex flex-col flex-1 rounded-md bg-white m-2 shadow-lg" style={{maxHeight: `${screenSize >= 1 ? "calc(100vh - 20rem)" : "100%"}`}}>
-            <div className="flex justify-between items-center px-4 py-3">
-                <ProfilePicture uid={user!.uid} className="h-8 w-8 rounded-full"/>
-                <h1 className="sidebar__headerUsername">{userDetails?.name}</h1>
-                <IconButton onClick={showCreateGroup}>
-                    <GroupAddRounded />
-                </IconButton>
-            </div>
+        <div className="flex flex-col flex-1 rounded-md md:bg-white m-2 md:shadow-lg" style={{maxHeight: `${screenSize >= 1 ? "calc(100vh - 20rem)" : "100%"}`}}>
             <div className="sidebar__searchContainer">
                 <div className="sidebar__search">
                     <SearchOutlined />
                     <input type="text" placeholder="Search by name" value={search} onChange={(e) => setSearch(e.target.value)}/>
+                    <IconButton onClick={showNewPeople}>
+                        <AddCircle />
+                    </IconButton>
                 </div>
             </div>
-            <div className="flex flex-col overflow-y-auto flex-1 relative">
-                <TransitionGroup>
+            <div className="flex flex-col overflow-y-auto flex-1 relative px-1 mt-2 md:mt-0">
+                <TransitionGroup className="space-y-1 md:space-y-0">
                     {rooms.filter(room => room.name!.toLowerCase().includes(search.toLowerCase())).map(room => {
                         return <Collapse key={room!.id}>
                         {/* @ts-ignore */}
@@ -124,11 +140,6 @@ function Sidebar({screenSize}) {
                         </Collapse>
                     })}
                 </TransitionGroup>
-                {screenSize <= 1 && <div className="absolute bottom-0 w-full">
-                    <Button className="w-full" variant="contained" onClick={showNewPeople}>
-                        Find New People
-                    </Button>
-                </div>}
                 {rooms.length === 0 && !loading && 
                 <div className="h-full grid place-items-center">
                     <div className="space-y-3 grid place-items-center">

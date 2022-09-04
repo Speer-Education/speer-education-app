@@ -1,5 +1,5 @@
 import React from "react";
-import { Dialog } from "@mui/material";
+import { Dialog, DialogProps } from "@mui/material";
 
 type ProviderContext = readonly [(option: DialogOption) => void, () => void];
 
@@ -15,7 +15,7 @@ type DialogParams = {
   open: boolean;
   onClose?: Function;
   onExited?: Function;
-};
+} & Omit<DialogProps, 'children' | 'open' | 'onClose' | 'onExited'>;
 type DialogOption = Omit<DialogParams, "open">;
 type DialogContainerProps = DialogParams & {
   onClose: () => void;
@@ -23,10 +23,10 @@ type DialogContainerProps = DialogParams & {
 };
 
 function DialogContainer(props: DialogContainerProps) {
-  const { children, open, onClose, onKill } = props;
+  const { children, open, onClose, onKill, ...dialogProps } = props;
 
   return (
-    <Dialog open={open} onClose={onClose} TransitionProps={{onExited: onKill}}>
+    <Dialog open={open} onClose={onClose} TransitionProps={{onExited: onKill}} {...dialogProps}>
       {children}
     </Dialog>
   );

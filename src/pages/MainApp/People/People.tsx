@@ -71,9 +71,11 @@ const People = () => {
                 <meta charSet="utf-8" />
                 <title>Mentors | Speer Education</title>
             </Helmet>
-            <div className="pt-10 p-3 2xl:p-10">   
+            <div className="lg:pt-10 lg:p-3 2xl:p-10">   
+                <p className="font-semibold text-lg">   
+                    Meet People
+                </p>
                 <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">Filter</FormLabel>
                     <RadioGroup
                         row
                         aria-labelledby="demo-radio-buttons-group-label"
@@ -93,7 +95,7 @@ const People = () => {
                         <h1 className="text-gray-500 lg:px-10">Loading Students...</h1>
                 </div>: null}
                 <TransitionGroup>
-                    <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 grid-flow-row justify-start  gap-4 mt-10 flex-1">
+                    <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 grid-flow-row justify-start  gap-2 md:gap-4 mt-2 md:mt-6 flex-1">
                         {peopleType !== 2 ? mentors.map((props) => 
                             <Grow in timeout={50} key={props.id}>
                                 {/* @ts-ignore */}

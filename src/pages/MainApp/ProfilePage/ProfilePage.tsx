@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy } from 'react';
-import { db } from '../../../config/firebase';
+import { db, docConverter } from '../../../config/firebase';
 import { useNavigate, useParams } from 'react-router-dom';
 import {Helmet} from "react-helmet";
 import './ProfilePage.css'
@@ -20,6 +20,10 @@ import Zoom from '@mui/material/Zoom';
 import { collection, doc, increment, onSnapshot, updateDoc } from 'firebase/firestore';
 import ProfileViewsCard from '../../../components/Profile/ProfileViewsCard';
 import ResumeCard from '../../../components/Profile/ResumeCard';
+import OccupationCard from '../../../components/Profile/OccupationCard';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useSpeerOrg } from '../../../hooks/useSpeerOrg';
+import { OrganizationMemberDocument } from '../../../types/Organization';
 
 const LazyEditBiographyDialog = lazy(() => import('../../../components/Profile/EditBiographyDialog'));
 
@@ -29,12 +33,16 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
     const { user, userDetails: currentUserDetails } = useAuth();
     const [userDetails, setUserDetails] = useState<UserDetails>();
     const [loading, setLoading] = useState(true);
+    const { orgRef } = useSpeerOrg();
+    const [userOrgDoc, loadUserOrgDoc, errorUserOrgDoc] = useDocumentData<OrganizationMemberDocument>((orgRef && user?.uid)?doc(orgRef, 'members', profileId || user.uid).withConverter(docConverter) : null);
     const [openEditBio, setOpenEditBio] = useState(false);
     const [profileFound, setProfileFound] = useState(true);
     
+    // console.log('userOrgDoc', userOrgDoc);
+    
     const { name, biography, socials, stats } = userDetails || {};
     // const { isMtr = false } = permissions || {}
-    const isMtr = true; //TODO: Query for isMtr status from the members doc. This is because the permissions field has been removed. 
+    const isMtr = !!userOrgDoc?.isMentor;
     const { views = 0 } = stats || {};
 
     //If profileId is userId, then redirect to profile page
@@ -84,7 +92,7 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
             <Zoom in>
                 <div className="w-screen h-full grid xl:grid-cols-[350px_auto_350px] md:grid-cols-[auto_350px] grid-cols-1 ">
                     <div className="hidden xl:flex flex-col h-full h-app w-sidebar">
-                        <div className="fixed flex flex-col cc_cursor h-app w-sidebar">
+                        <div className="fixed flex flex-col cc_cursor h-app w-sidebar p-3 space-y-2">
                             {((profileId || user?.uid) && userDetails) && <ContactsSidebar profileId={profileId || user!.uid} userDetails={userDetails} isUser={isUser}/>}
                             <StatsCard />
                         </div>
@@ -123,6 +131,7 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
                     <div className="flex flex-col h-app md:w-sidebar ">
                         <div className="md:fixed flex flex-col cc_cursor p-3 space-y-2">
                             {userDetails && <EducationCard userDetails={userDetails} isUser={isUser} isMentor={isMtr!} />}
+                            {userDetails && <OccupationCard userDetails={userDetails} isUser={isUser} isMentor={isMtr!} />}
                             {socials && <SocialsCard socials={socials} isUser={isUser}/>}
                             {isUser && <ProfileViewsCard views={views} />}
                             {userDetails && <ResumeCard userDetails={userDetails} isUser={isUser}/>}

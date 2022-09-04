@@ -33,7 +33,7 @@ const UserSmallProfileCard = ({ userDetails, uid }: {
         </div>
         <div className="mt-5 mb-6">
             <h3 className="text-gray-600 font-semibold text-xl">{(user?.uid === uid)?"Your":`${name}'s`}  Highlights</h3>
-            <div className="flex flex-row items-center my-5 space-x-3">
+            <div className="flex flex-col items-start my-5 space-y-2">
                 <UserHighlight highlight={highlight1}/>
                 <UserHighlight highlight={highlight2}/>
             </div>

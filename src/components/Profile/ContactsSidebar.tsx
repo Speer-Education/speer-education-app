@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { db } from '../../config/firebase';
+import { db, docConverter } from '../../config/firebase';
 import ProfilePicture from '../User/ProfilePicture';
 import { useAuth } from '../../hooks/useAuth';
 import {PublicUser, PublicUserDoc, UserID, } from '../../types/User';
 import { getMajor } from '../../utils/user';
-import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocFromCache, onSnapshot, query, where } from 'firebase/firestore';
 
 export default function ContactsSidebar({ profileId, userDetails, isUser }: { profileId: UserID, userDetails: PublicUser, isUser?: boolean }) {
 
@@ -21,12 +21,14 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }: { pr
         let ref = query(collection(db, 'relationships'), where('followedId','==', profileId));
         return onSnapshot(ref, async snapshot => {
             let list = await Promise.all(snapshot.docs.map(async docSnap => {
-                const { followedId, followerId } = docSnap.data();
+                const { followerId } = docSnap.data();
                 //Get user data from firestore
-                const userRef = doc(db, 'usersPublic', followerId);
-                const userData = await getDoc(userRef);
+                const userRef = doc(db, 'usersPublic', followerId).withConverter(docConverter);
+                const userData = await getDocFromCache(userRef).catch(() => {
+                    return getDoc(userRef)
+                });
 
-                return {id: userData.id, ...userData.data()} as Partial<PublicUserDoc>
+                return userData.data() as Partial<PublicUserDoc>
             })) as PublicUserDoc[];
             setFollowers(list);
             setFollowersLoaded(true)
@@ -43,11 +45,11 @@ export default function ContactsSidebar({ profileId, userDetails, isUser }: { pr
     }
 
     return (
-        <div className="flex flex-col flex-1 p-3 m-2 shadow-lg rounded-md bg-white overflow-y-auto">
-            <p>{isUser?"Your":`${userDetails.name}'s` || ""} Contacts</p>
+        <div className="flex flex-col flex-1 py-3 shadow-lg rounded-md bg-white overflow-y-auto">
+            <p className='px-3'>{isUser?"Your":`${userDetails.name}'s` || ""} Contacts</p>
             {followers.map((user) => {
                 const { id, name } = user; 
-                return (<div className="flex flex-row py-2 transition-colors hover:bg-gray-100" key={id}>
+                return (<div className="flex flex-row py-2 transition-colors hover:bg-gray-100 px-3" key={id}>
                 <Link className="flex flex-row flex-1" to={`/profile/${id}`}>
                     <ProfilePicture className="w-10 h-10 rounded-full" uid={id}/>
                     <div className="ml-2">

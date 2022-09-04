@@ -1,4 +1,4 @@
-import { Button, CircularProgress, IconButton, LinearProgress, Tooltip } from "@mui/material";
+import { Button, CircularProgress, Fade, IconButton, LinearProgress, Tooltip } from "@mui/material";
 import { EditOutlined, ExitToAppOutlined, MessageOutlined, PasswordTwoTone } from "@mui/icons-material";
 import { FC, lazy, useRef, useState } from "react";
 import { functions, db } from "../../config/firebase";
@@ -18,6 +18,8 @@ import CircleLoader from "../Loader/CircleLoader";
 import imageCompression from 'browser-image-compression';
 import { doc, getDoc } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
+import EditDetailsDialog from "./EditDetailsDialog";
+import { useMediaQuery } from "react-responsive";
 
 
 const LazyEditDetailsDialog = lazy(() => import("./EditDetailsDialog"));
@@ -123,8 +125,9 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
     const { name, country, highlights } = userDetails || {};
     const [highlight1, highlight2] = highlights;
     const [mentorModalOpen, setMentorModalOpen] = useState(false);
-    const [openEditDetails, setOpenEditDetails] = useState(false);
     const [openDialog, closeDialog] = useDialog();
+    const isMobile = useMediaQuery({ maxWidth: 768 });
+    
     const connectWithPerson = async () => {
         if (!user?.uid || !profileId) return;
 
@@ -144,6 +147,14 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
             }
         }
 
+    }
+
+    const handleEditDetails = () => {
+        openDialog({
+            children: <EditDetailsDialog onClose={closeDialog} />,
+            fullScreen: isMobile,
+            TransitionComponent: Fade,
+        })
     }
 
     const handlePasswordChangeDialog = () => {
@@ -174,10 +185,10 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
                                 </IconButton>
                             </Tooltip>
                             <div className="hidden md:inline">
-                                <Button variant="contained" color="primary" onClick={e => setOpenEditDetails(true)}>Edit Your Profile</Button>
+                                <Button variant="contained" color="primary" onClick={handleEditDetails}>Edit Your Profile</Button>
                             </div>
                             <div className="md:hidden">
-                                <IconButton onClick={e => setOpenEditDetails(true)} size="large"><EditOutlined /></IconButton>
+                                <IconButton onClick={handleEditDetails} size="large"><EditOutlined /></IconButton>
                             </div>
                         </div> : <>
                             <div className="hidden md:inline">
@@ -197,7 +208,6 @@ export default function UserFullProfile({ profileId, isMentor, isUser, userDetai
                 </div>
             </div>
         </div>
-        <LazyEditDetailsDialog open={openEditDetails} onClose={() => setOpenEditDetails(false)} />
         <MentorCardModal open={mentorModalOpen} setOpen={setMentorModalOpen} mentorSelected={{id: profileId, ...userDetails}}/>
     </>;
 }

@@ -5,9 +5,6 @@ import { logEvent as logEventToAnalytics } from 'firebase/analytics'
 import * as amplitude from '@amplitude/analytics-browser';
 import smartlookClient from 'smartlook-client';
 
-amplitude.init('627e19822eb4482290feebf284cd9f4c');
-smartlookClient.init('784a0552bf8bbf15124518cb462f45113638da83');
-
 const logEvent = (eventName: string, eventData: any = null) => {
     
     // Only log analytics if NOT in development mode (because analytics doesn't exist in development mode)
@@ -21,9 +18,9 @@ const logEvent = (eventName: string, eventData: any = null) => {
 const setUserProperties = (uid: string, userDetails: any) => {
     
     // Only log analytics if NOT in development mode (because analytics doesn't exist in development mode)
-    if(isDevelopment() || !analytics) return;
+    if(isDevelopment()) return;
     //@ts-ignore
-    analytics.setUserProperties(uid, userDetails);
+    if(analytics) analytics.setUserProperties(uid, userDetails);
     //@ts-ignore
     mixpanel.identify(uid);
     //@ts-ignore
@@ -31,8 +28,12 @@ const setUserProperties = (uid: string, userDetails: any) => {
 
     //Amplitude
     const event = new amplitude.Identify();
-    event.set(uid, userDetails);
-    amplitude.identify(event);
+    for (const key in userDetails) {
+        event.set(key, userDetails[key]);
+    }
+    amplitude.identify(event, {
+        'user_id': uid,
+    });
 
     //Smartlook
     smartlookClient.identify(uid, userDetails);

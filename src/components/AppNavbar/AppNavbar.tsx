@@ -72,8 +72,7 @@ export const NavBarLink = ({ IconComponent, title, href, isContactIcon } : {
  */
 const AppNavbar = () => {
   const navigate = useNavigate();
-  const { user, userToken } = useAuth();
-  const { toggleOrg, isAdmin, orgId } = useSpeerOrg();
+  const { isAdmin } = useSpeerOrg();
   const mobileBar = useMediaQuery({ maxWidth: 1024 });
   
   return (<SlideTransition in timeout={50}>
@@ -83,7 +82,7 @@ const AppNavbar = () => {
         <SearchBar />
       </div>}
       <div className="w-full lg:w-auto flex flex-row max-w-4xl justify-center items-center space-x-3">
-        <div className="flex flex-row h-full flex-1 lg:flex-none pl-2">
+        <div className="flex flex-row h-full flex-1 lg:flex-none pl-2 justify-end">
           <NavBarLink IconComponent={HomeTwoToneIcon} title="Home" href="/" />
           <NavBarLink IconComponent={PeopleTwoToneIcon} title="Meet People" href="/people" />
           {/* <NavBarLink IconComponent={PeopleTwoToneIcon} title="New Mentors" href="/mentors" />
@@ -92,16 +91,8 @@ const AppNavbar = () => {
           {isAdmin && !mobileBar && <NavBarLink IconComponent={AutoGraphIcon} title="Admin" href="/orgadmin" />}
           {/* <NavBarLink IconComponent={Notif0.  icationsTwoToneIcon} title="Notifications"/> */}
         </div>
-        {/* <div className="hidden lg:block" >
-          <Button variant="contained" color="primary" endIcon={<ArrowDropDownTwoToneIcon/>} style={{textTransform: "capitalize"}}>
-            Compose a message
-          </Button>
-        </div> */}
-        <UserMenu />
+        {!mobileBar && <UserMenu />}
       </div>
-      {/* Transparent images spacer to center the stuff in the middle */}
-      <img className="h-20 hidden lg:block opacity-0 cursor-pointer pr-5" src="/full-transparent-logo.png" alt="logo" />
-      <img className="h-20 hidden lg:block opacity-0 cursor-pointer pr-5" src="/full-transparent-logo.png" alt="logo" />
     </div>
   </SlideTransition>);
 };

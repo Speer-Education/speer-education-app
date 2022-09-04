@@ -4,6 +4,7 @@ import {Button, IconButton} from '@mui/material';
 import {EditOutlined} from '@mui/icons-material';
 import { useDialog } from "../../hooks/useDialog";
 import UploadResumeDialog from "./UploadResumeDialog";
+import PDFViewerDialog from "./PDFViewerDialog";
 
 const ResumeCard: FC<{ userDetails: PublicUser, isUser: boolean }> = ({ userDetails, isUser }) => {
     const { name, resumeURL } = userDetails || {};
@@ -14,7 +15,14 @@ const ResumeCard: FC<{ userDetails: PublicUser, isUser: boolean }> = ({ userDeta
         })
     }
 
-    const resume = resumeURL ? <a className="text-blue-800 font-semibold underline" href={resumeURL} target="_blank" rel="noopener noreferrer">Resume</a> : "No Resume Uploaded";
+    const viewResume = () => {
+        openDialog({
+            children: <PDFViewerDialog onClose={closeDialog} url={resumeURL!} />,
+            fullScreen: true,
+        })
+    }
+
+    const resume = resumeURL ? <p className="text-blue-800 font-semibold underline cursor-pointer" onClick={viewResume}>Resume</p> : "No Resume Uploaded";
 
     return <div className="relative flex flex-col p-3 shadow-lg rounded-md bg-white space-y-3">
         <div className=" flex flex-row space-between">

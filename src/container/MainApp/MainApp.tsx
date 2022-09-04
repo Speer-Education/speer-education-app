@@ -31,7 +31,7 @@ const LazyDashboard = lazy(
   () => import("../../pages/MainApp/Dashboard/Dashboard")
 );
 const LazyBlogs = lazy(
-  () => import("../../components/Dashboard/BlogShowcase")
+  () => import("../../pages/MainApp/Blogs/Blogs")
 );
 
 export default function MainApp() {

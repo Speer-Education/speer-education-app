@@ -17,7 +17,7 @@ const InputField = forwardRef<InputBaseProps, ( Props & InputBaseProps)>(({ clas
         if (required) setEmpty(e.target.value.length === 0)
     }
 
-    return <div className={`${autoWidth ? "" : "w-full"} px-3 ${className}`}>
+    return <div className={`${autoWidth ? "" : "w-full"} ${className}`}>
         {label && <label className="block titlecase tracking-wide text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>}
@@ -36,7 +36,7 @@ type InputAreaProps = {
  }
 
 const InputAreaField = forwardRef<HTMLTextAreaElement, (InputAreaProps & React.HTMLAttributes<HTMLTextAreaElement>)>(({ className, label, id, required = false, ...props }, ref) => {
-    return <div className={`w-full px-3 ${className}`}>
+    return <div className={`w-full ${className}`}>
         {label && <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>}
@@ -78,13 +78,23 @@ const InputSelect: FC<({
     required?: boolean,
     className?: string,
     label?: string,
-    id: string
-} & React.ComponentProps<typeof Select>)> = ({ className="", label="", id, required = false, ...props } ) => {
-    return <div className={`w-full px-3 ${className}`}>
+    id: string,
+} & React.ComponentProps<typeof Select>)> = ({ className="", label="", id, required = false, value, options,...props } ) => {
+    return <div className={`w-full ${className}`}>
         <label className="block titlecase tracking-wide text-gray-700 text-xs font-bold mb-2" style={{color: "#2596be"}} htmlFor={id}>
             {label} {required ? <span className="text-red-600">*</span> : ""}
         </label>
-        <Select className="user-details__custom-select" styles={selectStyle} id={id} {...props} />
+        <Select 
+            className="user-details__custom-select" 
+            styles={selectStyle} 
+            id={id} 
+            options={options}
+            value={options.filter((option) => value?.includes(option.value))}
+            defaultValue={options.filter((option) =>
+                value?.includes(option.value)
+            )}
+            {...props} 
+            />
     </div>
 }
 

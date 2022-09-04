@@ -17,21 +17,22 @@ const FormRow = ({ children }) => (
   <div className="flex flex-wrap mb-6 flex-row">{children}</div>
 )
 
-type FormValues = Pick<UserDetails, 'name' | 'education' | 'dateOfBirth' | 'email' | 'country' | 'highlights'>;
+type FormValues = Pick<UserDetails, 'name' | 'dateOfBirth' | 'email' | 'country' | 'highlights'>;
 
-const EditDetailsDialog = ({ open, onClose }) => {
+const EditDetailsDialog = ({ onClose }) => {
   const { user, userDetails } = useAuth();
-  const { register, control, handleSubmit, watch, setValue, formState: { isValid, isSubmitting } } = useForm<FormValues>({
+  const { register, control, handleSubmit, formState: { isSubmitting } } = useForm<FormValues>({
     mode: 'all',
     defaultValues: {
       name: userDetails?.name,
-      education: userDetails?.education,
       dateOfBirth: userDetails?.dateOfBirth,
       email: userDetails?.email,
       country: userDetails?.country,
       highlights: userDetails?.highlights
     }
   });
+
+  console.log(userDetails)
 
   const handleSaveDetails = async (data: FormValues) => {
     if (!user) return;
@@ -54,7 +55,7 @@ const EditDetailsDialog = ({ open, onClose }) => {
   }
 
   return (
-    <DialogBase open={open} onClose={onClose}>
+    <>
       <DialogTitle
         className="text-xl font-semibold leading-6 text-center text-gray-900"
       >
@@ -62,8 +63,6 @@ const EditDetailsDialog = ({ open, onClose }) => {
       </DialogTitle>
       <DialogContent>
         <InputField {...register('name', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="What is your full name" placeholder="John Doe" />
-        <InputField {...register('education.0.major', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Current/Intended Major" placeholder="Economics, Business ...."/>
-        <InputField {...register('education.0.school', { required: true })} required type="text" className="md:w-64 mb-6 md:mb-0" label="Name of Your School" placeholder="Harvard University" />
         <Controller
           control={control}
           name="country"
@@ -88,10 +87,11 @@ const EditDetailsDialog = ({ open, onClose }) => {
             name="highlights.0.emoji"/>
           <InputField
             {...register('highlights.0.description', { required: true })}
+            sx={{ fontSize: "14px" }}
             required
             type="text"
             label=""
-            className="md:w-3/4 mb-6 md:mb-0"
+            className="w-[calc(100%-100px)] mb-6 md:mb-0"
             autoWidth
             placeholder="eg. Marketing Lead @ Amce Inc" />
         </FormRow>
@@ -102,10 +102,11 @@ const EditDetailsDialog = ({ open, onClose }) => {
             name="highlights.1.emoji"/>
           <InputField
             {...register('highlights.1.description', { required: true })}
+            sx={{ fontSize: "14px" }}
             required
             type="text"
             label=""
-            className="md:w-3/4 mb-2 md:mb-0"
+            className="w-[calc(100%-100px)] mb-2 md:mb-0"
             autoWidth
             placeholder="eg. CEO @ Amce Labs" />
         </FormRow>
@@ -126,7 +127,7 @@ const EditDetailsDialog = ({ open, onClose }) => {
           Close
         </button>
       </DialogActions>
-    </DialogBase>
+    </>
   );
 }
 
