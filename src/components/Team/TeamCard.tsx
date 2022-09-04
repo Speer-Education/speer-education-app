@@ -1,7 +1,7 @@
 export const TeamCard = ({ fullname, title, linkedinUrl, imageUrl }) => {
   return (
     <div className="home-team__card">
-      <img className="home-team__card-pic" src={imageUrl} alt="Speer Team Member"/>
+      <img className="home-team__card-pic" src={imageUrl} alt="Catalyst Team Member"/>
       <div className="home-team__card-bio">
         <h2>{fullname}</h2>
         <p>{title}</p>

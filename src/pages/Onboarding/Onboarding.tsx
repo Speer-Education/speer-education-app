@@ -134,7 +134,7 @@ export default function UserDetails() {
         <div className="bg-gray-100 md:h-screen overflow-x-hidden flex justify-center md:items-center">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Onboarding | Speer Education</title>
+                <title>Onboarding | Catalyst Education</title>
             </Helmet>
             {!updatingClaims ? <div className="flex flex-col md:flex-row  bg-white rounded-2xl onboardingForm shadow-xl">
                 <div className="flex-1 pr-2 py-3 space-y-2 onboardingForm__welcomeContainer">

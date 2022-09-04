@@ -48,7 +48,7 @@ const Students = () => {
         <div className="mentors h-app">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Students | Speer Education</title>
+                <title>Students | Catalyst Education</title>
             </Helmet>
             <div className="pt-10 p-3 2xl:p-10">   
                 <TransitionGroup>

@@ -20,7 +20,7 @@ function Dashboard() {
             <div className="dashboard h-app">
                 <Helmet>
                     <meta charSet="utf-8" />
-                    <title>Dashboard | Speer Education</title>
+                    <title>Dashboard | Catalyst Education</title>
                 </Helmet>
                 <NewUserDialog open={showNewUserDialog} onClose={() => {
                     setShowNewUserDialog(false)

@@ -30,7 +30,7 @@ export default function Verify() {
         <div className="bg-gray-100 h-screen overflow-x-hidden">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Sign Up | Speer Education</title>
+                <title>Sign Up | Catalyst Education</title>
             </Helmet>
             <div className="flex flex-row w-screen h-screen">
                 <div className="flex-1 text-left p-6 md:p-20 bg-white space-y-4">
@@ -41,7 +41,7 @@ export default function Verify() {
                         </div>
                     </div>
                     <div className="space-y-2 text-speer-yellow font-extrabold">
-                        <h1><span className="text-speer-blue">We Are</span> Speer</h1>
+                        <h1><span className="text-speer-blue">We Are</span> Catalyst</h1>
                         <h1>We so excited to meet you</h1>
                     </div>
                     <p className="text-gray-600">You should've received an verification email in the inbox of {user?.email}.</p>

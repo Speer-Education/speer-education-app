@@ -8,7 +8,7 @@ function NotFoundPage() {
         <div className="bg-gray-100 h-screen overflow-x-hidden">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Error 404 | Speer Education</title>
+                <title>Error 404 | Catalyst Education</title>
             </Helmet>
             <div className="flex flex-row w-screen h-screen">
                 <div className="flex-1 text-left p-20 bg-white space-y-4">

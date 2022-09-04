@@ -43,7 +43,7 @@ const Mentors = () => {
         <div className="mentors h-app">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Mentors | Speer Education</title>
+                <title>Mentors | Catalyst Education</title>
             </Helmet>
             <div className="pt-10 p-3 2xl:p-10">   
                 <TransitionGroup>

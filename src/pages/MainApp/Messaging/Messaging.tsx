@@ -39,7 +39,7 @@ function Messaging() {
             <div className="messaging h-app">
                 <Helmet>
                     <meta charSet="utf-8" />
-                    <title>Messaging | Speer Education</title>
+                    <title>Messaging | Catalyst Education</title>
                 </Helmet>
                 <div className="flex flex-row h-full max-h-full w-screen">
                     {screenSize >= 1 ?

@@ -87,7 +87,7 @@ function ProfilePage({ isUser=false }: { isUser?: boolean }) {
         !profileFound ? <NotFoundPage/> : <div className="profilePage h-app">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>{isUser?"Your":name || ""} Profile | Speer Education</title>
+                <title>{isUser?"Your":name || ""} Profile | Catalyst Education</title>
             </Helmet>
             <Zoom in>
                 <div className="w-screen h-full grid xl:grid-cols-[350px_auto_350px] md:grid-cols-[auto_350px] grid-cols-1 ">

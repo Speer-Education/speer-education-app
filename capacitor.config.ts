@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.speeredu.mobile',
-  appName: 'Speer Education',
+  appName: 'Catalyst Education',
   webDir: 'build',
   bundledWebRuntime: false,
   plugins: {

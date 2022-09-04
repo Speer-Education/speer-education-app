@@ -69,7 +69,7 @@ const People = () => {
         <div className="people h-app">
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Mentors | Speer Education</title>
+                <title>Mentors | Catalyst Education</title>
             </Helmet>
             <div className="lg:pt-10 lg:p-3 2xl:p-10">   
                 <p className="font-semibold text-lg">   

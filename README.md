@@ -1,4 +1,4 @@
-# Speer Education App 🚀
+# Catalyst Education App 🚀
 
 🎂 Nice, you're here for the cake. Let's get started.
 

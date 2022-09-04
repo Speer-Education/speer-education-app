@@ -35,7 +35,7 @@ function OrgDashboard() {
             <div className="dashboard h-app">
                 <Helmet>
                     <meta charSet="utf-8" />
-                    <title>{organization.name} | Speer Education</title>
+                    <title>{organization.name} | Catalyst Education</title>
                 </Helmet>
                 <div className="dashboard_sidebar">
                     {/* left side bar */}
