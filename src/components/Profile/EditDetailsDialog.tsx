@@ -44,6 +44,8 @@ const EditDetailsDialog = ({ onClose }) => {
       data.country = data.country.value
     }
 
+    console.log("Data", data)
+
     logEvent('updated_details')
     await updateDoc(doc(db, `users`, `${user.uid}`), {
       ...data,
