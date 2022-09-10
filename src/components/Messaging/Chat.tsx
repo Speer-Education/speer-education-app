@@ -36,30 +36,13 @@ function Chat({screenSize}) {
     const { user, userDetails } = useAuth();
     const [input, setInput] = useState("");
     const { roomId } = useParams();
-    const [roomDoc, setRoomDoc] = useState<MessageRoomDocument>();
-    const [roomName, setRoomName] = useState<string>(""); //Will have to reach out again and figure out what its room name is.
-    const [roomPic, setRoomPic] = useState("");
-    const [roomUsers, setRoomUsers] = useState<string[]>([]);
-    const [recipientId, setRecipientId] = useState<string>();
-    const [isMentor, setIsMentor] = useState();
-    //@ts-ignore
-    const [messages, getMoreMessages, messageLoading, loadedAllMessages] = useMessages(doc(db, 'rooms', roomId).withConverter(docConverter), {
-        pageLimit: DOCUMENTS_PER_PAGE,
-    });
-    const [loading, setLoading] = useState(true);
-    const [sendLoading, setSendLoading] = useState(false);
-    const [fileMessages, setFileMessages] = useState<File[]>([]);
-    const [showProfPicAndAttachments, setShowProfPicAndAttachments] = useState(false);
-    const [doneInitialScroll, setDoneInitialScroll] = useState(false);
-    const [fileSizeWarning, setFileSizeWarning] = useState(false);
-    const [tooManyFilesWarning, setTooManyFilesWarning] = useState(false);
-    const [roomDoesNotExistWarning, setRoomDoesNotExistWarning] = useState(false);
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const filter = new Filter({ emptyList: true, list: badWordsList });
 
     //For if screen size updates
     useEffect(() => {
+
         if (screenSize >= 2){
             setShowProfPicAndAttachments(false)
         }
