@@ -55,6 +55,15 @@ function Sidebar({screenSize}) {
                         pic: docData.picture || "" //TODO: No picture property, will need to add this for group rooms.
                     } as FixTypeLater
                 } else {
+
+                    if (docData.users.length < 2) return {
+                        id: doc.id,
+                        data: docData,
+                        name: "Deleted User",
+                        isMentor: false,
+                        pic: ""
+                    } as FixTypeLater
+
                     const { isMentor, roomPic } = await findRoomPicAndIsMentor(docData);
 
                     return {
@@ -83,7 +92,12 @@ function Sidebar({screenSize}) {
 
     //resolve a room name for this
     const findRoomPicAndIsMentor = async (data) => {
-        let recipientId = data.users.filter((id) => id !== user?.uid)[0]
+        let recipientId = data.users.filter((id) => id !== user?.uid)[0] as string || undefined;
+
+        if (!recipientId) return { 
+            isMentor: false, 
+            roomPic: "" 
+        }
 
         const userData = (await getDoc(doc(orgRef, 'members', recipientId))).data() as OrganizationMemberDocument
 
