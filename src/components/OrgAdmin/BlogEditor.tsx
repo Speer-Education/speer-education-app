@@ -1,6 +1,6 @@
-import {doc, DocumentReference, setDoc, Timestamp, collection} from 'firebase/firestore';
-import {useCallback, useEffect, useMemo, useRef, FC} from 'react';
-import { useDocumentData, useDocumentDataOnce } from "react-firebase-hooks/firestore";
+import { doc, setDoc, Timestamp, collection } from 'firebase/firestore';
+import { useEffect, useMemo, useRef, FC } from 'react';
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { blogConverter} from '../../config/firebase';
@@ -8,11 +8,11 @@ import { useSpeerOrg } from "../../hooks/useSpeerOrg";
 import { MDEditor } from "../Blog/Editor/mdeditor";
 import { Delta } from 'quill';
 import { Button } from "@mui/material";
-import {SimpleUserDetails} from '../../types/User';
 import { useAuth } from "../../hooks/useAuth";
 import { BlogDocument } from "../../types/Blogs";
 import FormCheckbox from '../form-components/FormCheckbox';
 import ReactQuill from 'react-quill';
+import {useSnackbar} from 'notistack';
 
 type BlogForm = {
     title: string;
@@ -45,7 +45,12 @@ const BlogEditor: FC = () => {
         }
     });
     const editorRef = useRef<ReactQuill>(null);
-    if(error) console.error(loading, error);
+    const { enqueueSnackbar } = useSnackbar();
+    
+    useEffect(() => {
+        if (error) enqueueSnackbar(error.message, { variant: 'error' });
+    }, [error, enqueueSnackbar]); 
+    
     useEffect(() => {
         reset({
             title: blogDoc?.title,

@@ -1,16 +1,14 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import { blogConverter, db, docConverter } from '../../config/firebase';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { blogConverter } from '../../config/firebase';
 import DialogBase from '../Dialog/DialogBase';
 import BlogContent from '../Blog/BlogContent';
-import OpenInNewTwoToneIcon from '@mui/icons-material/OpenInNewTwoTone';
-import {PlatformBlogDocument} from '../../types/PlatformBlogs';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { collection, query, orderBy, limit, where } from 'firebase/firestore';
+import { collection, query, orderBy, where } from 'firebase/firestore';
 import { DialogActions, DialogContent } from '@mui/material';
 import { useSpeerOrg } from '../../hooks/useSpeerOrg';
 import {BlogDocument} from '../../types/Blogs';
 import {format} from 'date-fns';
+import {useSnackbar} from 'notistack';
 
 
 export default function BlogShowcase() {
@@ -19,7 +17,10 @@ export default function BlogShowcase() {
   const [blogOpen, setBlogOpen] = useState(false);
   const [activeBlog, setActiveBlog] = useState<BlogDocument>();
 
-  if(error) console.error(error);
+  const { enqueueSnackbar } = useSnackbar();
+  useEffect(() => {
+      if (error) enqueueSnackbar(error.message, { variant: 'error' });
+  }, [error, enqueueSnackbar]); 
 
   const handleShowBlog = (blog) => {
     setActiveBlog(blog);

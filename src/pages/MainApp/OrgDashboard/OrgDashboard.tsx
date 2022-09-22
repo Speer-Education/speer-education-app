@@ -1,30 +1,27 @@
-import React from 'react';
-import MentorShowcase from '../../../components/Dashboard/MentorShowcase';
+import { useEffect } from 'react';
 import PostComposerCard from '../../../components/Dashboard/PostComposerCard';
 import PostStream from '../../../components/Dashboard/PostStream';
 import OpenChats from '../../../components/Dashboard/OpenChats';
 import StatsCard from '../../../components/Dashboard/StatsCard';
 import { Helmet } from "react-helmet";
 import './OrgDashboard.css';
-import BlogShowcase from "../../../components/Dashboard/BlogShowcase";
-import { useLocalStorage } from '../../../hooks/useHooks';
-import NewUserDialog from '../../../components/Dashboard/NewUserDialog';
-import { logEvent } from '../../../utils/analytics';
 import Zoom from '@mui/material/Zoom';
 import { useParams } from 'react-router-dom';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { doc } from 'firebase/firestore';
 import { db, docConverter } from '../../../config/firebase';
 import { OrganizationDocument } from '../../../types/Organization';
+import { useSnackbar } from 'notistack';
 
 function OrgDashboard() {
     const { orgId } = useParams();
     //@ts-ignore
     const [organization, loading, error] = useDocumentData<OrganizationDocument>(orgId && doc(db, 'organization', orgId).withConverter(docConverter))
-    //log error if exists
-    if (error) {
-        console.error('orgerr',error);
-    }
+    const { enqueueSnackbar } = useSnackbar();
+    
+    useEffect(() => {
+        if (error) enqueueSnackbar(error.message, { variant: 'error' });
+    }, [error, enqueueSnackbar]); 
 
     if(loading || !organization) {
         return <div>Loading...</div>

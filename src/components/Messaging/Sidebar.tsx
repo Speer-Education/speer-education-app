@@ -16,6 +16,7 @@ import CreateGroupChatForm from '../Forms/CreateGroupChatForm';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import { useSpeerOrg } from '../../hooks/useSpeerOrg';
 import { OrganizationMemberDocument } from '../../types/Organization';
+import { useSnackbar } from 'notistack';
 
 function Sidebar({screenSize}) {
     const location = useLocation();
@@ -27,6 +28,7 @@ function Sidebar({screenSize}) {
     const [rooms, setRooms] = useState<FixTypeLater[]>([]);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true)
+    const { enqueueSnackbar } = useSnackbar();
 
     type FixTypeLater = {
         id: string;
@@ -81,7 +83,10 @@ function Sidebar({screenSize}) {
                 setLoading(false)
                 setRooms(res as FixTypeLater[])
             })
-            
+            .catch(err => {
+                if(err instanceof Error) enqueueSnackbar(err.message, {variant: 'error'});
+                else enqueueSnackbar('Something went wrong', {variant: 'error'});
+            })
         })
 
         return () => {

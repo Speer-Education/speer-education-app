@@ -1,8 +1,9 @@
-import { doc, DocumentReference } from "firebase/firestore";
-import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from "react";
+import { doc } from "firebase/firestore";
+import { useSnackbar } from "notistack";
+import { createContext, PropsWithChildren, useContext, useEffect, useMemo } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db, docConverter } from "../config/firebase";
-import { Organization, OrganizationDocument, OrganizationMember, OrganizationMemberDocument } from "../types/Organization";
+import { OrganizationDocument, OrganizationMemberDocument } from "../types/Organization";
 import { useAuth } from "./useAuth";
 import { useLocalStorage } from "./useHooks";
 
@@ -12,6 +13,16 @@ const useSpeerOrgProvider = () => {
     const orgRef = useMemo(() => doc(db, 'organization', orgId).withConverter(docConverter), [orgId]);
     const [orgDoc, loading, error] = useDocumentData<OrganizationDocument>(orgRef);
     const [memberDoc, loadMember, errorMember] = useDocumentData<OrganizationMemberDocument>(user && doc(orgRef, 'members', user.uid).withConverter(docConverter));
+    const { enqueueSnackbar } = useSnackbar();
+    
+    useEffect(() => {
+        if (error) enqueueSnackbar(error.message, { variant: 'error' });
+    }, [error, enqueueSnackbar]); 
+
+    
+    useEffect(() => {
+        if (errorMember) enqueueSnackbar(errorMember.message, { variant: 'error' });
+    }, [errorMember, enqueueSnackbar]); 
 
     useEffect(() => {
         // if(window.location.host.split('.')[0] === 'chew') {

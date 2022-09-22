@@ -1,16 +1,22 @@
 import DialogTitle from '@mui/material/DialogTitle';
 import { FolderOpenOutlined } from '@mui/icons-material';
 import { collection, orderBy, query } from 'firebase/firestore';
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import {db, docConverter, roomsCollection} from '../../config/firebase';
+import { docConverter, roomsCollection } from '../../config/firebase';
 import DialogBase from '../Dialog/DialogBase';
 import AttachmentItem from './AttachmentItem';
 import {AttachmentDocument, RoomID} from '../../types/Messaging';
+import {useSnackbar} from 'notistack';
 
 const AttachmentsDialog: FC<{open: boolean, onClose: () => void, roomId: RoomID }> = ({open, onClose, roomId}) => {
   const [attachments = [], loading, error] = useCollectionData<AttachmentDocument>(query(collection(roomsCollection, roomId, 'blogs').withConverter(docConverter), orderBy('uploadedOn','desc')))
 
+  const { enqueueSnackbar } = useSnackbar();
+  useEffect(() => {
+      if (error) enqueueSnackbar(error.message, { variant: 'error' });
+  }, [error, enqueueSnackbar]); 
+  
   return (
       <DialogBase open={open} onClose={onClose}>
           <div className="inline-block w-full max-w-md p-4 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg overflow-y-auto" style={{maxHeight: "30rem"}}>

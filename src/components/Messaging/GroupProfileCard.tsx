@@ -16,6 +16,7 @@ import { useSnackbar } from "notistack";
 import AddGroupMembersForm from "../Forms/AddGroupMembersForm";
 import {useDocumentData} from 'react-firebase-hooks/firestore';
 import { doc } from "firebase/firestore";
+import {useEffect} from 'react';
 
 const GroupProfileCard = ({ roomExists, roomUsers }: {
   roomExists: boolean,
@@ -64,6 +65,10 @@ const GroupUserSmallProfileCard = ({ id }: {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { roomId } = useParams();
+  
+  useEffect(() => {
+      if (error) enqueueSnackbar(error.message, { variant: 'error' });
+  }, [error, enqueueSnackbar]); 
 
   const handleKick = (user: SimpleUserDetails) => {
     openDialog({

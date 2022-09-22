@@ -46,6 +46,10 @@ const UsersManager = () => {
     const { enqueueSnackbar } = useSnackbar();
     
     useEffect(() => {
+        if (error) enqueueSnackbar(error.message, { variant: 'error' });
+    }, [error, enqueueSnackbar]); 
+    
+    useEffect(() => {
         if (users.length > 0) {
             Promise.all(users.map(async (user) => ({
                 ...(await getDoc(doc(orgRef, 'members', user.id).withConverter(docConverter))).data() as OrganizationMemberDocument,

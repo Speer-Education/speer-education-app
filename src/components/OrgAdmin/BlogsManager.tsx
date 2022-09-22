@@ -1,21 +1,25 @@
-import {collection, query, where} from 'firebase/firestore';
+import { collection } from 'firebase/firestore';
 import {useCollectionData} from 'react-firebase-hooks/firestore';
-import {blogConverter, db, publicUserCollection} from '../../config/firebase';
+import { blogConverter } from '../../config/firebase';
 import {useSpeerOrg} from '../../hooks/useSpeerOrg';
 import {useDialog} from '../../hooks/useDialog';
 import {useSnackbar} from 'notistack';
 import { BlogDocument } from '../../types/Blogs';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 
 const BlogsManager: FC = () => {
     const { orgRef, orgDoc } = useSpeerOrg();
     const [blogs = [], loading, error] = useCollectionData<BlogDocument>(collection(orgRef, 'blogs').withConverter(blogConverter));
     const [openDialog, closeDialog] = useDialog();
-    const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
-
+    const { enqueueSnackbar } = useSnackbar();
+    
+    useEffect(() => {
+        if (error) enqueueSnackbar(error.message, { variant: 'error' });
+    }, [error, enqueueSnackbar]); 
+    
     return (
         <div className="space-y-4">
             <h1>Blogs Manager</h1>

@@ -1,15 +1,16 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 import "./SidebarChat.css";
 import { Avatar, Tooltip } from "@mui/material";
-import { Link, useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { db, publicUserCollection } from '../../config/firebase';
 import { useAuth } from '../../hooks/useAuth';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { Message, MessageRoom } from '../../types/Messaging';
-import { collection, doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { useMediaQuery } from 'react-responsive';
 import { ArrowRight } from '@mui/icons-material';
+import {useSnackbar} from 'notistack';
 
 const SidebarChat = forwardRef<HTMLDivElement, {
     id: string,
@@ -23,6 +24,12 @@ const SidebarChat = forwardRef<HTMLDivElement, {
     const [senderInfo, loadSenderInfo, error] = useDocumentData((messages?.senderId &&  messages.senderId !== user?.uid)? doc(publicUserCollection, messages.senderId): null);
     const location = useLocation();
     const isMobile = useMediaQuery({ maxWidth: 767 });
+    const { enqueueSnackbar } = useSnackbar();
+    
+    useEffect(() => {
+        if (error) enqueueSnackbar(error.message, { variant: 'error' });
+    }, [error, enqueueSnackbar]); 
+    
     //Fetches the latest message for display
     useEffect(() => {
         if (id) {

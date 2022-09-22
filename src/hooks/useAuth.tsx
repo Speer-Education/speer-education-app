@@ -1,15 +1,25 @@
-import React, { useState, useEffect, useContext, createContext, PropsWithChildren } from "react";
+import { useState, useEffect, useContext, createContext, PropsWithChildren } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { auth, db, firebase, rtdb } from "../config/firebase";
-import { UserClaims, UserDetails, UserDetailsDocument, UserDetailsToken } from "../types/User";
+import { auth, db, rtdb } from "../config/firebase";
+import { UserClaims, UserDetailsDocument } from "../types/User";
 import { logEvent, setUserProperties } from "../utils/analytics";
 import { useLocalStorage } from "./useHooks";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { EmailAuthProvider, ParsedToken, reauthenticateWithCredential, signOut, updatePassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect, signInWithCredential } from "firebase/auth"
+import {
+    EmailAuthProvider,
+    ParsedToken,
+    reauthenticateWithCredential,
+    signOut,
+    updatePassword,
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithCredential,
+} from "firebase/auth";
 import { doc, onSnapshot } from "firebase/firestore";
 import { onDisconnect, onValue, ref, serverTimestamp, set } from "firebase/database";
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import { Capacitor } from "@capacitor/core";
+import {useSnackbar} from 'notistack';
 
 
 //@ts-ignore //TODO: FIX THIS
@@ -51,7 +61,12 @@ const useAuthProvider = () => {
     const [lastCommitted, setLastCommitted] = useLocalStorage("lastCommited", 0);  //The last committed state of our user claims document, decides if token needs to update if outdated
     const navigate = useNavigate();
     const location = useLocation();
+    const { enqueueSnackbar } = useSnackbar();
     
+    useEffect(() => {
+        if (authError) enqueueSnackbar(authError.message, { variant: 'error' });
+    }, [authError, enqueueSnackbar]);
+
     /**
      * Sign in user with email and password login
      * @param {*} params Email and Password  
